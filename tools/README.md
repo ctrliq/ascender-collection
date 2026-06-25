@@ -47,19 +47,24 @@ ln -s $(pwd) ~/.ansible/collections/ansible_collections/ctrliq/ascender
 ```
 
 This is a shortcut for quick validation of tests that bypasses `ansible-test`.
-To use this, you need the `~/.tower_cli.cfg` config file populated,
-which can be done via the deprecated `tower-cli login <username>` or manually
-writing it, where the format looks like:
+Configure authentication via environment variables:
 
+```bash
+export CONTROLLER_HOST=https://localhost:8043
+export CONTROLLER_USERNAME=admin
+export CONTROLLER_PASSWORD=password
+export CONTROLLER_VERIFY_SSL=false
 ```
+
+Or via a config file at `~/.controller_cli.cfg`:
+
+```ini
 [general]
-host = https://localhost:8043/
+host = https://localhost:8043
 verify_ssl = false
 username = admin
 password = password
 ```
-
-TODO: adjust playbook to allow using environment variables as well.
 
 To run some sample modules:
 

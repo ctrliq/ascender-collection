@@ -18,11 +18,16 @@ tags:
   - ascender
   - ansible
   - automation
-version: {{ collection_version_override | default(collection_version) }}
+version: {{ collection_version }}
 build_ignore:
   - tools
   - test
+  - tests
   - setup.cfg
   - galaxy.yml.j2
   - template_galaxy.yml
   - '*.tar.gz'
+  - .github
+  - .gitignore
+  - TESTING.md
+  - images

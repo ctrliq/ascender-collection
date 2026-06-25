@@ -180,10 +180,10 @@ For integration tests, you will need an existing AWX or Automation Platform Cont
   connection: local
   gather_facts: False
   environment:
-      TOWER_HOST: <URL>
-      TOWER_USERNAME: <username>
-      TOWER_PASSWORD: <password>
-      TOWER_VERIFY_SSL: False
+      CONTROLLER_HOST: <URL>
+      CONTROLLER_USERNAME: <username>
+      CONTROLLER_PASSWORD: <password>
+      CONTROLLER_VERIFY_SSL: False
   collections:
     - ctrliq.ascender
 
