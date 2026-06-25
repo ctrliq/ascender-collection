@@ -1,17 +1,5 @@
 # {% if collection_package | lower() == 'ascender' %}Ascender{% else %}Tower{% endif %} Ansible Collection
 
-[comment]: # (*******************************************************)
-[comment]: # (*                                                     *)
-[comment]: # (*             WARNING                                 *)
-[comment]: # (*                                                     *)
-[comment]: # (*  This file is templated and not to be               *)
-[comment]: # (*  edited directly! Instead modify:                   *)
-[comment]: # (*  tools/roles/template_galaxy/templates/README.md.j2 *)
-[comment]: # (*                                                     *)
-[comment]: # (*  Changes to the base README.md file are refreshed   *)
-[comment]: # (*  upon build of the collection                       *)
-[comment]: # (*******************************************************)
-
 The `{{ collection_namespace }}.{{ collection_package }}` collection lets you manage an {% if collection_package | lower() == 'ascender' %}Ascender{% else %}Red Hat Ansible Automation Platform{% endif %} controller from Ansible playbooks: organizations, inventories, projects, job templates, credentials, schedules, workflows, and the rest of the controller API are all exposed as modules, alongside a dynamic inventory plugin and a set of lookup plugins.
 
 This collection traces back to the modules that once shipped in Ansible core
