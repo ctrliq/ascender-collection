@@ -30,21 +30,19 @@ plugin, module utilities, and doc fragments that lived elsewhere in that repo.
 ## Installation
 
 {% if collection_package | lower() == 'ascender' %}
-The collection templates its own `galaxy.yml` at build time. From the root of
-this repository, run:
+### From Galaxy
 
 ```bash
-ansible-playbook -i localhost, tools/template_galaxy.yml \
-  -e collection_package={{ collection_package }} \
-  -e collection_namespace={{ collection_namespace }} \
-  -e collection_version=$(python3 -c "import datetime; print(datetime.date.today().strftime('%y.%-m.0'))")
+ansible-galaxy collection install {{ collection_namespace }}.{{ collection_package }}
 ```
 
-This produces a versioned artifact in the `build/` directory.
-Install it with:
+### From source
+
+Build the collection from a checkout of this repository:
 
 ```bash
-ansible-galaxy collection install build/{{ collection_namespace }}-{{ collection_package }}-*.tar.gz
+ansible-galaxy collection build
+ansible-galaxy collection install {{ collection_namespace }}-{{ collection_package }}-*.tar.gz
 ```
 {% else %}
 Install this collection from
@@ -136,9 +134,8 @@ Notable points in the history of the `{{ collection_namespace }}.{{ collection_p
 - It descends from the `awx.awx` collection; every module previously named
   `tower_*` is now unprefixed (for example, `tower_inventory` is `inventory`).
 - All modules support named URLs anywhere a name or id is accepted.
-- The source tree carries the placeholder version `0.0.1-devel`. A real version
-  (e.g. `25.4.0`) is injected at build time by the template system — see
-  [Installation](#installation).
+- The version in `galaxy.yml` is bumped with each release and follows a
+  `YY.M.PATCH` calendar scheme (e.g. `25.4.0`).
 {% else %}
 - 3.7.0 initial release.
 - 4.0.0 `ansible.tower` renamed to `ansible.controller`; the `tower_` prefix was

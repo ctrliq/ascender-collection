@@ -287,8 +287,8 @@ class ControllerModule(AnsibleModule):
 
 
 class ControllerAPIModule(ControllerModule):
-    # TODO: Move the collection version check into controller_module.py
-    # This gets set by the make process so whatever is in here is irrelevant
+    # Development placeholder — the optional template_galaxy.yml build
+    # playbook replaces this with the real version from galaxy.yml.
     _COLLECTION_VERSION = "0.0.1-devel"
     _COLLECTION_TYPE = "awx"
     # This maps the collection type (awx/ascender/tower) to the X-API-Product-Name

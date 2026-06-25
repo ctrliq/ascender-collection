@@ -1,17 +1,5 @@
 # Ascender Ansible Collection
 
-[comment]: # (*******************************************************)
-[comment]: # (*                                                     *)
-[comment]: # (*             WARNING                                 *)
-[comment]: # (*                                                     *)
-[comment]: # (*  This file is templated and not to be               *)
-[comment]: # (*  edited directly! Instead modify:                   *)
-[comment]: # (*  tools/roles/template_galaxy/templates/README.md.j2 *)
-[comment]: # (*                                                     *)
-[comment]: # (*  Changes to the base README.md file are refreshed   *)
-[comment]: # (*  upon build of the collection                       *)
-[comment]: # (*******************************************************)
-
 The `ctrliq.ascender` collection lets you manage an Ascender controller from Ansible playbooks: organizations, inventories, projects, job templates, credentials, schedules, workflows, and the rest of the controller API are all exposed as modules, alongside a dynamic inventory plugin and a set of lookup plugins.
 
 This collection traces back to the modules that once shipped in Ansible core
@@ -29,21 +17,19 @@ plugin, module utilities, and doc fragments that lived elsewhere in that repo.
 
 ## Installation
 
-The collection templates its own `galaxy.yml` at build time. From the root of
-this repository, run:
+### From Galaxy
 
 ```bash
-ansible-playbook -i localhost, tools/template_galaxy.yml \
-  -e collection_package=ascender \
-  -e collection_namespace=ctrliq \
-  -e collection_version=$(python3 -c "import datetime; print(datetime.date.today().strftime('%y.%-m.0'))")
+ansible-galaxy collection install ctrliq.ascender
 ```
 
-This produces a versioned artifact in the `build/` directory.
-Install it with:
+### From source
+
+Build the collection from a checkout of this repository:
 
 ```bash
-ansible-galaxy collection install build/ctrliq-ascender-*.tar.gz
+ansible-galaxy collection build
+ansible-galaxy collection install ctrliq-ascender-*.tar.gz
 ```
 
 ## Using the collection
@@ -126,9 +112,8 @@ Notable points in the history of the `ctrliq.ascender` collection:
 - It descends from the `awx.awx` collection; every module previously named
   `tower_*` is now unprefixed (for example, `tower_inventory` is `inventory`).
 - All modules support named URLs anywhere a name or id is accepted.
-- The source tree carries the placeholder version `0.0.1-devel`. A real version
-  (e.g. `25.4.0`) is injected at build time by the template system — see
-  [Installation](#installation).
+- The version in `galaxy.yml` is bumped with each release and follows a
+  `YY.M.PATCH` calendar scheme (e.g. `25.4.0`).
 
 Behaviours worth knowing when writing playbooks:
 

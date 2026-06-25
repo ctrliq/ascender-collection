@@ -2,18 +2,33 @@
 
 Tools used for building, maintaining, and testing the collection.
 
-### Template Galaxy
+### Building
 
-The `template_galaxy.yml` playbook runs as a pre-requisite for building the collection:
+The standard way to build the collection is:
 
-```
-ansible-playbook -i localhost, tools/template_galaxy.yml \
-  -e collection_package=ascender \
-  -e collection_namespace=ctrliq \
-  -e collection_version=25.4.0
+```bash
+ansible-galaxy collection build
 ```
 
-This produces a build artifact in the `build/` directory.
+This reads the version from `galaxy.yml` and produces a
+`ctrliq-ascender-<version>.tar.gz` artifact in the current directory.
+
+### Template Galaxy (optional)
+
+The `template_galaxy.yml` playbook copies the source into `build/` and
+injects the version and namespace into the Python source code. This is
+only needed when building a non-default namespace variant (e.g.
+`ansible.controller`) or when you want `_COLLECTION_VERSION` in the
+modules to reflect the release version instead of the `0.0.1-devel`
+development placeholder:
+
+```bash
+ansible-playbook -i localhost, tools/template_galaxy.yml
+ansible-galaxy collection build build/
+```
+
+The version defaults to whatever is in `galaxy.yml`. Override with
+`-e collection_version=25.5.0`.
 
 ### Generate
 
