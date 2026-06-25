@@ -2,7 +2,7 @@
 authors:
   - Ascender Project Contributors
 dependencies: {}
-description: Ansible content that interacts with the Ascender (AWX) Controller API.
+description: Ansible content that interacts with the Ascender (AWX) API
 documentation: https://github.com/ctrliq/ascender-collection/blob/main/README.md
 homepage: https://ascender-automation.org
 issues: https://github.com/ctrliq/ascender-collection/issues
