@@ -3,3 +3,29 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# Egg/dist info
+*.egg-info/
+*.egg
+.eggs/
+dist/
+
+# Tool caches
+.tox/
+.mypy_cache/
+.ruff_cache/
+
+# Editor/IDE files
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
