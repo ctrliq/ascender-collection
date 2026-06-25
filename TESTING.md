@@ -49,7 +49,7 @@ This test has a single test called `test_create_token`. It creates a `module_arg
 
 ### Completion Test
 
-The completeness check is run from the unit tests and can be found in `ascender_collection/tests/ascender/test_completness.py`. It compares the CRUD modules to the API endpoints and looks for discrepancies in options between the two.
+The completeness check is run from the unit tests and can be found in `test/ascender/test_completeness.py`. It compares the CRUD modules to the API endpoints and looks for discrepancies in options between the two.
 
 For example, when creating a new module for an endpoint and the module has parameters A, B and C, and the endpoint supports options A, B and D, then errors around parameter C and option D being mismatched would come up.
 
@@ -141,55 +141,30 @@ When writing an integration test, a test of asset type A does not need to make a
 
 ## Running Unit Tests
 
-You can use the `Makefile` to run unit tests. In addition to the `make` command, you need a virtual environment with several requirements installed. These requirements are outlined in the [`ascender_collection/README.md`](https://github.com/ctrliq/ascender/blob/devel/ascender_collection/README.md) file.
+The unit tests require a checkout of the [Ascender](https://github.com/ctrliq/ascender) repo for the Django models. Set up a virtualenv with the necessary dependencies:
 
-> **Note:** The process for the installation will differ depending on OS and version.
+```bash
+mkvirtualenv my_new_venv
+pip install -r requirements.txt
+pip install -e <path to your ascender checkout>
+pip install -e <path to your ascender checkout>/awxkit
+```
 
-Once your environment is completely established, you can run all of the unit tests with the command (your results may vary):
+Once your environment is established, run all unit tests:
 
 ```
-$ make test_collection
-rm -f /home/student1/virtuelenvs//awx/lib/python3.6/no-global-site-packages.txt
-if [ "/home/student1/virtuelenvs/" ]; then \
-        . /home/student1/virtuelenvs//awx/bin/activate; \
-fi; \
-py.test ascender_collection/test/ascender -v
+$ py.test test/ascender -v
 ==================================== test session starts ====================================
-platform linux -- Python 3.6.8, pytest-6.1.0, py-1.9.0, pluggy-0.13.1 -- /home/student1/virtuelenvs/awx/bin/python
-cachedir: .pytest_cache
-django: settings: awx.settings.development (from ini)
-rootdir: /home/student1/awx, configfile: pytest.ini
-plugins: cov-2.10.1, django-3.10.0, pythonpath-0.7.3, mock-1.11.1, timeout-1.4.2, forked-1.3.0, xdist-1.34.0
-collected 116 items
-
-ascender_collection/test/ascender/test_application.py::test_create_application PASSED                [  0%]
-ascender_collection/test/ascender/test_completeness.py::test_completeness PASSED                     [  1%]
-
 ...
-
-==================================== short test summary info ====================================
-FAILED ascender_collection/test/ascender/test_job_template.py::test_create_job_template - AssertionError: assert {'changed': T...'name': 'foo'} == {'changed': T...
-FAILED ascender_collection/test/ascender/test_job_template.py::test_job_template_with_new_credentials - assert 16 == 14
-FAILED ascender_collection/test/ascender/test_job_template.py::test_job_template_with_survey_spec - assert 11 == 9
-FAILED ascender_collection/test/ascender/test_module_utils.py::test_version_warning - SystemExit: 1
-FAILED ascender_collection/test/ascender/test_module_utils.py::test_type_warning - SystemExit: 1
-====================== 5 failed, 106 passed, 5 skipped, 56 warnings in 48.53s ===================
-make: *** [Makefile:382: test_collection] Error 1
 ```
 
-In addition to running all of the tests, you can also specify specific tests to run. This is useful when developing a single module. In this example, we will run the tests for the `token` module:
+You can also run a specific test file:
 
 ```
-$ pytest ascender_collection/test/ascender/test_token.py
+$ py.test test/ascender/test_token.py
 ============================ test session starts ============================
-platform darwin -- Python 3.7.0, pytest-3.6.0, py-1.8.1, pluggy-0.6.0
-django: settings: awx.settings.development (from ini)
-rootdir: /Users/jowestco/junk/awx, inifile: pytest.ini
-plugins: xdist-1.27.0, timeout-1.3.4, pythonpath-0.7.3, mock-1.11.1, forked-1.1.3, django-3.9.0, cov-2.8.1
-collected 1 item                                                                                                                                                  
-
-ascender_collection/test/ascender/test_token.py .                               [100%]
-
+...
+test/ascender/test_token.py .                               [100%]
 ========================= 1 passed in 1.72 seconds =========================
 ```
 
@@ -205,10 +180,10 @@ For integration tests, you will need an existing AWX or Automation Platform Cont
   connection: local
   gather_facts: False
   environment:
-      TOWER_HOST: <URL>
-      TOWER_USERNAME: <username>
-      TOWER_PASSWORD: <password>
-      TOWER_VERIFY_SSL: False
+      CONTROLLER_HOST: <URL>
+      CONTROLLER_USERNAME: <username>
+      CONTROLLER_PASSWORD: <password>
+      CONTROLLER_VERIFY_SSL: False
   collections:
     - ctrliq.ascender
 
@@ -216,46 +191,19 @@ For integration tests, you will need an existing AWX or Automation Platform Cont
     - include_tasks: main.yml
 ```
 
-Place this file in the `/tasks` directory of the test playbook you'd like to run (i.e., `awx/ascender_collection/tests/integration/targets/ad_hoc_command_cancel/tasks/`; a test playbook named `main.yml` must be in the same directory).
+Place this file in the `/tasks` directory of the test playbook you'd like to run (i.e., `tests/integration/targets/ad_hoc_command_cancel/tasks/`; a test playbook named `main.yml` must be in the same directory).
 
 The `run_it.yml` playbook will set up your connection parameters via environment variables and then invoke the `main.yml` play of the role.
 
-The output below is what should ideally be seen when running an integration test:
-
-```
-$ ansible-playbook run_it.yml
-
-PLAY [Run Integration Test] *******************************************************************************
-
-TASK [include_tasks] **************************************************************************************
-included: /home/student1/awx/ascender_collection/tests/integration/targets/demo_data/tasks/main.yml for localhost
-
-TASK [Assure that default organization exists] *************************************************************
-[WARNING]: You are using the awx version of this collection but connecting to Red Hat Ansible Tower
-ok: [localhost]
-
-TASK [HACK - delete orphaned projects from preload data where organization deleted] ************************
-
-TASK [Assure that demo project exists] *********************************************************************
-changed: [localhost]
-
-TASK [Assure that demo inventory exists] *******************************************************************
-changed: [localhost]
-
-TASK [Create a Host] ***************************************************************************************
-changed: [localhost]
-
-TASK [Assure that demo job template exists] *****************************************************************
-changed: [localhost]
-
-PLAY RECAP **************************************************************************************
-localhost: ok=6    changed=4    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0
-```
-
 You should see the tasks from the integration test run as expected.
 
-It is critical to keep in mind that the integration tests run against the _installed_ version of the collection, not against the files in `~/awx/ascender_collection/plugins/modules`. Because of this, you need to build your development version of the collection by running `make install_collection` prior to running a test against it or your results may vary.
+It is critical to keep in mind that the integration tests run against the _installed_ version of the collection. Because of this, you need to build and install the collection prior to running a test against it or your results may vary.
 
-In order to avoid having to rebuild every time, you can attempt to run `make symlink_collection`. This will symlink your development directory into the Ansible-installed collection location.
+In order to avoid having to rebuild every time, you can symlink your development directory into the Ansible-installed collection location:
+
+```bash
+mkdir -p ~/.ansible/collections/ansible_collections/ctrliq
+ln -s $(pwd) ~/.ansible/collections/ansible_collections/ctrliq/ascender
+```
 
 > **Note:** Collections and symlinks can be unstable.

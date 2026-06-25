@@ -22,6 +22,6 @@ Minor Changes
 Breaking Changes
 ----------------
 
-- Raised the minimum required ansible-core to 2.17. The modules and plugins are now Python 3 only; the legacy ``six`` based Python 2 compatibility shims have been removed.
+- Raised the minimum required ansible-core to 2.16. The modules and plugins are now Python 3 only; the legacy ``six`` based Python 2 compatibility shims have been removed.
 - Removed the long-deprecated ``tower_*`` module and plugin redirects (their announced removal date was 2022-01-23). Use the current ``ctrliq.ascender.*`` names instead.
-- Renamed the collection from ``awx.awx`` to ``ctrliq.ascender``. Playbooks must update their fully-qualified module, plugin and doc-fragment names (for example ``awx.awx.job_launch`` becomes ``ctrliq.ascender.job_launch``). The collection source folder is now ``ascender_collection``.
+- Renamed the collection from ``awx.awx`` to ``ctrliq.ascender``. Playbooks must update their fully-qualified module, plugin and doc-fragment names (for example ``awx.awx.job_launch`` becomes ``ctrliq.ascender.job_launch``). The collection now lives in its own repository at https://github.com/ctrliq/ascender-collection.

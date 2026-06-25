@@ -1,24 +1,6 @@
 # Ascender Ansible Collection
 
-[comment]: # (*******************************************************)
-[comment]: # (*                                                     *)
-[comment]: # (*             WARNING                                 *)
-[comment]: # (*                                                     *)
-[comment]: # (*  This file is templated and not to be               *)
-[comment]: # (*  edited directly! Instead modify:                   *)
-[comment]: # (*  tools/roles/template_galaxy/templates/README.md.j2 *)
-[comment]: # (*                                                     *)
-[comment]: # (*  Changes to the base README.md file are refreshed   *)
-[comment]: # (*  upon build of the collection                       *)
-[comment]: # (*******************************************************)
-
-The `ctrliq.ascender` collection lets you manage an Ascender controller from Ansible playbooks: organizations, inventories, projects, job templates, credentials, schedules, workflows, and the rest of the controller API are all exposed as modules, alongside a dynamic inventory plugin and a set of lookup plugins.
-
-The source for this collection lives in the `ascender_collection` folder of the
-[Ascender repository](https://github.com/ctrliq/ascender). It traces back to the
-modules that once shipped in Ansible core under
-`lib/ansible/modules/web_infrastructure/ansible_tower`, plus the inventory
-plugin, module utilities, and doc fragments that lived elsewhere in that repo.
+The `ctrliq.ascender` collection lets you manage an [Ascender](https://ascender-automation.org) controller from Ansible playbooks: organizations, inventories, projects, job templates, credentials, schedules, workflows, and the rest of the controller API are all exposed as modules, alongside a dynamic inventory plugin and a set of lookup plugins.
 
 ## Requirements
 
@@ -31,19 +13,19 @@ plugin, module utilities, and doc fragments that lived elsewhere in that repo.
 
 ## Installation
 
-The collection templates its own `galaxy.yml` at build time. From the root of
-the Ascender source tree, run:
+### From Galaxy
 
 ```bash
-make build_collection
+ansible-galaxy collection install ctrliq.ascender
 ```
 
-This produces a versioned artifact in the `ascender_collection` folder, for
-example `ascender_collection/ctrliq-ascender-25.4.0.tar.gz`.
-Install it with:
+### From source
+
+Build the collection from a checkout of this repository:
 
 ```bash
-ansible-galaxy collection install ctrliq-ascender-25.4.0.tar.gz
+ansible-galaxy collection build
+ansible-galaxy collection install ctrliq-ascender-*.tar.gz
 ```
 
 ## Using the collection
@@ -119,73 +101,14 @@ oauth_token = LEdCpKVKc4znzffcpQL5vLG8oyeku6
 Per-plugin documentation is available with `ansible-doc`, e.g.
 `ansible-doc ctrliq.ascender.job_launch`.
 
-## Release and upgrade notes
-
-Notable points in the history of the `ctrliq.ascender` collection:
-
-- It descends from the `awx.awx` collection; every module previously named
-  `tower_*` is now unprefixed (for example, `tower_inventory` is `inventory`).
-- All modules support named URLs anywhere a name or id is accepted.
-- `0.0.1-devel` is the version reported when installing from source. It is meant
-  for development and is expected to be unstable; build a release artifact for
-  production use.
-
-Behaviours worth knowing when writing playbooks:
-
-- `credential`: `kind` is no longer a parameter; supply the credential's fields
-  under `inputs` (for example, `become_method`).
-- `job_wait`: use `interval` instead of the removed `min_interval`/`max_interval`.
-- `notification_template`: notification settings go in the
-  `notification_configuration` dict; use a `lookup` to load one from a file.
-- `inventory_source`: when `source_project` is given, it is looked up within the
-  same organization as the inventory.
-- `project`: creation waits for the initial sync by default; set `wait: false`
-  to skip it.
-- `extra_vars` is always a dict. Launching with `extra_vars` requires
-  `ask_extra_vars` or `survey_enabled` to be enabled on the job template.
-- `variables` on `group`, `host`, and `inventory` must be a dict; the `@file`
-  syntax is no longer supported (use a `lookup`).
-- `inputs`/`injectors` on `credential_type`, and `schema` on
-  `workflow_job_template`, are structured data (dict / list of dicts), not
-  strings.
-- Config files must be INI, YAML, or JSON — single-line `k=v` content is no
-  longer accepted.
-- Removed: "scan" job templates, the `TOWER_CERTIFICATE` env var, the HipChat
-  notification type, `extra_vars_path` on `job_template`, and passing a filename
-  to `ssh_key_data` on `credential`.
-
 ## Testing
 
-The collection is verified three ways:
+See [TESTING.md](./TESTING.md) for full details.
 
-- **Sanity** — from an installed copy of the collection:
-  `ansible-test sanity`.
-- **Unit** — compatibility tests against the current controller code live in
-  `ascender_collection/test/ascender` and run with `make test_collection` inside
-  the development container. To run them outside the container against an Ansible
-  checkout, use a dedicated virtualenv:
-
-  ```bash
-  mkvirtualenv my_new_venv
-  # you may need to swap psycopg for psycopg-binary in requirements/requirements.txt
-  pip install -r requirements/requirements.txt -r requirements/requirements_dev.txt -r requirements/requirements_git.txt
-  make clean-api
-  pip install -e <path to your Ansible>
-  pip install -e .
-  pip install -e awxkit
-  py.test ascender_collection/test/ascender/
-  ```
-
-- **Integration** — require a virtualenv with `ansible-core >= 2.16` and
-  `awxkit`, a running controller, and an installed collection
-  (`make install_collection`) plus a config file as described under
-  [Authentication](#authentication):
-
-  ```bash
-  # ansible-test must run from where the collection is installed
-  cd ~/.ansible/collections/ansible_collections/ctrliq/ascender/
-  ansible-test integration
-  ```
+- **Sanity** — `ansible-test sanity` from an installed copy.
+- **Unit** — `py.test test/ascender/` against the
+  [Ascender](https://github.com/ctrliq/ascender) Django models.
+- **Integration** — `ansible-test integration` with a running controller.
 
 ## Licensing
 

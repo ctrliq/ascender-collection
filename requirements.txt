@@ -1,3 +1,4 @@
 pytz  # for schedule_rrule lookup plugin
 python-dateutil>=2.7.0  # schedule_rrule
-awxkit  # For import and export modules
+# Optional — only needed by the export and import modules
+# awxkit
