@@ -80,9 +80,7 @@ EXAMPLES = """
     action: deny
 """
 
-RETURN = """
-
-"""
+RETURN = r"""# This module does not return additional data beyond the standard changed/failed status."""
 
 
 from ..module_utils.controller_api import ControllerAPIModule
