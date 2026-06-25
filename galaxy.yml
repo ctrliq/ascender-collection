@@ -27,6 +27,7 @@ build_ignore:
   - galaxy.yml.j2
   - template_galaxy.yml
   - '*.tar.gz'
+  - CONTRIBUTING.md
   - .github
   - .gitignore
   - TESTING.md
