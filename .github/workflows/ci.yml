@@ -1,0 +1,125 @@
+---
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - stable-*
+  pull_request:
+    branches:
+      - main
+      - stable-*
+  schedule:
+    # Weekly Monday 06:00 UTC — catches breakage from ansible-core devel
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  sanity:
+    name: Sanity (Ansible ${{ matrix.ansible }} / Python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # ansible-core 2.17 (oldest supported) — Python 3.10-3.12
+          - ansible: stable-2.17
+            python: "3.10"
+          - ansible: stable-2.17
+            python: "3.12"
+          # ansible-core 2.18 — Python 3.11-3.13
+          - ansible: stable-2.18
+            python: "3.12"
+          # ansible-core 2.19 — Python 3.11-3.13
+          - ansible: stable-2.19
+            python: "3.12"
+          - ansible: stable-2.19
+            python: "3.13"
+          # ansible-core devel — latest Python
+          - ansible: devel
+            python: "3.13"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ansible_collections/ctrliq/ascender
+
+      - uses: ansible-community/ansible-test-gh-action@v1.17.0
+        with:
+          ansible-core-version: ${{ matrix.ansible }}
+          target-python-version: ${{ matrix.python }}
+          testing-type: sanity
+          collection-root: ansible_collections/ctrliq/ascender
+
+  build:
+    name: Build & Galaxy import
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install ansible-core
+        run: pip install ansible-core
+
+      - name: Build collection
+        run: ansible-galaxy collection build --force
+
+      - name: Verify artifact exists
+        run: ls -la ctrliq-ascender-*.tar.gz
+
+      - name: Install galaxy-importer
+        run: pip install galaxy-importer
+
+      - name: Validate with galaxy-importer
+        run: python -m galaxy_importer.main ctrliq-ascender-*.tar.gz
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: collection-artifact
+          path: ctrliq-ascender-*.tar.gz
+          retention-days: 30
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install flake8 yamllint
+
+      - name: flake8 — plugins
+        run: flake8 plugins/ --max-line-length=200 --count --show-source --statistics
+
+      - name: yamllint — meta and galaxy
+        run: yamllint -d relaxed meta/ galaxy.yml
+
+  changelog:
+    name: Changelog
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install antsibull-changelog
+        run: pip install antsibull-changelog
+
+      - name: Lint changelog
+        run: antsibull-changelog lint
