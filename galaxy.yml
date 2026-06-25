@@ -31,3 +31,4 @@ build_ignore:
   - .gitignore
   - TESTING.md
   - images
+  - .yamllint

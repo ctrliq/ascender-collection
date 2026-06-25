@@ -105,7 +105,7 @@ jobs:
         run: flake8 plugins/ --max-line-length=200 --count --show-source --statistics
 
       - name: yamllint — meta and galaxy
-        run: yamllint -d relaxed meta/ galaxy.yml
+        run: yamllint meta/ galaxy.yml
 
   changelog:
     name: Changelog
