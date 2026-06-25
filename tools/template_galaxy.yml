@@ -1,14 +1,23 @@
 ---
-- name: Template the collection galaxy.yml
+# Optional build playbook for producing a release artifact with the
+# collection version and type injected into the Python source code.
+#
+# For most use cases, a plain `ansible-galaxy collection build` from the
+# repo root is sufficient — it reads galaxy.yml directly.
+#
+# This playbook copies the source into build/, templates the version and
+# namespace into the Python modules, and leaves the result ready for
+# `ansible-galaxy collection build build/`.
+- name: Template the collection for release
   hosts: localhost
   gather_facts: false
   connection: local
   vars:
     collection_package: ascender
     collection_namespace: ctrliq
-    collection_version: 0.0.1  # not for updating, pass in extra_vars
+    collection_version: "{{ lookup('file', playbook_dir + '/../galaxy.yml') | from_yaml | json_query('version') }}"
     collection_source: "{{ playbook_dir }}/../"
-    collection_path: "{{ playbook_dir }}/../../ascender_collection_build"
+    collection_path: "{{ playbook_dir }}/../build"
   pre_tasks:
     - file:
         path: "{{ collection_path }}"
@@ -21,20 +30,3 @@
 
   roles:
     - template_galaxy
-
-  tasks:
-    - name: Make substitutions in source to sync with templates
-      set_fact:
-        collection_version_override: 0.0.1-devel
-
-    - name: Template the galaxy.yml source file (should be commited with your changes)
-      template:
-        src: "{{ collection_source }}/tools/roles/template_galaxy/templates/galaxy.yml.j2"
-        dest: "{{ collection_source }}/galaxy.yml"
-        force: true
-
-    - name: Template the README.md source file (should be commited with your changes)
-      template:
-        src: "{{ collection_source }}/tools/roles/template_galaxy/templates/README.md.j2"
-        dest: "{{ collection_source }}/README.md"
-        force: true

@@ -1,23 +1,9 @@
 # {% if collection_package | lower() == 'ascender' %}Ascender{% else %}Tower{% endif %} Ansible Collection
 
-[comment]: # (*******************************************************)
-[comment]: # (*                                                     *)
-[comment]: # (*             WARNING                                 *)
-[comment]: # (*                                                     *)
-[comment]: # (*  This file is templated and not to be               *)
-[comment]: # (*  edited directly! Instead modify:                   *)
-[comment]: # (*  tools/roles/template_galaxy/templates/README.md.j2 *)
-[comment]: # (*                                                     *)
-[comment]: # (*  Changes to the base README.md file are refreshed   *)
-[comment]: # (*  upon build of the collection                       *)
-[comment]: # (*******************************************************)
-
 The `{{ collection_namespace }}.{{ collection_package }}` collection lets you manage an {% if collection_package | lower() == 'ascender' %}Ascender{% else %}Red Hat Ansible Automation Platform{% endif %} controller from Ansible playbooks: organizations, inventories, projects, job templates, credentials, schedules, workflows, and the rest of the controller API are all exposed as modules, alongside a dynamic inventory plugin and a set of lookup plugins.
 
-The source for this collection lives in the `ascender_collection` folder of the
-[Ascender repository](https://github.com/ctrliq/ascender). It traces back to the
-modules that once shipped in Ansible core under
-`lib/ansible/modules/web_infrastructure/ansible_tower`, plus the inventory
+This collection traces back to the modules that once shipped in Ansible core
+under `lib/ansible/modules/web_infrastructure/ansible_tower`, plus the inventory
 plugin, module utilities, and doc fragments that lived elsewhere in that repo.
 
 ## Requirements
@@ -32,19 +18,19 @@ plugin, module utilities, and doc fragments that lived elsewhere in that repo.
 ## Installation
 
 {% if collection_package | lower() == 'ascender' %}
-The collection templates its own `galaxy.yml` at build time. From the root of
-the Ascender source tree, run:
+### From Galaxy
 
 ```bash
-make build_collection
+ansible-galaxy collection install {{ collection_namespace }}.{{ collection_package }}
 ```
 
-This produces a versioned artifact in the `ascender_collection` folder, for
-example `ascender_collection/{{ collection_namespace }}-{{ collection_package }}-25.4.0.tar.gz`.
-Install it with:
+### From source
+
+Build the collection from a checkout of this repository:
 
 ```bash
-ansible-galaxy collection install {{ collection_namespace }}-{{ collection_package }}-25.4.0.tar.gz
+ansible-galaxy collection build
+ansible-galaxy collection install {{ collection_namespace }}-{{ collection_package }}-*.tar.gz
 ```
 {% else %}
 Install this collection from
@@ -136,9 +122,8 @@ Notable points in the history of the `{{ collection_namespace }}.{{ collection_p
 - It descends from the `awx.awx` collection; every module previously named
   `tower_*` is now unprefixed (for example, `tower_inventory` is `inventory`).
 - All modules support named URLs anywhere a name or id is accepted.
-- `0.0.1-devel` is the version reported when installing from source. It is meant
-  for development and is expected to be unstable; build a release artifact for
-  production use.
+- The version in `galaxy.yml` is bumped with each release and follows a
+  `YY.M.PATCH` calendar scheme (e.g. `25.4.0`).
 {% else %}
 - 3.7.0 initial release.
 - 4.0.0 `ansible.tower` renamed to `ansible.controller`; the `tower_` prefix was
@@ -177,24 +162,21 @@ The collection is verified three ways:
   `ansible-test sanity`.
 {% if collection_package | lower() == "ascender" %}
 - **Unit** — compatibility tests against the current controller code live in
-  `ascender_collection/test/ascender` and run with `make test_collection` inside
-  the development container. To run them outside the container against an Ansible
-  checkout, use a dedicated virtualenv:
+  `test/ascender` and require a checkout of the
+  [Ascender](https://github.com/ctrliq/ascender) repo for the Django models.
+  To run them, use a dedicated virtualenv:
 
   ```bash
   mkvirtualenv my_new_venv
-  # you may need to swap psycopg for psycopg-binary in requirements/requirements.txt
-  pip install -r requirements/requirements.txt -r requirements/requirements_dev.txt -r requirements/requirements_git.txt
-  make clean-api
-  pip install -e <path to your Ansible>
-  pip install -e .
-  pip install -e awxkit
-  py.test ascender_collection/test/ascender/
+  pip install -r requirements.txt
+  pip install -e <path to your ascender checkout>
+  pip install -e <path to your ascender checkout>/awxkit
+  py.test test/ascender/
   ```
 
 - **Integration** — require a virtualenv with `ansible-core >= 2.16` and
   `awxkit`, a running controller, and an installed collection
-  (`make install_collection`) plus a config file as described under
+  plus a config file as described under
   [Authentication](#authentication):
 
   ```bash
