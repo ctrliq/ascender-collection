@@ -50,16 +50,11 @@ jobs:
           - ansible: devel
             python: "3.13"
     steps:
-      - uses: actions/checkout@v4
-        with:
-          path: ansible_collections/ctrliq/ascender
-
       - uses: ansible-community/ansible-test-gh-action@v1.17.0
         with:
           ansible-core-version: ${{ matrix.ansible }}
           target-python-version: ${{ matrix.python }}
           testing-type: sanity
-          collection-root: ansible_collections/ctrliq/ascender
 
   build:
     name: Build & Galaxy import
