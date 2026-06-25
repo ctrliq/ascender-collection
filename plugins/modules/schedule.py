@@ -1,14 +1,8 @@
 #!/usr/bin/python
 # coding: utf-8 -*-
 
-
 # (c) 2020, John Westcott IV <john.westcott.iv@redhat.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-
-from __future__ import absolute_import, division, print_function
-
-__metaclass__ = type
-
 
 ANSIBLE_METADATA = {'metadata_version': '1.1', 'status': ['preview'], 'supported_by': 'community'}
 
@@ -199,9 +193,7 @@ id:
     sample: 42
 '''
 
-
 from ..module_utils.controller_api import ControllerAPIModule
-
 
 def main():
     # Any additional arguments that are not fields of the item can be added here
@@ -373,7 +365,6 @@ def main():
         item_type='schedule',
         associations=association_fields,
     )
-
 
 if __name__ == '__main__':
     main()

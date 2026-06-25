@@ -1,6 +1,4 @@
-from __future__ import absolute_import, division, print_function
 
-__metaclass__ = type
 
 from ansible.module_utils.basic import AnsibleModule, env_fallback
 from ansible.module_utils.urls import Request, SSLValidationError, ConnectionError
@@ -17,7 +15,6 @@ from json import loads, dumps
 from os.path import isfile, expanduser, split, join, exists, isdir
 from os import access, R_OK, getcwd, environ
 
-
 try:
     from ansible.module_utils.compat.version import LooseVersion as Version
 except ImportError:
@@ -33,14 +30,11 @@ try:
 except ImportError:
     HAS_YAML = False
 
-
 class ConfigFileException(Exception):
     pass
 
-
 class ItemNotDefined(Exception):
     pass
-
 
 class ControllerModule(AnsibleModule):
     url = None
@@ -284,7 +278,6 @@ class ControllerModule(AnsibleModule):
             self.warn_callback(warning)
         else:
             super().warn(warning)
-
 
 class ControllerAPIModule(ControllerModule):
     # Development placeholder — the optional template_galaxy.yml build

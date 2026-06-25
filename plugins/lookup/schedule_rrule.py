@@ -1,8 +1,5 @@
 # (c) 2020 Ansible Project
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-from __future__ import absolute_import, division, print_function
-
-__metaclass__ = type
 
 DOCUMENTATION = """
     name: schedule_rrule
@@ -97,7 +94,6 @@ except ImportError as imp_exc:
     LIBRARY_IMPORT_ERROR = imp_exc
 else:
     LIBRARY_IMPORT_ERROR = None
-
 
 class LookupModule(LookupBase):
     # plugin constructor

@@ -4,13 +4,7 @@
 # (c) 2017, Wayne Witzel III <wayne@riotousliving.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-from __future__ import absolute_import, division, print_function
-
-__metaclass__ = type
-
-
 ANSIBLE_METADATA = {'metadata_version': '1.1', 'status': ['preview'], 'supported_by': 'community'}
-
 
 DOCUMENTATION = '''
 ---
@@ -41,7 +35,6 @@ options:
       type: dict
 extends_documentation_fragment: ctrliq.ascender.auth
 '''
-
 
 EXAMPLES = '''
 - name: List running jobs for the testing.yml playbook
@@ -78,9 +71,7 @@ results:
               "inventory": 1, "job_explanation": "", "job_tags": "", "job_template": 5, "job_type": "run"}, ...]
 '''
 
-
 from ..module_utils.controller_api import ControllerAPIModule
-
 
 def main():
     # Any additional arguments that are not fields of the item can be added here
@@ -119,7 +110,6 @@ def main():
 
     # Attempt to look up jobs based on the status
     module.exit_json(**job_list['json'])
-
 
 if __name__ == '__main__':
     main()

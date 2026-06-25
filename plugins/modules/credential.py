@@ -4,13 +4,7 @@
 # Copyright: (c) 2017, Wayne Witzel III <wayne@riotousliving.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-from __future__ import absolute_import, division, print_function
-
-__metaclass__ = type
-
-
 ANSIBLE_METADATA = {'metadata_version': '1.1', 'status': ['preview'], 'supported_by': 'community'}
-
 
 DOCUMENTATION = '''
 ---
@@ -116,7 +110,6 @@ notes:
     See the last 4 examples for details.
 '''
 
-
 EXAMPLES = '''
 - name: Add machine credential
   credential:
@@ -212,9 +205,7 @@ id:
     sample: 42
 '''
 
-
 from ..module_utils.controller_api import ControllerAPIModule
-
 
 def main():
     # Any additional arguments that are not fields of the item can be added here
@@ -318,7 +309,6 @@ def main():
 
     # If the state was present we can let the module build or update the existing group, this will return on its own
     module.create_or_update_if_needed(credential, credential_fields, endpoint='credentials', item_type='credential')
-
 
 if __name__ == '__main__':
     main()

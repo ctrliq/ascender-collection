@@ -1,6 +1,4 @@
-from __future__ import absolute_import, division, print_function
 
-__metaclass__ = type
 
 from .controller_api import ControllerModule
 from ansible.module_utils.basic import missing_required_lib
@@ -13,7 +11,6 @@ try:
     HAS_AWX_KIT = True
 except ImportError:
     HAS_AWX_KIT = False
-
 
 class ControllerAWXKitModule(ControllerModule):
     connection = None

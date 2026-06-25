@@ -5,13 +5,7 @@
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-from __future__ import absolute_import, division, print_function
-
-__metaclass__ = type
-
-
 ANSIBLE_METADATA = {'status': ['preview'], 'supported_by': 'community', 'metadata_version': '1.1'}
-
 
 DOCUMENTATION = '''
 ---
@@ -64,7 +58,6 @@ options:
 extends_documentation_fragment: ctrliq.ascender.auth
 '''
 
-
 EXAMPLES = '''
 - credential_type:
     name: Nexus
@@ -80,14 +73,11 @@ EXAMPLES = '''
     state: absent
 '''
 
-
 RETURN = ''' # '''
-
 
 from ..module_utils.controller_api import ControllerAPIModule
 
 KIND_CHOICES = {'ssh': 'Machine', 'vault': 'Ansible Vault', 'net': 'Network', 'scm': 'Source Control', 'cloud': 'Lots of others', 'insights': 'Insights'}
-
 
 def main():
     # Any additional arguments that are not fields of the item can be added here
@@ -134,7 +124,6 @@ def main():
 
     # If the state was present and we can let the module build or update the existing credential type, this will return on its own
     module.create_or_update_if_needed(credential_type, credential_type_params, endpoint='credential_types', item_type='credential type')
-
 
 if __name__ == '__main__':
     main()

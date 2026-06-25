@@ -4,13 +4,7 @@
 # (c) 2020, John Westcott IV <john.westcott.iv@redhat.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-from __future__ import absolute_import, division, print_function
-
-__metaclass__ = type
-
-
 ANSIBLE_METADATA = {'metadata_version': '1.1', 'status': ['preview'], 'supported_by': 'community'}
-
 
 DOCUMENTATION = '''
 ---
@@ -79,7 +73,6 @@ options:
 extends_documentation_fragment: ctrliq.ascender.auth
 '''
 
-
 EXAMPLES = '''
 - name: Add user
   user:
@@ -133,9 +126,7 @@ id:
     sample: 42
 '''
 
-
 from ..module_utils.controller_api import ControllerAPIModule
-
 
 def main():
     # Any additional arguments that are not fields of the item can be added here
@@ -205,7 +196,6 @@ def main():
     else:
         # If the state was present and we can let the module build or update the existing item, this will return on its own
         module.create_or_update_if_needed(existing_item, new_fields, endpoint='users', item_type='user')
-
 
 if __name__ == '__main__':
     main()

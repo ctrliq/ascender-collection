@@ -4,13 +4,7 @@
 # (c) 2017, Wayne Witzel III <wayne@riotousliving.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-from __future__ import absolute_import, division, print_function
-
-__metaclass__ = type
-
-
 ANSIBLE_METADATA = {'metadata_version': '1.1', 'status': ['preview'], 'supported_by': 'community'}
-
 
 DOCUMENTATION = '''
 ---
@@ -319,7 +313,6 @@ notes:
     for POST operation payload example.
 '''
 
-
 EXAMPLES = '''
 - name: Create Ping job template
   job_template:
@@ -369,10 +362,8 @@ id:
     sample: 42
 '''
 
-
 from ..module_utils.controller_api import ControllerAPIModule
 import json
-
 
 def update_survey(module, last_request):
     spec_endpoint = last_request.get('related', {}).get('survey_spec')
@@ -386,7 +377,6 @@ def update_survey(module, last_request):
         if response['status_code'] != 200:
             module.fail_json(msg="Failed to update survey: {0}".format(response['json']['error']))
     module.exit_json(**module.json_output)
-
 
 def main():
     # Any additional arguments that are not fields of the item can be added here
@@ -644,7 +634,6 @@ def main():
         on_create=on_change,
         on_update=on_change,
     )
-
 
 if __name__ == '__main__':
     main()

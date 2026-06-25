@@ -4,13 +4,7 @@
 # (c) 2018, Nikhil Jain <nikjain@redhat.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-from __future__ import absolute_import, division, print_function
-
-__metaclass__ = type
-
-
 ANSIBLE_METADATA = {'metadata_version': '1.1', 'status': ['preview'], 'supported_by': 'community'}
-
 
 DOCUMENTATION = '''
 ---
@@ -80,7 +74,6 @@ new_values:
     type: dict
 '''
 
-
 from ..module_utils.controller_api import ControllerAPIModule
 
 try:
@@ -89,7 +82,6 @@ try:
     HAS_YAML = True
 except ImportError:
     HAS_YAML = False
-
 
 def coerce_type(module, value):
     # If our value is already None we can just return directly
@@ -108,7 +100,6 @@ def coerce_type(module, value):
     except ValueError:
         pass
     return value
-
 
 def main():
     # Any additional arguments that are not fields of the item can be added here
@@ -186,7 +177,6 @@ def main():
         module.fail_json(msg=response['json']['__all__'])
     else:
         module.fail_json(**{'msg': "Unable to update settings, see response", 'response': response})
-
 
 if __name__ == '__main__':
     main()

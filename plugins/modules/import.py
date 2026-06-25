@@ -4,13 +4,7 @@
 # (c) 2017, John Westcott IV <john.westcott.iv@redhat.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-from __future__ import absolute_import, division, print_function
-
-__metaclass__ = type
-
-
 ANSIBLE_METADATA = {'metadata_version': '1.1', 'status': ['preview'], 'supported_by': 'community'}
-
 
 DOCUMENTATION = '''
 ---
@@ -52,7 +46,6 @@ RETURN = '''
 # This module returns only the standard module result keys (changed, failed, msg).
 '''
 
-
 from ..module_utils.awxkit import ControllerAWXKitModule
 
 # These two lines are not needed if awxkit changes to do programatic notifications on issues
@@ -66,7 +59,6 @@ try:
     HAS_EXPORTABLE_RESOURCES = True
 except ImportError:
     HAS_EXPORTABLE_RESOURCES = False
-
 
 def main():
     argument_spec = dict(assets=dict(type='dict', required=True))
@@ -104,7 +96,6 @@ def main():
             module.fail_json(msg=log_contents)
 
     module.exit_json(**module.json_output)
-
 
 if __name__ == '__main__':
     main()
