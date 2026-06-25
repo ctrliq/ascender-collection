@@ -88,14 +88,14 @@ EXAMPLES = '''
     name: "Foo"
     description: "Foo bar organization"
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 
 - name: Create organization using 'foo-venv' as default Python virtualenv
   organization:
     name: "Foo"
     description: "Foo bar organization using foo-venv"
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 
 - name: Create organization that pulls content from galaxy.ansible.com
   organization:
@@ -103,7 +103,7 @@ EXAMPLES = '''
     state: present
     galaxy_credentials:
       - Ansible Galaxy
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 '''
 
 RETURN = '''

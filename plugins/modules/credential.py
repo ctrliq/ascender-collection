@@ -125,7 +125,7 @@ EXAMPLES = '''
     organization: test-org
     credential_type: Machine
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 
 - name: Create a valid SCM credential from a private_key file
   credential:

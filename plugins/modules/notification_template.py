@@ -121,7 +121,7 @@ EXAMPLES = '''
        error:
          message: "{{ '{{ job_friendly_name }} FAILED! Please look at {{ job.url }}' }}"
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 
 - name: Add webhook notification
   notification_template:
@@ -132,7 +132,7 @@ EXAMPLES = '''
       headers:
         X-Custom-Header: value123
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 
 - name: Add email notification
   notification_template:
@@ -149,7 +149,7 @@ EXAMPLES = '''
       use_tls: no
       use_ssl: no
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 
 - name: Add twilio notification
   notification_template:
@@ -162,7 +162,7 @@ EXAMPLES = '''
       to_numbers:
         - '+15553334444'
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 
 - name: Add PagerDuty notification
   notification_template:
@@ -174,7 +174,7 @@ EXAMPLES = '''
       client_name: client
       service_key: a_key
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 
 - name: Add IRC notification
   notification_template:
@@ -189,13 +189,13 @@ EXAMPLES = '''
       server: irc.example.com
       use_ssl: no
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 
 - name: Delete notification
   notification_template:
     name: old notification
     state: absent
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 
 - name: Copy webhook notification
   notification_template:

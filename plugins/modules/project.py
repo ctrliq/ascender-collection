@@ -171,7 +171,7 @@ EXAMPLES = '''
     description: "Foo bar project"
     organization: "test"
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 
 - name: Add Project with cache timeout
   project:
@@ -181,7 +181,7 @@ EXAMPLES = '''
     scm_update_on_launch: True
     scm_update_cache_timeout: 60
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 
 - name: Copy project
   project:
