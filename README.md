@@ -126,9 +126,9 @@ Notable points in the history of the `ctrliq.ascender` collection:
 - It descends from the `awx.awx` collection; every module previously named
   `tower_*` is now unprefixed (for example, `tower_inventory` is `inventory`).
 - All modules support named URLs anywhere a name or id is accepted.
-- `0.0.1-devel` is the version reported when installing from source. It is meant
-  for development and is expected to be unstable; build a release artifact for
-  production use.
+- The source tree carries the placeholder version `0.0.1-devel`. A real version
+  (e.g. `25.4.0`) is injected at build time by the template system — see
+  [Installation](#installation).
 
 Behaviours worth knowing when writing playbooks:
 
