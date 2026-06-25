@@ -1,5 +1,4 @@
 #!/usr/bin/python
-# coding: utf-8 -*-
 
 
 # (c) 2020, John Westcott IV <john.westcott.iv@redhat.com>

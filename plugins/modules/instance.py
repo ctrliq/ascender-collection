@@ -1,5 +1,4 @@
 #!/usr/bin/python
-# coding: utf-8 -*-
 
 
 # (c) 2022 Red Hat, Inc.
