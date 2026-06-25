@@ -4,11 +4,16 @@ Tools used for building, maintaining, and testing the collection.
 
 ### Template Galaxy
 
-The `template_galaxy.yml` playbook ran as a pre-requisite for building the collection.
+The `template_galaxy.yml` playbook runs as a pre-requisite for building the collection:
 
 ```
-make ascender_collection_build
+ansible-playbook -i localhost, tools/template_galaxy.yml \
+  -e collection_package=ascender \
+  -e collection_namespace=ctrliq \
+  -e collection_version=25.4.0
 ```
+
+This produces a build artifact in the `build/` directory.
 
 ### Generate
 
@@ -18,9 +23,13 @@ It is intended as a tool for writing new modules or enforcing consistency.
 ### Integration Testing
 
 These instructions assume you have ansible-core and the collection installed.
-To install the collection in-place (to pick up any local changes to source)
-the `make symlink_collection` will symlink the `ascender_collection/` folder to
-the appropriate place under `~/.ansible/collections`.
+To install the collection in-place (to pick up any local changes to source),
+symlink the repo to the appropriate place under `~/.ansible/collections`:
+
+```bash
+mkdir -p ~/.ansible/collections/ansible_collections/ctrliq
+ln -s $(pwd) ~/.ansible/collections/ansible_collections/ctrliq/ascender
+```
 
 This is a shortcut for quick validation of tests that bypasses `ansible-test`.
 To use this, you need the `~/.tower_cli.cfg` config file populated,
@@ -40,13 +49,13 @@ TODO: adjust playbook to allow using environment variables as well.
 To run some sample modules:
 
 ```
-ansible-playbook -i localhost, ascender_collection/tools/integration_testing.yml
+ansible-playbook -i localhost, tools/integration_testing.yml
 ```
 
 To run just one module (the most common use case), use the `-e test=<name>`.
 
 ```
-ansible-playbook -i localhost, ascender_collection/tools/integration_testing.yml -e test=host
+ansible-playbook -i localhost, tools/integration_testing.yml -e test=host
 ```
 
 If you want to run _all_ the tests, then you need to pass in the whole list.
@@ -54,9 +63,9 @@ This will take significant time and is not ideal from an error-handling perspect
 but this is a way to do it:
 
 ```
-ansible-playbook -i localhost, ascender_collection/tools/integration_testing.yml -e test=$(ls -1Am ascender_collection/tests/integration/targets/ | tr -d '[:space:]')
+ansible-playbook -i localhost, tools/integration_testing.yml -e test=$(ls -1Am tests/integration/targets/ | tr -d '[:space:]')
 ```
 
 Depending on the module, you may need special dependencies.
 For instance, the rrule lookup plugins need `pytz`.
-These will be satisfied if you install requirements in `ascender_collection/requirements.txt`.
+These will be satisfied if you install the requirements in `requirements.txt`.

@@ -4,12 +4,29 @@ __metaclass__ = type
 
 import io
 import os
+import sys
 import json
 import datetime
 import importlib
 from contextlib import redirect_stdout, suppress
 from unittest import mock
 import logging
+
+# awxkit is not pip-installed inside the Ascender dev container; it is
+# available as a source tree at /awx_devel/awxkit/awxkit/.  We must
+# prepend the parent directory *before* Python caches a namespace
+# package from /awx_devel/awxkit (which lacks the api subpackage).
+_awxkit_path = os.environ.get('AWXKIT_PATH')
+if not _awxkit_path:
+    for _candidate in ['/awx_devel/awxkit']:
+        if os.path.isdir(os.path.join(_candidate, 'awxkit', 'api')):
+            _awxkit_path = _candidate
+            break
+if _awxkit_path and _awxkit_path not in sys.path:
+    sys.path.insert(0, _awxkit_path)
+    # Invalidate any cached namespace-package stub so the real package loads.
+    if 'awxkit' in sys.modules:
+        del sys.modules['awxkit']
 
 from requests.models import Response, PreparedRequest
 
@@ -38,15 +55,6 @@ from django.db import transaction
 HAS_TOWER_CLI = False
 HAS_AWX_KIT = False
 logger = logging.getLogger('awx.main.tests')
-
-
-@pytest.fixture(autouse=True)
-def awxkit_path_set(monkeypatch):
-    """Monkey patch sys.path, insert awxkit source code so that
-    the package does not need to be installed.
-    """
-    base_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir, os.pardir, 'awxkit'))
-    monkeypatch.syspath_prepend(base_folder)
 
 
 @pytest.fixture(autouse=True)
@@ -97,11 +105,10 @@ def collection_path_set(monkeypatch):
 
 @pytest.fixture
 def collection_import():
-    """These tests run assuming that the ascender_collection folder is inserted
-    into the PATH before-hand by collection_path_set.
-    But all imports internally to the collection
-    go through this fixture so that can be changed if needed.
-    For instance, we could switch to fully-qualified import paths.
+    """All imports internally to the collection go through this fixture
+    so that the import mechanism can be changed if needed.
+    collection_path_set inserts the repo root into sys.path so that
+    ``plugins.modules.<name>`` resolves without a full installation.
     """
 
     def rf(path):

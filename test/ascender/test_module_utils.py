@@ -161,7 +161,7 @@ def test_duplicate_config(collection_import, silence_warning):
 
 def test_no_templated_values(collection_import):
     """This test corresponds to replacements done by
-    ascender_collection/tools/roles/template_galaxy/tasks/main.yml
+    tools/roles/template_galaxy/tasks/main.yml
     Those replacements should happen at build time, so they should not be
     checked into source.
     """

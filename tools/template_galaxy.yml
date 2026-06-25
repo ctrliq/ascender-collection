@@ -8,7 +8,7 @@
     collection_namespace: ctrliq
     collection_version: 0.0.1  # not for updating, pass in extra_vars
     collection_source: "{{ playbook_dir }}/../"
-    collection_path: "{{ playbook_dir }}/../../ascender_collection_build"
+    collection_path: "{{ playbook_dir }}/../build"
   pre_tasks:
     - file:
         path: "{{ collection_path }}"

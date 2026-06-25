@@ -14,10 +14,8 @@
 
 The `ctrliq.ascender` collection lets you manage an Ascender controller from Ansible playbooks: organizations, inventories, projects, job templates, credentials, schedules, workflows, and the rest of the controller API are all exposed as modules, alongside a dynamic inventory plugin and a set of lookup plugins.
 
-The source for this collection lives in the `ascender_collection` folder of the
-[Ascender repository](https://github.com/ctrliq/ascender). It traces back to the
-modules that once shipped in Ansible core under
-`lib/ansible/modules/web_infrastructure/ansible_tower`, plus the inventory
+This collection traces back to the modules that once shipped in Ansible core
+under `lib/ansible/modules/web_infrastructure/ansible_tower`, plus the inventory
 plugin, module utilities, and doc fragments that lived elsewhere in that repo.
 
 ## Requirements
@@ -32,18 +30,20 @@ plugin, module utilities, and doc fragments that lived elsewhere in that repo.
 ## Installation
 
 The collection templates its own `galaxy.yml` at build time. From the root of
-the Ascender source tree, run:
+this repository, run:
 
 ```bash
-make build_collection
+ansible-playbook -i localhost, tools/template_galaxy.yml \
+  -e collection_package=ascender \
+  -e collection_namespace=ctrliq \
+  -e collection_version=$(python3 -c "import datetime; print(datetime.date.today().strftime('%y.%-m.0'))")
 ```
 
-This produces a versioned artifact in the `ascender_collection` folder, for
-example `ascender_collection/ctrliq-ascender-25.4.0.tar.gz`.
+This produces a versioned artifact in the `build/` directory.
 Install it with:
 
 ```bash
-ansible-galaxy collection install ctrliq-ascender-25.4.0.tar.gz
+ansible-galaxy collection install build/ctrliq-ascender-*.tar.gz
 ```
 
 ## Using the collection
@@ -161,24 +161,21 @@ The collection is verified three ways:
 - **Sanity** — from an installed copy of the collection:
   `ansible-test sanity`.
 - **Unit** — compatibility tests against the current controller code live in
-  `ascender_collection/test/ascender` and run with `make test_collection` inside
-  the development container. To run them outside the container against an Ansible
-  checkout, use a dedicated virtualenv:
+  `test/ascender` and require a checkout of the
+  [Ascender](https://github.com/ctrliq/ascender) repo for the Django models.
+  To run them, use a dedicated virtualenv:
 
   ```bash
   mkvirtualenv my_new_venv
-  # you may need to swap psycopg for psycopg-binary in requirements/requirements.txt
-  pip install -r requirements/requirements.txt -r requirements/requirements_dev.txt -r requirements/requirements_git.txt
-  make clean-api
-  pip install -e <path to your Ansible>
-  pip install -e .
-  pip install -e awxkit
-  py.test ascender_collection/test/ascender/
+  pip install -r requirements.txt
+  pip install -e <path to your ascender checkout>
+  pip install -e <path to your ascender checkout>/awxkit
+  py.test test/ascender/
   ```
 
 - **Integration** — require a virtualenv with `ansible-core >= 2.16` and
   `awxkit`, a running controller, and an installed collection
-  (`make install_collection`) plus a config file as described under
+  plus a config file as described under
   [Authentication](#authentication):
 
   ```bash
