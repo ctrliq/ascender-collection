@@ -229,12 +229,7 @@ class ControllerModule(AnsibleModule):
 
                 try:
                     placeholder_file = StringIO(config_string)
-                    # py2 ConfigParser has readfp, that has been deprecated in favor of read_file in py3
-                    # This "if" removes the deprecation warning
-                    if hasattr(config, 'read_file'):
-                        config.read_file(placeholder_file)
-                    else:
-                        config.readfp(placeholder_file)
+                    config.read_file(placeholder_file)
 
                     # If we made it here then we have values from reading the ini file, so let's pull them out into a dict
                     config_data = {}
