@@ -1,4 +1,4 @@
-# Ascender Ansible Collection
+# {% if collection_package | lower() == 'ascender' %}Ascender{% else %}Tower{% endif %} Ansible Collection
 
 [comment]: # (*******************************************************)
 [comment]: # (*                                                     *)
@@ -12,7 +12,7 @@
 [comment]: # (*  upon build of the collection                       *)
 [comment]: # (*******************************************************)
 
-The `ctrliq.ascender` collection lets you manage an Ascender controller from Ansible playbooks: organizations, inventories, projects, job templates, credentials, schedules, workflows, and the rest of the controller API are all exposed as modules, alongside a dynamic inventory plugin and a set of lookup plugins.
+The `{{ collection_namespace }}.{{ collection_package }}` collection lets you manage an {% if collection_package | lower() == 'ascender' %}Ascender{% else %}Red Hat Ansible Automation Platform{% endif %} controller from Ansible playbooks: organizations, inventories, projects, job templates, credentials, schedules, workflows, and the rest of the controller API are all exposed as modules, alongside a dynamic inventory plugin and a set of lookup plugins.
 
 The source for this collection lives in the `ascender_collection` folder of the
 [Ascender repository](https://github.com/ctrliq/ascender). It traces back to the
@@ -31,6 +31,7 @@ plugin, module utilities, and doc fragments that lived elsewhere in that repo.
 
 ## Installation
 
+{% if collection_package | lower() == 'ascender' %}
 The collection templates its own `galaxy.yml` at build time. From the root of
 the Ascender source tree, run:
 
@@ -39,17 +40,25 @@ make build_collection
 ```
 
 This produces a versioned artifact in the `ascender_collection` folder, for
-example `ascender_collection/ctrliq-ascender-25.4.0.tar.gz`.
+example `ascender_collection/{{ collection_namespace }}-{{ collection_package }}-25.4.0.tar.gz`.
 Install it with:
 
 ```bash
-ansible-galaxy collection install ctrliq-ascender-25.4.0.tar.gz
+ansible-galaxy collection install {{ collection_namespace }}-{{ collection_package }}-25.4.0.tar.gz
 ```
+{% else %}
+Install this collection from
+[Automation Hub](https://console.redhat.com/ansible/automation-hub/ansible/tower/):
+
+```bash
+ansible-galaxy collection install {{ collection_namespace }}.{{ collection_package }}
+```
+{% endif %}
 
 ## Using the collection
 
 Reference modules, the inventory plugin, and lookups by their fully qualified
-collection name, `ctrliq.ascender.<name>`:
+collection name, `{{ collection_namespace }}.{{ collection_package }}.<name>`:
 
 ```yaml
 - name: Create a project and launch a job
@@ -57,27 +66,27 @@ collection name, `ctrliq.ascender.<name>`:
   gather_facts: false
   tasks:
     - name: Add a project
-      ctrliq.ascender.project:
+      {{ collection_namespace }}.{{ collection_package }}.project:
         name: My Project
         organization: Default
         scm_type: git
         scm_url: https://github.com/ansible/test-playbooks.git
 
     - name: Launch a job template
-      ctrliq.ascender.job_launch:
+      {{ collection_namespace }}.{{ collection_package }}.job_launch:
         job_template: My Job Template
       register: job
 
     - name: Wait for it to finish
-      ctrliq.ascender.job_wait:
-        job_id: "{{ job.id }}"
+      {{ collection_namespace }}.{{ collection_package }}.job_wait:
+        job_id: "{{ '{{' }} job.id {{ '}}' }}"
 ```
 
 To use the dynamic inventory plugin, add a `*.controller.yml` (or
 `*.controller.yaml`) inventory source:
 
 ```yaml
-plugin: ctrliq.ascender.controller
+plugin: {{ collection_namespace }}.{{ collection_package }}.controller
 host: https://controller.example.com
 ```
 
@@ -109,19 +118,20 @@ oauth_token = LEdCpKVKc4znzffcpQL5vLG8oyeku6
 
 ## Included content
 
-- **44 modules** covering controller resources (organizations, teams,
+- **{{ '44' }} modules** covering controller resources (organizations, teams,
   users, inventories, hosts, groups, projects, credentials, job/workflow
   templates, schedules, notifications, settings, tokens, and more), plus
   `export`/`import` for bulk configuration.
-- **Inventory plugin:** `ctrliq.ascender.controller`.
+- **Inventory plugin:** `{{ collection_namespace }}.{{ collection_package }}.controller`.
 - **Lookup plugins:** `controller_api`, `schedule_rrule`, and `schedule_rruleset`.
 
 Per-plugin documentation is available with `ansible-doc`, e.g.
-`ansible-doc ctrliq.ascender.job_launch`.
+`ansible-doc {{ collection_namespace }}.{{ collection_package }}.job_launch`.
 
 ## Release and upgrade notes
 
-Notable points in the history of the `ctrliq.ascender` collection:
+{% if collection_package | lower() == "ascender" %}
+Notable points in the history of the `{{ collection_namespace }}.{{ collection_package }}` collection:
 
 - It descends from the `awx.awx` collection; every module previously named
   `tower_*` is now unprefixed (for example, `tower_inventory` is `inventory`).
@@ -129,6 +139,11 @@ Notable points in the history of the `ctrliq.ascender` collection:
 - `0.0.1-devel` is the version reported when installing from source. It is meant
   for development and is expected to be unstable; build a release artifact for
   production use.
+{% else %}
+- 3.7.0 initial release.
+- 4.0.0 `ansible.tower` renamed to `ansible.controller`; the `tower_` prefix was
+  dropped from module names (for example, `tower_inventory` became `inventory`).
+{% endif %}
 
 Behaviours worth knowing when writing playbooks:
 
@@ -160,6 +175,7 @@ The collection is verified three ways:
 
 - **Sanity** — from an installed copy of the collection:
   `ansible-test sanity`.
+{% if collection_package | lower() == "ascender" %}
 - **Unit** — compatibility tests against the current controller code live in
   `ascender_collection/test/ascender` and run with `make test_collection` inside
   the development container. To run them outside the container against an Ansible
@@ -183,9 +199,10 @@ The collection is verified three ways:
 
   ```bash
   # ansible-test must run from where the collection is installed
-  cd ~/.ansible/collections/ansible_collections/ctrliq/ascender/
+  cd ~/.ansible/collections/ansible_collections/{{ collection_namespace }}/{{ collection_package }}/
   ansible-test integration
   ```
+{% endif %}
 
 ## Licensing
 
