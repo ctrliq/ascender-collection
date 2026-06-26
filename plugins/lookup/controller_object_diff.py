@@ -46,30 +46,30 @@ options:
 
 EXAMPLES = """
 - name: Get the organization ID
-  set_fact:
+  ansible.builtin.set_fact:
     controller_organization_id: "{{ lookup('ctrliq.ascender.controller_api', 'organizations', query_params={ 'name': 'Default' },
       host=controller_hostname, username=controller_username, password=controller_password, verify_ssl=false) }}"
 
 - name: "Get the API list of all Projects in the Default Organization"
-  set_fact:
+  ansible.builtin.set_fact:
     controller_api_results: "{{ lookup('ctrliq.ascender.controller_api', 'projects', query_params={ 'organization':
       controller_organization_id.id } ,host=controller_hostname, username=controller_username,
       password=controller_password, verify_ssl=false) }}"
 
 - name: "Get the API in a list form. Useful for making sure the results of one item is set to a list."
-  set_fact:
+  ansible.builtin.set_fact:
     controller_api_results: "{{ query('ctrliq.ascender.controller_api', 'inventories', query_params={ 'organization':
       controller_organization_id.id } ,host=controller_hostname, username=controller_username,
       password=controller_password, verify_ssl=false) }}"
 
 - name: "Find the difference of Project between what is on the Controller versus curated list."
-  set_fact:
+  ansible.builtin.set_fact:
     project_difference: "{{ query('ctrliq.ascender.controller_object_diff',
       api_list=controller_api_results, compare_list=differential_item.differential_test_items,
       with_present=true, set_absent=true) }}"
 
 - name: Add Projects
-  include_role:
+  ansible.builtin.include_role:
     name: ctrliq.ascender.projects
   vars:
     controller_projects: "{{ project_difference }}"

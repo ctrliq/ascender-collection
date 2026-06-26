@@ -5,7 +5,7 @@
   no_log: "{{ controller_configuration_labels_secure_logging }}"
   block:
     - name: Managing Labels
-      label:
+      ctrliq.ascender.label:
         name: "{{ __controller_label_item.name | mandatory }}"
         new_name: "{{ __controller_label_item.new_name | default(omit, true) }}"
         organization: "{{ __controller_label_item.organization | mandatory }}"
