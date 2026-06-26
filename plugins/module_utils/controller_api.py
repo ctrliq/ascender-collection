@@ -143,12 +143,12 @@ class ControllerModule(AnsibleModule):
             elif isinstance(token_param, str):
                 self.oauth_token = self.params.get('controller_oauthtoken')
             else:
-                error_msg = "The provided controller_oauthtoken type was not valid ({0}). Valid options are str or dict.".format(type(token_param).__name__)
+                error_msg = f"The provided controller_oauthtoken type was not valid ({type(token_param).__name__}). Valid options are str or dict."
                 self.fail_json(msg=error_msg)
 
         # Perform some basic validation
         if not re.match('^https{0,1}://', self.host):
-            self.host = "https://{0}".format(self.host)
+            self.host = f"https://{self.host}"
 
         # Try to parse the hostname as a url
         try:
@@ -156,27 +156,27 @@ class ControllerModule(AnsibleModule):
             # Store URL prefix for later use in build_url
             self.url_prefix = self.url.path
         except Exception as e:
-            self.fail_json(msg="Unable to parse controller_host as a URL ({1}): {0}".format(self.host, e))
+            self.fail_json(msg=f"Unable to parse controller_host as a URL ({e}): {self.host}")
 
         # Try to resolve the hostname
         try:
-            proxy_env_var_name = "{0}_proxy".format(self.url.scheme)
+            proxy_env_var_name = f"{self.url.scheme}_proxy"
             if not environ.get(proxy_env_var_name) and not environ.get(proxy_env_var_name.upper()):
                 addrinfolist = getaddrinfo(self.url.hostname, self.url.port, proto=IPPROTO_TCP)
                 for family, kind, proto, canonical, sockaddr in addrinfolist:
                     sockaddr[0]
         except Exception as e:
-            self.fail_json(msg="Unable to resolve controller_host ({1}): {0}".format(self.url.hostname, e))
+            self.fail_json(msg=f"Unable to resolve controller_host ({e}): {self.url.hostname}")
 
     def build_url(self, endpoint, query_params=None):
         # Make sure we start with /api/vX
         if not endpoint.startswith("/"):
-            endpoint = "/{0}".format(endpoint)
+            endpoint = f"/{endpoint}"
         prefix = self.url_prefix.rstrip("/")
         if not endpoint.startswith(prefix + "/api/"):
-            endpoint = prefix + "/api/v2{0}".format(endpoint)
+            endpoint = f"{prefix}/api/v2{endpoint}"
         if not endpoint.endswith('/') and '?' not in endpoint:
-            endpoint = "{0}/".format(endpoint)
+            endpoint = f"{endpoint}/"
 
         # Update the URL path with the endpoint
         url = self.url._replace(path=endpoint)
@@ -188,25 +188,22 @@ class ControllerModule(AnsibleModule):
 
     def load_config_files(self):
         # Load config files from least specific to most specific
-        config_files = ['/etc/tower/tower_cli.cfg', join(expanduser("~"), ".{0}".format(self.config_name))]
+        config_files = ['/etc/tower/tower_cli.cfg', join(expanduser("~"), f".{self.config_name}")]
         local_dir = getcwd()
         config_files.append(join(local_dir, self.config_name))
         while split(local_dir)[1]:
             local_dir = split(local_dir)[0]
-            config_files.insert(2, join(local_dir, ".{0}".format(self.config_name)))
+            config_files.insert(2, join(local_dir, f".{self.config_name}"))
 
         # If we have a specified  tower config, load it
         if self.params.get('controller_config_file'):
             duplicated_params = [fn for fn in self.AUTH_ARGSPEC if fn != 'controller_config_file' and self.params.get(fn) is not None]
             if duplicated_params:
                 self.warn(
-                    (
-                        'The parameter(s) {0} were provided at the same time as controller_config_file. '
-                        'Precedence may be unstable, we suggest either using config file or params.'
-                    ).format(', '.join(duplicated_params))
+                    f"The parameter(s) {', '.join(duplicated_params)} were provided at the same time as controller_config_file. "
+                    "Precedence may be unstable, we suggest either using config file or params."
                 )
             try:
-                # TODO: warn if there are conflicts with other params
                 self.load_config(self.params.get('controller_config_file'))
             except ConfigFileException as cfe:
                 # Since we were told specifically to load this we want it to fail if we have an error
@@ -218,7 +215,7 @@ class ControllerModule(AnsibleModule):
                     try:
                         self.load_config(config_file)
                     except ConfigFileException:
-                        self.fail_json(msg='The config file {0} is not properly formatted'.format(config_file))
+                        self.fail_json(msg=f'The config file {config_file} is not properly formatted')
 
     def load_config(self, config_path):
         # Validate the config file is an actual file
@@ -249,7 +246,7 @@ class ControllerModule(AnsibleModule):
             if try_config_parsing:
                 # Support config files with a missing [general] section by prepending it if missing
                 if '[general]' not in config_string:
-                    config_string = '[general]\n{0}'.format(config_string)
+                    config_string = f'[general]\n{config_string}'
 
                 config = ConfigParser()
 
@@ -266,10 +263,10 @@ class ControllerModule(AnsibleModule):
                             pass
 
                 except Exception as e:
-                    raise ConfigFileException("An unknown exception occurred trying to load INI config file: {0}".format(e)) from e
+                    raise ConfigFileException(f"An unknown exception occurred trying to load INI config file: {e}") from e
 
         except Exception as e:
-            raise ConfigFileException("An unknown exception occurred trying to load config file: {0}".format(e)) from e
+            raise ConfigFileException(f"An unknown exception occurred trying to load config file: {e}") from e
 
         # If we made it here, we have a dict which has values in it from our config, any final settings logic can be performed here
         for honored_setting in self.short_params:
@@ -354,7 +351,7 @@ class ControllerAPIModule(ControllerModule):
             return 'unknown'
 
         if item:
-            self.fail_json(msg='Cannot determine identity field for {0} object.'.format(item.get('type', 'unknown')))
+            self.fail_json(msg=f"Cannot determine identity field for {item.get('type', 'unknown')} object.")
         else:
             self.fail_json(msg='Cannot determine identity field for Undefined object.')
 
@@ -391,7 +388,7 @@ class ControllerAPIModule(ControllerModule):
     def get_all_endpoint(self, endpoint, *args, **kwargs):
         response = self.get_endpoint(endpoint, *args, **kwargs)
         if 'next' not in response['json']:
-            raise RuntimeError('Expected list from API at {0}, got: {1}'.format(endpoint, response))
+            raise RuntimeError(f'Expected list from API at {endpoint}, got: {response}')
         next_page = response['json']['next']
 
         if response['json']['count'] > 10000:
@@ -413,7 +410,7 @@ class ControllerAPIModule(ControllerModule):
         if name_or_id is not None and '++' in name_or_id:
             # Maybe someone gave us a named URL so lets see if we get anything from that.
             url_quoted_name = quote(name_or_id, safe="+")
-            named_endpoint = '{0}/{1}/'.format(endpoint, url_quoted_name)
+            named_endpoint = f'{endpoint}/{url_quoted_name}/'
             named_response = self.get_endpoint(named_endpoint)
 
             if named_response['status_code'] == 200 and 'json' in named_response:
@@ -431,11 +428,11 @@ class ControllerAPIModule(ControllerModule):
                 name_field = self.get_name_field_from_endpoint(endpoint)
                 new_data = kwargs.get('data', {}).copy()
                 if name_field in new_data:
-                    self.fail_json(msg="You can't specify the field {0} in your search data if using the name_or_id field".format(name_field))
+                    self.fail_json(msg=f"You can't specify the field {name_field} in your search data if using the name_or_id field")
 
                 try:
                     new_data['or__id'] = int(name_or_id)
-                    new_data['or__{0}'.format(name_field)] = name_or_id
+                    new_data[f'or__{name_field}'] = name_or_id
                 except ValueError:
                     # If we get a value error, then we didn't have an integer so we can just pass and fall down to the fail
                     new_data[name_field] = name_or_id
@@ -444,9 +441,9 @@ class ControllerAPIModule(ControllerModule):
             response = self.get_endpoint(endpoint, **new_kwargs)
 
             if response['status_code'] != 200:
-                fail_msg = "Got a {0} response when trying to get one from {1}".format(response['status_code'], endpoint)
+                fail_msg = f"Got a {response['status_code']} response when trying to get one from {endpoint}"
                 if 'detail' in response.get('json', {}):
-                    fail_msg += ', detail: {0}'.format(response['json']['detail'])
+                    fail_msg += f", detail: {response['json']['detail']}"
                 self.fail_json(msg=fail_msg)
 
             if 'count' not in response['json'] or 'results' not in response['json']:
@@ -481,7 +478,7 @@ class ControllerAPIModule(ControllerModule):
         host_length = len(self.host)
         display_endpoint = url.geturl()[host_length:]  # truncate to not include the base URL
         self.fail_json(
-            msg="Request to {0} returned {1} items, expected 1".format(display_endpoint, response['json']['count']),
+            msg=f"Request to {display_endpoint} returned {response['json']['count']} items, expected 1",
             query=query_params,
             response=sample,
             total_results=response['json']['count'],
@@ -512,7 +509,7 @@ class ControllerAPIModule(ControllerModule):
             self.authenticate(**kwargs)
         if self.oauth_token:
             # If we have a oauth token, we just use a bearer header
-            headers['Authorization'] = 'Bearer {0}'.format(self.oauth_token)
+            headers['Authorization'] = f'Bearer {self.oauth_token}'
 
         if method in ['POST', 'PUT', 'PATCH']:
             headers.setdefault('Content-Type', 'application/json')
@@ -531,31 +528,31 @@ class ControllerAPIModule(ControllerModule):
                 follow_redirects=True,
                 data=data
             )
-        except (SSLValidationError) as ssl_err:
-            self.fail_json(msg="Could not establish a secure connection to your host ({1}): {0}.".format(url.netloc, ssl_err))
-        except (ConnectionError) as con_err:
-            self.fail_json(msg="There was a network error of some kind trying to connect to your host ({1}): {0}.".format(url.netloc, con_err))
-        except (HTTPError) as he:
+        except SSLValidationError as ssl_err:
+            self.fail_json(msg=f"Could not establish a secure connection to your host ({ssl_err}): {url.netloc}.")
+        except ConnectionError as con_err:
+            self.fail_json(msg=f"There was a network error of some kind trying to connect to your host ({con_err}): {url.netloc}.")
+        except HTTPError as he:
             # Sanity check: Did the server send back some kind of internal error?
             if he.code >= 500:
-                self.fail_json(msg='The host sent back a server error ({1}): {0}. Please check the logs and try again later'.format(url.path, he))
+                self.fail_json(msg=f'The host sent back a server error ({he}): {url.path}. Please check the logs and try again later')
             # Sanity check: Did we fail to authenticate properly?  If so, fail out now; this is always a failure.
             elif he.code == 401:
-                self.fail_json(msg='Invalid authentication credentials for {0} (HTTP 401).'.format(url.path))
+                self.fail_json(msg=f'Invalid authentication credentials for {url.path} (HTTP 401).')
             # Sanity check: Did we get a forbidden response, which means that the user isn't allowed to do this? Report that.
             elif he.code == 403:
-                self.fail_json(msg="You don't have permission to {1} to {0} (HTTP 403).".format(url.path, method))
+                self.fail_json(msg=f"You don't have permission to {method} to {url.path} (HTTP 403).")
             # Sanity check: Did we get a 404 response?
             # Requests with primary keys will return a 404 if there is no response, and we want to consistently trap these.
             elif he.code == 404:
                 if kwargs.get('return_none_on_404', False):
                     return None
-                self.fail_json(msg='The requested object could not be found at {0}.'.format(url.path))
+                self.fail_json(msg=f'The requested object could not be found at {url.path}.')
             # Sanity check: Did we get a 405 response?
             # A 405 means we used a method that isn't allowed. Usually this is a bad request, but it requires special treatment because the
             # API sends it as a logic error in a few situations (e.g. trying to cancel a job that isn't running).
             elif he.code == 405:
-                self.fail_json(msg="Cannot make a request with the {0} method to this endpoint {1}".format(method, url.path))
+                self.fail_json(msg=f"Cannot make a request with the {method} method to this endpoint {url.path}")
             # Sanity check: Did we get some other kind of error?  If so, write an appropriate error message.
             elif he.code >= 400:
                 # We are going to return a 400 so the module can decide what to do with it
@@ -569,9 +566,9 @@ class ControllerAPIModule(ControllerModule):
                 # A 204 is a normal response for a delete function
                 pass
             else:
-                self.fail_json(msg="Unexpected return code when calling {0}: {1}".format(url.geturl(), he))
-        except (Exception) as e:
-            self.fail_json(msg="There was an unknown error when trying to connect to {2}: {0} {1}".format(type(e).__name__, e, url.geturl()))
+                self.fail_json(msg=f"Unexpected return code when calling {url.geturl()}: {he}")
+        except Exception as e:
+            self.fail_json(msg=f"There was an unknown error when trying to connect to {url.geturl()}: {type(e).__name__} {e}")
 
         if not self.version_checked:
             controller_type = response.getheader('X-API-Product-Name', None)
@@ -584,32 +581,28 @@ class ControllerAPIModule(ControllerModule):
                     collection_compare_ver = parsed_collection_version[0]
                     controller_compare_ver = parsed_controller_version[0]
                 else:
-                    collection_compare_ver = "{0}.{1}".format(parsed_collection_version[0], parsed_collection_version[1])
-                    controller_compare_ver = '{0}.{1}'.format(parsed_controller_version[0], parsed_controller_version[1])
+                    collection_compare_ver = f"{parsed_collection_version[0]}.{parsed_collection_version[1]}"
+                    controller_compare_ver = f'{parsed_controller_version[0]}.{parsed_controller_version[1]}'
 
                 if self._COLLECTION_TYPE not in self.collection_to_version or self.collection_to_version[self._COLLECTION_TYPE] != controller_type:
-                    self.warn("You are using the {0} version of this collection but connecting to {1}".format(self._COLLECTION_TYPE, controller_type))
+                    self.warn(f"You are using the {self._COLLECTION_TYPE} version of this collection but connecting to {controller_type}")
                 elif collection_compare_ver != controller_compare_ver:
-                    self.warn(
-                        "You are running collection version {0} but connecting to {2} version {1}".format(
-                            self._COLLECTION_VERSION, controller_version, controller_type
-                        )
-                    )
+                    self.warn(f"You are running collection version {self._COLLECTION_VERSION} but connecting to {controller_type} version {controller_version}")
 
             self.version_checked = True
 
         response_body = ''
         try:
             response_body = response.read()
-        except (Exception) as e:
-            self.fail_json(msg="Failed to read response body: {0}".format(e))
+        except Exception as e:
+            self.fail_json(msg=f"Failed to read response body: {e}")
 
         response_json = {}
         if response_body and response_body != '':
             try:
                 response_json = loads(response_body)
-            except (Exception) as e:
-                self.fail_json(msg="Failed to parse the response json: {0}".format(e))
+            except Exception as e:
+                self.fail_json(msg=f"Failed to parse the response json: {e}")
 
         status_code = response.status
         return {'status_code': status_code, 'json': response_json}
@@ -645,11 +638,11 @@ class ControllerAPIModule(ControllerModule):
                 try:
                     resp = he.read()
                 except Exception as e:
-                    resp = 'unknown {0}'.format(e)
-                self.fail_json(msg='Failed to get token: {0}'.format(he), response=resp)
-            except (Exception) as e:
+                    resp = f'unknown {e}'
+                self.fail_json(msg=f'Failed to get token: {he}', response=resp)
+            except Exception as e:
                 # Sanity check: Did the server send back some kind of internal error?
-                self.fail_json(msg='Failed to get token: {0}'.format(e))
+                self.fail_json(msg=f'Failed to get token: {e}')
 
             token_response = None
             try:
@@ -658,8 +651,8 @@ class ControllerAPIModule(ControllerModule):
                 self.oauth_token_id = response_json['id']
                 self.oauth_token = response_json['token']
                 self.authenticated = True
-            except (Exception) as e:
-                self.fail_json(msg="Failed to extract token information from login response: {0}".format(e), **{'response': token_response})
+            except Exception as e:
+                self.fail_json(msg=f"Failed to extract token information from login response: {e}", **{'response': token_response})
 
     def delete_if_needed(self, existing_item, on_delete=None, auto_exit=True):
         # This will exit from the module on its own.
@@ -677,7 +670,7 @@ class ControllerAPIModule(ControllerModule):
                 item_id = existing_item['id']
                 item_name = self.get_item_name(existing_item, allow_unknown=True)
             except KeyError as ke:
-                self.fail_json(msg="Unable to process delete of item due to missing data {0}".format(ke))
+                self.fail_json(msg=f"Unable to process delete of item due to missing data {ke}")
 
             response = self.delete_endpoint(item_url)
 
@@ -692,15 +685,15 @@ class ControllerAPIModule(ControllerModule):
                     return self.json_output
             else:
                 if 'json' in response and '__all__' in response['json']:
-                    self.fail_json(msg="Unable to delete {0} {1}: {2}".format(item_type, item_name, response['json']['__all__'][0]))
+                    self.fail_json(msg=f"Unable to delete {item_type} {item_name}: {response['json']['__all__'][0]}")
                 elif 'json' in response:
                     # This is from a project delete (if there is an active job against it)
                     if 'error' in response['json']:
-                        self.fail_json(msg="Unable to delete {0} {1}: {2}".format(item_type, item_name, response['json']['error']))
+                        self.fail_json(msg=f"Unable to delete {item_type} {item_name}: {response['json']['error']}")
                     else:
-                        self.fail_json(msg="Unable to delete {0} {1}: {2}".format(item_type, item_name, response['json']))
+                        self.fail_json(msg=f"Unable to delete {item_type} {item_name}: {response['json']}")
                 else:
-                    self.fail_json(msg="Unable to delete {0} {1}: {2}".format(item_type, item_name, response['status_code']))
+                    self.fail_json(msg=f"Unable to delete {item_type} {item_name}: {response['status_code']}")
         else:
             if auto_exit:
                 self.exit_json(**self.json_output)
@@ -733,19 +726,19 @@ class ControllerAPIModule(ControllerModule):
             if response['status_code'] == 204:
                 self.json_output['changed'] = True
             else:
-                self.fail_json(msg="Failed to disassociate item {0}".format(response['json'].get('detail', response['json'])))
+                self.fail_json(msg=f"Failed to disassociate item {response['json'].get('detail', response['json'])}")
 
         for an_id in addition_list:
             response = self.post_endpoint(association_endpoint, **{'data': {'id': int(an_id)}})
             if response['status_code'] == 204:
                 self.json_output['changed'] = True
             else:
-                self.fail_json(msg="Failed to associate item {0}".format(response['json'].get('detail', response['json'])))
+                self.fail_json(msg=f"Failed to associate item {response['json'].get('detail', response['json'])}")
 
     def copy_item(self, existing_item, copy_from_name_or_id, new_item_name, endpoint=None, item_type='unknown', copy_lookup_data=None):
 
         if existing_item is not None:
-            self.warn("A {0} with the name {1} already exists.".format(item_type, new_item_name))
+            self.warn(f"A {item_type} with the name {new_item_name} already exists.")
             self.json_output['changed'] = False
             self.json_output['copied'] = False
             return existing_item
@@ -755,7 +748,7 @@ class ControllerAPIModule(ControllerModule):
 
         # Fail if the copy_from_lookup is empty
         if copy_from_lookup is None:
-            self.fail_json(msg="A {0} with the name {1} was not able to be found.".format(item_type, copy_from_name_or_id))
+            self.fail_json(msg=f"A {item_type} with the name {copy_from_name_or_id} was not able to be found.")
 
         # Do checks for copy permissions if warranted
         if item_type == 'workflow_job_template':
@@ -771,9 +764,9 @@ class ControllerAPIModule(ControllerModule):
                     # Because checks have passed
                     self.json_output['copy_checks'] = 'passed'
                 else:
-                    self.fail_json(msg="Unable to copy {0} {1} error: {2}".format(item_type, copy_from_name_or_id, copy_get_check))
+                    self.fail_json(msg=f"Unable to copy {item_type} {copy_from_name_or_id} error: {copy_get_check}")
             else:
-                self.fail_json(msg="Error accessing {0} {1} error: {2} ".format(item_type, copy_from_name_or_id, copy_get_check))
+                self.fail_json(msg=f"Error accessing {item_type} {copy_from_name_or_id} error: {copy_get_check} ")
 
         response = self.post_endpoint(copy_from_lookup['related']['copy'], **{'data': {'name': new_item_name}})
 
@@ -784,11 +777,11 @@ class ControllerAPIModule(ControllerModule):
             new_existing_item = response['json']
         else:
             if 'json' in response and '__all__' in response['json']:
-                self.fail_json(msg="Unable to create {0} {1}: {2}".format(item_type, new_item_name, response['json']['__all__'][0]))
+                self.fail_json(msg=f"Unable to create {item_type} {new_item_name}: {response['json']['__all__'][0]}")
             elif 'json' in response:
-                self.fail_json(msg="Unable to create {0} {1}: {2}".format(item_type, new_item_name, response['json']))
+                self.fail_json(msg=f"Unable to create {item_type} {new_item_name}: {response['json']}")
             else:
-                self.fail_json(msg="Unable to create {0} {1}: {2}".format(item_type, new_item_name, response['status_code']))
+                self.fail_json(msg=f"Unable to create {item_type} {new_item_name}: {response['status_code']}")
         return new_existing_item
 
     def create_if_needed(self, existing_item, new_item, endpoint, on_create=None, auto_exit=True, item_type='unknown', associations=None):
@@ -802,14 +795,14 @@ class ControllerAPIModule(ControllerModule):
         # Note: common error codes from the AWX API can cause the module to fail
         response = None
         if not endpoint:
-            self.fail_json(msg="Unable to create new {0} due to missing endpoint".format(item_type))
+            self.fail_json(msg=f"Unable to create new {item_type} due to missing endpoint")
 
         item_url = None
         if existing_item:
             try:
                 item_url = existing_item['url']
             except KeyError as ke:
-                self.fail_json(msg="Unable to process create of item due to missing data {0}".format(ke))
+                self.fail_json(msg=f"Unable to process create of item due to missing data {ke}")
         else:
             # If we don't have an existing_item, we can try to create it
 
@@ -830,16 +823,16 @@ class ControllerAPIModule(ControllerModule):
                 item_url = response['json']['url']
             else:
                 if 'json' in response and '__all__' in response['json']:
-                    self.fail_json(msg="Unable to create {0} {1}: {2}".format(item_type, item_name, response['json']['__all__'][0]))
+                    self.fail_json(msg=f"Unable to create {item_type} {item_name}: {response['json']['__all__'][0]}")
                 elif 'json' in response:
-                    self.fail_json(msg="Unable to create {0} {1}: {2}".format(item_type, item_name, response['json']))
+                    self.fail_json(msg=f"Unable to create {item_type} {item_name}: {response['json']}")
                 else:
-                    self.fail_json(msg="Unable to create {0} {1}: {2}".format(item_type, item_name, response['status_code']))
+                    self.fail_json(msg=f"Unable to create {item_type} {item_name}: {response['status_code']}")
 
         # Process any associations with this item
         if associations is not None:
             for association_type in associations:
-                sub_endpoint = '{0}{1}/'.format(item_url, association_type)
+                sub_endpoint = f'{item_url}{association_type}/'
                 self.modify_associations(sub_endpoint, associations[association_type])
 
         # If we have an on_create method and we actually changed something we can call on_create
@@ -858,9 +851,7 @@ class ControllerAPIModule(ControllerModule):
         if not warning:
             return
         self.warn(
-            'The field {0} of {1} {2} has encrypted data and may inaccurately report task is changed.'.format(
-                field, old.get('type', 'unknown'), old.get('id', 'unknown')
-            )
+            f"The field {field} of {old.get('type', 'unknown')} {old.get('id', 'unknown')} has encrypted data and may inaccurately report task is changed."
         )
 
     @staticmethod
@@ -942,7 +933,7 @@ class ControllerAPIModule(ControllerModule):
                     item_name = existing_item['name']
                 item_id = existing_item['id']
             except KeyError as ke:
-                self.fail_json(msg="Unable to process update of item due to missing data {0}".format(ke))
+                self.fail_json(msg=f"Unable to process update of item due to missing data {ke}")
 
             # Check to see if anything within the item requires the item to be updated
             needs_patch = self.objects_could_be_different(existing_item, new_item)
@@ -958,7 +949,7 @@ class ControllerAPIModule(ControllerModule):
                 elif 'json' in response and '__all__' in response['json']:
                     self.fail_json(msg=response['json']['__all__'])
                 else:
-                    self.fail_json(**{'msg': "Unable to update {0} {1}, see response".format(item_type, item_name), 'response': response})
+                    self.fail_json(**{'msg': f"Unable to update {item_type} {item_name}, see response", 'response': response})
 
         else:
             raise RuntimeError('update_if_needed called incorrectly without existing_item')
@@ -966,7 +957,7 @@ class ControllerAPIModule(ControllerModule):
         # Process any associations with this item
         if associations is not None:
             for association_type, id_list in associations.items():
-                endpoint = '{0}{1}/'.format(item_url, association_type)
+                endpoint = f'{item_url}{association_type}/'
                 self.modify_associations(endpoint, id_list)
 
         # If we change something and have an on_change call it
@@ -1008,17 +999,17 @@ class ControllerAPIModule(ControllerModule):
         if survey_spec == {}:
             response = self.delete_endpoint(survey_endpoint)
             if response['status_code'] != 200:
-                self.fail_json(msg="Failed to delete survey: {0}".format(response['json']))
+                self.fail_json(msg=f"Failed to delete survey: {response['json']}")
         else:
             response = self.post_endpoint(survey_endpoint, **{'data': survey_spec})
             if response['status_code'] != 200:
-                self.fail_json(msg="Failed to update survey: {0}".format(response['json']['error']))
+                self.fail_json(msg=f"Failed to update survey: {response['json']['error']}")
 
     def logout(self):
         if self.authenticated and self.oauth_token_id:
             # Attempt to delete our current token from /api/v2/tokens/
             # Post to the tokens endpoint with basic auth to try and get a token
-            endpoint = self.url_prefix.rstrip('/') + '/api/v2/tokens/{0}/'.format(self.oauth_token_id)
+            endpoint = self.url_prefix.rstrip('/') + f'/api/v2/tokens/{self.oauth_token_id}/'
             api_token_url = (self.url._replace(path=endpoint, query=None)).geturl()  # in error cases, fail_json exists before exception handling
 
             try:
@@ -1038,11 +1029,11 @@ class ControllerAPIModule(ControllerModule):
                 try:
                     resp = he.read()
                 except Exception as e:
-                    resp = 'unknown {0}'.format(e)
-                self.warn('Failed to release token: {0}, response: {1}'.format(he, resp))
-            except (Exception) as e:
+                    resp = f'unknown {e}'
+                self.warn(f'Failed to release token: {he}, response: {resp}')
+            except Exception as e:
                 # Sanity check: Did the server send back some kind of internal error?
-                self.warn('Failed to release token {0}: {1}'.format(self.oauth_token_id, e))
+                self.warn(f'Failed to release token {self.oauth_token_id}: {e}')
 
     def is_job_done(self, job_status):
         if job_status in ['new', 'pending', 'waiting', 'running']:
@@ -1062,9 +1053,9 @@ class ControllerAPIModule(ControllerModule):
             if timeout and timeout < time.time() - start:
                 # Account for Legacy messages
                 if object_type == 'legacy_job_wait':
-                    self.json_output['msg'] = 'Monitoring of Job - {0} aborted due to timeout'.format(object_name)
+                    self.json_output['msg'] = f'Monitoring of Job - {object_name} aborted due to timeout'
                 else:
-                    self.json_output['msg'] = 'Monitoring of {0} - {1} aborted due to timeout'.format(object_type, object_name)
+                    self.json_output['msg'] = f'Monitoring of {object_type} - {object_name} aborted due to timeout'
                 self.wait_output(result)
                 self.fail_json(**self.json_output)
 
@@ -1078,9 +1069,9 @@ class ControllerAPIModule(ControllerModule):
         if result['json']['failed']:
             # Account for Legacy messages
             if object_type == 'legacy_job_wait':
-                self.json_output['msg'] = 'Job with id {0} failed'.format(object_name)
+                self.json_output['msg'] = f'Job with id {object_name} failed'
             else:
-                self.json_output['msg'] = 'The {0} - {1}, failed'.format(object_type, object_name)
+                self.json_output['msg'] = f'The {object_type} - {object_name}, failed'
                 self.json_output["job_data"] = result["json"]
             self.wait_output(result)
             self.fail_json(**self.json_output)
@@ -1102,7 +1093,7 @@ class ControllerAPIModule(ControllerModule):
             # If we are past our time out fail with a message
             if timeout and timeout < time.time() - start:
                 # Account for Legacy messages
-                self.json_output["msg"] = "Monitoring of {0} - {1} aborted due to timeout, {2}".format(object_type, object_name, url)
+                self.json_output["msg"] = f"Monitoring of {object_type} - {object_name} aborted due to timeout, {url}"
                 self.wait_output(result)
                 self.fail_json(**self.json_output)
 
