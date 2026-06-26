@@ -128,10 +128,6 @@ class ControllerModule(AnsibleModule):
         except Exception as e:
             self.fail_json(msg="Unable to parse controller_host as a URL ({1}): {0}".format(self.host, e))
 
-        # Remove ipv6 square brackets
-        remove_target = '[]'
-        for char in remove_target:
-            self.url.hostname.replace(char, "")
         # Try to resolve the hostname
         try:
             proxy_env_var_name = "{0}_proxy".format(self.url.scheme)
