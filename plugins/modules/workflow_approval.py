@@ -44,7 +44,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = """
 - name: Create a workflow approval node
-  workflow_job_template_node:
+  ctrliq.ascender.workflow_job_template_node:
     identifier: approval_test
     approval_node:
       name: approval_jt_name
@@ -52,13 +52,13 @@ EXAMPLES = """
     workflow: "Test Workflow"
 
 - name: Launch the workflow with a timeout of 10 seconds
-  workflow_launch:
+  ctrliq.ascender.workflow_launch:
     workflow_template: "Test Workflow"
     wait: False
   register: workflow
 
 - name: Wait for approval node to activate and approve
-  workflow_approval:
+  ctrliq.ascender.workflow_approval:
     workflow_job_id: "{{ workflow.id }}"
     name: approval_jt_name
     interval: 10
