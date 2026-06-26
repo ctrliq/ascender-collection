@@ -27,7 +27,14 @@ build_ignore:
   - galaxy.yml.j2
   - template_galaxy.yml
   - '*.tar.gz'
+  - .ansible-lint
+  - .editorconfig
   - .github
   - .gitignore
+  - .pre-commit-config.yaml
+  - CONTRIBUTING.md
+  - SECURITY.md
   - TESTING.md
   - images
+  - pyproject.toml
+  - ruff.toml
