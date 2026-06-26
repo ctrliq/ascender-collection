@@ -40,7 +40,7 @@ class ControllerAWXKitModule(ControllerModule):
                 self.connection.login(username=self.username, password=self.password)
                 self.authenticated = True
         except Exception:
-            self.fail_json("Failed to authenticate")
+            self.fail_json(msg="Failed to authenticate")
 
     def get_api_v2_object(self):
         if not self.apiV2Ref:
