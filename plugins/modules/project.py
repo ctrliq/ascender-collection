@@ -4,13 +4,7 @@
 # (c) 2017, Wayne Witzel III <wayne@riotousliving.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-from __future__ import absolute_import, division, print_function
-
-__metaclass__ = type
-
-
 ANSIBLE_METADATA = {'metadata_version': '1.1', 'status': ['preview'], 'supported_by': 'community'}
-
 
 DOCUMENTATION = '''
 ---
@@ -163,7 +157,6 @@ options:
 extends_documentation_fragment: ctrliq.ascender.auth
 '''
 
-
 EXAMPLES = '''
 - name: Add project
   project:
@@ -200,9 +193,7 @@ id:
     sample: 42
 '''
 
-
 from ..module_utils.controller_api import ControllerAPIModule
-
 
 def wait_for_project_update(module, last_request):
     # The current running job for the update is in last_request['summary_fields']['current_update']['id']
@@ -252,7 +243,6 @@ def wait_for_project_update(module, last_request):
             module.json_output['changed'] = False
 
     module.exit_json(**module.json_output)
-
 
 def main():
     # Any additional arguments that are not fields of the item can be added here
@@ -422,7 +412,6 @@ def main():
     if update_project:
         wait_for_project_update(module, response)
     module.exit_json(**module.json_output)
-
 
 if __name__ == '__main__':
     main()

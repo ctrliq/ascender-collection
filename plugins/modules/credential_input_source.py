@@ -4,13 +4,7 @@
 # Copyright: (c) 2020, Tom Page <tpage@redhat.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-from __future__ import absolute_import, division, print_function
-
-__metaclass__ = type
-
-
 ANSIBLE_METADATA = {'metadata_version': '1.1', 'status': ['preview'], 'supported_by': 'community'}
-
 
 DOCUMENTATION = '''
 ---
@@ -55,7 +49,6 @@ options:
 extends_documentation_fragment: ctrliq.ascender.auth
 '''
 
-
 EXAMPLES = '''
 - name: Use CyberArk Lookup credential as password source
   credential_input_source:
@@ -77,9 +70,7 @@ id:
     sample: 42
 '''
 
-
 from ..module_utils.controller_api import ControllerAPIModule
-
 
 def main():
     # Any additional arguments that are not fields of the item can be added here
@@ -131,7 +122,6 @@ def main():
     module.create_or_update_if_needed(
         credential_input_source, credential_input_source_fields, endpoint='credential_input_sources', item_type='credential_input_source'
     )
-
 
 if __name__ == '__main__':
     main()

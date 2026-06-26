@@ -4,13 +4,7 @@
 # (c) 2017, John Westcott IV <john.westcott.iv@redhat.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-from __future__ import absolute_import, division, print_function
-
-__metaclass__ = type
-
-
 ANSIBLE_METADATA = {'metadata_version': '1.1', 'status': ['preview'], 'supported_by': 'community'}
-
 
 DOCUMENTATION = '''
 ---
@@ -131,7 +125,6 @@ assets:
     type: dict
 '''
 
-
 from ..module_utils.awxkit import ControllerAWXKitModule
 
 try:
@@ -140,7 +133,6 @@ try:
     HAS_EXPORTABLE_RESOURCES = True
 except ImportError:
     HAS_EXPORTABLE_RESOURCES = False
-
 
 def main():
     argument_spec = dict(
@@ -199,7 +191,6 @@ def main():
         log_capture_string.close()
         if log_contents != '':
             module.fail_json(msg=log_contents)
-
 
 if __name__ == '__main__':
     main()

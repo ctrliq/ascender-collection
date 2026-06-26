@@ -1,14 +1,8 @@
 #!/usr/bin/python
 # coding: utf-8 -*-
 
-
 # (c) 2020, John Westcott IV <john.westcott.iv@redhat.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-
-from __future__ import absolute_import, division, print_function
-
-__metaclass__ = type
-
 
 ANSIBLE_METADATA = {'metadata_version': '1.1', 'status': ['preview'], 'supported_by': 'community'}
 
@@ -116,7 +110,6 @@ controller_token:
 
 from ..module_utils.controller_api import ControllerAPIModule
 
-
 def return_token(module, last_response):
     # A token is special because you can never get the actual token ID back from the API.
     # So the default module return would give you an ID but then the token would forever be masked on you.
@@ -127,7 +120,6 @@ def return_token(module, last_response):
         'tower_token': last_response,
     }
     module.exit_json(**module.json_output)
-
 
 def main():
     # Any additional arguments that are not fields of the item can be added here
@@ -202,7 +194,6 @@ def main():
         associations={},
         on_create=return_token,
     )
-
 
 if __name__ == '__main__':
     main()

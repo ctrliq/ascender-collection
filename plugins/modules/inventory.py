@@ -4,13 +4,7 @@
 # (c) 2017, Wayne Witzel III <wayne@riotousliving.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-from __future__ import absolute_import, division, print_function
-
-__metaclass__ = type
-
-
 ANSIBLE_METADATA = {'metadata_version': '1.1', 'status': ['preview'], 'supported_by': 'community'}
-
 
 DOCUMENTATION = '''
 ---
@@ -83,7 +77,6 @@ options:
 extends_documentation_fragment: ctrliq.ascender.auth
 '''
 
-
 EXAMPLES = '''
 - name: Add inventory
   inventory:
@@ -131,7 +124,6 @@ EXAMPLES = '''
         resolved_state: state | default("running")
 '''
 
-
 RETURN = '''
 id:
     description: The numeric database ID of the inventory.
@@ -140,10 +132,8 @@ id:
     sample: 42
 '''
 
-
 from ..module_utils.controller_api import ControllerAPIModule
 import json
-
 
 def main():
     # Any additional arguments that are not fields of the item can be added here
@@ -240,7 +230,6 @@ def main():
         item_type='inventory',
         associations=association_fields,
     )
-
 
 if __name__ == '__main__':
     main()

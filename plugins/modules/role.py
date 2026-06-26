@@ -4,13 +4,7 @@
 # (c) 2017, Wayne Witzel III <wayne@riotousliving.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-from __future__ import absolute_import, division, print_function
-
-__metaclass__ = type
-
-
 ANSIBLE_METADATA = {'metadata_version': '1.1', 'status': ['preview'], 'supported_by': 'community'}
-
 
 DOCUMENTATION = '''
 ---
@@ -145,7 +139,6 @@ options:
 extends_documentation_fragment: ctrliq.ascender.auth
 '''
 
-
 EXAMPLES = '''
 - name: Add jdoe to the member role of My Team
   role:
@@ -174,9 +167,7 @@ id:
     sample: 42
 '''
 
-
 from ..module_utils.controller_api import ControllerAPIModule
-
 
 def main():
 
@@ -336,7 +327,6 @@ def main():
                     module.fail_json(msg="Failed to revoke role. {0}".format(response['json'].get('detail', response['json'].get('msg', 'unknown'))))
 
     module.exit_json(**module.json_output)
-
 
 if __name__ == '__main__':
     main()
