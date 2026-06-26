@@ -15,6 +15,9 @@ on:
     - cron: "0 6 * * 1"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -99,13 +102,16 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install ruff yamllint
+        run: pip install ansible-core ruff yamllint ansible-lint
 
       - name: ruff — plugins
         run: ruff check plugins/
 
       - name: yamllint — meta and galaxy
         run: yamllint meta/ galaxy.yml
+
+      - name: ansible-lint
+        run: ansible-lint
 
   unit:
     name: Unit tests
@@ -124,12 +130,6 @@ jobs:
 
       - name: Run unit tests
         run: pytest tests/unit/ -v
-
-      - name: Install ansible-lint
-        run: pip install ansible-core ansible-lint
-
-      - name: ansible-lint
-        run: ansible-lint
 
   changelog:
     name: Changelog
