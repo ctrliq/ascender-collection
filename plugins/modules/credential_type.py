@@ -1,5 +1,4 @@
 #!/usr/bin/python
-# coding: utf-8 -*-
 #
 # (c) 2018, Adrien Fleury <fleu42@gmail.com>
 # GNU General Public License v3.0+
