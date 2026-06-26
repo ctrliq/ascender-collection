@@ -1,0 +1,21 @@
+{% if first_hosts | default(true) | bool %}
+---
+controller_hosts:
+{% endif %}
+{% for host in current_hosts_asset_value if not host.has_inventory_sources %}
+  - name: "{{ host.name }}"
+    description: "{{ template_overrides_resources.host[host.name].description
+                     | default(template_overrides_global.host.description)
+                     | default(host.description) }}"
+    inventory: "{{ host.summary_fields.inventory.name | default('ToDo: The host \'' + host.name + '\' must have an associated inventory') }}"
+{% if template_overrides_resources.host[host.name].variables is defined
+      or template_overrides_global.host.variables is defined
+      or (host.variables and host.variables != '---' and host.variables != '') %}
+    variables:
+      {{ template_overrides_resources.host[host.name].variables
+         | default(template_overrides_global.host.variables)
+         | default(host.variables)
+         | from_yaml | to_nice_yaml(indent=2, sort_keys=False) | indent(width=6, first=False) | regex_replace('(^[^:]*): (.*){([{%])', '\\g<1>: !unsafe \\g<2>{\\g<3>', multiline=True)}}
+{%- endif %}
+{% endfor %}
+...
