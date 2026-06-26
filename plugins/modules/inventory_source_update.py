@@ -10,7 +10,7 @@ author: "Bianca Henderson (@beeankha)"
 short_description: Update inventory source(s).
 description:
     - Update Automation Platform Controller inventory source(s). See
-      U(https://www.ansible.com/tower) for an overview.
+      U(https://ascender-automation.org) for an overview.
 options:
     name:
       description:

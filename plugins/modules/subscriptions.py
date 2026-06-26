@@ -10,7 +10,7 @@ author: "John Westcott IV (@john-westcott-iv)"
 short_description: Get subscription list
 description:
     - Get subscriptions available to Automation Platform Controller. See
-      U(https://www.ansible.com/tower) for an overview.
+      U(https://ascender-automation.org) for an overview.
 options:
     username:
       description:

@@ -11,7 +11,7 @@ version_added: "4.0.0"
 short_description: create, update, or destroy Automation Platform Controller ad hoc commands.
 description:
     - Create, update, or destroy Automation Platform Controller ad hoc commands. See
-      U(https://www.ansible.com/tower) for an overview.
+      U(https://ascender-automation.org) for an overview.
 options:
     job_type:
       description:

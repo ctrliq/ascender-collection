@@ -9,7 +9,7 @@ author: "Sean Sullivan (@sean-m-sullivan)"
 short_description: Update a Project in Automation Platform Controller
 description:
     - Update a Automation Platform Controller Project. See
-      U(https://www.ansible.com/tower) for an overview.
+      U(https://ascender-automation.org) for an overview.
 options:
     name:
       description:

@@ -11,7 +11,7 @@ author: "Adrien Fleury (@fleu42)"
 short_description: Create, update, or destroy custom Automation Platform Controller credential type.
 description:
     - Create, update, or destroy Automation Platform Controller credential type. See
-      U(https://www.ansible.com/tower) for an overview.
+      U(https://ascender-automation.org) for an overview.
 options:
     name:
       description:

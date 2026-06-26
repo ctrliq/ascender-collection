@@ -10,7 +10,7 @@ author: "Shane McDonald (@shanemcd)"
 short_description: create, update, or destroy Execution Environments in Automation Platform Controller.
 description:
     - Create, update, or destroy Execution Environments in Automation Platform Controller. See
-      U(https://www.ansible.com/tower) for an overview.
+      U(https://ascender-automation.org) for an overview.
 options:
     name:
       description:

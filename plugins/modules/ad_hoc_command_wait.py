@@ -10,7 +10,7 @@ author: "John Westcott IV (@john-westcott-iv)"
 short_description: Wait for Automation Platform Controller Ad Hoc Command to finish.
 description:
     - Wait for Automation Platform Controller ad hoc command to finish and report success or failure. See
-      U(https://www.ansible.com/tower) for an overview.
+      U(https://ascender-automation.org) for an overview.
 options:
     command_id:
       description:

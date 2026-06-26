@@ -10,7 +10,7 @@ author: "Nikhil Jain (@jainnikhil30)"
 short_description: Modify Automation Platform Controller settings.
 description:
     - Modify Automation Platform Controller settings. See
-      U(https://www.ansible.com/tower) for an overview.
+      U(https://ascender-automation.org) for an overview.
 options:
     name:
       description:

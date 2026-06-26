@@ -9,7 +9,7 @@ requirements:
   - None
 description:
   - Returns GET requests from the Automation Platform Controller API. See
-    U(https://docs.ansible.com/ansible-tower/latest/html/towerapi/index.html) for API usage.
+    U(https://ascender-automation.org) for API usage.
   - For use that is cross-compatible between the ctrliq.ascender and ansible.controller collection
     see the controller_meta module
 options:

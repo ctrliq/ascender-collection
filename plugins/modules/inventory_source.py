@@ -10,7 +10,7 @@ author: "Adrien Fleury (@fleu42)"
 short_description: create, update, or destroy Automation Platform Controller inventory source.
 description:
     - Create, update, or destroy Automation Platform Controller inventory source. See
-      U(https://www.ansible.com/tower) for an overview.
+      U(https://ascender-automation.org) for an overview.
 options:
     name:
       description:

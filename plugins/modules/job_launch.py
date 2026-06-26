@@ -10,7 +10,7 @@ author: "Wayne Witzel III (@wwitzel3)"
 short_description: Launch an Ansible Job.
 description:
     - Launch an Automation Platform Controller jobs. See
-      U(https://www.ansible.com/tower) for an overview.
+      U(https://ascender-automation.org) for an overview.
 options:
     name:
       description:

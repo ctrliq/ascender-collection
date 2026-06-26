@@ -9,7 +9,7 @@ author: "John Westcott IV (@john-westcott-iv)"
 short_description: Run a workflow in Automation Platform Controller
 description:
     - Launch an Automation Platform Controller workflows. See
-      U(https://www.ansible.com/tower) for an overview.
+      U(https://ascender-automation.org) for an overview.
 options:
     name:
       description:
