@@ -952,6 +952,7 @@ def main():
             module.json_output['changed'] = True
             if existing_item and module.has_encrypted_values(existing_spec):
                 module._encrypted_changed_warning('survey_spec', existing_item, warning=True)
+
             def on_change(mod, last_request):
                 spec_endpoint = last_request.get('related', {}).get('survey_spec')
                 mod.update_survey_spec(mod.params.get('survey_spec'), spec_endpoint)
