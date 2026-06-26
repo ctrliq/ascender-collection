@@ -84,7 +84,7 @@ EXAMPLES = '''
     description: "Our Foo Cloud Servers"
     organization: "Bar Org"
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 
 - name: Copy inventory
   inventory:

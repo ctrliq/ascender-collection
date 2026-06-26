@@ -57,7 +57,7 @@ EXAMPLES = '''
     description: "Local Host Group"
     inventory: "Local Inventory"
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
     variables:
       example_var: 123
 '''

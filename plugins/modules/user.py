@@ -82,7 +82,7 @@ EXAMPLES = '''
     first_name: John
     last_name: Doe
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 
 - name: Add user as a system administrator
   user:
@@ -91,7 +91,7 @@ EXAMPLES = '''
     email: jdoe@example.org
     superuser: yes
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 
 - name: Add user as a system auditor
   user:
@@ -100,7 +100,7 @@ EXAMPLES = '''
     email: jdoe@example.org
     auditor: yes
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 
 - name: Add user as a member of an organization (permissions on the organization are required)
   user:
@@ -115,7 +115,7 @@ EXAMPLES = '''
     username: jdoe
     email: jdoe@example.org
     state: absent
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 '''
 
 RETURN = '''

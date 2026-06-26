@@ -49,7 +49,7 @@ EXAMPLES = '''
     description: Team Description
     organization: test-org
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 '''
 
 RETURN = '''
