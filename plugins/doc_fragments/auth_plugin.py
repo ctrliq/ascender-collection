@@ -73,8 +73,8 @@ options:
     - name: CONTROLLER_REQUEST_TIMEOUT
 
 notes:
-- If no I(config_file) is provided we will attempt to use the tower-cli library
-  defaults to find your host information.
+- If no I(config_file) is provided we will attempt to use the default config file
+  locations to find your host information.
 - I(config_file) should be in the following format
     host=hostname
     username=username
