@@ -56,9 +56,37 @@ EXAMPLES = """
     timeout: 120
 """
 
-RETURN = """
-
-"""
+RETURN = '''
+id:
+    description: ID of the workflow node job that was waited on
+    returned: success
+    type: int
+    sample: 99
+status:
+    description: final status of the workflow node job
+    returned: success
+    type: str
+    sample: successful
+elapsed:
+    description: total time in seconds the job took to run
+    returned: success
+    type: float
+    sample: 10.879
+started:
+    description: timestamp of when the job started running
+    returned: success
+    type: str
+    sample: "2017-03-01T17:03:53.200234Z"
+finished:
+    description: timestamp of when the job finished
+    returned: success
+    type: str
+    sample: "2017-03-01T17:04:04.078782Z"
+job_data:
+    description: dictionary containing the full job data returned by the controller
+    returned: success
+    type: dict
+'''
 
 from ..module_utils.controller_api import ControllerAPIModule
 
