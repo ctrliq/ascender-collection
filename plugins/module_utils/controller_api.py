@@ -1000,6 +1000,16 @@ class ControllerAPIModule(ControllerModule):
                 existing_item, new_item, endpoint, on_create=on_create, item_type=item_type, auto_exit=auto_exit, associations=associations
             )
 
+    def update_survey_spec(self, survey_spec, survey_endpoint):
+        if survey_spec == {}:
+            response = self.delete_endpoint(survey_endpoint)
+            if response['status_code'] != 200:
+                self.fail_json(msg="Failed to delete survey: {0}".format(response['json']))
+        else:
+            response = self.post_endpoint(survey_endpoint, **{'data': survey_spec})
+            if response['status_code'] != 200:
+                self.fail_json(msg="Failed to update survey: {0}".format(response['json']['error']))
+
     def logout(self):
         if self.authenticated and self.oauth_token_id:
             # Attempt to delete our current token from /api/v2/tokens/
