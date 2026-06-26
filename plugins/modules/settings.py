@@ -80,6 +80,7 @@ try:
 except ImportError:
     HAS_YAML = False
 
+
 def coerce_type(module, value):
     # If our value is already None we can just return directly
     if value is None:
@@ -97,6 +98,7 @@ def coerce_type(module, value):
     except ValueError:
         pass
     return value
+
 
 def main():
     # Any additional arguments that are not fields of the item can be added here
@@ -174,6 +176,7 @@ def main():
         module.fail_json(msg=response['json']['__all__'])
     else:
         module.fail_json(**{'msg': "Unable to update settings, see response", 'response': response})
+
 
 if __name__ == '__main__':
     main()

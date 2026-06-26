@@ -119,6 +119,7 @@ from ansible.module_utils.common.text.converters import to_native
 from ansible.utils.display import Display
 from ..module_utils.controller_api import ControllerAPIModule
 
+
 class LookupModule(LookupBase):
     display = Display()
 

@@ -152,6 +152,7 @@ id:
 from ..module_utils.controller_api import ControllerAPIModule
 from json import dumps
 
+
 def main():
     # Any additional arguments that are not fields of the item can be added here
     argument_spec = dict(
@@ -296,6 +297,7 @@ def main():
     module.create_or_update_if_needed(
         inventory_source_object, inventory_source_fields, endpoint='inventory_sources', item_type='inventory source', associations=association_fields
     )
+
 
 if __name__ == '__main__':
     main()

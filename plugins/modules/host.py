@@ -70,6 +70,7 @@ id:
 from ..module_utils.controller_api import ControllerAPIModule
 import json
 
+
 def main():
     # Any additional arguments that are not fields of the item can be added here
     argument_spec = dict(
@@ -117,6 +118,7 @@ def main():
 
     # If the state was present and we can let the module build or update the existing host, this will return on its own
     module.create_or_update_if_needed(host, host_fields, endpoint='hosts', item_type='host')
+
 
 if __name__ == '__main__':
     main()

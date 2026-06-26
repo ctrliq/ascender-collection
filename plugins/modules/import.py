@@ -57,6 +57,7 @@ try:
 except ImportError:
     HAS_EXPORTABLE_RESOURCES = False
 
+
 def main():
     argument_spec = dict(assets=dict(type='dict', required=True))
 
@@ -93,6 +94,7 @@ def main():
             module.fail_json(msg=log_contents)
 
     module.exit_json(**module.json_output)
+
 
 if __name__ == '__main__':
     main()

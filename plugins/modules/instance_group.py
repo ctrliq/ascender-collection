@@ -91,6 +91,7 @@ id:
 
 from ..module_utils.controller_api import ControllerAPIModule
 
+
 def main():
     # Any additional arguments that are not fields of the item can be added here
     argument_spec = dict(
@@ -172,6 +173,7 @@ def main():
             'instances': instances_ids,
         },
     )
+
 
 if __name__ == '__main__':
     main()
