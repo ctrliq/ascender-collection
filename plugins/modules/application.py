@@ -65,7 +65,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Add Foo application
-  application:
+  ctrliq.ascender.application:
     name: "Foo"
     description: "Foo bar application"
     organization: "test"
@@ -74,7 +74,7 @@ EXAMPLES = '''
     client_type: public
 
 - name: Add Foo application
-  application:
+  ctrliq.ascender.application:
     name: "Foo"
     description: "Foo bar application"
     organization: "test"

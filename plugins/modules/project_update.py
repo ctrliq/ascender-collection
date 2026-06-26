@@ -61,12 +61,12 @@ status:
 
 EXAMPLES = '''
 - name: Launch a project with a timeout of 10 seconds
-  project_update:
+  ctrliq.ascender.project_update:
     project: "Networking Project"
     timeout: 10
 
 - name: Launch a Project with extra_vars without waiting
-  project_update:
+  ctrliq.ascender.project_update:
     project: "Networking Project"
     wait: False
 '''

@@ -71,7 +71,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Add group
-  group:
+  ctrliq.ascender.group:
     name: localhost
     description: "Local Host Group"
     inventory: "Local Inventory"
@@ -79,7 +79,7 @@ EXAMPLES = '''
     controller_config_file: "~/controller.cfg"
 
 - name: Add group
-  group:
+  ctrliq.ascender.group:
     name: Cities
     description: "Local Host Group"
     inventory: Default Inventory

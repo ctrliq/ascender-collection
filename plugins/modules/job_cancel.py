@@ -29,7 +29,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Cancel job
-  job_cancel:
+  ctrliq.ascender.job_cancel:
     job_id: job.id
 '''
 

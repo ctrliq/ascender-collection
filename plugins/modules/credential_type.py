@@ -58,7 +58,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 '''
 
 EXAMPLES = '''
-- credential_type:
+- ctrliq.ascender.credential_type:
     name: Nexus
     description: Credentials type for Nexus
     kind: cloud
@@ -67,7 +67,7 @@ EXAMPLES = '''
     state: present
     validate_certs: false
 
-- credential_type:
+- ctrliq.ascender.credential_type:
     name: Nexus
     state: absent
 '''

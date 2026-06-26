@@ -97,7 +97,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Add Slack notification with custom messages
-  notification_template:
+  ctrliq.ascender.notification_template:
     name: slack notification
     organization: Default
     notification_type: slack
@@ -116,7 +116,7 @@ EXAMPLES = '''
     controller_config_file: "~/controller.cfg"
 
 - name: Add webhook notification
-  notification_template:
+  ctrliq.ascender.notification_template:
     name: webhook notification
     notification_type: webhook
     notification_configuration:
@@ -127,7 +127,7 @@ EXAMPLES = '''
     controller_config_file: "~/controller.cfg"
 
 - name: Add email notification
-  notification_template:
+  ctrliq.ascender.notification_template:
     name: email notification
     notification_type: email
     notification_configuration:
@@ -144,7 +144,7 @@ EXAMPLES = '''
     controller_config_file: "~/controller.cfg"
 
 - name: Add twilio notification
-  notification_template:
+  ctrliq.ascender.notification_template:
     name: twilio notification
     notification_type: twilio
     notification_configuration:
@@ -157,7 +157,7 @@ EXAMPLES = '''
     controller_config_file: "~/controller.cfg"
 
 - name: Add PagerDuty notification
-  notification_template:
+  ctrliq.ascender.notification_template:
     name: pagerduty notification
     notification_type: pagerduty
     notification_configuration:
@@ -169,7 +169,7 @@ EXAMPLES = '''
     controller_config_file: "~/controller.cfg"
 
 - name: Add IRC notification
-  notification_template:
+  ctrliq.ascender.notification_template:
     name: irc notification
     notification_type: irc
     notification_configuration:
@@ -184,13 +184,13 @@ EXAMPLES = '''
     controller_config_file: "~/controller.cfg"
 
 - name: Delete notification
-  notification_template:
+  ctrliq.ascender.notification_template:
     name: old notification
     state: absent
     controller_config_file: "~/controller.cfg"
 
 - name: Copy webhook notification
-  notification_template:
+  ctrliq.ascender.notification_template:
     name: foo notification
     copy_from: email notification
     organization: Foo

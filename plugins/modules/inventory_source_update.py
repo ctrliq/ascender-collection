@@ -51,13 +51,13 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Update a single inventory source
-  inventory_source_update:
+  ctrliq.ascender.inventory_source_update:
     name: "Example Inventory Source"
     inventory: "My Inventory"
     organization: Default
 
 - name: Update all inventory sources
-  inventory_source_update:
+  ctrliq.ascender.inventory_source_update:
     name: "{{ item }}"
     inventory: "My Other Inventory"
   loop: "{{ query('ctrliq.ascender.controller_api', 'inventory_sources', query_params={ 'inventory': 30 }, return_ids=True ) }}"

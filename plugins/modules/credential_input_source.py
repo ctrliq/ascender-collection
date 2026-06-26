@@ -50,7 +50,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Use CyberArk Lookup credential as password source
-  credential_input_source:
+  ctrliq.ascender.credential_input_source:
     input_field_name: password
     target_credential: new_cred
     source_credential: cyberark_lookup

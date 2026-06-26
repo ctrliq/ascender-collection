@@ -46,12 +46,12 @@ subscriptions:
 
 EXAMPLES = '''
 - name: Get subscriptions
-  subscriptions:
+  ctrliq.ascender.subscriptions:
     username: "my_username"
     password: "My Password"
 
 - name: Get subscriptions with a filter
-  subscriptions:
+  ctrliq.ascender.subscriptions:
     username: "my_username"
     password: "My Password"
     filters:

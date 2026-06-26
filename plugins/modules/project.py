@@ -158,7 +158,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Add project
-  project:
+  ctrliq.ascender.project:
     name: "Foo"
     description: "Foo bar project"
     organization: "test"
@@ -166,7 +166,7 @@ EXAMPLES = '''
     controller_config_file: "~/controller.cfg"
 
 - name: Add Project with cache timeout
-  project:
+  ctrliq.ascender.project:
     name: "Foo"
     description: "Foo bar project"
     organization: "test"
@@ -176,7 +176,7 @@ EXAMPLES = '''
     controller_config_file: "~/controller.cfg"
 
 - name: Copy project
-  project:
+  ctrliq.ascender.project:
     name: copy
     copy_from: test
     description: Foo copy project

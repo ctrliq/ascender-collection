@@ -28,16 +28,16 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Export all assets
-  export:
+  ctrliq.ascender.export:
     all: True
   register: export_output
 
 - name: Import all assets from our export
-  import:
+  ctrliq.ascender.import:
     assets: "{{ export_output.assets }}"
 
 - name: Load data from a json file created by a command like awx export --organization Default
-  import:
+  ctrliq.ascender.import:
     assets: "{{ lookup('file', 'org.json') | from_json() }}"
 '''
 

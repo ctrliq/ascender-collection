@@ -74,7 +74,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Add user
-  user:
+  ctrliq.ascender.user:
     username: jdoe
     password: foobarbaz
     email: jdoe@example.org
@@ -84,7 +84,7 @@ EXAMPLES = '''
     controller_config_file: "~/controller.cfg"
 
 - name: Add user as a system administrator
-  user:
+  ctrliq.ascender.user:
     username: jdoe
     password: foobarbaz
     email: jdoe@example.org
@@ -93,7 +93,7 @@ EXAMPLES = '''
     controller_config_file: "~/controller.cfg"
 
 - name: Add user as a system auditor
-  user:
+  ctrliq.ascender.user:
     username: jdoe
     password: foobarbaz
     email: jdoe@example.org
@@ -102,7 +102,7 @@ EXAMPLES = '''
     controller_config_file: "~/controller.cfg"
 
 - name: Add user as a member of an organization (permissions on the organization are required)
-  user:
+  ctrliq.ascender.user:
     username: jdoe
     password: foobarbaz
     email: jdoe@example.org
@@ -110,7 +110,7 @@ EXAMPLES = '''
     state: present
 
 - name: Delete user
-  user:
+  ctrliq.ascender.user:
     username: jdoe
     email: jdoe@example.org
     state: absent

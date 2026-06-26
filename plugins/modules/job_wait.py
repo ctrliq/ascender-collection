@@ -41,12 +41,12 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Launch a job
-  job_launch:
+  ctrliq.ascender.job_launch:
     job_template: "My Job Template"
   register: job
 
 - name: Wait for job max 120s
-  job_wait:
+  ctrliq.ascender.job_wait:
     job_id: "{{ job.id }}"
     timeout: 120
 '''

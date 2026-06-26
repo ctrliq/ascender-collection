@@ -51,7 +51,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Add host
-  host:
+  ctrliq.ascender.host:
     name: localhost
     description: "Local Host Group"
     inventory: "Local Inventory"

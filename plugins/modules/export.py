@@ -98,20 +98,20 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Export all assets
-  export:
+  ctrliq.ascender.export:
     all: True
 
 - name: Export all inventories
-  export:
+  ctrliq.ascender.export:
     inventory: 'all'
 
 - name: Export a job template named "My Template" and all Credentials
-  export:
+  ctrliq.ascender.export:
     job_templates: "My Template"
     credentials: 'all'
 
 - name: Export a list of inventories
-  export:
+  ctrliq.ascender.export:
     inventory: ['My Inventory 1', 'My Inventory 2']
 '''
 

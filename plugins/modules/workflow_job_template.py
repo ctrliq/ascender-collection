@@ -433,7 +433,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Create a workflow job template
-  workflow_job_template:
+  ctrliq.ascender.workflow_job_template:
     name: example-workflow
     description: created by Ansible Playbook
     organization: Default
@@ -498,7 +498,7 @@ EXAMPLES = '''
   register: result
 
 - name: Copy a workflow job template
-  workflow_job_template:
+  ctrliq.ascender.workflow_job_template:
     name: copy-workflow
     copy_from: example-workflow
     organization: Foo

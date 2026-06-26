@@ -41,7 +41,7 @@ version:
 '''
 
 EXAMPLES = '''
-- controller_meta:
+- ctrliq.ascender.controller_meta:
   register: result
 
 - name: Show details about the collection

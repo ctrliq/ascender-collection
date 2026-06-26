@@ -43,7 +43,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Create team
-  team:
+  ctrliq.ascender.team:
     name: Team Name
     description: Team Description
     organization: test-org
