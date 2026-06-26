@@ -26,17 +26,17 @@ prefix:
 name:
     description: Collection name
     returned: success
-    sample: awx
+    sample: ascender
     type: str
 namespace:
     description: Collection namespace
     returned: success
-    sample: awx
+    sample: ctrliq
     type: str
 version:
     description: Version of the collection
     returned: success
-    sample: 0.0.1-devel
+    sample: 25.4.0
     type: str
 '''
 
@@ -56,7 +56,7 @@ from ..module_utils.controller_api import ControllerAPIModule
 
 def main():
     module = ControllerAPIModule(argument_spec={})
-    namespace = {'awx': 'awx', 'controller': 'ansible'}.get(module._COLLECTION_TYPE, 'unknown')
+    namespace = {'awx': 'awx', 'ascender': 'ctrliq', 'controller': 'ansible'}.get(module._COLLECTION_TYPE, 'unknown')
     namespace_name = '{0}.{1}'.format(namespace, module._COLLECTION_TYPE)
     module.exit_json(prefix=namespace_name, name=module._COLLECTION_TYPE, namespace=namespace, version=module._COLLECTION_VERSION)
 

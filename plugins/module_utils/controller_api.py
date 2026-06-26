@@ -308,10 +308,8 @@ class ControllerModule(AnsibleModule):
             super().warn(warning)
 
 class ControllerAPIModule(ControllerModule):
-    # Development placeholder — the optional template_galaxy.yml build
-    # playbook replaces this with the real version from galaxy.yml.
-    _COLLECTION_VERSION = "0.0.1-devel"
-    _COLLECTION_TYPE = "awx"
+    _COLLECTION_VERSION = "25.4.0"
+    _COLLECTION_TYPE = "ascender"
     # This maps the collection type (awx/ascender/tower) to the X-API-Product-Name
     # value returned by the server (see server_product_name() in
     # awx/main/utils/licensing.py). Ascender runs on the open license, so its
