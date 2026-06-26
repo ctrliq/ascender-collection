@@ -1,0 +1,73 @@
+---
+- name: team_roles | Get current Team Roles from the API
+  ansible.builtin.set_fact:
+    team_roles_lookvar: "{{ query(controller_api_plugin, 'api/v2/teams/' + team_id | string + '/roles/', host=controller_hostname, oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs,
+      return_all=true, max_objects=query_controller_api_max_objects) }}"
+  no_log: "{{ controller_configuration_filetree_create_secure_logging }}"
+
+- name: team_roles | Define object_roles variable
+  ansible.builtin.set_fact:
+    object_roles: []
+
+- name: team_roles | Map objects with roles (block)
+  when: team_roles_lookvar | length > 0
+  block:
+    - name: team_roles | Get role and object types and populate object_roles variable
+      ansible.builtin.set_fact:
+        role_types: "{{ team_roles_lookvar | map(attribute='name') | unique }}"
+        object_types: "{{ team_roles_lookvar | map(attribute='summary_fields.resource_type') | unique }}"
+
+    - name: team_roles | Match objects with roles
+      when: (team_roles_lookvar | selectattr('name','equalto', item.0) | selectattr('summary_fields.resource_type','equalto', item.1) | map(attribute='summary_fields.resource_name'))
+        | length > 0
+      ansible.builtin.set_fact:
+        object_roles: "{{ object_roles + [{ item.0: { 'resource_names': (team_roles_lookvar | selectattr('name','equalto', item.0) | selectattr('summary_fields.resource_type','equalto',
+          item.1) | map(attribute='summary_fields.resource_name')), 'resource_type': item.1, } }] }}"
+      loop: "{{ role_types | product(object_types) | list }}"
+
+- name: team_roles | Block for to generate flatten output
+  when:
+    - flatten_output is defined
+    - flatten_output | bool
+  vars:
+    __dest: "{{ output_path }}/team_roles.yaml"
+  block:
+    - name: team_roles | Stat if the output file exists
+      ansible.builtin.stat:
+        path: "{{ __dest }}"
+      register: team_roles_file
+
+    - name: team_roles | Add current team roles to the team roles flat file
+      ansible.builtin.blockinfile:
+        create: true
+        mode: "0644"
+        insertafter: EOF
+        path: "{{ __dest }}"
+        marker: ""
+        block: "{{ lookup('template', 'templates/current_team_roles.j2') }}"
+      vars:
+        first_team_role: "{{ not team_roles_file.stat.exists }}"
+      when: object_roles | length > 0
+
+    - name: team_roles | Remove all the blank lines introduced by the last task
+      ansible.builtin.lineinfile:
+        path: "{{ __dest }}"
+        line: ""
+        state: absent
+
+- name: team_roles | Block for to generate the filetre_create normal output
+  when: flatten_output is not defined or not (flatten_output | bool)
+  block:
+    - name: "team_roles | Create the output directory for team roles: {{ output_path }}"
+      ansible.builtin.file:
+        path: "{{ output_path }}/team_roles"
+        state: directory
+        mode: "0755"
+
+    - name: team_roles | Add current roles to the output yaml file
+      ansible.builtin.template:
+        src: templates/current_team_roles.j2
+        dest: "{{ output_path }}/team_roles/current_roles_{{ team_name | regex_replace('/', '_') }}.yaml"
+        mode: "0644"
+      when: object_roles | length > 0
+...

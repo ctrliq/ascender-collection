@@ -10,6 +10,7 @@ action_groups:
     - bulk_host_create
     - bulk_host_delete
     - controller_meta
+    - controller_export_diff
     - credential_input_source
     - credential
     - credential_type
