@@ -254,6 +254,7 @@ id:
 
 from ..module_utils.controller_api import ControllerAPIModule
 
+
 def main():
     # Any additional arguments that are not fields of the item can be added here
     argument_spec = dict(
@@ -437,6 +438,7 @@ def main():
             existing_item, new_fields, endpoint=approval_endpoint, item_type='workflow_job_template_approval_node', associations=association_fields
         )
     module.exit_json(**module.json_output)
+
 
 if __name__ == '__main__':
     main()

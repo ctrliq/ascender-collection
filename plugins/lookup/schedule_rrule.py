@@ -95,6 +95,7 @@ except ImportError as imp_exc:
 else:
     LIBRARY_IMPORT_ERROR = None
 
+
 class LookupModule(LookupBase):
     # plugin constructor
     def __init__(self, *args, **kwargs):

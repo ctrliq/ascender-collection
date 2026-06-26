@@ -125,6 +125,7 @@ id:
 
 from ..module_utils.controller_api import ControllerAPIModule
 
+
 def main():
     # Any additional arguments that are not fields of the item can be added here
     argument_spec = dict(
@@ -193,6 +194,7 @@ def main():
     else:
         # If the state was present and we can let the module build or update the existing item, this will return on its own
         module.create_or_update_if_needed(existing_item, new_fields, endpoint='users', item_type='user')
+
 
 if __name__ == '__main__':
     main()

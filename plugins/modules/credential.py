@@ -204,6 +204,7 @@ id:
 
 from ..module_utils.controller_api import ControllerAPIModule
 
+
 def main():
     # Any additional arguments that are not fields of the item can be added here
     argument_spec = dict(
@@ -306,6 +307,7 @@ def main():
 
     # If the state was present we can let the module build or update the existing group, this will return on its own
     module.create_or_update_if_needed(credential, credential_fields, endpoint='credentials', item_type='credential')
+
 
 if __name__ == '__main__':
     main()

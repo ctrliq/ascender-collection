@@ -67,6 +67,7 @@ EXAMPLES = '''
 import base64
 from ..module_utils.controller_api import ControllerAPIModule
 
+
 def main():
 
     module = ControllerAPIModule(
@@ -124,6 +125,7 @@ def main():
             module.post_endpoint('config/attach', data={'pool_id': module.params.get('pool_id')})
 
     module.exit_json(**json_output)
+
 
 if __name__ == '__main__':
     main()

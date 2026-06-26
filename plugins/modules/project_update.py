@@ -71,6 +71,7 @@ EXAMPLES = '''
 
 from ..module_utils.controller_api import ControllerAPIModule
 
+
 def main():
     # Any additional arguments that are not fields of the item can be added here
     argument_spec = dict(
@@ -128,6 +129,7 @@ def main():
         module.json_output['changed'] = False
 
     module.exit_json(**module.json_output)
+
 
 if __name__ == '__main__':
     main()

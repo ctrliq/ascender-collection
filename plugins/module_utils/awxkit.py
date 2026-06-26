@@ -12,6 +12,7 @@ try:
 except ImportError:
     HAS_AWX_KIT = False
 
+
 class ControllerAWXKitModule(ControllerModule):
     connection = None
     apiV2Ref = None

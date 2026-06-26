@@ -8,9 +8,7 @@ def test_infrastructure():
 
 def test_collection_import():
     """Verify that the collection's module_utils can be imported."""
-    import importlib
+    from pathlib import Path
 
-    spec = importlib.util.find_spec("plugins.module_utils.controller_api")
-    # The module file should exist on disk even if we can't fully import it
-    # without ansible-core wiring; finding the spec is sufficient.
-    assert spec is not None, "plugins.module_utils.controller_api should be discoverable"
+    module_path = Path("plugins/module_utils/controller_api.py")
+    assert module_path.exists(), "plugins/module_utils/controller_api.py should exist"

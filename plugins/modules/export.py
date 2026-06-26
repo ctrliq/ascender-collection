@@ -131,6 +131,7 @@ try:
 except ImportError:
     HAS_EXPORTABLE_RESOURCES = False
 
+
 def main():
     argument_spec = dict(
         all=dict(type='bool', default=False),
@@ -187,6 +188,7 @@ def main():
         log_capture_string.close()
         if log_contents != '':
             module.fail_json(msg=log_contents)
+
 
 if __name__ == '__main__':
     main()
