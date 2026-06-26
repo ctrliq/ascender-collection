@@ -227,29 +227,29 @@ class ControllerModule(AnsibleModule):
 
                     # If we made it here then we have values from reading the ini file, so let's pull them out into a dict
                     config_data = {}
-                    for honorred_setting in self.short_params:
+                    for honored_setting in self.short_params:
                         try:
-                            config_data[honorred_setting] = config.get('general', honorred_setting)
+                            config_data[honored_setting] = config.get('general', honored_setting)
                         except NoOptionError:
                             pass
 
                 except Exception as e:
-                    raise ConfigFileException("An unknown exception occured trying to ini load config file: {0}".format(e)) from e
+                    raise ConfigFileException("An unknown exception occurred trying to ini load config file: {0}".format(e)) from e
 
         except Exception as e:
-            raise ConfigFileException("An unknown exception occured trying to load config file: {0}".format(e)) from e
+            raise ConfigFileException("An unknown exception occurred trying to load config file: {0}".format(e)) from e
 
         # If we made it here, we have a dict which has values in it from our config, any final settings logic can be performed here
-        for honorred_setting in self.short_params:
-            if honorred_setting in config_data:
-                # Veriffy SSL must be a boolean
-                if honorred_setting == 'verify_ssl':
-                    if isinstance(config_data[honorred_setting], str):
-                        setattr(self, honorred_setting, strtobool(config_data[honorred_setting]))
+        for honored_setting in self.short_params:
+            if honored_setting in config_data:
+                # Verify SSL must be a boolean
+                if honored_setting == 'verify_ssl':
+                    if isinstance(config_data[honored_setting], str):
+                        setattr(self, honored_setting, strtobool(config_data[honored_setting]))
                     else:
-                        setattr(self, honorred_setting, bool(config_data[honorred_setting]))
+                        setattr(self, honored_setting, bool(config_data[honored_setting]))
                 else:
-                    setattr(self, honorred_setting, config_data[honorred_setting])
+                    setattr(self, honored_setting, config_data[honored_setting])
 
     def logout(self):
         # This method is intended to be overridden
@@ -594,7 +594,7 @@ class ControllerAPIModule(ControllerModule):
             }
             # Preserve URL prefix
             endpoint = self.url_prefix.rstrip('/') + '/api/v2/tokens/'
-            # Post to the tokens endpoint with baisc auth to try and get a token
+            # Post to the tokens endpoint with basic auth to try and get a token
             api_token_url = (self.url._replace(path=endpoint)).geturl()
 
             try:
@@ -635,7 +635,7 @@ class ControllerAPIModule(ControllerModule):
     def delete_if_needed(self, existing_item, on_delete=None, auto_exit=True):
         # This will exit from the module on its own.
         # If the method successfully deletes an item and on_delete param is defined,
-        #   the on_delete parameter will be called as a method pasing in this object and the json from the response
+        #   the on_delete parameter will be called as a method passing in this object and the json from the response
         # This will return one of two things:
         #   1. None if the existing_item is not defined (so no delete needs to happen)
         #   2. The response from AWX from calling the delete on the endpont. It's up to you to process the response and exit from the module
@@ -729,7 +729,7 @@ class ControllerAPIModule(ControllerModule):
         if copy_from_lookup is None:
             self.fail_json(msg="A {0} with the name {1} was not able to be found.".format(item_type, copy_from_name_or_id))
 
-        # Do checks for copy permisions if warrented
+        # Do checks for copy permissions if warranted
         if item_type == 'workflow_job_template':
             copy_get_check = self.get_endpoint(copy_from_lookup['related']['copy'])
             if copy_get_check['status_code'] in [200]:
@@ -767,7 +767,7 @@ class ControllerAPIModule(ControllerModule):
 
         # This will exit from the module on its own
         # If the method successfully creates an item and on_create param is defined,
-        #    the on_create parameter will be called as a method pasing in this object and the json from the response
+        #    the on_create parameter will be called as a method passing in this object and the json from the response
         # This will return one of two things:
         #    1. None if the existing_item is already defined (so no create needs to happen)
         #    2. The response from AWX from calling the patch on the endpont. It's up to you to process the response and exit from the module
@@ -783,7 +783,7 @@ class ControllerAPIModule(ControllerModule):
             except KeyError as ke:
                 self.fail_json(msg="Unable to process create of item due to missing data {0}".format(ke))
         else:
-            # If we don't have an exisitng_item, we can try to create it
+            # If we don't have an existing_item, we can try to create it
 
             # We have to rely on item_type being passed in since we don't have an existing item that declares its type
             # We will pull the item_name out from the new_item, if it exists
@@ -890,7 +890,7 @@ class ControllerAPIModule(ControllerModule):
     def update_if_needed(self, existing_item, new_item, on_update=None, auto_exit=True, associations=None):
         # This will exit from the module on its own
         # If the method successfully updates an item and on_update param is defined,
-        #   the on_update parameter will be called as a method pasing in this object and the json from the response
+        #   the on_update parameter will be called as a method passing in this object and the json from the response
         # This will return one of two things:
         #    1. None if the existing_item does not need to be updated
         #    2. The response from AWX from patching to the endpoint. It's up to you to process the response and exit from the module.
@@ -979,7 +979,7 @@ class ControllerAPIModule(ControllerModule):
     def logout(self):
         if self.authenticated and self.oauth_token_id:
             # Attempt to delete our current token from /api/v2/tokens/
-            # Post to the tokens endpoint with baisc auth to try and get a token
+            # Post to the tokens endpoint with basic auth to try and get a token
             endpoint = self.url_prefix.rstrip('/') + '/api/v2/tokens/{0}/'.format(self.oauth_token_id)
             api_token_url = (self.url._replace(path=endpoint, query=None)).geturl()  # in error cases, fail_json exists before exception handling
 
