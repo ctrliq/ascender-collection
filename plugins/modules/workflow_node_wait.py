@@ -23,7 +23,7 @@ author: "Sean Sullivan (@sean-m-sullivan)"
 short_description: Wait for a workflow node to finish.
 description:
     - Approve an approval node in a workflow job. See
-      U(https://www.ansible.com/tower) for an overview.
+      U(https://ascender-automation.org) for an overview.
 options:
     workflow_job_id:
       description:

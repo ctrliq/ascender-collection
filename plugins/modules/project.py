@@ -19,7 +19,7 @@ author: "Wayne Witzel III (@wwitzel3)"
 short_description: create, update, or destroy Automation Platform Controller projects
 description:
     - Create, update, or destroy Automation Platform Controller projects. See
-      U(https://www.ansible.com/tower) for an overview.
+      U(https://ascender-automation.org) for an overview.
 options:
     name:
       description:

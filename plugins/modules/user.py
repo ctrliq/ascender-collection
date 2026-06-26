@@ -19,7 +19,7 @@ author: "John Westcott IV (@john-westcott-iv)"
 short_description: create, update, or destroy Automation Platform Controller users.
 description:
     - Create, update, or destroy Automation Platform Controller users. See
-      U(https://www.ansible.com/tower) for an overview.
+      U(https://ascender-automation.org) for an overview.
 options:
     username:
       description:

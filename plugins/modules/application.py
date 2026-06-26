@@ -19,7 +19,7 @@ author: "Geoffrey Bacheot (@jffz)"
 short_description: create, update, or destroy Automation Platform Controller applications
 description:
     - Create, update, or destroy Automation Platform Controller applications. See
-      U(https://www.ansible.com/tower) for an overview.
+      U(https://ascender-automation.org) for an overview.
 options:
     name:
       description:
@@ -90,7 +90,7 @@ EXAMPLES = '''
     authorization_grant_type: authorization-code
     client_type: confidential
     redirect_uris:
-      - http://tower.com/api/v2/
+      - the controller API endpoint
 '''
 
 RETURN = '''

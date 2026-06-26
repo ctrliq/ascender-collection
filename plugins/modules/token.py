@@ -20,7 +20,7 @@ version_added: "2.3.0"
 short_description: create, update, or destroy Automation Platform Controller tokens.
 description:
     - Create or destroy Automation Platform Controller tokens. See
-      U(https://www.ansible.com/tower) for an overview.
+      U(https://ascender-automation.org) for an overview.
     - In addition, the module sets an Ansible fact which can be passed into other
       controller modules as the parameter controller_oauthtoken. See examples for usage.
     - Because of the sensitive nature of tokens, the created token value is only available once

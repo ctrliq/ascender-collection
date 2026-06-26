@@ -20,7 +20,7 @@ version_added: "3.7.0"
 short_description: import resources into Automation Platform Controller.
 description:
     - Import assets into Automation Platform Controller. See
-      U(https://www.ansible.com/tower) for an overview.
+      U(https://ascender-automation.org) for an overview.
 options:
     assets:
       description:

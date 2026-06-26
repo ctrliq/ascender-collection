@@ -19,7 +19,7 @@ author: "Wayne Witzel III (@wwitzel3)"
 short_description: create, update, or destroy Automation Platform Controller job templates.
 description:
     - Create, update, or destroy Automation Platform Controller job templates. See
-      U(https://www.ansible.com/tower) for an overview.
+      U(https://ascender-automation.org) for an overview.
 options:
     name:
       description:
@@ -315,7 +315,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 notes:
   - JSON for survey_spec can be found in the API Documentation. See
-    U(https://docs.ansible.com/ansible-tower/latest/html/towerapi/api_ref.html#/Job_Templates/Job_Templates_job_templates_survey_spec_create)
+    U(https://ascender-automation.org)
     for POST operation payload example.
 '''
 

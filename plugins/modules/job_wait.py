@@ -19,7 +19,7 @@ author: "Wayne Witzel III (@wwitzel3)"
 short_description: Wait for Automation Platform Controller job to finish.
 description:
     - Wait for Automation Platform Controller job to finish and report success or failure. See
-      U(https://www.ansible.com/tower) for an overview.
+      U(https://ascender-automation.org) for an overview.
 options:
     job_id:
       description:
