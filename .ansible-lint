@@ -3,9 +3,18 @@
 
 offline: true
 
-# Treat the collection as its FQCN so ansible-lint resolves modules correctly
+# Mock collection modules so ansible-lint doesn't error on unresolved FQCNs
 mock_modules:
-  - ctrliq.ascender
+  - ctrliq.ascender.project
+  - ctrliq.ascender.job_launch
+  - ctrliq.ascender.job_wait
+  - ctrliq.ascender.inventory
+  - ctrliq.ascender.host
+  - ctrliq.ascender.group
+  - ctrliq.ascender.credential
+  - ctrliq.ascender.job_template
+  - ctrliq.ascender.workflow_job_template
+  - ctrliq.ascender.organization
 
 # Directories to exclude from linting
 exclude_paths:
