@@ -44,6 +44,18 @@ options:
 extends_documentation_fragment: ctrliq.ascender.auth
 '''
 
+EXAMPLES = '''
+- name: Launch a project with a timeout of 10 seconds
+  ctrliq.ascender.project_update:
+    project: "Networking Project"
+    timeout: 10
+
+- name: Launch a Project with extra_vars without waiting
+  ctrliq.ascender.project_update:
+    project: "Networking Project"
+    wait: False
+'''
+
 RETURN = '''
 id:
     description: project id of the updated project
@@ -55,18 +67,6 @@ status:
     returned: success
     type: str
     sample: pending
-'''
-
-EXAMPLES = '''
-- name: Launch a project with a timeout of 10 seconds
-  ctrliq.ascender.project_update:
-    project: "Networking Project"
-    timeout: 10
-
-- name: Launch a Project with extra_vars without waiting
-  ctrliq.ascender.project_update:
-    project: "Networking Project"
-    wait: False
 '''
 
 from ..module_utils.controller_api import ControllerAPIModule

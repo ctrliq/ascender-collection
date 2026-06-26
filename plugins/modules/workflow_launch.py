@@ -70,13 +70,6 @@ options:
 extends_documentation_fragment: ctrliq.ascender.auth
 '''
 
-RETURN = '''
-job_info:
-    description: dictionary containing information about the workflow executed
-    returned: If workflow launched
-    type: dict
-'''
-
 EXAMPLES = '''
 - name: Launch a workflow with a timeout of 10 seconds
   ctrliq.ascender.workflow_launch:
@@ -90,6 +83,13 @@ EXAMPLES = '''
       var1: My First Variable
       var2: My Second Variable
     wait: False
+'''
+
+RETURN = '''
+job_info:
+    description: dictionary containing information about the workflow executed
+    returned: If workflow launched
+    type: dict
 '''
 
 from ..module_utils.controller_api import ControllerAPIModule

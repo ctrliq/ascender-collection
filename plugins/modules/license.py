@@ -37,14 +37,6 @@ options:
 extends_documentation_fragment: ctrliq.ascender.auth
 '''
 
-RETURN = '''
-changed:
-    description: Whether the license was changed.
-    returned: always
-    type: bool
-    sample: true
-'''
-
 EXAMPLES = '''
 - name: Set the license using a file
   ctrliq.ascender.license:
@@ -62,6 +54,14 @@ EXAMPLES = '''
 - name: Remove license
   ctrliq.ascender.license:
     state: absent
+'''
+
+RETURN = '''
+changed:
+    description: Whether the license was changed.
+    returned: always
+    type: bool
+    sample: true
 '''
 
 import base64
