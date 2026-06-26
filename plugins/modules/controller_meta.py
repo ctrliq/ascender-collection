@@ -15,6 +15,18 @@ options: {}
 extends_documentation_fragment: ctrliq.ascender.auth
 '''
 
+EXAMPLES = '''
+- ctrliq.ascender.controller_meta:
+  register: result
+
+- name: Show details about the collection
+  debug: var=result
+
+- name: Load the UI setting without hard-coding the collection name
+  debug:
+    msg: "{{ lookup(result.prefix + '.controller_api', 'settings/ui') }}"
+'''
+
 RETURN = '''
 prefix:
     description: Collection namespace and name in the namespace.name format
@@ -36,18 +48,6 @@ version:
     returned: success
     sample: 25.4.0
     type: str
-'''
-
-EXAMPLES = '''
-- ctrliq.ascender.controller_meta:
-  register: result
-
-- name: Show details about the collection
-  debug: var=result
-
-- name: Load the UI setting without hard-coding the collection name
-  debug:
-    msg: "{{ lookup(result.prefix + '.controller_api', 'settings/ui') }}"
 '''
 
 from ..module_utils.controller_api import ControllerAPIModule

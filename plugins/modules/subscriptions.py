@@ -35,13 +35,6 @@ options:
 extends_documentation_fragment: ctrliq.ascender.auth
 '''
 
-RETURN = '''
-subscriptions:
-    description: dictionary containing information about the subscriptions
-    returned: If login succeeded
-    type: dict
-'''
-
 EXAMPLES = '''
 - name: Get subscriptions
   ctrliq.ascender.subscriptions:
@@ -55,6 +48,13 @@ EXAMPLES = '''
     filters:
       product_name: "Red Hat Ansible Automation Platform"
       support_level: "Self-Support"
+'''
+
+RETURN = '''
+subscriptions:
+    description: dictionary containing information about the subscriptions
+    returned: If login succeeded
+    type: dict
 '''
 
 from ..module_utils.controller_api import ControllerAPIModule

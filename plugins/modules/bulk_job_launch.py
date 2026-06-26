@@ -159,13 +159,6 @@ options:
 extends_documentation_fragment: ctrliq.ascender.auth
 '''
 
-RETURN = '''
-job_info:
-    description: dictionary containing information about the bulk job executed
-    returned: If bulk job launched
-    type: dict
-'''
-
 EXAMPLES = '''
 - name: Launch bulk jobs
   ctrliq.ascender.bulk_job_launch:
@@ -195,6 +188,13 @@ EXAMPLES = '''
       - unified_job_template: 7
       - unified_job_template: "{{ lookup('ctrliq.ascender.controller_api', 'job_templates', query_params={'name': 'Demo Job Template'},
         return_ids=True, expect_one=True) }}"
+'''
+
+RETURN = '''
+job_info:
+    description: dictionary containing information about the bulk job executed
+    returned: If bulk job launched
+    type: dict
 '''
 
 from ..module_utils.controller_api import ControllerAPIModule
