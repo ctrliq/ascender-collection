@@ -13,18 +13,21 @@ options:
     - URL to your Automation Platform Controller instance.
     - If value not set, will try environment variable C(CONTROLLER_HOST) and then config files
     - If value not specified by any means, the value of C(127.0.0.1) will be used
+    - The C(tower_host) alias is deprecated and will be removed in version 26.0.0.
     type: str
     aliases: [ tower_host ]
   controller_username:
     description:
     - Username for your controller instance.
     - If value not set, will try environment variable C(CONTROLLER_USERNAME) and then config files
+    - The C(tower_username) alias is deprecated and will be removed in version 26.0.0.
     type: str
     aliases: [ tower_username ]
   controller_password:
     description:
     - Password for your controller instance.
     - If value not set, will try environment variable C(CONTROLLER_PASSWORD) and then config files
+    - The C(tower_password) alias is deprecated and will be removed in version 26.0.0.
     type: str
     aliases: [ tower_password ]
   controller_oauthtoken:
@@ -34,6 +37,7 @@ options:
     - A string which is the token itself. (i.e. bqV5txm97wqJqtkxlMkhQz0pKhRMMX)
     - A dictionary structure as returned by the token module.
     - If value not set, will try environment variable C(CONTROLLER_OAUTH_TOKEN) and then config files
+    - The C(tower_oauthtoken) alias is deprecated and will be removed in version 26.0.0.
     type: raw
     version_added: "3.7.0"
     aliases: [ tower_oauthtoken ]
@@ -43,6 +47,7 @@ options:
     - If C(no), SSL certificates will not be validated.
     - This should only be used on personally controlled sites using self-signed certificates.
     - If value not set, will try environment variable C(CONTROLLER_VERIFY_SSL) and then config files
+    - The C(tower_verify_ssl) alias is deprecated and will be removed in version 26.0.0.
     type: bool
     aliases: [ tower_verify_ssl ]
   request_timeout:
@@ -54,6 +59,7 @@ options:
     description:
     - Path to the controller config file.
     - If provided, the other locations for config files will not be considered.
+    - The C(tower_config_file) alias is deprecated and will be removed in version 26.0.0.
     type: path
     aliases: [tower_config_file]
 
