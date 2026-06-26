@@ -653,11 +653,9 @@ class ControllerAPIModule(ControllerModule):
                 response_json = loads(token_response)
                 self.oauth_token_id = response_json['id']
                 self.oauth_token = response_json['token']
+                self.authenticated = True
             except (Exception) as e:
                 self.fail_json(msg="Failed to extract token information from login response: {0}".format(e), **{'response': token_response})
-
-        # If we have neither of these, then we can try un-authenticated access
-        self.authenticated = True
 
     def delete_if_needed(self, existing_item, on_delete=None, auto_exit=True):
         # This will exit from the module on its own.
