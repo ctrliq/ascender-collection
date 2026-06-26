@@ -19,7 +19,7 @@ options:
       type: str
     force:
       description:
-        - By default, the license manifest will only be applied if Tower is currently
+        - By default, the license manifest will only be applied if the controller is currently
           unlicensed or trial licensed.  When force=true, the license is always applied.
       type: bool
       default: 'False'

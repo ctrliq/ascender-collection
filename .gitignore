@@ -26,6 +26,10 @@ dist/
 .idea/
 .vscode/
 
+# Claude Code
+.claude/
+CLAUDE.md
+
 # OS files
 .DS_Store
 Thumbs.db
