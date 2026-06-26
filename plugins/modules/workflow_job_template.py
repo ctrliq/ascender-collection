@@ -941,7 +941,11 @@ def main():
             else:
                 association_fields['labels'].append(label_id['id'])
 
-    on_change = None
+    def survey_on_change(mod, last_request):
+        spec_endpoint = last_request.get('related', {}).get('survey_spec')
+        mod.update_survey_spec(mod.params.get('survey_spec'), spec_endpoint)
+
+    survey_callback = None
     new_spec = module.params.get('survey_spec')
     if new_spec:
         existing_spec = None
@@ -952,10 +956,7 @@ def main():
             module.json_output['changed'] = True
             if existing_item and module.has_encrypted_values(existing_spec):
                 module._encrypted_changed_warning('survey_spec', existing_item, warning=True)
-
-            def on_change(mod, last_request):
-                spec_endpoint = last_request.get('related', {}).get('survey_spec')
-                mod.update_survey_spec(mod.params.get('survey_spec'), spec_endpoint)
+            survey_callback = survey_on_change
 
     # If the state was present and we can let the module build or update the existing item, this will return on its own
     module.create_or_update_if_needed(
@@ -964,8 +965,8 @@ def main():
         endpoint='workflow_job_templates',
         item_type='workflow_job_template',
         associations=association_fields,
-        on_create=on_change,
-        on_update=on_change,
+        on_create=survey_callback,
+        on_update=survey_callback,
         auto_exit=False,
     )
 
