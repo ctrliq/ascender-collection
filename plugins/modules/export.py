@@ -174,8 +174,7 @@ def main():
         logger = logging.getLogger(logger_name)
         logger.setLevel(logging.ERROR)
         ch.setLevel(logging.ERROR)
-
-    logger.addHandler(ch)
+        logger.addHandler(ch)
     log_contents = ''
 
     # Run the export process
