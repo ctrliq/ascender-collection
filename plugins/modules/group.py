@@ -164,7 +164,7 @@ def main():
                 }
             )
             if sub_obj is None:
-                module.fail_json(msg='Could not find {0} with name {1}'.format(resource, sub_name))
+                module.fail_json(msg=f'Could not find {resource} with name {sub_name}')
             id_list.append(sub_obj['id'])
         # Preserve existing objects
         if (preserve_existing_hosts and relationship == 'hosts') or (preserve_existing_children and relationship == 'children'):

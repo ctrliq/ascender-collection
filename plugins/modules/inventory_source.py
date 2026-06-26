@@ -206,7 +206,7 @@ def main():
     inventory_object = module.get_one('inventories', name_or_id=inventory, data=lookup_data)
 
     if not inventory_object:
-        module.fail_json(msg='The specified inventory, {0}, was not found.'.format(lookup_data))
+        module.fail_json(msg=f'The specified inventory, {lookup_data}, was not found.')
 
     inventory_source_object = module.get_one(
         'inventory_sources',
@@ -258,7 +258,7 @@ def main():
     if source_project is not None:
         source_project_object = module.get_one('projects', name_or_id=source_project, data=lookup_data)
         if not source_project_object:
-            module.fail_json(msg='The specified source project, {0}, was not found.'.format(lookup_data))
+            module.fail_json(msg=f'The specified source project, {lookup_data}, was not found.')
         inventory_source_fields['source_project'] = source_project_object['id']
 
     OPTIONAL_VARS = (

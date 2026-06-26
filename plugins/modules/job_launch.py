@@ -273,7 +273,7 @@ def main():
     job_template = module.get_one('job_templates', name_or_id=name, data=lookup_data)
 
     if job_template is None:
-        module.fail_json(msg="Unable to find job template by name {0}".format(name))
+        module.fail_json(msg=f"Unable to find job template by name {name}")
 
     # The API will allow you to submit values to a jb launch that are not prompt on launch.
     # Therefore, we will test to see if anything is set which is not prompt on launch and fail.
@@ -292,7 +292,7 @@ def main():
     param_errors = []
     for variable_name, prompt in check_vars_to_prompts.items():
         if module.params.get(variable_name) and not job_template[prompt]:
-            param_errors.append("The field {0} was specified but the job template does not allow for it to be overridden".format(variable_name))
+            param_errors.append(f"The field {variable_name} was specified but the job template does not allow for it to be overridden")
     # Check if Either ask_variables_on_launch, or survey_enabled is enabled for use of extra vars.
     if module.params.get('extra_vars') and not (job_template['ask_variables_on_launch'] or job_template['survey_enabled']):
         param_errors.append("The field extra_vars was specified but the job template does not allow for it to be overridden")

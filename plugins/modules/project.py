@@ -210,7 +210,7 @@ def wait_for_project_update(module, last_request):
         # rather than polling in a tight loop with no delay (see ansible/awx#12850).
         if wait:
             result_final = module.wait_on_url(
-                url='/project_updates/{0}/'.format(last_request['summary_fields']['current_update']['id']),
+                url=f'/project_updates/{last_request["summary_fields"]["current_update"]["id"]}/',
                 object_name=module.get_item_name(last_request),
                 object_type='Project Update',
                 timeout=timeout,

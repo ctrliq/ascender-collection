@@ -142,7 +142,7 @@ class LookupModule(LookupBase):
     # plugin constructor
     def __init__(self, *args, **kwargs):
         if LIBRARY_IMPORT_ERROR:
-            raise AnsibleError('{0}'.format(LIBRARY_IMPORT_ERROR)) from LIBRARY_IMPORT_ERROR
+            raise AnsibleError(f'{LIBRARY_IMPORT_ERROR}') from LIBRARY_IMPORT_ERROR
         super().__init__(*args, **kwargs)
 
         self.frequencies = {
@@ -200,7 +200,7 @@ class LookupModule(LookupBase):
                 value = value.strip()
             # If value happens to be an int (from a list of ints) we need to coerce it into a str for the re.match
             if not re.match(r"^\d+$", str(value)) or int(value) < min_value or int(value) > max_value:
-                raise AnsibleError('In rule {0} {1} must be between {2} and {3}'.format(rule_number, field_name, min_value, max_value))
+                raise AnsibleError(f'In rule {rule_number} {field_name} must be between {min_value} and {max_value}')
             return_values.append(int(value))
         return return_values
 
@@ -212,7 +212,7 @@ class LookupModule(LookupBase):
         for value in rule[field_name]:
             value = value.strip().lower()
             if value not in valid_list:
-                raise AnsibleError('In rule {0} {1} must only contain values in {2}'.format(rule_number, field_name, ', '.join(valid_list.keys())))
+                raise AnsibleError(f'In rule {rule_number} {field_name} must only contain values in {", ".join(valid_list.keys())}')
             return_values.append(valid_list[value])
         return return_values
 
@@ -258,12 +258,12 @@ class LookupModule(LookupBase):
             ]
             invalid_options = list(set(rule.keys()) - set(valid_options))
             if invalid_options:
-                raise AnsibleError('Rule {0} has invalid options: {1}'.format(rule_number, ', '.join(invalid_options)))
+                raise AnsibleError(f'Rule {rule_number} has invalid options: {", ".join(invalid_options)}')
             frequency = rule.get('frequency', None)
             if not frequency:
-                raise AnsibleError("Rule {0} is missing a frequency".format(rule_number))
+                raise AnsibleError(f"Rule {rule_number} is missing a frequency")
             if frequency not in self.frequencies:
-                raise AnsibleError('Frequency of rule {0} is invalid {1}'.format(rule_number, frequency))
+                raise AnsibleError(f'Frequency of rule {rule_number} is invalid {frequency}')
 
             rrule_kwargs = {
                 'freq': self.frequencies[frequency],
@@ -285,7 +285,7 @@ class LookupModule(LookupBase):
                             rrule_kwargs['until'] = LookupModule.parse_date_time(end_on)
                         except Exception as e:
                             raise AnsibleError(
-                                'In rule {0} end_on must either be an integer or in the format YYYY-MM-DD [HH:MM:SS]'.format(rule_number)
+                                f'In rule {rule_number} end_on must either be an integer or in the format YYYY-MM-DD [HH:MM:SS]'
                             ) from e
 
             if 'bysetpos' in rule:
@@ -315,15 +315,15 @@ class LookupModule(LookupBase):
             try:
                 generated_rule = str(rrule.rrule(**rrule_kwargs))
             except Exception as e:
-                raise AnsibleError('Failed to parse rrule for rule {0} {1}: {2}'.format(rule_number, str(rrule_kwargs), e)) from e
+                raise AnsibleError(f'Failed to parse rrule for rule {rule_number} {rrule_kwargs}: {e}') from e
 
             # AWX requires an interval. rrule will not add interval if it's set to 1
             if rule.get('interval', 1) == 1:
-                generated_rule = "{0};INTERVAL=1".format(generated_rule)
+                generated_rule = f"{generated_rule};INTERVAL=1"
 
             if rule_index == 0:
                 # rrule puts a \n in the rule instead of a space and can't handle timezones
-                generated_rule = generated_rule.replace('\n', ' ').replace('DTSTART:', 'DTSTART;TZID={0}:'.format(timezone))
+                generated_rule = generated_rule.replace('\n', ' ').replace('DTSTART:', f'DTSTART;TZID={timezone}:')
             else:
                 # Only the first rule needs the dtstart in a ruleset so remaining rules we can split at \n
                 generated_rule = generated_rule.split('\n')[1]
@@ -345,7 +345,7 @@ class LookupModule(LookupBase):
         try:
             rules = rrule.rrulestr(rruleset_str)
         except Exception as e:
-            raise AnsibleError("Failed to parse generated rule set via rruleset {0}".format(e)) from e
+            raise AnsibleError(f"Failed to parse generated rule set via rruleset {e}") from e
 
         # return self.get_rrule(frequency, kwargs)
         return [rruleset_str]

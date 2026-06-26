@@ -548,7 +548,7 @@ def main():
                 }
             )
             if project_data is None:
-                module.fail_json(msg="The project {0} in organization {1} was not found on the controller instance server".format(project, organization))
+                module.fail_json(msg=f"The project {project} in organization {organization} was not found on the controller instance server")
             new_fields['project'] = project_data['id']
         else:
             new_fields['project'] = module.resolve_name_to_id('projects', project)
@@ -568,7 +568,7 @@ def main():
         for item in labels:
             label_id = module.get_one('labels', name_or_id=item, **{'data': search_fields})
             if label_id is None:
-                module.fail_json(msg='Could not find label entry with name {0}'.format(item))
+                module.fail_json(msg=f'Could not find label entry with name {item}')
             else:
                 association_fields['labels'].append(label_id['id'])
 

@@ -85,7 +85,7 @@ def main():
     )
 
     if command is None:
-        module.fail_json(msg="Unable to find command with id {0}".format(command_id))
+        module.fail_json(msg=f"Unable to find command with id {command_id}")
 
     cancel_page = module.get_endpoint(command['related']['cancel'])
     if 'json' not in cancel_page or 'can_cancel' not in cancel_page['json']:

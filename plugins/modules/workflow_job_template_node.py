@@ -320,7 +320,7 @@ def main():
         wfjt_data = module.get_one('workflow_job_templates', name_or_id=workflow_job_template, **{'data': wfjt_search_fields})
         if wfjt_data is None:
             module.fail_json(
-                msg="The workflow {0} in organization {1} was not found on the controller instance server".format(workflow_job_template, organization)
+                msg=f"The workflow {workflow_job_template} in organization {organization} was not found on the controller instance server"
             )
         workflow_job_template_id = wfjt_data['id']
         search_fields['workflow_job_template'] = new_fields['workflow_job_template'] = workflow_job_template_id
@@ -380,7 +380,7 @@ def main():
                     lookup_data['workflow_job_template'] = workflow_job_template_id
                 sub_obj = module.get_one(endpoint, **{'data': lookup_data})
             if sub_obj is None:
-                module.fail_json(msg='Could not find {0} entry with name {1}'.format(association, sub_name))
+                module.fail_json(msg=f'Could not find {association} entry with name {sub_name}')
             id_list.append(sub_obj['id'])
         association_fields[association] = id_list
 
@@ -391,7 +391,7 @@ def main():
         else:
             ee = module.get_one('execution_environments', name_or_id=execution_environment)
             if ee is None:
-                module.fail_json(msg='could not find execution_environment entry with name {0}'.format(execution_environment))
+                module.fail_json(msg=f'could not find execution_environment entry with name {execution_environment}')
             else:
                 new_fields['execution_environment'] = ee['id']
 
@@ -433,7 +433,7 @@ def main():
         # Due to not able to lookup workflow_approval_templates, find the existing item in another place
         if workflow_job_template_node['related'].get('unified_job_template') is not None:
             existing_item = module.get_endpoint(workflow_job_template_node['related']['unified_job_template'])['json']
-        approval_endpoint = 'workflow_job_template_nodes/{0}/create_approval_template/'.format(workflow_job_template_node_id)
+        approval_endpoint = f'workflow_job_template_nodes/{workflow_job_template_node_id}/create_approval_template/'
         module.create_or_update_if_needed(
             existing_item, new_fields, endpoint=approval_endpoint, item_type='workflow_job_template_approval_node', associations=association_fields
         )

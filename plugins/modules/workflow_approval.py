@@ -99,7 +99,7 @@ def main():
 
     # Attempt to look up workflow job based on the provided id
     approval_job = module.wait_on_workflow_node_url(
-        url="workflow_jobs/{0}/workflow_nodes/".format(workflow_job_id),
+        url=f"workflow_jobs/{workflow_job_id}/workflow_nodes/",
         object_name=name,
         object_type="Workflow Approval",
         timeout=timeout,
@@ -110,7 +110,7 @@ def main():
             }
         }
     )
-    response = module.post_endpoint("{0}{1}".format(approval_job["related"]["job"], action))
+    response = module.post_endpoint(f"{approval_job['related']['job']}{action}")
     if response["status_code"] == 204:
         module.json_output["changed"] = True
 

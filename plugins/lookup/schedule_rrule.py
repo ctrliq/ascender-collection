@@ -100,7 +100,7 @@ class LookupModule(LookupBase):
     # plugin constructor
     def __init__(self, *args, **kwargs):
         if LIBRARY_IMPORT_ERROR:
-            raise AnsibleError('{0}'.format(LIBRARY_IMPORT_ERROR)) from LIBRARY_IMPORT_ERROR
+            raise AnsibleError(f'{LIBRARY_IMPORT_ERROR}') from LIBRARY_IMPORT_ERROR
         super().__init__(*args, **kwargs)
 
         self.frequencies = {
@@ -148,7 +148,7 @@ class LookupModule(LookupBase):
     def get_rrule(self, frequency, kwargs):
 
         if frequency not in self.frequencies:
-            raise AnsibleError('Frequency of {0} is invalid'.format(frequency))
+            raise AnsibleError(f'Frequency of {frequency} is invalid')
 
         rrule_kwargs = {
             'freq': self.frequencies[frequency],
@@ -183,7 +183,7 @@ class LookupModule(LookupBase):
                 for day in kwargs['on_days'].split(','):
                     day = day.strip()
                     if day not in self.weekdays:
-                        raise AnsibleError('Parameter on_days must only contain values {0}'.format(', '.join(self.weekdays.keys())))
+                        raise AnsibleError(f'Parameter on_days must only contain values {", ".join(self.weekdays.keys())}')
                     days.append(self.weekdays[day])
 
                 rrule_kwargs['byweekday'] = days
@@ -228,9 +228,9 @@ class LookupModule(LookupBase):
             timezone = kwargs['timezone']
 
         # rrule puts a \n in the rule instad of a space and can't handle timezones
-        return_rrule = str(my_rule).replace('\n', ' ').replace('DTSTART:', 'DTSTART;TZID={0}:'.format(timezone))
+        return_rrule = str(my_rule).replace('\n', ' ').replace('DTSTART:', f'DTSTART;TZID={timezone}:')
         # AWX requires an interval. rrule will not add interval if it's set to 1
         if kwargs.get('every', 1) == 1:
-            return_rrule = "{0};INTERVAL=1".format(return_rrule)
+            return_rrule = f"{return_rrule};INTERVAL=1"
 
         return [return_rrule]

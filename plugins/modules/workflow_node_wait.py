@@ -104,7 +104,7 @@ def main():
     interval = module.params.get("interval")
 
     module.wait_on_workflow_node_url(
-        url="workflow_jobs/{0}/workflow_nodes/".format(workflow_job_id),
+        url=f"workflow_jobs/{workflow_job_id}/workflow_nodes/",
         object_name=name,
         object_type="Workflow Node",
         timeout=timeout,

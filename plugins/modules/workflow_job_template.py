@@ -594,7 +594,7 @@ def create_workflow_nodes(module, response, workflow_nodes, workflow_id):
         # Lookup Job Template ID
         if workflow_node['unified_job_template']['name']:
             if workflow_node['unified_job_template']['type'] is None:
-                module.fail_json(msg='Could not find unified job template type in workflow_nodes {0}'.format(workflow_node))
+                module.fail_json(msg=f'Could not find unified job template type in workflow_nodes {workflow_node}')
             search_fields['type'] = workflow_node['unified_job_template']['type']
             if workflow_node['unified_job_template']['type'] == 'inventory_source':
                 if 'inventory' in workflow_node['unified_job_template']:
@@ -613,7 +613,7 @@ def create_workflow_nodes(module, response, workflow_nodes, workflow_id):
                 workflow_node_fields['unified_job_template'] = unified_job_template['id']
             else:
                 if workflow_node['unified_job_template']['type'] != 'workflow_approval':
-                    module.fail_json(msg="Unable to Find unified_job_template: {0}".format(search_fields))
+                    module.fail_json(msg=f"Unable to Find unified_job_template: {search_fields}")
 
         # Lookup Values for other fields
 
@@ -701,7 +701,7 @@ def create_workflow_nodes(module, response, workflow_nodes, workflow_id):
             # Due to not able to lookup workflow_approval_templates, find the existing item in another place
             if workflow_job_template_node['related'].get('unified_job_template') is not None:
                 existing_item = module.get_endpoint(workflow_job_template_node['related']['unified_job_template'])['json']
-            approval_endpoint = 'workflow_job_template_nodes/{0}/create_approval_template/'.format(workflow_job_template_node_id)
+            approval_endpoint = f'workflow_job_template_nodes/{workflow_job_template_node_id}/create_approval_template/'
 
             module.create_or_update_if_needed(
                 existing_item,
@@ -764,7 +764,7 @@ def create_workflow_nodes_association(module, response, workflow_nodes, workflow
                             lookup_data['workflow_job_template'] = workflow_id
                         sub_obj = module.get_one(endpoint, **{'data': lookup_data})
                         if sub_obj is None:
-                            module.fail_json(msg='Could not find {0} entry with name {1}'.format(association, sub_name))
+                            module.fail_json(msg=f'Could not find {association} entry with name {sub_name}')
                         id_list.append(sub_obj['id'])
                     if id_list:
                         association_fields[association] = id_list
@@ -937,7 +937,7 @@ def main():
         for item in labels:
             label_id = module.get_one('labels', name_or_id=item, **{'data': search_fields})
             if label_id is None:
-                module.fail_json(msg='Could not find label entry with name {0}'.format(item))
+                module.fail_json(msg=f'Could not find label entry with name {item}')
             else:
                 association_fields['labels'].append(label_id['id'])
 

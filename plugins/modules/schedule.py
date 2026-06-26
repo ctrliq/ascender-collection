@@ -286,7 +286,7 @@ def main():
             if ee is None:
                 ee2 = module.get_one('execution_environments', name_or_id=execution_environment)
                 if ee2 is None or ee2['organization'] is not None:
-                    module.fail_json(msg='could not find execution_environment entry with name {0}'.format(execution_environment))
+                    module.fail_json(msg=f'could not find execution_environment entry with name {execution_environment}')
                 else:
                     new_fields['execution_environment'] = ee2['id']
             else:
@@ -308,7 +308,7 @@ def main():
         for item in labels:
             label_id = module.get_one('labels', name_or_id=item, **{'data': search_fields})
             if label_id is None:
-                module.fail_json(msg='Could not find label entry with name {0}'.format(item))
+                module.fail_json(msg=f'Could not find label entry with name {item}')
             else:
                 association_fields['labels'].append(label_id['id'])
 
@@ -317,7 +317,7 @@ def main():
         for item in instance_groups:
             instance_group_id = module.get_one('instance_groups', name_or_id=item, **{'data': search_fields})
             if instance_group_id is None:
-                module.fail_json(msg='Could not find instance_group entry with name {0}'.format(item))
+                module.fail_json(msg=f'Could not find instance_group entry with name {item}')
             else:
                 association_fields['instance_groups'].append(instance_group_id['id'])
 
