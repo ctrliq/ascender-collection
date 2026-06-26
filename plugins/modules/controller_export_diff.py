@@ -1,19 +1,7 @@
 #!/usr/bin/python
-# coding: utf-8 -*-
 # (c) 2017, John Westcott IV <john.westcott.iv@redhat.com>
 # based on the work of John Westcott
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-
-from __future__ import absolute_import, division, print_function
-
-__metaclass__ = type
-
-
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "community",
-}
 
 
 DOCUMENTATION = """
@@ -115,55 +103,7 @@ options:
         - Include items in the original compare list in the output, and set state to 'present'
       type: bool
       default: True
-    controller_host:
-      description:
-      - URL to your Automation Platform Controller instance.
-      - If value not set, will try environment variable C(CONTROLLER_HOST) and then config files
-      - If value not specified by any means, the value of C(127.0.0.1) will be used
-      type: str
-      aliases: [ tower_host ]
-    controller_username:
-      description:
-      - Username for your controller instance.
-      - If value not set, will try environment variable C(CONTROLLER_USERNAME) and then config files
-      type: str
-      aliases: [ tower_username ]
-    controller_password:
-      description:
-      - Password for your controller instance.
-      - If value not set, will try environment variable C(CONTROLLER_PASSWORD) and then config files
-      type: str
-      aliases: [ tower_password ]
-    controller_oauthtoken:
-      description:
-      - The OAuth token to use.
-      - This value can be in one of two formats.
-      - A string which is the token itself. (i.e. bqV5txm97wqJqtkxlMkhQz0pKhRMMX)
-      - A dictionary structure as returned by the token module.
-      - If value not set, will try environment variable C(CONTROLLER_OAUTH_TOKEN) and then config files
-      type: raw
-      aliases: [ tower_oauthtoken ]
-    validate_certs:
-      description:
-      - Whether to allow insecure connections to AWX.
-      - If C(no), SSL certificates will not be validated.
-      - This should only be used on personally controlled sites using self-signed certificates.
-      - If value not set, will try environment variable C(CONTROLLER_VERIFY_SSL) and then config files
-      type: bool
-      aliases: [ tower_verify_ssl ]
-    request_timeout:
-      description:
-      - Specify the timeout Ansible should use in requests to the controller host.
-      - Defaults to 10s, but this is handled by the shared module_utils code
-      - This option requires ctrliq.ascender>=22.7.0
-      type: float
-      version_added: "2.6.0"
-    controller_config_file:
-      description:
-      - Path to the controller config file.
-      - If provided, the other locations for config files will not be considered.
-      type: path
-      aliases: [tower_config_file]
+extends_documentation_fragment: ctrliq.ascender.auth
 requirements:
   - "awxkit >= 9.3.0"
   - ctrliq.ascender collection
@@ -207,8 +147,19 @@ EXAMPLES = """
 ...
 """
 
+RETURN = r"""
+controller_objects:
+    description: The exported objects from the controller before comparison.
+    returned: success
+    type: dict
+difference:
+    description: The differential list of objects with state set to present or absent.
+    returned: success
+    type: dict
+"""
+
 import logging
-from ansible.module_utils.six.moves import StringIO
+from io import StringIO
 from copy import deepcopy
 
 ControllerAWXKitModule = None

@@ -1,8 +1,5 @@
 # (c) 2020 Ansible Project
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-from __future__ import absolute_import, division, print_function
-
-__metaclass__ = type
 
 DOCUMENTATION = """
 name: controller_object_diff
@@ -12,7 +9,7 @@ requirements:
   - None
 description:
   - Takes results of GET requests from the Automation Platform Controller API. See
-    U(https://docs.ansible.com/ansible-tower/latest/html/towerapi/index.html) for API usage.
+    U(https://ascender-automation.org) for API usage.
   - Returns difference of on Unique Name and Organization, between two sets of groups
 options:
   api_list:
