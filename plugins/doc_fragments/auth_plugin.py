@@ -15,7 +15,7 @@ options:
     - name: TOWER_HOST
       deprecated:
         collection_name: 'ctrliq.ascender'
-        version: '4.0.0'
+        version: '26.0.0'
         why: Collection name change
         alternatives: 'CONTROLLER_HOST'
   username:
@@ -25,7 +25,7 @@ options:
     - name: TOWER_USERNAME
       deprecated:
         collection_name: 'ctrliq.ascender'
-        version: '4.0.0'
+        version: '26.0.0'
         why: Collection name change
         alternatives: 'CONTROLLER_USERNAME'
   password:
@@ -35,7 +35,7 @@ options:
     - name: TOWER_PASSWORD
       deprecated:
         collection_name: 'ctrliq.ascender'
-        version: '4.0.0'
+        version: '26.0.0'
         why: Collection name change
         alternatives: 'CONTROLLER_PASSWORD'
   oauth_token:
@@ -46,7 +46,7 @@ options:
     - name: TOWER_OAUTH_TOKEN
       deprecated:
         collection_name: 'ctrliq.ascender'
-        version: '4.0.0'
+        version: '26.0.0'
         why: Collection name change
         alternatives: 'CONTROLLER_OAUTH_TOKEN'
   verify_ssl:
@@ -59,7 +59,7 @@ options:
     - name: TOWER_VERIFY_SSL
       deprecated:
         collection_name: 'ctrliq.ascender'
-        version: '4.0.0'
+        version: '26.0.0'
         why: Collection name change
         alternatives: 'CONTROLLER_VERIFY_SSL'
     aliases: [ validate_certs ]
