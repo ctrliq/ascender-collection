@@ -45,15 +45,48 @@ class ItemNotDefined(Exception):
 class ControllerModule(AnsibleModule):
     url = None
     AUTH_ARGSPEC = dict(
-        controller_host=dict(required=False, aliases=['tower_host'], fallback=(env_fallback, ['CONTROLLER_HOST', 'TOWER_HOST'])),
-        controller_username=dict(required=False, aliases=['tower_username'], fallback=(env_fallback, ['CONTROLLER_USERNAME', 'TOWER_USERNAME'])),
-        controller_password=dict(no_log=True, aliases=['tower_password'], required=False, fallback=(env_fallback, ['CONTROLLER_PASSWORD', 'TOWER_PASSWORD'])),
-        validate_certs=dict(type='bool', aliases=['tower_verify_ssl'], required=False, fallback=(env_fallback, ['CONTROLLER_VERIFY_SSL', 'TOWER_VERIFY_SSL'])),
+        controller_host=dict(
+            required=False,
+            aliases=['tower_host'],
+            deprecated_aliases=[dict(name='tower_host', version='26.0.0', collection_name='ctrliq.ascender')],
+            fallback=(env_fallback, ['CONTROLLER_HOST', 'TOWER_HOST']),
+        ),
+        controller_username=dict(
+            required=False,
+            aliases=['tower_username'],
+            deprecated_aliases=[dict(name='tower_username', version='26.0.0', collection_name='ctrliq.ascender')],
+            fallback=(env_fallback, ['CONTROLLER_USERNAME', 'TOWER_USERNAME']),
+        ),
+        controller_password=dict(
+            no_log=True,
+            aliases=['tower_password'],
+            deprecated_aliases=[dict(name='tower_password', version='26.0.0', collection_name='ctrliq.ascender')],
+            required=False,
+            fallback=(env_fallback, ['CONTROLLER_PASSWORD', 'TOWER_PASSWORD']),
+        ),
+        validate_certs=dict(
+            type='bool',
+            aliases=['tower_verify_ssl'],
+            deprecated_aliases=[dict(name='tower_verify_ssl', version='26.0.0', collection_name='ctrliq.ascender')],
+            required=False,
+            fallback=(env_fallback, ['CONTROLLER_VERIFY_SSL', 'TOWER_VERIFY_SSL']),
+        ),
         request_timeout=dict(type='float', required=False, fallback=(env_fallback, ['CONTROLLER_REQUEST_TIMEOUT'])),
         controller_oauthtoken=dict(
-            type='raw', no_log=True, aliases=['tower_oauthtoken'], required=False, fallback=(env_fallback, ['CONTROLLER_OAUTH_TOKEN', 'TOWER_OAUTH_TOKEN'])
+            type='raw',
+            no_log=True,
+            aliases=['tower_oauthtoken'],
+            deprecated_aliases=[dict(name='tower_oauthtoken', version='26.0.0', collection_name='ctrliq.ascender')],
+            required=False,
+            fallback=(env_fallback, ['CONTROLLER_OAUTH_TOKEN', 'TOWER_OAUTH_TOKEN']),
         ),
-        controller_config_file=dict(type='path', aliases=['tower_config_file'], required=False, default=None),
+        controller_config_file=dict(
+            type='path',
+            aliases=['tower_config_file'],
+            deprecated_aliases=[dict(name='tower_config_file', version='26.0.0', collection_name='ctrliq.ascender')],
+            required=False,
+            default=None,
+        ),
     )
     # Associations of these types are ordered and have special consideration in the modified associations function
     ordered_associations = ['instance_groups', 'galaxy_credentials', 'input_inventories']
