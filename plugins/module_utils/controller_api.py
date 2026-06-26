@@ -234,7 +234,7 @@ class ControllerModule(AnsibleModule):
                             pass
 
                 except Exception as e:
-                    raise ConfigFileException("An unknown exception occurred trying to ini load config file: {0}".format(e)) from e
+                    raise ConfigFileException("An unknown exception occurred trying to load INI config file: {0}".format(e)) from e
 
         except Exception as e:
             raise ConfigFileException("An unknown exception occurred trying to load config file: {0}".format(e)) from e
