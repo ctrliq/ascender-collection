@@ -393,7 +393,7 @@ def main():
     # If we are doing a not manual project, register our on_change method
     # An on_change function, if registered, will fire after an post_endpoint or update_if_needed completes successfully
     on_change = None
-    if wait and scm_type != '' or update_project and scm_type != '':
+    if (wait or update_project) and scm_type != '':
         on_change = wait_for_project_update
 
     # If the state was present and we can let the module build or update the existing project, this will return on its own
