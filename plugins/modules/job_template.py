@@ -363,12 +363,6 @@ from ..module_utils.controller_api import ControllerAPIModule
 import json
 
 
-def update_survey(module, last_request):
-    spec_endpoint = last_request.get('related', {}).get('survey_spec')
-    module.update_survey_spec(module.params.get('survey_spec'), spec_endpoint)
-    module.exit_json(**module.json_output)
-
-
 def main():
     # Any additional arguments that are not fields of the item can be added here
     argument_spec = dict(
@@ -613,7 +607,10 @@ def main():
             module.json_output['changed'] = True
             if existing_item and module.has_encrypted_values(existing_spec):
                 module._encrypted_changed_warning('survey_spec', existing_item, warning=True)
-            on_change = update_survey
+            def on_change(mod, last_request):
+                spec_endpoint = last_request.get('related', {}).get('survey_spec')
+                mod.update_survey_spec(mod.params.get('survey_spec'), spec_endpoint)
+                mod.exit_json(**mod.json_output)
 
     # If the state was present and we can let the module build or update the existing item, this will return on its own
     module.create_or_update_if_needed(
