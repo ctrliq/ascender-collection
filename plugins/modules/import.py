@@ -27,7 +27,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 EXAMPLES = '''
 - name: Export all assets
   ctrliq.ascender.export:
-    all: True
+    all: true
   register: export_output
 
 - name: Import all assets from our export

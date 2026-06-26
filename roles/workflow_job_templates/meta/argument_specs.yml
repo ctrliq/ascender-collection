@@ -145,7 +145,10 @@ argument_specs:
         #         default: None
         #         required: true
         #         type: str
-        #         description: An identifier for this node that is unique within its workflow. It is copied to workflow job nodes corresponding to this node. This functions the same as the name field for other resources, however if it is not set, it will be set to a random UUID4 value. Recommended to use Column and row numbers for identifiers such as Node401. [Refer to this documentation for more](https://github.com/ansible/awx/blob/devel/docs/workflow.md)
+        #         description: An identifier for this node that is unique within its workflow. It is copied to workflow job
+        #           nodes corresponding to this node. This functions the same as the name field for other resources, however
+        #           if it is not set, it will be set to a random UUID4 value. Recommended to use Column and row numbers for
+        #           identifiers such as Node401. [Refer to this documentation for more](https://github.com/ansible/awx/blob/devel/docs/workflow.md)
         #       unified_job_template:
         #         default: None
         #         required: false
@@ -155,7 +158,9 @@ argument_specs:
         #         default: None
         #         required: false
         #         type: str
-        #         description: Organization the inventories, job templates, projects, or workflows the items exists in. Used to help lookup the object, for organization roles see organization. If not provided, will lookup by name only, which does not work with duplicates.
+        #         description: Organization the inventories, job templates, projects, or workflows the items exists in.
+        #           Used to help lookup the object, for organization roles see organization. If not provided,
+        #           will lookup by name only, which does not work with duplicates.
         #       execution_environment:
         #         default: job_template_default
         #         required: false
@@ -244,7 +249,9 @@ argument_specs:
         #         default: None
         #         required: false
         #         type: dict
-        #         description: Variables to apply at launch time. Will only be accepted if job template prompts for vars or has a survey asking for those vars. extra_data are extra_vars at the node level and named so to match the module and the API. These are only for "ask extra vars on prompt" on a given job template.
+        #         description: Variables to apply at launch time. Will only be accepted if job template prompts for vars or
+        #           has a survey asking for those vars. extra_data are extra_vars at the node level and named so to match
+        #           the module and the API. These are only for "ask extra vars on prompt" on a given job template.
         #       inventory:
         #         default: None
         #         required: false

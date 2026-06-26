@@ -77,7 +77,9 @@ argument_specs:
         #   lookup_organization:
         #     required: false
         #     type: str
-        #     description: Organization the inventories, job templates, projects, or workflows the items exists in. Used to help lookup the object, for organization roles see organization. If not provided, will lookup by name only, which does not work with duplicates.
+        #     description: Organization the inventories, job templates, projects, or workflows the items exists in.
+        #       Used to help lookup the object, for organization roles see organization. If not provided,
+        #       will lookup by name only, which does not work with duplicates.
         #   project:
         #     required: false
         #     type: str

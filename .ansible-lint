@@ -24,8 +24,9 @@ exclude_paths:
 
 # Rules to skip entirely
 skip_list:
-  # No roles in this collection
   - role-name
+  # Role variable prefix rule skipped to avoid breaking changes across 39 roles
+  - var-naming[no-role-prefix]
   # Collection-level name checks not applicable
   - name[play]
   # Allow FQCN usage flexibility in the collection itself

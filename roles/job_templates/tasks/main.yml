@@ -45,8 +45,9 @@
           }}"
         ask_tags_on_launch: "{{ __controller_template_item.ask_tags | default(__controller_template_item.ask_tags_on_launch | default((false if controller_configuration_job_templates_enforce_defaults
           else omit))) }}"
-        ask_skip_tags_on_launch: "{{ __controller_template_item.ask_skip_tags | default(__controller_template_item.ask_skip_tags_on_launch | default((false if controller_configuration_job_templates_enforce_defaults
-          else omit))) }}"
+        ask_skip_tags_on_launch: "{{ __controller_template_item.ask_skip_tags
+          | default(__controller_template_item.ask_skip_tags_on_launch
+          | default((false if controller_configuration_job_templates_enforce_defaults else omit))) }}"
         ask_job_type_on_launch: "{{ __controller_template_item.ask_job_type_on_launch | default((false if controller_configuration_job_templates_enforce_defaults else
           omit)) }}"
         ask_verbosity_on_launch: "{{ __controller_template_item.ask_verbosity_on_launch | default((false if controller_configuration_job_templates_enforce_defaults else
@@ -85,15 +86,18 @@
         labels: "{{ (__controller_template_item.related.labels | map(attribute='name') | list if __controller_template_item.related.labels is defined) | default(__controller_template_item.labels)
           | default(([] if controller_configuration_job_templates_enforce_defaults else omit), true) }}"
         state: "{{ __controller_template_item.state | default(controller_state | default('present')) }}"
-        notification_templates_started: "{{ (__controller_template_item.related.notification_templates_started | map(attribute='name') | list if __controller_template_item.related.notification_templates_started
-          is defined) | default(__controller_template_item.notification_templates_started) | default(([] if controller_configuration_job_templates_enforce_defaults else
-          omit), true) }}"
-        notification_templates_success: "{{ (__controller_template_item.related.notification_templates_success | map(attribute='name') | list if __controller_template_item.related.notification_templates_success
-          is defined) | default(__controller_template_item.notification_templates_success) | default(([] if controller_configuration_job_templates_enforce_defaults else
-          omit), true) }}"
-        notification_templates_error: "{{ (__controller_template_item.related.notification_templates_error | map(attribute='name') | list if __controller_template_item.related.notification_templates_error
-          is defined) | default(__controller_template_item.notification_templates_error) | default(([] if controller_configuration_job_templates_enforce_defaults else
-          omit), true) }}"
+        notification_templates_started: "{{ (__controller_template_item.related.notification_templates_started
+          | map(attribute='name') | list if __controller_template_item.related.notification_templates_started
+          is defined) | default(__controller_template_item.notification_templates_started)
+          | default(([] if controller_configuration_job_templates_enforce_defaults else omit), true) }}"
+        notification_templates_success: "{{ (__controller_template_item.related.notification_templates_success
+          | map(attribute='name') | list if __controller_template_item.related.notification_templates_success
+          is defined) | default(__controller_template_item.notification_templates_success)
+          | default(([] if controller_configuration_job_templates_enforce_defaults else omit), true) }}"
+        notification_templates_error: "{{ (__controller_template_item.related.notification_templates_error
+          | map(attribute='name') | list if __controller_template_item.related.notification_templates_error
+          is defined) | default(__controller_template_item.notification_templates_error)
+          | default(([] if controller_configuration_job_templates_enforce_defaults else omit), true) }}"
 
         # Role Standard Options
         controller_username: "{{ controller_username | default(omit, true) }}"
