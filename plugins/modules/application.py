@@ -90,7 +90,7 @@ EXAMPLES = '''
     authorization_grant_type: authorization-code
     client_type: confidential
     redirect_uris:
-      - the controller API endpoint
+      - https://ascender.example.com/api/v2/
 '''
 
 RETURN = '''
