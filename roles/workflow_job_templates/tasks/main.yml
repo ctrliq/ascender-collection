@@ -5,7 +5,7 @@
   no_log: "{{ workflow_job_templates_secure_logging }}"
   block:
     - name: Managing Workflows
-      workflow_job_template:
+      ctrliq.ascender.workflow_job_template:
         name: "{{ __workflow_loop_item.name | mandatory }}"
         new_name: "{{ __workflow_loop_item.new_name | default(omit, true) }}"
         copy_from: "{{ __workflow_loop_item.copy_from | default(omit, true) }}"

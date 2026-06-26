@@ -6,7 +6,7 @@
   no_log: "{{ controller_configuration_project_update_secure_logging }}"
   block:
     - name: Run Controller project update
-      project_update:
+      ctrliq.ascender.project_update:
         name: "{{ __project_update_update_item.name }}"
         organization: "{{ __project_update_update_item.organization.name | default(__project_update_update_item.organization | default(omit, true)) }}"
         wait: "{{ __project_update_update_item.wait | default(omit) }}"

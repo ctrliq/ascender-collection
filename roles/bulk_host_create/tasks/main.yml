@@ -6,7 +6,7 @@
   no_log: "{{ controller_configuration_bulk_hosts_secure_logging }}"
   block:
     - name: Add Controller hosts in bulk
-      bulk_host_create:
+      ctrliq.ascender.bulk_host_create:
         hosts: "{{ __controller_bulk_hosts_item.hosts }}"
         inventory: "{{ __controller_bulk_hosts_item.inventory }}"
 
