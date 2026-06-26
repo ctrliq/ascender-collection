@@ -688,7 +688,6 @@ class ControllerAPIModule(ControllerModule):
                     on_delete(self, response['json'])
                 self.json_output['changed'] = True
                 self.json_output['id'] = item_id
-                self.exit_json(**self.json_output)
                 if auto_exit:
                     self.exit_json(**self.json_output)
                 else:
