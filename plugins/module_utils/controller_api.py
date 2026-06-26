@@ -335,9 +335,9 @@ class ControllerAPIModule(ControllerModule):
             return 'unknown'
 
         if item:
-            self.exit_json(msg='Cannot determine identity field for {0} object.'.format(item.get('type', 'unknown')))
+            self.fail_json(msg='Cannot determine identity field for {0} object.'.format(item.get('type', 'unknown')))
         else:
-            self.exit_json(msg='Cannot determine identity field for Undefined object.')
+            self.fail_json(msg='Cannot determine identity field for Undefined object.')
 
     def head_endpoint(self, endpoint, *args, **kwargs):
         return self.make_request('HEAD', endpoint, **kwargs)
