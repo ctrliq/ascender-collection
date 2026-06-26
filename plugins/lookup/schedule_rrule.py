@@ -70,9 +70,9 @@ DOCUMENTATION = """
 """
 
 EXAMPLES = """
-    - name: Create a string for a schedule
-      debug:
-        msg: "{{ lookup('ctrliq.ascender.schedule_rrule', 'none', start_date='1979-09-13 03:45:07') }}"
+- name: Create a string for a schedule
+  debug:
+    msg: "{{ lookup('ctrliq.ascender.schedule_rrule', 'none', start_date='1979-09-13 03:45:07') }}"
 """
 
 RETURN = """

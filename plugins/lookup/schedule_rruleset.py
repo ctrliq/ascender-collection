@@ -100,21 +100,21 @@ DOCUMENTATION = """
             description:
               - If this rule should be included (RRULE) or excluded (EXRULE)
             type: bool
-            default: True
+            default: true
 """
 
 EXAMPLES = """
-    - name: Create a ruleset for everyday except Sundays
-      set_fact:
-        complex_rule: "{{ lookup('ctrliq.ascender.schedule_rruleset', '2022-04-30 10:30:45', rules=rrules, timezone='UTC') }}"
-      vars:
-        rrules:
-          - frequency: 'day'
-            interval: 1
-          - frequency: 'day'
-            interval: 1
-            byweekday: 'sunday'
-            include: False
+- name: Create a ruleset for everyday except Sundays
+  set_fact:
+    complex_rule: "{{ lookup('ctrliq.ascender.schedule_rruleset', '2022-04-30 10:30:45', rules=rrules, timezone='UTC') }}"
+  vars:
+    rrules:
+      - frequency: 'day'
+        interval: 1
+      - frequency: 'day'
+        interval: 1
+        byweekday: 'sunday'
+        include: false
 """
 
 RETURN = """

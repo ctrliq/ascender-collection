@@ -53,7 +53,7 @@ EXAMPLES = '''
 - name: Launch a Project with extra_vars without waiting
   ctrliq.ascender.project_update:
     project: "Networking Project"
-    wait: False
+    wait: false
 '''
 
 RETURN = '''
