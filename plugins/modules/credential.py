@@ -249,7 +249,7 @@ def main():
         'credential_type': cred_type_id,
     }
     # Create a copy of lookup data for copying without org.
-    copy_lookup_data = lookup_data
+    copy_lookup_data = lookup_data.copy()
     if organization:
         lookup_data['organization'] = org_id
     if user:
