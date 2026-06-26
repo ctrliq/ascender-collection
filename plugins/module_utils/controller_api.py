@@ -155,7 +155,7 @@ class ControllerModule(AnsibleModule):
         return url
 
     def load_config_files(self):
-        # Load configs like TowerCLI would have from least import to most
+        # Load config files from least specific to most specific
         config_files = ['/etc/tower/tower_cli.cfg', join(expanduser("~"), ".{0}".format(self.config_name))]
         local_dir = getcwd()
         config_files.append(join(local_dir, self.config_name))
@@ -215,7 +215,7 @@ class ControllerModule(AnsibleModule):
                     try_config_parsing = True
 
             if try_config_parsing:
-                # TowerCLI used to support a config file with a missing [general] section by prepending it if missing
+                # Support config files with a missing [general] section by prepending it if missing
                 if '[general]' not in config_string:
                     config_string = '[general]\n{0}'.format(config_string)
 
