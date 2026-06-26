@@ -1,5 +1,2 @@
 [tool.pytest.ini_options]
-testpaths = ["tests/unit"]
-
-[tool.yamllint]
-extends = "relaxed"
+testpaths = ["test/ascender"]
