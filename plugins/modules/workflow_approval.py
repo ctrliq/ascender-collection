@@ -72,7 +72,13 @@ EXAMPLES = """
     action: deny
 """
 
-RETURN = r"""# This module does not return additional data beyond the standard changed/failed status."""
+RETURN = """
+changed:
+    description: Whether the approval action was performed.
+    returned: always
+    type: bool
+    sample: true
+"""
 
 from ..module_utils.controller_api import ControllerAPIModule
 

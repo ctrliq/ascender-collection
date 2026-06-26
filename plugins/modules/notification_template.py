@@ -196,7 +196,13 @@ EXAMPLES = '''
     organization: Foo
 '''
 
-RETURN = ''' # '''
+RETURN = '''
+id:
+    description: ID of the notification template.
+    returned: on successful create, update, or delete
+    type: int
+    sample: 42
+'''
 
 from ..module_utils.controller_api import ControllerAPIModule
 
