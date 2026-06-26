@@ -107,6 +107,7 @@ controller_token:
 
 from ..module_utils.controller_api import ControllerAPIModule
 
+
 def return_token(module, last_response):
     # A token is special because you can never get the actual token ID back from the API.
     # So the default module return would give you an ID but then the token would forever be masked on you.
@@ -117,6 +118,7 @@ def return_token(module, last_response):
         'tower_token': last_response,
     }
     module.exit_json(**module.json_output)
+
 
 def main():
     # Any additional arguments that are not fields of the item can be added here
@@ -191,6 +193,7 @@ def main():
         associations={},
         on_create=return_token,
     )
+
 
 if __name__ == '__main__':
     main()

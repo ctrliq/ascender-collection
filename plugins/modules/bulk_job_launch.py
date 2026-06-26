@@ -199,6 +199,7 @@ EXAMPLES = '''
 
 from ..module_utils.controller_api import ControllerAPIModule
 
+
 def main():
     # Any additional arguments that are not fields of the item can be added here
     argument_spec = dict(
@@ -270,6 +271,7 @@ def main():
     module.wait_on_url(url=result['json']['url'], object_name=name, object_type='Bulk Job Launch', timeout=timeout, interval=interval)
 
     module.exit_json(**module.json_output)
+
 
 if __name__ == '__main__':
     main()

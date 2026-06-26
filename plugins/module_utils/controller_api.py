@@ -30,11 +30,14 @@ try:
 except ImportError:
     HAS_YAML = False
 
+
 class ConfigFileException(Exception):
     pass
 
+
 class ItemNotDefined(Exception):
     pass
+
 
 class ControllerModule(AnsibleModule):
     url = None
@@ -302,6 +305,7 @@ class ControllerModule(AnsibleModule):
             self.warn_callback(warning)
         else:
             super().warn(warning)
+
 
 class ControllerAPIModule(ControllerModule):
     _COLLECTION_VERSION = "25.4.0"

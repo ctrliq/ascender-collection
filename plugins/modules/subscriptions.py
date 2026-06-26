@@ -59,6 +59,7 @@ EXAMPLES = '''
 
 from ..module_utils.controller_api import ControllerAPIModule
 
+
 def main():
 
     module = ControllerAPIModule(
@@ -87,6 +88,7 @@ def main():
             json_output['subscriptions'].append(subscription)
 
     module.exit_json(**json_output)
+
 
 if __name__ == '__main__':
     main()

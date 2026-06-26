@@ -166,6 +166,7 @@ id:
 
 from ..module_utils.controller_api import ControllerAPIModule
 
+
 def main():
 
     argument_spec = dict(
@@ -324,6 +325,7 @@ def main():
                     module.fail_json(msg="Failed to revoke role. {0}".format(response['json'].get('detail', response['json'].get('msg', 'unknown'))))
 
     module.exit_json(**module.json_output)
+
 
 if __name__ == '__main__':
     main()

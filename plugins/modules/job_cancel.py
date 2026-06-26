@@ -41,6 +41,7 @@ id:
 
 from ..module_utils.controller_api import ControllerAPIModule
 
+
 def main():
     # Any additional arguments that are not fields of the item can be added here
     argument_spec = dict(
@@ -84,6 +85,7 @@ def main():
         module.fail_json(msg="Failed to cancel job, see response for details", **{'response': results})
 
     module.exit_json(**{'changed': True})
+
 
 if __name__ == '__main__':
     main()

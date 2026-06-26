@@ -69,6 +69,7 @@ id:
 
 from ..module_utils.controller_api import ControllerAPIModule
 
+
 def main():
     # Any additional arguments that are not fields of the item can be added here
     argument_spec = dict(
@@ -119,6 +120,7 @@ def main():
     module.create_or_update_if_needed(
         credential_input_source, credential_input_source_fields, endpoint='credential_input_sources', item_type='credential_input_source'
     )
+
 
 if __name__ == '__main__':
     main()

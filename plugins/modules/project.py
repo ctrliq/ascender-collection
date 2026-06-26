@@ -192,6 +192,7 @@ id:
 
 from ..module_utils.controller_api import ControllerAPIModule
 
+
 def wait_for_project_update(module, last_request):
     # The current running job for the update is in last_request['summary_fields']['current_update']['id']
 
@@ -240,6 +241,7 @@ def wait_for_project_update(module, last_request):
             module.json_output['changed'] = False
 
     module.exit_json(**module.json_output)
+
 
 def main():
     # Any additional arguments that are not fields of the item can be added here
@@ -409,6 +411,7 @@ def main():
     if update_project:
         wait_for_project_update(module, response)
     module.exit_json(**module.json_output)
+
 
 if __name__ == '__main__':
     main()

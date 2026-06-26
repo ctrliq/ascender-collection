@@ -362,10 +362,12 @@ id:
 from ..module_utils.controller_api import ControllerAPIModule
 import json
 
+
 def update_survey(module, last_request):
     spec_endpoint = last_request.get('related', {}).get('survey_spec')
     module.update_survey_spec(module.params.get('survey_spec'), spec_endpoint)
     module.exit_json(**module.json_output)
+
 
 def main():
     # Any additional arguments that are not fields of the item can be added here
@@ -623,6 +625,7 @@ def main():
         on_create=on_change,
         on_update=on_change,
     )
+
 
 if __name__ == '__main__':
     main()

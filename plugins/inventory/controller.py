@@ -68,8 +68,10 @@ from ansible.config.manager import ensure_type
 
 from ..module_utils.controller_api import ControllerAPIModule
 
+
 def handle_error(**kwargs):
     raise AnsibleParserError(to_native(kwargs.get('msg')))
+
 
 class InventoryModule(BaseInventoryPlugin):
     NAME = 'ctrliq.ascender.controller'
