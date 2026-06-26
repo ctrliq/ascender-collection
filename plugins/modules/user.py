@@ -82,35 +82,35 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Add user
-  user:
+  ctrliq.ascender.user:
     username: jdoe
     password: foobarbaz
     email: jdoe@example.org
     first_name: John
     last_name: Doe
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 
 - name: Add user as a system administrator
-  user:
+  ctrliq.ascender.user:
     username: jdoe
     password: foobarbaz
     email: jdoe@example.org
     superuser: yes
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 
 - name: Add user as a system auditor
-  user:
+  ctrliq.ascender.user:
     username: jdoe
     password: foobarbaz
     email: jdoe@example.org
     auditor: yes
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 
 - name: Add user as a member of an organization (permissions on the organization are required)
-  user:
+  ctrliq.ascender.user:
     username: jdoe
     password: foobarbaz
     email: jdoe@example.org
@@ -118,11 +118,11 @@ EXAMPLES = '''
     state: present
 
 - name: Delete user
-  user:
+  ctrliq.ascender.user:
     username: jdoe
     email: jdoe@example.org
     state: absent
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 '''
 
 RETURN = '''

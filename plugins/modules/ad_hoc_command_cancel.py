@@ -48,7 +48,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Cancel command
-  ad_hoc_command_cancel:
+  ctrliq.ascender.ad_hoc_command_cancel:
     command_id: command.id
 '''
 

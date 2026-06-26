@@ -29,7 +29,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Bulk host delete
-  bulk_host_delete:
+  ctrliq.ascender.bulk_host_delete:
     hosts:
       - 1
       - 2

@@ -138,7 +138,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Add an inventory source
-  inventory_source:
+  ctrliq.ascender.inventory_source:
     name: "source-inventory"
     description: Source for inventory
     inventory: previously-created-inventory

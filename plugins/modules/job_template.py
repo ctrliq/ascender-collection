@@ -322,7 +322,7 @@ notes:
 
 EXAMPLES = '''
 - name: Create Ping job template
-  job_template:
+  ctrliq.ascender.job_template:
     name: "Ping"
     job_type: "run"
     organization: "Default"
@@ -333,25 +333,25 @@ EXAMPLES = '''
       - "Local"
       - "2nd credential"
     state: "present"
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
     survey_enabled: yes
     survey_spec: "{{ lookup('file', 'my_survey.json') }}"
 
 - name: Add start notification to Job Template
-  job_template:
+  ctrliq.ascender.job_template:
     name: "Ping"
     notification_templates_started:
       - Notification1
       - Notification2
 
 - name: Remove Notification1 start notification from Job Template
-  job_template:
+  ctrliq.ascender.job_template:
     name: "Ping"
     notification_templates_started:
       - Notification2
 
 - name: Copy Job Template
-  job_template:
+  ctrliq.ascender.job_template:
     name: copy job template
     copy_from: test job template
     job_type: "run"

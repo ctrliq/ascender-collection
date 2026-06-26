@@ -51,12 +51,12 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Create team
-  team:
+  ctrliq.ascender.team:
     name: Team Name
     description: Team Description
     organization: test-org
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 '''
 
 RETURN = '''

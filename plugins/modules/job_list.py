@@ -45,10 +45,10 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: List running jobs for the testing.yml playbook
-  job_list:
+  ctrliq.ascender.job_list:
     status: running
     query: {"playbook": "testing.yml"}
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
   register: testing_jobs
 '''
 

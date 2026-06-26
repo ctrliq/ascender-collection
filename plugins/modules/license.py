@@ -49,20 +49,20 @@ RETURN = ''' # '''
 
 EXAMPLES = '''
 - name: Set the license using a file
-  license:
+  ctrliq.ascender.license:
     manifest: "/tmp/my_manifest.zip"
 
 - name: Use the subscriptions module to fetch subscriptions from Red Hat or Red Hat Satellite
-  subscriptions:
+  ctrliq.ascender.subscriptions:
     username: "my_satellite_username"
     password: "my_satellite_password"
 
 - name: Attach to a pool (requires fetching subscriptions at least once before)
-  license:
+  ctrliq.ascender.license:
     pool_id: 123456
 
 - name: Remove license
-  license:
+  ctrliq.ascender.license:
     state: absent
 '''
 

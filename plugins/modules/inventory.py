@@ -86,15 +86,15 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Add inventory
-  inventory:
+  ctrliq.ascender.inventory:
     name: "Foo Inventory"
     description: "Our Foo Cloud Servers"
     organization: "Bar Org"
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 
 - name: Copy inventory
-  inventory:
+  ctrliq.ascender.inventory:
     name: Copy Foo Inventory
     copy_from: Default Inventory
     description: "Our Foo Cloud Servers"
@@ -105,7 +105,7 @@ EXAMPLES = '''
 # of kind "constructed" and then editing the automatically generated inventory
 # source for that inventory.
 - name: Add constructed inventory with two existing input inventories
-  inventory:
+  ctrliq.ascender.inventory:
     name: My Constructed Inventory
     organization: Default
     kind: constructed
@@ -114,7 +114,7 @@ EXAMPLES = '''
       - "East Datacenter"
 
 - name: Edit the constructed inventory source
-  inventory_source:
+  ctrliq.ascender.inventory_source:
     # The constructed inventory source will always be in the format:
     # "Auto-created source for: <constructed inventory name>"
     name: "Auto-created source for: My Constructed Inventory"

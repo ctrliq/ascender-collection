@@ -48,7 +48,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Add label to organization
-  label:
+  ctrliq.ascender.label:
     name: Custom Label
     organization: My Organization
 '''

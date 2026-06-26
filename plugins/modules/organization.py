@@ -84,26 +84,26 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Create organization
-  organization:
+  ctrliq.ascender.organization:
     name: "Foo"
     description: "Foo bar organization"
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 
 - name: Create organization using 'foo-venv' as default Python virtualenv
-  organization:
+  ctrliq.ascender.organization:
     name: "Foo"
     description: "Foo bar organization using foo-venv"
     state: present
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 
 - name: Create organization that pulls content from galaxy.ansible.com
-  organization:
+  ctrliq.ascender.organization:
     name: "Foo"
     state: present
     galaxy_credentials:
       - Ansible Galaxy
-    controller_config_file: "~/tower_cli.cfg"
+    controller_config_file: "~/controller.cfg"
 '''
 
 RETURN = '''

@@ -148,14 +148,14 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Add jdoe to the member role of My Team
-  role:
+  ctrliq.ascender.role:
     user: jdoe
     target_team: "My Team"
     role: member
     state: present
 
 - name: Add Joe to multiple job templates and a workflow
-  role:
+  ctrliq.ascender.role:
     user: joe
     role: execute
     workflows:

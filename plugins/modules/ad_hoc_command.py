@@ -96,7 +96,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Launch an Ad Hoc Command waiting for it to finish
-  ad_hoc_command:
+  ctrliq.ascender.ad_hoc_command:
     inventory: Demo Inventory
     credential: Demo Credential
     module_name: command

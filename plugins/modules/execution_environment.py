@@ -64,7 +64,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Add EE to the controller instance
-  execution_environment:
+  ctrliq.ascender.execution_environment:
     name: "My EE"
     image: quay.io/ansible/awx-ee
 '''

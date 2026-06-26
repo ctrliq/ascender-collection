@@ -56,7 +56,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Bulk host create
-  bulk_host_create:
+  ctrliq.ascender.bulk_host_create:
     inventory: 1
     hosts:
       - name: foobar.org

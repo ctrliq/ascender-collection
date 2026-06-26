@@ -187,7 +187,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 EXAMPLES = '''
 - name: Create a node, follows workflow_job_template example
-  workflow_job_template_node:
+  ctrliq.ascender.workflow_job_template_node:
     identifier: my-first-node
     workflow: example-workflow
     unified_job_template: jt-for-node-use
@@ -196,7 +196,7 @@ EXAMPLES = '''
       foo_key: bar_value
 
 - name: Create parent node for prior node
-  workflow_job_template_node:
+  ctrliq.ascender.workflow_job_template_node:
     identifier: my-root-node
     workflow: example-workflow
     unified_job_template: jt-for-node-use
