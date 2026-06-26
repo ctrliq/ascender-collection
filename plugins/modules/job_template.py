@@ -369,7 +369,7 @@ def update_survey(module, last_request):
     if module.params.get('survey_spec') == {}:
         response = module.delete_endpoint(spec_endpoint)
         if response['status_code'] != 200:
-            # Not sure how to make this actually return a non 200 to test what to dump in the respinse
+            # Not sure how to make this actually return a non 200 to test what to dump in the response
             module.fail_json(msg="Failed to delete survey: {0}".format(response['json']))
     else:
         response = module.post_endpoint(spec_endpoint, **{'data': module.params.get('survey_spec')})
