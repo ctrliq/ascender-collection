@@ -44,8 +44,8 @@ class ControllerAWXKitModule(ControllerModule):
             if not self.authenticated:
                 self.authenticate()
             v2_index = get_registered_page('/api/v2/')(self.connection).get()
-            self.api_ref = ApiV2(connection=self.connection, **{'json': v2_index})
-        return self.api_ref
+            self.apiV2Ref = ApiV2(connection=self.connection, **{'json': v2_index})
+        return self.apiV2Ref
 
     def logout(self):
         if self.authenticated:
