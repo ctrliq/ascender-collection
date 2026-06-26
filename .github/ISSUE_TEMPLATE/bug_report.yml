@@ -1,0 +1,62 @@
+---
+name: Bug Report
+description: Report a bug in the ctrliq.ascender collection
+labels: [bug]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: A clear description of the bug
+    validations:
+      required: true
+  - type: input
+    id: collection-version
+    attributes:
+      label: Collection Version
+      description: "Output of: ansible-galaxy collection list ctrliq.ascender"
+      placeholder: "ctrliq.ascender 25.4.0"
+    validations:
+      required: true
+  - type: input
+    id: ansible-version
+    attributes:
+      label: Ansible Version
+      description: "Output of: ansible --version"
+      placeholder: "ansible-core 2.16.x"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Minimal playbook or steps to reproduce the issue
+      render: yaml
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What you expected to happen
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened (include error messages)
+    validations:
+      required: true
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - Module
+        - Inventory Plugin
+        - Lookup Plugin
+        - Documentation
+        - Other
+    validations:
+      required: true
