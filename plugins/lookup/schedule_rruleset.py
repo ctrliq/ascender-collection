@@ -142,7 +142,7 @@ class LookupModule(LookupBase):
     # plugin constructor
     def __init__(self, *args, **kwargs):
         if LIBRARY_IMPORT_ERROR:
-            raise AnsibleError(f'{LIBRARY_IMPORT_ERROR}') from LIBRARY_IMPORT_ERROR
+            raise AnsibleError(str(LIBRARY_IMPORT_ERROR)) from LIBRARY_IMPORT_ERROR
         super().__init__(*args, **kwargs)
 
         self.frequencies = {
