@@ -1,0 +1,8 @@
+line-length = 200
+target-version = "py310"
+
+[lint]
+select = ["E", "F", "W"]
+ignore = [
+    "E402",  # module-level import not at top — Ansible convention
+]

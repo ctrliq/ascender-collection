@@ -99,10 +99,10 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install flake8 yamllint
+        run: pip install ruff yamllint
 
-      - name: flake8 — plugins
-        run: flake8 plugins/ --max-line-length=200 --count --show-source --statistics
+      - name: ruff — plugins
+        run: ruff check plugins/
 
       - name: yamllint — meta and galaxy
         run: yamllint -d relaxed meta/ galaxy.yml

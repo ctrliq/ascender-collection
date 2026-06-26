@@ -1,7 +1,0 @@
-[flake8]
-max-line-length = 200
-# E402: module level import not at top of file.
-# Ansible modules and plugins must place imports after the
-# DOCUMENTATION/EXAMPLES/RETURN docstring blocks, which is the required
-# Ansible convention, so E402 is expected and intentionally ignored.
-extend-ignore = E402
