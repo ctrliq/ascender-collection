@@ -3,8 +3,6 @@
 # (c) 2018, Samuel Carpentier <samuelcarpentier0@gmail.ca>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {'metadata_version': '1.1', 'status': ['preview'], 'supported_by': 'community'}
-
 DOCUMENTATION = '''
 ---
 module: notification_template
