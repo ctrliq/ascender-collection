@@ -37,7 +37,13 @@ options:
 extends_documentation_fragment: ctrliq.ascender.auth
 '''
 
-RETURN = ''' # '''
+RETURN = '''
+changed:
+    description: Whether the license was changed.
+    returned: always
+    type: bool
+    sample: true
+'''
 
 EXAMPLES = '''
 - name: Set the license using a file

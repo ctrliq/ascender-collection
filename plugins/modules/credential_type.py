@@ -70,7 +70,13 @@ EXAMPLES = '''
     state: absent
 '''
 
-RETURN = ''' # '''
+RETURN = '''
+id:
+    description: ID of the credential type.
+    returned: on successful create, update, or delete
+    type: int
+    sample: 42
+'''
 
 from ..module_utils.controller_api import ControllerAPIModule
 
