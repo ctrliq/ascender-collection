@@ -63,8 +63,8 @@ options:
     aliases: [tower_config_file]
 
 notes:
-- If no I(config_file) is provided we will attempt to use the default config file
-  locations to find your host information.
+- If no I(config_file) is provided we will attempt to find a config file in standard locations
+  (./tower_cli.cfg, ~/.tower_cli.cfg, /etc/tower/tower_cli.cfg).
 - I(config_file) should be in the following format
     host=hostname
     username=username
