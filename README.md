@@ -1,5 +1,8 @@
 # Ascender Ansible Collection
 
+[![CI](https://github.com/ctrliq/ascender-collection/actions/workflows/ci.yml/badge.svg)](https://github.com/ctrliq/ascender-collection/actions/workflows/ci.yml)
+[![Ansible Galaxy](https://img.shields.io/badge/galaxy-ctrliq.ascender-blue.svg)](https://galaxy.ansible.com/ui/repo/published/ctrliq/ascender/)
+
 The `ctrliq.ascender` collection lets you manage an [Ascender](https://ascender-automation.org) controller from Ansible playbooks: organizations, inventories, projects, job templates, credentials, schedules, workflows, and the rest of the controller API are all exposed as modules, alongside a dynamic inventory plugin and a set of lookup plugins.
 
 ## Requirements
