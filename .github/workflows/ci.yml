@@ -125,6 +125,12 @@ jobs:
       - name: Run unit tests
         run: pytest tests/unit/ -v
 
+      - name: Install ansible-lint
+        run: pip install ansible-core ansible-lint
+
+      - name: ansible-lint
+        run: ansible-lint
+
   changelog:
     name: Changelog
     runs-on: ubuntu-latest

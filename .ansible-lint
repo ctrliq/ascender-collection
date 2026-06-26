@@ -1,0 +1,39 @@
+---
+# Ansible-lint configuration for ctrliq.ascender collection
+
+offline: true
+
+# Mock collection modules so ansible-lint doesn't error on unresolved FQCNs
+mock_modules:
+  - ctrliq.ascender.project
+  - ctrliq.ascender.job_launch
+  - ctrliq.ascender.job_wait
+  - ctrliq.ascender.inventory
+  - ctrliq.ascender.host
+  - ctrliq.ascender.group
+  - ctrliq.ascender.credential
+  - ctrliq.ascender.job_template
+  - ctrliq.ascender.workflow_job_template
+  - ctrliq.ascender.organization
+
+# Directories to exclude from linting
+exclude_paths:
+  - test/
+  - tests/
+  - tools/
+
+# Rules to skip entirely
+skip_list:
+  # No roles in this collection
+  - role-name
+  # Collection-level name checks not applicable
+  - name[play]
+  # Allow FQCN usage flexibility in the collection itself
+  - fqcn[action-core]
+
+# Rules that produce warnings instead of errors
+warn_list:
+  - experimental
+  - no-changed-when
+  - command-instead-of-shell
+  - risky-shell-pipe

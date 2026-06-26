@@ -15,7 +15,7 @@ covers the development setup, testing, and PR guidelines.
 2. Install development dependencies:
 
    ```bash
-   pip install ansible-core flake8 yamllint antsibull-changelog
+   pip install ansible-core ruff yamllint ansible-lint antsibull-changelog
    ```
 
 3. For unit tests, you also need a checkout of the
@@ -54,8 +54,9 @@ DJANGO_SETTINGS_MODULE=awx.main.tests.settings_for_test \
 ### Linting
 
 ```bash
-flake8 plugins/ --max-line-length=200
+ruff check plugins/
 yamllint -d relaxed meta/ galaxy.yml
+ansible-lint
 ```
 
 ## Making changes
