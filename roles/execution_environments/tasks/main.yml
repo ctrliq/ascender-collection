@@ -6,7 +6,7 @@
   no_log: "{{ controller_configuration_execution_environments_secure_logging }}"
   block:
     - name: Managing Controller Execution Environments
-      execution_environment:
+      ctrliq.ascender.execution_environment:
         name: "{{ __execution_environments_item.name | mandatory }}"
         new_name: "{{ __execution_environments_item.new_name | default(omit, true) }}"
         description: "{{ __execution_environments_item.description | default(('' if controller_configuration_execution_environments_enforce_defaults else omit), true)

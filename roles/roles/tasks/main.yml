@@ -5,7 +5,7 @@
   no_log: "{{ controller_configuration_role_secure_logging }}"
   block:
     - name: Managing Role Based Access Entries on Controller
-      role:
+      ctrliq.ascender.role:
         user: "{{ __controller_role_item.0.user | default(__controller_role_item.user) | default(omit, true) }}"
         users: "{{ __controller_role_item.0.users | default(__controller_role_item.users) | default(([] if controller_configuration_role_enforce_defaults else omit),
           true) }}"

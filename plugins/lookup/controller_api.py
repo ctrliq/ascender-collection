@@ -66,34 +66,34 @@ notes:
 
 EXAMPLES = """
 - name: Load the UI settings
-  set_fact:
+  ansible.builtin.set_fact:
     controller_settings: "{{ lookup('ctrliq.ascender.controller_api', 'settings/ui') }}"
 
 - name: Load the UI settings specifying the connection info
-  set_fact:
+  ansible.builtin.set_fact:
     controller_settings: "{{ lookup('ctrliq.ascender.controller_api', 'settings/ui', host='controller.example.com',
                              username='admin', password=my_pass_var, verify_ssl=False) }}"
 
 - name: Report the usernames of all users with admin privs
-  debug:
+  ansible.builtin.debug:
     msg: "Admin users: {{ query('ctrliq.ascender.controller_api', 'users', query_params={ 'is_superuser': true }) | map(attribute='username') | join(', ') }}"
 
 - name: debug all organizations in a loop  # use query to return a list
-  debug:
+  ansible.builtin.debug:
     msg: "Organization description={{ item['description'] }} id={{ item['id'] }}"
   loop: "{{ query('ctrliq.ascender.controller_api', 'organizations') }}"
   loop_control:
     label: "{{ item['name'] }}"
 
 - name: Make sure user 'john' is an org admin of the default org if the user exists
-  role:
+  ctrliq.ascender.role:
     organization: Default
     role: admin
     user: john
   when: "lookup('ctrliq.ascender.controller_api', 'users', query_params={ 'username': 'john' }) | length == 1"
 
 - name: Create an inventory group with all 'foo' hosts
-  group:
+  ctrliq.ascender.group:
     name: "Foo Group"
     inventory: "Demo Inventory"
     hosts: >-

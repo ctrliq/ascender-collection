@@ -6,7 +6,7 @@
   no_log: "{{ controller_configuration_applications_secure_logging }}"
   block:
     - name: Managing Controller Applications
-      application:
+      ctrliq.ascender.application:
         name: "{{ __application_item.name | mandatory }}"
         new_name: "{{ __application_item.new_name | default(omit, true) }}"
         organization: "{{ __application_item.organization | mandatory }}"

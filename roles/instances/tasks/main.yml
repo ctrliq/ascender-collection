@@ -6,7 +6,7 @@
   no_log: "{{ controller_configuration_instances_secure_logging }}"
   block:
     - name: Add Controller Instance
-      instance:
+      ctrliq.ascender.instance:
         hostname: "{{ __controller_instance_item.hostname | mandatory }}"
         capacity_adjustment: "{{ __controller_instance_item.capacity_adjustment | default((1.0 if controller_configuration_instances_enforce_defaults else omit), true)
           }}"

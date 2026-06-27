@@ -26,7 +26,7 @@
     filetree_controller_schedules: *filetree_create_output_dir
     filetree_controller_roles: *filetree_create_output_dir
   roles:
-    - filetree_read
+    - ctrliq.ascender.filetree_read
   post_tasks:
     - name: Create the output flatten dir
       ansible.builtin.file:

@@ -5,7 +5,7 @@
   no_log: "{{ controller_configuration_inventories_secure_logging }}"
   block:
     - name: Managing Inventories
-      inventory:
+      ctrliq.ascender.inventory:
         name: "{{ __controller_inventory_item.name | mandatory }}"
         new_name: "{{ __controller_inventory_item.new_name | default(omit, true) }}"
         copy_from: "{{ __controller_inventory_item.copy_from | default(omit, true) }}"
