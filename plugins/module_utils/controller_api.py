@@ -44,43 +44,31 @@ class ControllerModule(AnsibleModule):
     AUTH_ARGSPEC = dict(
         controller_host=dict(
             required=False,
-            aliases=['tower_host'],
-            deprecated_aliases=[dict(name='tower_host', version='26.0.0', collection_name='ctrliq.ascender')],
-            fallback=(env_fallback, ['CONTROLLER_HOST', 'TOWER_HOST']),
+            fallback=(env_fallback, ['CONTROLLER_HOST']),
         ),
         controller_username=dict(
             required=False,
-            aliases=['tower_username'],
-            deprecated_aliases=[dict(name='tower_username', version='26.0.0', collection_name='ctrliq.ascender')],
-            fallback=(env_fallback, ['CONTROLLER_USERNAME', 'TOWER_USERNAME']),
+            fallback=(env_fallback, ['CONTROLLER_USERNAME']),
         ),
         controller_password=dict(
             no_log=True,
-            aliases=['tower_password'],
-            deprecated_aliases=[dict(name='tower_password', version='26.0.0', collection_name='ctrliq.ascender')],
             required=False,
-            fallback=(env_fallback, ['CONTROLLER_PASSWORD', 'TOWER_PASSWORD']),
+            fallback=(env_fallback, ['CONTROLLER_PASSWORD']),
         ),
         validate_certs=dict(
             type='bool',
-            aliases=['tower_verify_ssl'],
-            deprecated_aliases=[dict(name='tower_verify_ssl', version='26.0.0', collection_name='ctrliq.ascender')],
             required=False,
-            fallback=(env_fallback, ['CONTROLLER_VERIFY_SSL', 'TOWER_VERIFY_SSL']),
+            fallback=(env_fallback, ['CONTROLLER_VERIFY_SSL']),
         ),
         request_timeout=dict(type='float', required=False, fallback=(env_fallback, ['CONTROLLER_REQUEST_TIMEOUT'])),
         controller_oauthtoken=dict(
             type='raw',
             no_log=True,
-            aliases=['tower_oauthtoken'],
-            deprecated_aliases=[dict(name='tower_oauthtoken', version='26.0.0', collection_name='ctrliq.ascender')],
             required=False,
-            fallback=(env_fallback, ['CONTROLLER_OAUTH_TOKEN', 'TOWER_OAUTH_TOKEN']),
+            fallback=(env_fallback, ['CONTROLLER_OAUTH_TOKEN']),
         ),
         controller_config_file=dict(
             type='path',
-            aliases=['tower_config_file'],
-            deprecated_aliases=[dict(name='tower_config_file', version='26.0.0', collection_name='ctrliq.ascender')],
             required=False,
             default=None,
         ),
@@ -103,7 +91,7 @@ class ControllerModule(AnsibleModule):
     oauth_token = None
     oauth_token_id = None
     authenticated = False
-    config_name = 'tower_cli.cfg'
+    config_name = 'controller_cli.cfg'
     version_checked = False
     error_callback = None
     warn_callback = None
@@ -188,14 +176,14 @@ class ControllerModule(AnsibleModule):
 
     def load_config_files(self):
         # Load config files from least specific to most specific
-        config_files = ['/etc/tower/tower_cli.cfg', join(expanduser("~"), f".{self.config_name}")]
+        config_files = ['/etc/controller/controller_cli.cfg', join(expanduser("~"), f".{self.config_name}")]
         local_dir = getcwd()
         config_files.append(join(local_dir, self.config_name))
         while split(local_dir)[1]:
             local_dir = split(local_dir)[0]
             config_files.insert(2, join(local_dir, f".{self.config_name}"))
 
-        # If we have a specified  tower config, load it
+        # If we have a specified controller config, load it
         if self.params.get('controller_config_file'):
             duplicated_params = [fn for fn in self.AUTH_ARGSPEC if fn != 'controller_config_file' and self.params.get(fn) is not None]
             if duplicated_params:
