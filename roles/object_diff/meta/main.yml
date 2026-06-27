@@ -11,6 +11,9 @@ galaxy_info:
         - all
   galaxy_tags: []
 
+collections:
+  - ctrliq.ascender
+
 dependencies:
   - role: meta_dependency_check
 ...
