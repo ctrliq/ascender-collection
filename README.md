@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/ctrliq/ascender-collection/actions/workflows/ci.yml/badge.svg)](https://github.com/ctrliq/ascender-collection/actions/workflows/ci.yml)
 [![Ansible Galaxy](https://img.shields.io/badge/galaxy-ctrliq.ascender-blue.svg)](https://galaxy.ansible.com/ui/repo/published/ctrliq/ascender/)
+[![Ansible-core](https://img.shields.io/badge/ansible--core-%3E%3D2.16-blue.svg)](https://docs.ansible.com/ansible/latest/)
+[![Python](https://img.shields.io/badge/python-%3E%3D3.10-blue.svg)](https://www.python.org/)
 
 The `ctrliq.ascender` collection lets you manage an [Ascender](https://ascender-automation.org) controller from Ansible playbooks: organizations, inventories, projects, job templates, credentials, schedules, workflows, and the rest of the controller API are all exposed as modules, alongside a dynamic inventory plugin and a set of lookup plugins.
 
@@ -94,12 +96,11 @@ oauth_token = LEdCpKVKc4znzffcpQL5vLG8oyeku6
 
 ## Included content
 
-- **44 modules** covering controller resources (organizations, teams,
-  users, inventories, hosts, groups, projects, credentials, job/workflow
-  templates, schedules, notifications, settings, tokens, and more), plus
-  `export`/`import` for bulk configuration.
+- **45 modules** covering controller resources (organizations, inventories, credentials, etc.).
+- **39 roles** for declarative controller configuration.
+- **5 playbooks** for common configuration workflows.
 - **Inventory plugin:** `ctrliq.ascender.controller`.
-- **Lookup plugins:** `controller_api`, `schedule_rrule`, and `schedule_rruleset`.
+- **Lookup plugins:** `controller_api`, `schedule_rrule`, `schedule_rruleset`.
 
 Per-plugin documentation is available with `ansible-doc`, e.g.
 `ansible-doc ctrliq.ascender.job_launch`.
@@ -112,6 +113,12 @@ See [TESTING.md](./TESTING.md) for full details.
 - **Unit** — `py.test test/ascender/` against the
   [Ascender](https://github.com/ctrliq/ascender) Django models.
 - **Integration** — `ansible-test integration` with a running controller.
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md). Report bugs via
+[GitHub Issues](https://github.com/ctrliq/ascender-collection/issues).
+Release notes are in the [changelog](./changelogs/changelog.yaml).
 
 ## Licensing
 
