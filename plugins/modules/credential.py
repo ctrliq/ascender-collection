@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: credential
 author: "Wayne Witzel III (@wwitzel3)"
-short_description: create, update, or destroy Automation Platform Controller credential.
+short_description: create, update, or destroy Ascender credential.
 description:
-    - Create, update, or destroy Automation Platform Controller credentials. See
+    - Create, update, or destroy Ascender credentials. See
       U(https://ascender-automation.org) for an overview.
 options:
     name:
@@ -55,7 +55,7 @@ options:
       description:
         - >-
           Credential inputs where the keys are var names used in templating.
-          Refer to the Automation Platform Controller documentation for example syntax.
+          Refer to the Ascender documentation for example syntax.
         - authorize (use this for net type)
         - authorize_password (password for net credentials that require authorize)
         - client (client or application ID for azure_rm type)

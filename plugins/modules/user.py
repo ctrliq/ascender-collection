@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: user
 author: "John Westcott IV (@john-westcott-iv)"
-short_description: create, update, or destroy Automation Platform Controller users.
+short_description: create, update, or destroy Ascender users.
 description:
-    - Create, update, or destroy Automation Platform Controller users. See
+    - Create, update, or destroy Ascender users. See
       U(https://ascender-automation.org) for an overview.
 options:
     username:

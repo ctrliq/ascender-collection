@@ -9,7 +9,7 @@ module: job_launch
 author: "Wayne Witzel III (@wwitzel3)"
 short_description: Launch an Ansible Job.
 description:
-    - Launch an Automation Platform Controller jobs. See
+    - Launch Ascender jobs. See
       U(https://ascender-automation.org) for an overview.
 options:
     name:

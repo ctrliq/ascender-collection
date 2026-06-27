@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: organization
 author: "Wayne Witzel III (@wwitzel3)"
-short_description: create, update, or destroy Automation Platform Controller organizations
+short_description: create, update, or destroy Ascender organizations
 description:
-    - Create, update, or destroy Automation Platform Controller organizations. See
+    - Create, update, or destroy Ascender organizations. See
       U(https://ascender-automation.org) for an overview.
 options:
     name:

@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: group
 author: "Wayne Witzel III (@wwitzel3)"
-short_description: create, update, or destroy Automation Platform Controller group.
+short_description: create, update, or destroy Ascender group.
 description:
-    - Create, update, or destroy Automation Platform Controller groups. See
+    - Create, update, or destroy Ascender groups. See
       U(https://ascender-automation.org) for an overview.
 options:
     name:

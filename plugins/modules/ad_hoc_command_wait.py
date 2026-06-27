@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: ad_hoc_command_wait
 author: "John Westcott IV (@john-westcott-iv)"
-short_description: Wait for Automation Platform Controller Ad Hoc Command to finish.
+short_description: Wait for Ascender Ad Hoc Command to finish.
 description:
-    - Wait for Automation Platform Controller ad hoc command to finish and report success or failure. See
+    - Wait for Ascender ad hoc command to finish and report success or failure. See
       U(https://ascender-automation.org) for an overview.
 options:
     command_id:

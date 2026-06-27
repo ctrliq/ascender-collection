@@ -7,10 +7,10 @@ DOCUMENTATION = '''
 ---
 module: role
 author: "Wayne Witzel III (@wwitzel3)"
-short_description: grant or revoke an Automation Platform Controller role.
+short_description: grant or revoke an Ascender role.
 description:
     - Roles are used for access control, this module is for managing user access to server resources.
-    - Grant or revoke Automation Platform Controller roles to users. See U(https://ascender-automation.org) for an overview.
+    - Grant or revoke Ascender roles to users. See U(https://ascender-automation.org) for an overview.
 options:
     user:
       description:

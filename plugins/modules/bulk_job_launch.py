@@ -6,9 +6,9 @@ DOCUMENTATION = '''
 ---
 module: bulk_job_launch
 author: "Seth Foster (@fosterseth)"
-short_description: Bulk job launch in Automation Platform Controller
+short_description: Bulk job launch in Ascender
 description:
-    - Single-request bulk job launch in Automation Platform Controller.
+    - Single-request bulk job launch in Ascender.
     - Creates a workflow where each node corresponds to an item specified in the jobs option.
     - Any options specified at the top level will inherited by the launched jobs (if prompt on launch is enabled for those fields).
     - Provides a way to submit many jobs at once to Controller.

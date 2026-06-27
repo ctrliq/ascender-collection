@@ -8,9 +8,9 @@ DOCUMENTATION = '''
 module: import
 author: "John Westcott (@john-westcott-iv)"
 version_added: "3.7.0"
-short_description: import resources into Automation Platform Controller.
+short_description: import resources into Ascender.
 description:
-    - Import assets into Automation Platform Controller. See
+    - Import assets into Ascender. See
       U(https://ascender-automation.org) for an overview.
 options:
     assets:
@@ -34,7 +34,7 @@ EXAMPLES = '''
   ctrliq.ascender.import:
     assets: "{{ export_output.assets }}"
 
-- name: Load data from a json file created by a command like awx export --organization Default
+- name: Load data from a json file created by a command like ascender export --organization Default
   ctrliq.ascender.import:
     assets: "{{ lookup('file', 'org.json') | from_json() }}"
 '''

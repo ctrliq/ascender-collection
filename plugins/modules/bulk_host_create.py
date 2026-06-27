@@ -6,9 +6,9 @@ DOCUMENTATION = '''
 ---
 module: bulk_host_create
 author: "Seth Foster (@fosterseth)"
-short_description: Bulk host create in Automation Platform Controller
+short_description: Bulk host create in Ascender
 description:
-    - Single-request bulk host creation in Automation Platform Controller.
+    - Single-request bulk host creation in Ascender.
     - Provides a way to add many hosts at once to an inventory in Controller.
 options:
     hosts:

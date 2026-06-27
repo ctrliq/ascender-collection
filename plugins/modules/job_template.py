@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: job_template
 author: "Wayne Witzel III (@wwitzel3)"
-short_description: create, update, or destroy Automation Platform Controller job templates.
+short_description: create, update, or destroy Ascender job templates.
 description:
-    - Create, update, or destroy Automation Platform Controller job templates. See
+    - Create, update, or destroy Ascender job templates. See
       U(https://ascender-automation.org) for an overview.
 options:
     name:
@@ -48,7 +48,7 @@ options:
         - Used to help lookup the object, cannot be modified using this module.
         - The Organization is inferred from the associated project
         - If not provided, will lookup by name only, which does not work with duplicates.
-        - Requires Automation Platform Version 3.7.0 or AWX 10.0.0 IS NOT backwards compatible with earlier versions.
+        - Requires Ascender 25.0.0 or later. Not backwards compatible with earlier versions.
       type: str
     project:
       description:

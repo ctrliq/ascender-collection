@@ -6,9 +6,9 @@ DOCUMENTATION = '''
 ---
 module: project_update
 author: "Sean Sullivan (@sean-m-sullivan)"
-short_description: Update a Project in Automation Platform Controller
+short_description: Update a Project in Ascender
 description:
-    - Update a Automation Platform Controller Project. See
+    - Update an Ascender Project. See
       U(https://ascender-automation.org) for an overview.
 options:
     name:

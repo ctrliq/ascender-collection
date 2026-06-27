@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: job_wait
 author: "Wayne Witzel III (@wwitzel3)"
-short_description: Wait for Automation Platform Controller job to finish.
+short_description: Wait for Ascender job to finish.
 description:
-    - Wait for Automation Platform Controller job to finish and report success or failure. See
+    - Wait for Ascender job to finish and report success or failure. See
       U(https://ascender-automation.org) for an overview.
 options:
     job_id:

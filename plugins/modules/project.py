@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: project
 author: "Wayne Witzel III (@wwitzel3)"
-short_description: create, update, or destroy Automation Platform Controller projects
+short_description: create, update, or destroy Ascender projects
 description:
-    - Create, update, or destroy Automation Platform Controller projects. See
+    - Create, update, or destroy Ascender projects. See
       U(https://ascender-automation.org) for an overview.
 options:
     name:

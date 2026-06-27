@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: workflow_job_template_node
 author: "John Westcott IV (@john-westcott-iv)"
-short_description: create, update, or destroy Automation Platform Controller workflow job template nodes.
+short_description: create, update, or destroy Ascender workflow job template nodes.
 description:
-    - Create, update, or destroy Automation Platform Controller workflow job template nodes.
+    - Create, update, or destroy Ascender workflow job template nodes.
     - Use this to build a graph for a workflow, which dictates what the workflow runs.
     - You can create nodes first, and link them afterwards, and not worry about ordering.
       For failsafe referencing of a node, specify identifier, WFJT, and organization.

@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: notification_template
 author: "Samuel Carpentier (@samcarpentier)"
-short_description: create, update, or destroy Automation Platform Controller notification.
+short_description: create, update, or destroy Ascender notification.
 description:
-    - Create, update, or destroy Automation Platform Controller notifications. See
+    - Create, update, or destroy Ascender notifications. See
       U(https://ascender-automation.org) for an overview.
 options:
     name:

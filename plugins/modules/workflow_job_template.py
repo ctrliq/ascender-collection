@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: workflow_job_template
 author: "John Westcott IV (@john-westcott-iv)"
-short_description: create, update, or destroy Automation Platform Controller workflow job templates.
+short_description: create, update, or destroy Ascender workflow job templates.
 description:
-    - Create, update, or destroy Automation Platform Controller workflow job templates.
+    - Create, update, or destroy Ascender workflow job templates.
     - Use workflow_job_template_node after this, or use the workflow_nodes parameter to build the workflow's graph
 options:
     name:

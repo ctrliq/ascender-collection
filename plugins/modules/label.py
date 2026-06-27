@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: label
 author: "Wayne Witzel III (@wwitzel3)"
-short_description: create, update, or destroy Automation Platform Controller labels.
+short_description: create, update, or destroy Ascender labels.
 description:
-    - Create, update, or destroy Automation Platform Controller labels. See
+    - Create, update, or destroy Ascender labels. See
       U(https://ascender-automation.org) for an overview.
     - Note, labels can only be created via the API, they can not be deleted.
       Once they are fully disassociated the API will clean them up on its own.

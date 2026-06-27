@@ -8,9 +8,9 @@ DOCUMENTATION = '''
 module: instance
 author: "Rick Elrod (@relrod)"
 version_added: "4.3.0"
-short_description: create, update, or destroy Automation Platform Controller instances.
+short_description: create, update, or destroy Ascender instances.
 description:
-    - Create, update, or destroy Automation Platform Controller instances. See
+    - Create, update, or destroy Ascender instances. See
       U(https://ascender-automation.org) for an overview.
 options:
     hostname:

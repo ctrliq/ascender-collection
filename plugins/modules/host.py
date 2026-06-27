@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: host
 author: "Wayne Witzel III (@wwitzel3)"
-short_description: create, update, or destroy Automation Platform Controller host.
+short_description: create, update, or destroy Ascender host.
 description:
-    - Create, update, or destroy Automation Platform Controller hosts. See
+    - Create, update, or destroy Ascender hosts. See
       U(https://ascender-automation.org) for an overview.
 options:
     name:

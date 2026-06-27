@@ -8,9 +8,9 @@ DOCUMENTATION = '''
 module: credential_input_source
 author: "Tom Page (@Tompage1994)"
 version_added: "2.3.0"
-short_description: create, update, or destroy Automation Platform Controller credential input sources.
+short_description: create, update, or destroy Ascender credential input sources.
 description:
-    - Create, update, or destroy Automation Platform Controller credential input sources. See
+    - Create, update, or destroy Ascender credential input sources. See
       U(https://ascender-automation.org) for an overview.
 options:
     description:

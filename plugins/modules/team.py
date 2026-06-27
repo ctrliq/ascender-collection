@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: team
 author: "Wayne Witzel III (@wwitzel3)"
-short_description: create, update, or destroy Automation Platform Controller team.
+short_description: create, update, or destroy Ascender team.
 description:
-    - Create, update, or destroy Automation Platform Controller teams. See
+    - Create, update, or destroy Ascender teams. See
       U(https://ascender-automation.org) for an overview.
 options:
     name:
