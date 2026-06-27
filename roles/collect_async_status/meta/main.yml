@@ -18,5 +18,8 @@ galaxy_info:
     - application
     - applications
 
+collections:
+  - ctrliq.ascender
+
 dependencies: []
 ...
