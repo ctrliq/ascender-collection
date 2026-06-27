@@ -1036,10 +1036,7 @@ class ControllerAPIModule(ControllerModule):
                 self.warn(f'Failed to release token {self.oauth_token_id}: {e}')
 
     def is_job_done(self, job_status):
-        if job_status in ['new', 'pending', 'waiting', 'running']:
-            return False
-        else:
-            return True
+        return job_status not in ['new', 'pending', 'waiting', 'running']
 
     def wait_on_url(self, url, object_name, object_type, timeout=30, interval=2):
         # Grab our start time to compare against for the timeout
