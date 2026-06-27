@@ -100,7 +100,7 @@ class LookupModule(LookupBase):
     # plugin constructor
     def __init__(self, *args, **kwargs):
         if LIBRARY_IMPORT_ERROR:
-            raise AnsibleError('{0}'.format(LIBRARY_IMPORT_ERROR)) from LIBRARY_IMPORT_ERROR
+            raise AnsibleError(str(LIBRARY_IMPORT_ERROR)) from LIBRARY_IMPORT_ERROR
         super().__init__(*args, **kwargs)
 
         self.frequencies = {
@@ -197,7 +197,7 @@ class LookupModule(LookupBase):
                     try:
                         my_month_day = int(kwargs['month_day_number'])
                         if my_month_day < 1 or my_month_day > 31:
-                            raise Exception()
+                            raise ValueError("month_day_number must be between 1 and 31")
                     except Exception as e:
                         raise AnsibleError('month_day_number must be between 1 and 31') from e
 

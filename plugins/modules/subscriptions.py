@@ -72,7 +72,7 @@ def main():
 
     json_output = {'changed': False}
 
-    # Check if Tower is already licensed
+    # Check if the controller is already licensed
     post_data = {
         'subscriptions_password': module.params.get('password'),
         'subscriptions_username': module.params.get('username'),

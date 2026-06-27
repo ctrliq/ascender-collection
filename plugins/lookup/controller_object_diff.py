@@ -88,7 +88,7 @@ _raw:
 
 import copy
 from ansible.errors import AnsibleError, AnsibleLookupError
-from ansible.module_utils._text import to_native
+from ansible.module_utils.common.text.converters import to_native
 from ansible.plugins.lookup import LookupBase
 from ansible.utils.display import Display
 

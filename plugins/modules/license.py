@@ -98,7 +98,7 @@ def main():
         except OSError as e:
             module.fail_json(msg=str(e))
 
-    # Check if Tower is already licensed
+    # Check if the controller is already licensed
     config = module.get_endpoint('config')['json']
     already_licensed = (
         'license_info' in config
