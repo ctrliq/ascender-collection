@@ -211,13 +211,39 @@ def main():
 
         argument_spec.update(
             dict(
-                controller_host=dict(type="str", aliases=["tower_host"]),
-                controller_username=dict(type="str", aliases=["tower_username"]),
-                controller_password=dict(type="str", no_log=True, aliases=["tower_password"]),
-                controller_oauthtoken=dict(type="raw", no_log=True, aliases=["tower_oauthtoken"]),
-                validate_certs=dict(type="bool", aliases=["tower_verify_ssl"]),
+                controller_host=dict(
+                    type="str",
+                    aliases=["tower_host"],
+                    deprecated_aliases=[dict(name='tower_host', version='26.0.0', collection_name='ctrliq.ascender')],
+                ),
+                controller_username=dict(
+                    type="str",
+                    aliases=["tower_username"],
+                    deprecated_aliases=[dict(name='tower_username', version='26.0.0', collection_name='ctrliq.ascender')],
+                ),
+                controller_password=dict(
+                    type="str",
+                    no_log=True,
+                    aliases=["tower_password"],
+                    deprecated_aliases=[dict(name='tower_password', version='26.0.0', collection_name='ctrliq.ascender')],
+                ),
+                controller_oauthtoken=dict(
+                    type="raw",
+                    no_log=True,
+                    aliases=["tower_oauthtoken"],
+                    deprecated_aliases=[dict(name='tower_oauthtoken', version='26.0.0', collection_name='ctrliq.ascender')],
+                ),
+                validate_certs=dict(
+                    type="bool",
+                    aliases=["tower_verify_ssl"],
+                    deprecated_aliases=[dict(name='tower_verify_ssl', version='26.0.0', collection_name='ctrliq.ascender')],
+                ),
                 request_timeout=dict(type="float"),
-                controller_config_file=dict(type="path", aliases=["tower_config_file"]),
+                controller_config_file=dict(
+                    type="path",
+                    aliases=["tower_config_file"],
+                    deprecated_aliases=[dict(name='tower_config_file', version='26.0.0', collection_name='ctrliq.ascender')],
+                ),
             )
         )
         module = AnsibleModule(argument_spec=argument_spec)
