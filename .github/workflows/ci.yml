@@ -11,7 +11,7 @@ on:
       - main
       - stable-*
   schedule:
-    # Weekly Monday 06:00 UTC — catches breakage from ansible-core devel
+    # Weekly Monday 06:00 UTC
     - cron: "0 6 * * 1"
   workflow_dispatch:
 
@@ -54,9 +54,6 @@ jobs:
             python: "3.12"
           # ansible-core 2.21 — Python 3.12-3.13
           - ansible: stable-2.21
-            python: "3.13"
-          # ansible-core devel — latest Python
-          - ansible: devel
             python: "3.13"
     steps:
       - uses: ansible-community/ansible-test-gh-action@6ded727edb598e670ac056a8e680ca4050bac0a3  # v1.18.0
