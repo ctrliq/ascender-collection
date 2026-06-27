@@ -169,12 +169,7 @@ try:
         ControllerAWXKitModule,
     )
 except ImportError:
-    try:
-        from ansible_collections.ctrliq.ascender.plugins.module_utils.awxkit import (
-            ControllerAWXKitModule,
-        )
-    except ImportError:
-        pass
+    pass
 
 try:
     from awxkit.api.pages.api import EXPORTABLE_RESOURCES
