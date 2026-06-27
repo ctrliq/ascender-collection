@@ -6,9 +6,9 @@ DOCUMENTATION = '''
 ---
 module: bulk_host_delete
 author: "Avi Layani (@Avilir)"
-short_description: Bulk host delete in Automation Platform Controller
+short_description: Bulk host delete in Ascender
 description:
-    - Single-request bulk host deletion in Automation Platform Controller.
+    - Single-request bulk host deletion in Ascender.
     - Provides a way to delete many hosts at once from inventories in Controller.
 options:
     hosts:

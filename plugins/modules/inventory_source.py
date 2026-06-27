@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: inventory_source
 author: "Adrien Fleury (@fleu42)"
-short_description: create, update, or destroy Automation Platform Controller inventory source.
+short_description: create, update, or destroy Ascender inventory source.
 description:
-    - Create, update, or destroy Automation Platform Controller inventory source. See
+    - Create, update, or destroy Ascender inventory source. See
       U(https://ascender-automation.org) for an overview.
 options:
     name:
@@ -53,7 +53,7 @@ options:
       type: str
     host_filter:
       description:
-        - If specified, AWX will only import hosts that match this regular expression.
+        - If specified, Ascender will only import hosts that match this regular expression.
       type: str
     limit:
       description:

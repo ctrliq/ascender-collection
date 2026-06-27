@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: license
 author: "John Westcott IV (@john-westcott-iv)"
-short_description: Set the license for Automation Platform Controller
+short_description: Set the license for Ascender
 description:
-    - Get or Set Automation Platform Controller license. See
+    - Get or Set Ascender license. See
       U(https://ascender-automation.org) for an overview.
 options:
     manifest:

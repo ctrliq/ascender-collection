@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: schedule
 author: "John Westcott IV (@john-westcott-iv)"
-short_description: create, update, or destroy Automation Platform Controller schedules.
+short_description: create, update, or destroy Ascender schedules.
 description:
-    - Create, update, or destroy Automation Platform Controller schedules. See
+    - Create, update, or destroy Ascender schedules. See
       U(https://ascender-automation.org) for an overview.
 options:
     rrule:

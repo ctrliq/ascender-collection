@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: inventory
 author: "Wayne Witzel III (@wwitzel3)"
-short_description: create, update, or destroy Automation Platform Controller inventory.
+short_description: create, update, or destroy Ascender inventory.
 description:
-    - Create, update, or destroy Automation Platform Controller inventories. See
+    - Create, update, or destroy Ascender inventories. See
       U(https://ascender-automation.org) for an overview.
 options:
     name:

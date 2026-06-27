@@ -6,9 +6,9 @@ DOCUMENTATION = '''
 ---
 module: workflow_launch
 author: "John Westcott IV (@john-westcott-iv)"
-short_description: Run a workflow in Automation Platform Controller
+short_description: Run a workflow in Ascender
 description:
-    - Launch an Automation Platform Controller workflows. See
+    - Launch Ascender workflows. See
       U(https://ascender-automation.org) for an overview.
 options:
     name:

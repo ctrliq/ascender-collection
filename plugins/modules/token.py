@@ -8,9 +8,9 @@ DOCUMENTATION = '''
 module: token
 author: "John Westcott IV (@john-westcott-iv)"
 version_added: "2.3.0"
-short_description: create, update, or destroy Automation Platform Controller tokens.
+short_description: create, update, or destroy Ascender tokens.
 description:
-    - Create or destroy Automation Platform Controller tokens. See
+    - Create or destroy Ascender tokens. See
       U(https://ascender-automation.org) for an overview.
     - In addition, the module sets an Ansible fact which can be passed into other
       controller modules as the parameter controller_oauthtoken. See examples for usage.

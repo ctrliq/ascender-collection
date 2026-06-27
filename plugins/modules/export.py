@@ -8,9 +8,9 @@ DOCUMENTATION = '''
 module: export
 author: "John Westcott IV (@john-westcott-iv)"
 version_added: "3.7.0"
-short_description: export resources from Automation Platform Controller.
+short_description: export resources from Ascender.
 description:
-    - Export assets from Automation Platform Controller.
+    - Export assets from Ascender.
 options:
     all:
       description:

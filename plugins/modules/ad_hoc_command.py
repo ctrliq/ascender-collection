@@ -8,9 +8,9 @@ DOCUMENTATION = '''
 module: ad_hoc_command
 author: "John Westcott IV (@john-westcott-iv)"
 version_added: "4.0.0"
-short_description: create, update, or destroy Automation Platform Controller ad hoc commands.
+short_description: create, update, or destroy Ascender ad hoc commands.
 description:
-    - Create, update, or destroy Automation Platform Controller ad hoc commands. See
+    - Create, update, or destroy Ascender ad hoc commands. See
       U(https://ascender-automation.org) for an overview.
 options:
     job_type:

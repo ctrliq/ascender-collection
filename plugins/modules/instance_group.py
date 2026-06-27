@@ -8,9 +8,9 @@ DOCUMENTATION = '''
 module: instance_group
 author: "John Westcott IV (@john-westcott-iv)"
 version_added: "4.0.0"
-short_description: create, update, or destroy Automation Platform Controller instance groups.
+short_description: create, update, or destroy Ascender instance groups.
 description:
-    - Create, update, or destroy Automation Platform Controller instance groups. See
+    - Create, update, or destroy Ascender instance groups. See
       U(https://ascender-automation.org) for an overview.
 options:
     name:

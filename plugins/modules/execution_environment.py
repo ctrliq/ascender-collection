@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: execution_environment
 author: "Shane McDonald (@shanemcd)"
-short_description: create, update, or destroy Execution Environments in Automation Platform Controller.
+short_description: create, update, or destroy Execution Environments in Ascender.
 description:
-    - Create, update, or destroy Execution Environments in Automation Platform Controller. See
+    - Create, update, or destroy Execution Environments in Ascender. See
       U(https://ascender-automation.org) for an overview.
 options:
     name:
@@ -56,7 +56,7 @@ EXAMPLES = '''
 - name: Add EE to the controller instance
   ctrliq.ascender.execution_environment:
     name: "My EE"
-    image: quay.io/ansible/awx-ee
+    image: quay.io/ansible/ansible-runner
 '''
 
 RETURN = '''

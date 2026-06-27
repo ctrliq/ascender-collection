@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: application
 author: "Geoffrey Bacheot (@jffz)"
-short_description: create, update, or destroy Automation Platform Controller applications
+short_description: create, update, or destroy Ascender applications
 description:
-    - Create, update, or destroy Automation Platform Controller applications. See
+    - Create, update, or destroy Ascender applications. See
       U(https://ascender-automation.org) for an overview.
 options:
     name:

@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: job_list
 author: "Wayne Witzel III (@wwitzel3)"
-short_description: List Automation Platform Controller jobs.
+short_description: List Ascender jobs.
 description:
-    - List Automation Platform Controller jobs. See
+    - List Ascender jobs. See
       U(https://ascender-automation.org) for an overview.
 options:
     status:

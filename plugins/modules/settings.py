@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: settings
 author: "Nikhil Jain (@jainnikhil30)"
-short_description: Modify Automation Platform Controller settings.
+short_description: Modify Ascender settings.
 description:
-    - Modify Automation Platform Controller settings. See
+    - Modify Ascender settings. See
       U(https://ascender-automation.org) for an overview.
 options:
     name:
@@ -32,16 +32,16 @@ extends_documentation_fragment: ctrliq.ascender.auth
 '''
 
 EXAMPLES = '''
-- name: Set the value of AWX_ISOLATION_BASE_PATH
+- name: Set the value of DEFAULT_ISOLATION_BASE_PATH
   ctrliq.ascender.settings:
-    name: AWX_ISOLATION_BASE_PATH
+    name: DEFAULT_ISOLATION_BASE_PATH
     value: "/tmp"
   register: testing_settings
 
-- name: Set the value of AWX_ISOLATION_SHOW_PATHS
+- name: Set the value of DEFAULT_ISOLATION_SHOW_PATHS
   ctrliq.ascender.settings:
-    name: "AWX_ISOLATION_SHOW_PATHS"
-    value: "'/var/lib/awx/projects/', '/tmp'"
+    name: "DEFAULT_ISOLATION_SHOW_PATHS"
+    value: "'/var/lib/ascender/projects/', '/tmp'"
   register: testing_settings
 
 - name: Set the LDAP Auth Bind Password

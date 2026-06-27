@@ -8,9 +8,9 @@ DOCUMENTATION = '''
 ---
 module: credential_type
 author: "Adrien Fleury (@fleu42)"
-short_description: Create, update, or destroy custom Automation Platform Controller credential type.
+short_description: Create, update, or destroy custom Ascender credential type.
 description:
-    - Create, update, or destroy Automation Platform Controller credential type. See
+    - Create, update, or destroy Ascender credential type. See
       U(https://ascender-automation.org) for an overview.
 options:
     name:
@@ -38,13 +38,13 @@ options:
       description:
         - >-
           Enter inputs using either JSON or YAML syntax. Refer to the
-          Automation Platform Controller documentation for example syntax.
+          Ascender documentation for example syntax.
       type: dict
     injectors:
       description:
         - >-
           Enter injectors using either JSON or YAML syntax. Refer to the
-          Automation Platform Controller documentation for example syntax.
+          Ascender documentation for example syntax.
       type: dict
     state:
       description:

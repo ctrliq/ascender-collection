@@ -7,9 +7,9 @@ DOCUMENTATION = '''
 ---
 module: job_cancel
 author: "Wayne Witzel III (@wwitzel3)"
-short_description: Cancel an Automation Platform Controller Job.
+short_description: Cancel an Ascender Job.
 description:
-    - Cancel Automation Platform Controller jobs. See
+    - Cancel Ascender jobs. See
       U(https://ascender-automation.org) for an overview.
 options:
     job_id:
