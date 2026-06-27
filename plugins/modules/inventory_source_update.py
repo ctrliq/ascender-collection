@@ -105,7 +105,7 @@ def main():
     inventory_object = module.get_one('inventories', name_or_id=inventory, data=lookup_data)
 
     if not inventory_object:
-        module.fail_json(msg='The specified inventory, {0}, was not found.'.format(lookup_data))
+        module.fail_json(msg=f'The specified inventory, {lookup_data}, was not found.')
 
     inventory_source_object = module.get_one('inventory_sources', name_or_id=name, data={'inventory': inventory_object['id']})
 

@@ -102,7 +102,7 @@ def main():
     )
 
     if command is None:
-        module.fail_json(msg='Unable to wait on ad hoc command {0}; that ID does not exist.'.format(command_id))
+        module.fail_json(msg=f'Unable to wait on ad hoc command {command_id}; that ID does not exist.')
 
     # Invoke wait function
     module.wait_on_url(url=command['url'], object_name=command_id, object_type='ad hoc command', timeout=timeout, interval=interval)

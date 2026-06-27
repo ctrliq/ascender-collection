@@ -181,7 +181,7 @@ def main():
         module.json_output['assets'] = module.get_api_v2_object().export_assets(**export_args)
         module.exit_json(**module.json_output)
     except Exception as e:
-        module.fail_json(msg="Failed to export assets {0}".format(e))
+        module.fail_json(msg=f"Failed to export assets {e}")
     finally:
         # Finally, consume the logs in case there were any errors and die if there were
         log_contents = log_capture_string.getvalue()

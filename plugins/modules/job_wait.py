@@ -109,7 +109,7 @@ def main():
     )
 
     if job is None:
-        module.fail_json(msg='Unable to wait on ' + job_type.rstrip("s") + ' {0}; that ID does not exist.'.format(job_id))
+        module.fail_json(msg=f'Unable to wait on {job_type.rstrip("s")} {job_id}; that ID does not exist.')
 
     # Invoke wait function
     module.wait_on_url(url=job['url'], object_name=job_id, object_type='legacy_job_wait', timeout=timeout, interval=interval)

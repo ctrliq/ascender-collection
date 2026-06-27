@@ -67,7 +67,7 @@ def main():
     )
 
     if job is None:
-        module.fail_json(msg="Unable to find job with id {0}".format(job_id))
+        module.fail_json(msg=f"Unable to find job with id {job_id}")
 
     cancel_page = module.get_endpoint(job['related']['cancel'])
     if 'json' not in cancel_page or 'can_cancel' not in cancel_page['json']:

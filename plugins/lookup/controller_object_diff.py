@@ -179,12 +179,12 @@ class LookupModule(LookupBase):
             for item in compare_list:
                 for key in keys_to_keep:
                     if key not in item.keys():
-                        self.handle_error(msg="Key: '{0}' missing from item in compare_list item: {1}".format(key, item))
+                        self.handle_error(msg=f"Key: '{key}' missing from item in compare_list item: {item}")
 
             for item in api_list:
                 for key in api_keys_to_keep:
                     if key not in item.keys():
-                        self.handle_error(msg="Key: '{0}' missing from item in api_list. Does this object come from the api? item: {1}".format(key, item))
+                        self.handle_error(msg=f"Key: '{key}' missing from item in api_list. Does this object come from the api? item: {item}")
 
         # Reduce list to name and organization
         if api_list[0]["type"] == "role":
@@ -328,8 +328,8 @@ class LookupModule(LookupBase):
                 item.update({"organization": item["summary_fields"]["organization"]["name"]})
                 item.pop("summary_fields")
 
-        self.display.v("compare_list_reduced: {0}".format(compare_list_reduced))
-        self.display.v("api_list_reduced: {0}".format(api_list_reduced))
+        self.display.v(f"compare_list_reduced: {compare_list_reduced}")
+        self.display.v(f"api_list_reduced: {api_list_reduced}")
 
         # Find difference between lists
         if api_list[0]["type"] != "role":

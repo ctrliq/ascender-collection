@@ -56,7 +56,7 @@ from ..module_utils.controller_api import ControllerAPIModule
 def main():
     module = ControllerAPIModule(argument_spec={})
     namespace = {'awx': 'awx', 'ascender': 'ctrliq', 'controller': 'ansible'}.get(module._COLLECTION_TYPE, 'unknown')
-    namespace_name = '{0}.{1}'.format(namespace, module._COLLECTION_TYPE)
+    namespace_name = f'{namespace}.{module._COLLECTION_TYPE}'
     module.exit_json(prefix=namespace_name, name=module._COLLECTION_TYPE, namespace=namespace, version=module._COLLECTION_VERSION)
 
 

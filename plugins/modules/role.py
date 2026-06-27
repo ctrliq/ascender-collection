@@ -284,7 +284,7 @@ def main():
                     resource_data.setdefault(key, []).append(data)
     if len(missing_items) > 0:
         module.fail_json(
-            msg='There were {0} missing items, missing items: {1}'.format(len(missing_items), missing_items), changed=False
+            msg=f'There were {len(missing_items)} missing items, missing items: {missing_items}', changed=False
         )
 
     # build association agenda
@@ -296,10 +296,10 @@ def main():
                 if role_field not in resource_roles:
                     available_roles = ', '.join(list(resource_roles.keys()))
                     module.fail_json(
-                        msg='Resource {0} has no role {1}, available roles: {2}'.format(resource['url'], role_field, available_roles), changed=False
+                        msg=f'Resource {resource["url"]} has no role {role_field}, available roles: {available_roles}', changed=False
                     )
                 role_data = resource_roles[role_field]
-                endpoint = '/roles/{0}/{1}/'.format(role_data['id'], actor_type)
+                endpoint = f'/roles/{role_data["id"]}/{actor_type}/'
                 associations.setdefault(endpoint, [])
                 for actor in actors:
                     associations[endpoint].append(actor['id'])
@@ -315,14 +315,14 @@ def main():
                 if response['status_code'] == 204:
                     module.json_output['changed'] = True
                 else:
-                    module.fail_json(msg="Failed to grant role. {0}".format(response['json'].get('detail', response['json'].get('msg', 'unknown'))))
+                    module.fail_json(msg=f"Failed to grant role. {response['json'].get('detail', response['json'].get('msg', 'unknown'))}")
         else:
             for an_id in list(set(existing_associated_ids) & set(new_association_list)):
                 response = module.post_endpoint(association_endpoint, **{'data': {'id': int(an_id), 'disassociate': True}})
                 if response['status_code'] == 204:
                     module.json_output['changed'] = True
                 else:
-                    module.fail_json(msg="Failed to revoke role. {0}".format(response['json'].get('detail', response['json'].get('msg', 'unknown'))))
+                    module.fail_json(msg=f"Failed to revoke role. {response['json'].get('detail', response['json'].get('msg', 'unknown'))}")
 
     module.exit_json(**module.json_output)
 

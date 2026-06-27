@@ -268,7 +268,7 @@ def main():
         awxkit_list = module.get_api_v2_object().export_assets(**export_args)
         module.json_output["controller_objects"] = deepcopy(awxkit_list)
     except Exception as e:
-        module.fail_json(msg="Failed to export assets {0}".format(e))
+        module.fail_json(msg=f"Failed to export assets {e}")
     finally:
         # Finally, consume the logs in case there were any errors and die if there were
         log_contents = log_capture_string.getvalue()
@@ -307,7 +307,7 @@ def main():
                 else:
                     output_list[resource] = awxkit_list[resource]
         except Exception as e:
-            module.fail_json(msg="Failed to export assets {0} with resource {1}".format(e, resource_object))
+            module.fail_json(msg=f"Failed to export assets {e} with resource {resource_object}")
     module.json_output["difference"] = output_list
     module.exit_json(**module.json_output)
 

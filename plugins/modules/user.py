@@ -190,7 +190,7 @@ def main():
     if organization:
         org_id = module.resolve_name_to_id('organizations', organization)
         # If the state was present and we can let the module build or update the existing item, this will return on its own
-        module.create_or_update_if_needed(existing_item, new_fields, endpoint='organizations/{0}/users'.format(org_id), item_type='user')
+        module.create_or_update_if_needed(existing_item, new_fields, endpoint=f'organizations/{org_id}/users', item_type='user')
     else:
         # If the state was present and we can let the module build or update the existing item, this will return on its own
         module.create_or_update_if_needed(existing_item, new_fields, endpoint='users', item_type='user')

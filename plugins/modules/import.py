@@ -85,7 +85,7 @@ def main():
     try:
         module.json_output['changed'] = module.get_api_v2_object().import_assets(assets)
     except Exception as e:
-        module.fail_json(msg="Failed to import assets {0}".format(e))
+        module.fail_json(msg=f"Failed to import assets {e}")
     finally:
         # Finally, consume the logs in case there were any errors and die if there were
         log_contents = log_capture_string.getvalue()
