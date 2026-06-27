@@ -4,16 +4,12 @@ galaxy_info:
   author: Andrew J. Huffman, Kedar Kulkarni
   description: An Ansible role to create inventory sources in Ansible Controller.
   company: Red Hat
-
   license: GPL-3.0-or-later
-
-  min_ansible_version: 2.15.0
-
+  min_ansible_version: 2.16.0
   platforms:
     - name: EL
       versions:
         - all
-
   galaxy_tags:
     - controller
     - aap
@@ -25,11 +21,8 @@ galaxy_info:
 
 collections:
   - ctrliq.ascender
-  - ctrliq.ascender
 
 dependencies:
-  # List your role dependencies here, one per line. Be sure to remove the '[]' above,
-  # if you add dependencies to this list.
   - role: global_vars
   - role: meta_dependency_check
 ...
