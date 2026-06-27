@@ -115,7 +115,6 @@ def return_token(module, last_response):
 
     module.json_output['ansible_facts'] = {
         'controller_token': last_response,
-        'tower_token': last_response,
     }
     module.exit_json(**module.json_output)
 
