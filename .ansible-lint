@@ -3,6 +3,10 @@
 
 offline: true
 
+# Mock collection roles so ansible-lint doesn't error on unresolved FQCNs
+mock_roles:
+  - ctrliq.ascender.filetree_read
+
 # Mock collection modules so ansible-lint doesn't error on unresolved FQCNs
 mock_modules:
   - ctrliq.ascender.ad_hoc_command
@@ -73,3 +77,4 @@ warn_list:
   - no-changed-when
   - command-instead-of-shell
   - risky-shell-pipe
+  - args[module]
