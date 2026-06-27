@@ -6,9 +6,9 @@ name: controller
 author:
   - Matthew Jones (@matburt)
   - Yunfan Zhang (@YunfanZhang42)
-short_description: Ansible dynamic inventory plugin for the Automation Platform Controller.
+short_description: Ansible dynamic inventory plugin for Ascender.
 description:
-    - Reads inventories from the Automation Platform Controller.
+    - Reads inventories from Ascender.
     - Supports reading configuration from both YAML config file and environment variables.
     - If reading from the YAML file, the file name must end with controller.(yml|yaml) or controller_inventory.(yml|yaml),
       the path in the command would be /path/to/controller_inventory.(yml|yaml). If some arguments in the config file
@@ -80,7 +80,7 @@ class InventoryModule(BaseInventoryPlugin):
     no_config_file_supplied = False
 
     def verify_file(self, path):
-        if path.endswith('@controller_inventory') or path.endswith('@tower_inventory'):
+        if path.endswith('@controller_inventory'):
             self.no_config_file_supplied = True
             return True
         elif super().verify_file(path):
@@ -90,10 +90,6 @@ class InventoryModule(BaseInventoryPlugin):
                     'controller_inventory.yaml',
                     'controller.yml',
                     'controller.yaml',
-                    'tower_inventory.yml',
-                    'tower_inventory.yaml',
-                    'tower.yml',
-                    'tower.yaml',
                 )
             )
         else:
@@ -169,7 +165,6 @@ class InventoryModule(BaseInventoryPlugin):
             server_data['license_type'] = config_data.get('license_info', {}).get('license_type', 'unknown')
             for key in ('version', 'ansible_version'):
                 server_data[key] = config_data.get(key, 'unknown')
-            self.inventory.set_variable('all', 'tower_metadata', server_data)
             self.inventory.set_variable('all', 'controller_metadata', server_data)
 
         # Clean up the inventory.
