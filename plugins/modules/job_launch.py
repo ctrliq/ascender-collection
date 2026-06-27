@@ -228,13 +228,13 @@ def main():
         if field_val is not None:
             optional_args[field_name] = field_val
 
-        # Special treatment of tags parameters
-        job_tags = module.params.get('tags')
-        if job_tags is not None:
-            optional_args['job_tags'] = ",".join(job_tags)
-        skip_tags = module.params.get('skip_tags')
-        if skip_tags is not None:
-            optional_args['skip_tags'] = ",".join(skip_tags)
+    # Special treatment of tags parameters
+    job_tags = module.params.get('tags')
+    if job_tags is not None:
+        optional_args['job_tags'] = ",".join(job_tags)
+    skip_tags = module.params.get('skip_tags')
+    if skip_tags is not None:
+        optional_args['skip_tags'] = ",".join(skip_tags)
 
     # job_timeout is special because its actually timeout but we already had a timeout variable
     job_timeout = module.params.get('job_timeout')
