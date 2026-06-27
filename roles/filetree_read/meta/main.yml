@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: filetree_read
   author: Automation Iberia
   description: AAP Configuration as Code Implementation
   company: Automation Iberia

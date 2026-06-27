@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: global_vars
   author: Ivan Aragonés
   description: Global variables to be consumed by any other role in the collection
   company: Red Hat

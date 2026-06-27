@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: filetree_create
   author: Automation Iberia
   description: AAP Configuration as Code extract from AAP
   company: Automation Iberia

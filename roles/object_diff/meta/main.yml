@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: object_diff
   author: Automation Iberia
   description: AAP Configuration as Code - Desired State
   company: Automation Iberia
