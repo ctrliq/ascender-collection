@@ -7,15 +7,11 @@ When trying to fix a bug, it is best to replicate its behavior within a test wit
 
 ## Unit Tests
 
-The unit tests are stored in the `test/ascender` directory and, where possible, test interactions between the collections modules and the AWX database. This is achieved by  using a Python testing suite and having a mocked layer which emulates interactions with the API. You do not need a server to run these unit tests. The depth of testing is not fixed and can change from module to module.
+The unit tests are stored in the `test/ascender` directory and, where possible, test interactions between the collections modules and the Ascender database. This is achieved by using a Python testing suite and having a mocked layer which emulates interactions with the API. You do not need a server to run these unit tests. The depth of testing is not fixed and can change from module to module.
 
 Let's take a closer look at the `test_token.py` file (which tests the `token` module):
 
 ```
-from __future__ import absolute_import, division, print_function
-
-__metaclass__ = type
-
 import pytest
 
 from awx.main.models import OAuth2AccessToken
@@ -53,7 +49,7 @@ The completeness check is run from the unit tests and can be found in `test/asce
 
 For example, when creating a new module for an endpoint and the module has parameters A, B and C, and the endpoint supports options A, B and D, then errors around parameter C and option D being mismatched would come up.
 
-A completeness failure will generate a large ASCII table in the Zuul log indicating what is going on:
+A completeness failure will generate a large ASCII table in the CI log indicating what is going on:
 
 ![Completeness Test Output](images/completeness_test_output.png)
 
@@ -71,7 +67,7 @@ Inside the `/tests` directory, there are two folders:
 
 In the `/sanity` folder are file directives for specific Ansible versions which contain information about which tests to skip for specific files. There are a number of reasons you may need to skip a sanity test. See the [`ansible-test` documentation](https://docs.ansible.com/ansible/latest/dev_guide/testing_running_locally.html) for more details about how and why you might want to skip a test.
 
-In the `integration/targets` folder you will see directories (which act as roles) for all of the different modules and plugins. When the collection is tested, an instance of Automation Platform Controller (or AWX) will be spun up and these roles will be applied to the target server to validate the functionality of the modules. Since these are really roles, each directory will contain a tasks folder under it with a `main.yml` file as an entry point.
+In the `integration/targets` folder you will see directories (which act as roles) for all of the different modules and plugins. When the collection is tested, an instance of Ascender will be spun up and these roles will be applied to the target server to validate the functionality of the modules. Since these are really roles, each directory will contain a tasks folder under it with a `main.yml` file as an entry point.
 
 While not strictly followed, the general flow of a test should be:
 
@@ -144,7 +140,8 @@ When writing an integration test, a test of asset type A does not need to make a
 The unit tests require a checkout of the [Ascender](https://github.com/ctrliq/ascender) repo for the Django models. Set up a virtualenv with the necessary dependencies:
 
 ```bash
-mkvirtualenv my_new_venv
+python -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 pip install -e <path to your ascender checkout>
 pip install -e <path to your ascender checkout>/awxkit
@@ -153,7 +150,7 @@ pip install -e <path to your ascender checkout>/awxkit
 Once your environment is established, run all unit tests:
 
 ```
-$ py.test test/ascender -v
+$ pytest test/ascender -v
 ==================================== test session starts ====================================
 ...
 ```
@@ -161,7 +158,7 @@ $ py.test test/ascender -v
 You can also run a specific test file:
 
 ```
-$ py.test test/ascender/test_token.py
+$ pytest test/ascender/test_token.py
 ============================ test session starts ============================
 ...
 test/ascender/test_token.py .                               [100%]
@@ -171,7 +168,7 @@ test/ascender/test_token.py .                               [100%]
 
 ## Running Integration Tests
 
-For integration tests, you will need an existing AWX or Automation Platform Controller instance to run the test playbooks against. You can write a simple `run_it.yml` playbook to invoke the main method:
+For integration tests, you will need an existing Ascender instance to run the test playbooks against. You can write a simple `run_it.yml` playbook to invoke the main method:
 
 ```
 ---
