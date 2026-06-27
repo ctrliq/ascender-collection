@@ -41,3 +41,5 @@ build_ignore:
   - images
   - pyproject.toml
   - ruff.toml
+  - bindep.txt
+  - requirements.txt

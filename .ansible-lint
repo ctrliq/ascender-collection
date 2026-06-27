@@ -5,16 +5,51 @@ offline: true
 
 # Mock collection modules so ansible-lint doesn't error on unresolved FQCNs
 mock_modules:
-  - ctrliq.ascender.project
-  - ctrliq.ascender.job_launch
-  - ctrliq.ascender.job_wait
-  - ctrliq.ascender.inventory
-  - ctrliq.ascender.host
-  - ctrliq.ascender.group
+  - ctrliq.ascender.ad_hoc_command
+  - ctrliq.ascender.ad_hoc_command_cancel
+  - ctrliq.ascender.ad_hoc_command_wait
+  - ctrliq.ascender.application
+  - ctrliq.ascender.bulk_host_create
+  - ctrliq.ascender.bulk_host_delete
+  - ctrliq.ascender.bulk_job_launch
+  - ctrliq.ascender.controller_export_diff
+  - ctrliq.ascender.controller_meta
   - ctrliq.ascender.credential
+  - ctrliq.ascender.credential_input_source
+  - ctrliq.ascender.credential_type
+  - ctrliq.ascender.execution_environment
+  - ctrliq.ascender.export
+  - ctrliq.ascender.group
+  - ctrliq.ascender.host
+  - ctrliq.ascender.import
+  - ctrliq.ascender.instance
+  - ctrliq.ascender.instance_group
+  - ctrliq.ascender.inventory
+  - ctrliq.ascender.inventory_source
+  - ctrliq.ascender.inventory_source_update
+  - ctrliq.ascender.job_cancel
+  - ctrliq.ascender.job_launch
+  - ctrliq.ascender.job_list
   - ctrliq.ascender.job_template
-  - ctrliq.ascender.workflow_job_template
+  - ctrliq.ascender.job_wait
+  - ctrliq.ascender.label
+  - ctrliq.ascender.license
+  - ctrliq.ascender.notification_template
   - ctrliq.ascender.organization
+  - ctrliq.ascender.project
+  - ctrliq.ascender.project_update
+  - ctrliq.ascender.role
+  - ctrliq.ascender.schedule
+  - ctrliq.ascender.settings
+  - ctrliq.ascender.subscriptions
+  - ctrliq.ascender.team
+  - ctrliq.ascender.token
+  - ctrliq.ascender.user
+  - ctrliq.ascender.workflow_approval
+  - ctrliq.ascender.workflow_job_template
+  - ctrliq.ascender.workflow_job_template_node
+  - ctrliq.ascender.workflow_launch
+  - ctrliq.ascender.workflow_node_wait
 
 # Directories to exclude from linting
 exclude_paths:
