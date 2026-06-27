@@ -49,6 +49,12 @@ jobs:
             python: "3.12"
           - ansible: stable-2.19
             python: "3.13"
+          # ansible-core 2.20 — Python 3.11-3.13
+          - ansible: stable-2.20
+            python: "3.12"
+          # ansible-core 2.21 — Python 3.12-3.13
+          - ansible: stable-2.21
+            python: "3.13"
           # ansible-core devel — latest Python
           - ansible: devel
             python: "3.13"
