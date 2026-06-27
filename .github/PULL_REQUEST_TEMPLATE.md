@@ -15,6 +15,6 @@
 
 ## Checklist
 - [ ] Sanity tests pass (`ansible-test sanity`)
-- [ ] Linting passes (`flake8`, `yamllint`)
+- [ ] Linting passes (`ruff`, `yamllint`, `ansible-lint`)
 - [ ] Changelog fragment added (if user-facing change)
 - [ ] Documentation updated (if applicable)

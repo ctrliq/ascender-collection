@@ -7,3 +7,8 @@ rules:
     allow-non-breakable-inline-mappings: true
   truthy:
     allowed-values: ['true', 'false', 'yes', 'no']
+  comments:
+    min-spaces-from-content: 1
+  octal-values:
+    forbid-implicit-octal: true
+    forbid-explicit-octal: true
