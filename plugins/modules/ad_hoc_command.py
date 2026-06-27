@@ -152,7 +152,7 @@ def main():
         'module_args': module_args,
     }
     for arg in ['job_type', 'limit', 'forks', 'verbosity', 'extra_vars', 'become_enabled', 'diff_mode']:
-        if module.params.get(arg):
+        if module.params.get(arg) is not None:
             # extra_var can receive a dict or a string, if a dict covert it to a string
             if arg == 'extra_vars' and not isinstance(module.params.get(arg), str):
                 post_data[arg] = json.dumps(module.params.get(arg))
