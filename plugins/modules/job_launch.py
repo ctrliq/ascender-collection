@@ -222,7 +222,6 @@ def main():
         'credential_passwords',
         'forks',
         'job_slice_count',
-        'job_timeout',
     ):
         field_val = module.params.get(field_name)
         if field_val is not None:
