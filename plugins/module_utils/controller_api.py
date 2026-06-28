@@ -214,7 +214,7 @@ class ControllerModule(AnsibleModule):
             raise ConfigFileException("The specified config file cannot be read")
 
         # Read in the file contents:
-        with open(config_path, 'r') as f:
+        with open(config_path, 'r', encoding='utf-8') as f:
             config_string = f.read()
 
         # First try to yaml load the content (which will also load json)
