@@ -106,6 +106,7 @@ options:
         - Service that webhook requests will be accepted from
       type: str
       choices:
+        - ''
         - github
         - gitlab
         - bitbucket_dc
@@ -580,10 +581,6 @@ from ..module_utils.controller_api import ControllerAPIModule
 
 import json
 
-response = []
-
-response = []
-
 
 def create_workflow_nodes(module, response, workflow_nodes, workflow_id):
     for workflow_node in workflow_nodes:
@@ -634,7 +631,7 @@ def create_workflow_nodes(module, response, workflow_nodes, workflow_id):
             'state',
         ):
             field_val = workflow_node.get(field_name)
-            if field_val:
+            if field_val is not None:
                 workflow_node_fields[field_name] = field_val
             if workflow_node['identifier']:
                 search_fields = {'identifier': workflow_node['identifier']}
@@ -815,7 +812,7 @@ def main():
         ask_inventory_on_launch=dict(type='bool'),
         ask_scm_branch_on_launch=dict(type='bool'),
         ask_limit_on_launch=dict(type='bool'),
-        webhook_service=dict(choices=['github', 'gitlab', 'bitbucket_dc']),
+        webhook_service=dict(choices=['github', 'gitlab', 'bitbucket_dc', '']),
         webhook_credential=dict(),
         labels=dict(type="list", elements='str'),
         notification_templates_started=dict(type="list", elements='str'),
@@ -973,6 +970,7 @@ def main():
     # Get Workflow information in case one was just created.
     existing_item = module.get_one('workflow_job_templates', name_or_id=new_name if new_name else name, **{'data': search_fields})
     workflow_job_template_id = existing_item['id']
+    response = []
     # Destroy current nodes if selected.
     if destroy_current_nodes:
         destroy_workflow_nodes(module, response, workflow_job_template_id)
