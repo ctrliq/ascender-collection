@@ -27,12 +27,14 @@ build_ignore:
   - galaxy.yml.j2
   - template_galaxy.yml
   - '*.tar.gz'
+  - .ansible
   - .claude
   - .ansible-lint
   - .editorconfig
   - .github
   - .gitignore
   - .pre-commit-config.yaml
+  - .ruff_cache
   - .yamllint
   - CLAUDE.md
   - CONTRIBUTING.md
