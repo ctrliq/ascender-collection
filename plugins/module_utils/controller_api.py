@@ -150,9 +150,7 @@ class ControllerModule(AnsibleModule):
         try:
             proxy_env_var_name = f"{self.url.scheme}_proxy"
             if not environ.get(proxy_env_var_name) and not environ.get(proxy_env_var_name.upper()):
-                addrinfolist = getaddrinfo(self.url.hostname, self.url.port, proto=IPPROTO_TCP)
-                for family, kind, proto, canonical, sockaddr in addrinfolist:
-                    sockaddr[0]
+                getaddrinfo(self.url.hostname, self.url.port, proto=IPPROTO_TCP)
         except Exception as e:
             self.fail_json(msg=f"Unable to resolve controller_host ({e}): {self.url.hostname}")
 
@@ -343,13 +341,13 @@ class ControllerAPIModule(ControllerModule):
         else:
             self.fail_json(msg='Cannot determine identity field for Undefined object.')
 
-    def head_endpoint(self, endpoint, *args, **kwargs):
+    def head_endpoint(self, endpoint, **kwargs):
         return self.make_request('HEAD', endpoint, **kwargs)
 
-    def get_endpoint(self, endpoint, *args, **kwargs):
+    def get_endpoint(self, endpoint, **kwargs):
         return self.make_request('GET', endpoint, **kwargs)
 
-    def patch_endpoint(self, endpoint, *args, **kwargs):
+    def patch_endpoint(self, endpoint, **kwargs):
         # Handle check mode
         if self.check_mode:
             self.json_output['changed'] = True
@@ -357,7 +355,7 @@ class ControllerAPIModule(ControllerModule):
 
         return self.make_request('PATCH', endpoint, **kwargs)
 
-    def post_endpoint(self, endpoint, *args, **kwargs):
+    def post_endpoint(self, endpoint, **kwargs):
         # Handle check mode
         if self.check_mode:
             self.json_output['changed'] = True
@@ -365,7 +363,7 @@ class ControllerAPIModule(ControllerModule):
 
         return self.make_request('POST', endpoint, **kwargs)
 
-    def delete_endpoint(self, endpoint, *args, **kwargs):
+    def delete_endpoint(self, endpoint, **kwargs):
         # Handle check mode
         if self.check_mode:
             self.json_output['changed'] = True
@@ -373,8 +371,8 @@ class ControllerAPIModule(ControllerModule):
 
         return self.make_request('DELETE', endpoint, **kwargs)
 
-    def get_all_endpoint(self, endpoint, *args, **kwargs):
-        response = self.get_endpoint(endpoint, *args, **kwargs)
+    def get_all_endpoint(self, endpoint, **kwargs):
+        response = self.get_endpoint(endpoint, **kwargs)
         if 'next' not in response['json']:
             raise RuntimeError(f'Expected list from API at {endpoint}, got: {response}')
         next_page = response['json']['next']
@@ -478,7 +476,7 @@ class ControllerAPIModule(ControllerModule):
     def resolve_name_to_id(self, endpoint, name_or_id):
         return self.get_exactly_one(endpoint, name_or_id)['id']
 
-    def make_request(self, method, endpoint, *args, **kwargs):
+    def make_request(self, method, endpoint, **kwargs):
         # In case someone is calling us directly; make sure we were given a method, let's not just assume a GET
         if not method:
             raise Exception("The HTTP method must be defined")
@@ -550,9 +548,6 @@ class ControllerAPIModule(ControllerModule):
                 # JSONDecodeError only available on Python 3.5+
                 except ValueError:
                     return {'status_code': he.code, 'text': page_data}
-            elif he.code == 204 and method == 'DELETE':
-                # A 204 is a normal response for a delete function
-                pass
             else:
                 self.fail_json(msg=f"Unexpected return code when calling {url.geturl()}: {he}")
         except Exception as e:
@@ -586,7 +581,7 @@ class ControllerAPIModule(ControllerModule):
             self.fail_json(msg=f"Failed to read response body: {e}")
 
         response_json = {}
-        if response_body and response_body != '':
+        if response_body:
             try:
                 response_json = loads(response_body)
             except Exception as e:
