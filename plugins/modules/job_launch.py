@@ -244,7 +244,7 @@ def main():
     # Create a datastructure to pass into our job launch
     post_data = {}
     for arg_name, arg_value in optional_args.items():
-        if arg_value:
+        if arg_value is not None:
             post_data[arg_name] = arg_value
 
     # Attempt to look up the related items the user specified (these will fail the module if not found)
