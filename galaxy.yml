@@ -6,8 +6,6 @@ description: Ansible collection for managing Ascender controllers, including mod
 documentation: https://github.com/ctrliq/ascender-collection/blob/main/README.md
 homepage: https://ascender-automation.org
 issues: https://github.com/ctrliq/ascender-collection/issues
-license:
-  - GPL-3.0-or-later
 license_file: COPYING
 name: ascender
 namespace: ctrliq
