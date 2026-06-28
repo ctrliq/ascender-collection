@@ -288,7 +288,9 @@ def main():
                                 awxkit_list[resource].pop(idx)
                                 break
                         else:
-                            if resource_object["name"] == dict_["name"] and resource_object.get("organization", {}).get("name") == dict_.get("organization", {}).get("name"):
+                            names_match = resource_object["name"] == dict_["name"]
+                            orgs_match = resource_object.get("organization", {}).get("name") == dict_.get("organization", {}).get("name")
+                            if names_match and orgs_match:
                                 awxkit_list[resource].pop(idx)
                                 break
                 # After looping through every item in the compare_items the remaining are set to absent.
