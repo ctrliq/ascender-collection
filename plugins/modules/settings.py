@@ -149,7 +149,7 @@ def main():
     if not needs_update:
         module.exit_json(**json_output)
 
-    if module.check_mode and module._diff:
+    if module.check_mode:
         json_output['changed'] = True
         module.exit_json(**json_output)
 
