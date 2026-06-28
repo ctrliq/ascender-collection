@@ -8,6 +8,7 @@ homepage: https://ascender-automation.org
 issues: https://github.com/ctrliq/ascender-collection/issues
 license:
   - GPL-3.0-or-later
+license_file: COPYING
 name: ascender
 namespace: ctrliq
 readme: README.md
