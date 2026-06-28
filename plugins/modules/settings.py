@@ -113,7 +113,7 @@ def main():
         argument_spec=argument_spec,
         required_one_of=[['name', 'settings']],
         mutually_exclusive=[['name', 'settings']],
-        required_if=[['name', 'present', ['value']]],
+        required_by={'name': 'value'},
     )
 
     # Extract our parameters
