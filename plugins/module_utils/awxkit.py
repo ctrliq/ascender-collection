@@ -37,8 +37,8 @@ class ControllerAWXKitModule(ControllerModule):
             elif self.username:
                 self.connection.login(username=self.username, password=self.password)
                 self.authenticated = True
-        except Exception:
-            self.fail_json(msg="Failed to authenticate")
+        except Exception as e:
+            self.fail_json(msg=f"Failed to authenticate: {e}")
 
     def get_api_v2_object(self):
         if not self.apiV2Ref:
