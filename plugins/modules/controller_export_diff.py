@@ -265,11 +265,11 @@ def main():
     except Exception as e:
         module.fail_json(msg=f"Failed to export assets {e}")
     finally:
-        # Finally, consume the logs in case there were any errors and die if there were
         log_contents = log_capture_string.getvalue()
         log_capture_string.close()
-        if log_contents != "":
-            module.fail_json(msg=log_contents)
+
+    if log_contents:
+        module.fail_json(msg=log_contents)
 
     # Loop over each resource type that we gathered from the API.
     output_list = {}

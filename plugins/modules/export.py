@@ -179,15 +179,16 @@ def main():
     # Run the export process
     try:
         module.json_output['assets'] = module.get_api_v2_object().export_assets(**export_args)
-        module.exit_json(**module.json_output)
     except Exception as e:
         module.fail_json(msg=f"Failed to export assets {e}")
     finally:
-        # Finally, consume the logs in case there were any errors and die if there were
         log_contents = log_capture_string.getvalue()
         log_capture_string.close()
-        if log_contents != '':
-            module.fail_json(msg=log_contents)
+
+    if log_contents:
+        module.fail_json(msg=log_contents)
+
+    module.exit_json(**module.json_output)
 
 
 if __name__ == '__main__':
