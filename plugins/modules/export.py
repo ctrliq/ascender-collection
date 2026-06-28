@@ -113,8 +113,6 @@ EXAMPLES = '''
     inventory: ['My Inventory 1', 'My Inventory 2']
 '''
 
-import logging
-from io import StringIO
 RETURN = '''
 assets:
     description: The exported assets, in a structure suitable for the import module.
@@ -122,6 +120,8 @@ assets:
     type: dict
 '''
 
+import logging
+from io import StringIO
 from ..module_utils.awxkit import ControllerAWXKitModule
 
 try:
