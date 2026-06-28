@@ -35,6 +35,7 @@ build_ignore:
   - .pre-commit-config.yaml
   - .ruff_cache
   - .yamllint
+  - CHANGELOG.rst
   - CLAUDE.md
   - CONTRIBUTING.md
   - SECURITY.md
