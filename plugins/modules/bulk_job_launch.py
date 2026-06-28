@@ -215,6 +215,7 @@ def main():
         skip_tags=dict(),
         wait=dict(required=False, default=True, type='bool'),
         interval=dict(required=False, default=2.0, type='float'),
+        timeout=dict(required=False, type='int'),
     )
 
     # Create a module for ourselves
@@ -233,7 +234,7 @@ def main():
     post_data = {}
     for p in post_data_names:
         val = module.params.get(p)
-        if val:
+        if val is not None:
             post_data[p] = val
 
     # Resolve name to ID for related resources
