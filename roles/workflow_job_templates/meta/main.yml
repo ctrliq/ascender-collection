@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  role_name: workflow_templates
+  role_name: workflow_job_templates
   author: Sean Sullivan
   description: An Ansible Role to create Workflow Templates in Ansible Controller.
   company: Red Hat

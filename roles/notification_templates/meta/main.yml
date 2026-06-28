@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  role_name: notifications
+  role_name: notification_templates
   author: Tom Page
   description: An Ansible Role to create notifications in Ansible Controller.
   company: Red Hat
