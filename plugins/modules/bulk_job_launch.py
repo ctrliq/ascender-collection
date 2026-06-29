@@ -156,6 +156,11 @@ options:
       required: False
       default: 2
       type: float
+    timeout:
+      description:
+        - Maximum time in seconds to wait for the bulk job to finish.
+      required: False
+      type: int
 extends_documentation_fragment: ctrliq.ascender.auth
 '''
 
