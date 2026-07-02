@@ -266,14 +266,10 @@ def main():
         # If the state was absent we can let the module delete it if needed, the module will handle exiting from this
         module.delete_if_needed(existing_item)
 
-    final_notification_configuration = {}
-    if notification_configuration is not None:
-        final_notification_configuration.update(notification_configuration)
-
     # Create the data that gets sent for create and update
     new_fields = {}
-    if final_notification_configuration:
-        new_fields['notification_configuration'] = final_notification_configuration
+    if notification_configuration is not None:
+        new_fields['notification_configuration'] = notification_configuration
     new_fields['name'] = new_name if new_name else (module.get_item_name(existing_item) if existing_item else name)
     if description is not None:
         new_fields['description'] = description
