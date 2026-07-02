@@ -339,7 +339,9 @@ def main():
 
     unified_job_template = module.params.get('unified_job_template')
     if unified_job_template:
-        new_fields['unified_job_template'] = module.get_one('unified_job_templates', name_or_id=unified_job_template, **{'data': search_fields})['id']
+        new_fields['unified_job_template'] = module.get_one(
+            'unified_job_templates', name_or_id=unified_job_template, allow_none=False, **{'data': search_fields}
+        )['id']
     inventory = module.params.get('inventory')
     if inventory:
         new_fields['inventory'] = module.resolve_name_to_id('inventories', inventory)
@@ -361,7 +363,7 @@ def main():
         'timeout',
     ):
         field_val = module.params.get(field_name)
-        if field_val:
+        if field_val is not None:
             new_fields[field_name] = field_val
 
     association_fields = {}
@@ -432,10 +434,12 @@ def main():
         existing_item = None
         # Due to not able to lookup workflow_approval_templates, find the existing item in another place
         if workflow_job_template_node['related'].get('unified_job_template') is not None:
-            existing_item = module.get_endpoint(workflow_job_template_node['related']['unified_job_template'])['json']
+            related_ujt = module.get_endpoint(workflow_job_template_node['related']['unified_job_template'])['json']
+            if related_ujt.get('type') == 'workflow_approval_template':
+                existing_item = related_ujt
         approval_endpoint = f'workflow_job_template_nodes/{workflow_job_template_node_id}/create_approval_template/'
         module.create_or_update_if_needed(
-            existing_item, new_fields, endpoint=approval_endpoint, item_type='workflow_job_template_approval_node', associations=association_fields
+            existing_item, new_fields, endpoint=approval_endpoint, item_type='workflow_job_template_approval_node', associations=None
         )
     module.exit_json(**module.json_output)
 
