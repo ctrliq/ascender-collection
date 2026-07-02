@@ -24,7 +24,7 @@ options:
       type: bool
     interval:
       description:
-        - The interval in seconds, to request an update from .
+        - The interval in seconds, to request an update from the controller.
       required: False
       default: 1
       type: float
