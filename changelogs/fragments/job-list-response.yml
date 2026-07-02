@@ -1,0 +1,4 @@
+bugfixes:
+  - job_list - fail with the API error details when the controller rejects the query (for example an invalid
+    filter field) instead of exiting successfully with the error body as output, or crashing with a raw
+    ``RuntimeError`` when ``all_pages`` is enabled.

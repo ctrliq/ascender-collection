@@ -373,6 +373,8 @@ class ControllerAPIModule(ControllerModule):
 
     def get_all_endpoint(self, endpoint, **kwargs):
         response = self.get_endpoint(endpoint, **kwargs)
+        if response['status_code'] != 200:
+            self.fail_json(msg=f"Got a {response['status_code']} response when trying to list {endpoint}", response=response)
         if 'next' not in response['json']:
             raise RuntimeError(f'Expected list from API at {endpoint}, got: {response}')
         next_page = response['json']['next']
