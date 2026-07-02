@@ -173,8 +173,7 @@ def main():
                 for sub_obj in preserve_existing_check['json']['results']:
                     if 'id' in sub_obj:
                         id_list.append(sub_obj['id'])
-        if id_list:
-            association_fields[relationship] = id_list
+        association_fields[relationship] = id_list
 
     # If the state was present we can let the module build or update the existing group, this will return on its own
     module.create_or_update_if_needed(group, group_fields, endpoint='groups', item_type='group', associations=association_fields)
