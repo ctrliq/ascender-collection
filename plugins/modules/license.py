@@ -88,7 +88,10 @@ def main():
     # If the state was absent we can delete the endpoint and exit.
     state = module.params.get('state')
     if state == 'absent':
-        module.delete_endpoint('config')
+        response = module.delete_endpoint('config')
+        if response['status_code'] >= 400:
+            module.fail_json(msg="Failed to remove the license, see response for details", response=response)
+        json_output['changed'] = True
         module.exit_json(**json_output)
 
     if module.params.get('manifest', None):
@@ -118,11 +121,13 @@ def main():
 
     # Do the actual install, if we need to
     if perform_install:
-        json_output['changed'] = True
         if module.params.get('manifest', None):
-            module.post_endpoint('config', data={'manifest': manifest.decode()})
+            response = module.post_endpoint('config', data={'manifest': manifest.decode()})
         else:
-            module.post_endpoint('config/attach', data={'pool_id': module.params.get('pool_id')})
+            response = module.post_endpoint('config/attach', data={'pool_id': module.params.get('pool_id')})
+        if response['status_code'] >= 400:
+            module.fail_json(msg="Failed to install the license, see response for details", response=response)
+        json_output['changed'] = True
 
     module.exit_json(**json_output)
 
