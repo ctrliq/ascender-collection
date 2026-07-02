@@ -177,9 +177,6 @@ EXAMPLES = '''
           food: carrot
           color: orange
     limit: bar
-    credentials:
-      - "My Credential"
-      - "suplementary cred"
     extra_vars: # these override / extend extra_data at the job level
       food: grape
       animal: owl

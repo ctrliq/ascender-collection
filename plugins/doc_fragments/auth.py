@@ -43,6 +43,7 @@ options:
     description:
     - Specify the timeout Ansible should use in requests to the controller host.
     - Defaults to 10s, but this is handled by the shared module_utils code
+    - If value not set, will try environment variable C(CONTROLLER_REQUEST_TIMEOUT) and then config files
     type: float
   controller_config_file:
     description:
@@ -51,9 +52,9 @@ options:
     type: path
 
 notes:
-- If no I(config_file) is provided we will attempt to find a config file in standard locations
+- If no I(controller_config_file) is provided we will attempt to find a config file in standard locations
   (./controller_cli.cfg, ~/.controller_cli.cfg, /etc/controller/controller_cli.cfg).
-- I(config_file) should be in the following format
+- I(controller_config_file) should be in the following format
     host=hostname
     username=username
     password=password
