@@ -100,7 +100,7 @@ class ControllerModule(AnsibleModule):
         full_argspec = {}
         full_argspec.update(ControllerModule.AUTH_ARGSPEC)
         full_argspec.update(argument_spec)
-        kwargs['supports_check_mode'] = True
+        kwargs.setdefault('supports_check_mode', True)
 
         self.error_callback = error_callback
         self.warn_callback = warn_callback
@@ -193,7 +193,7 @@ class ControllerModule(AnsibleModule):
                 self.load_config(self.params.get('controller_config_file'))
             except ConfigFileException as cfe:
                 # Since we were told specifically to load this we want it to fail if we have an error
-                self.fail_json(msg=cfe)
+                self.fail_json(msg=str(cfe))
         else:
             for config_file in config_files:
                 if exists(config_file) and not isdir(config_file):
@@ -263,6 +263,14 @@ class ControllerModule(AnsibleModule):
                         setattr(self, honored_setting, strtobool(config_data[honored_setting]))
                     else:
                         setattr(self, honored_setting, bool(config_data[honored_setting]))
+                # The request timeout needs to be a float; INI config files always produce strings
+                elif honored_setting == 'request_timeout':
+                    try:
+                        setattr(self, honored_setting, float(config_data[honored_setting]))
+                    except ValueError as e:
+                        raise ConfigFileException(
+                            f"The request_timeout setting in the config file must be a number, got: {config_data[honored_setting]}"
+                        ) from e
                 else:
                     setattr(self, honored_setting, config_data[honored_setting])
 
@@ -307,7 +315,7 @@ class ControllerAPIModule(ControllerModule):
     ENCRYPTED_STRING = "$encrypted$"
 
     def __init__(self, argument_spec, direct_params=None, error_callback=None, warn_callback=None, **kwargs):
-        kwargs['supports_check_mode'] = True
+        kwargs.setdefault('supports_check_mode', True)
 
         super().__init__(argument_spec=argument_spec, direct_params=direct_params, error_callback=error_callback, warn_callback=warn_callback, **kwargs)
         self.session = Request(cookies=CookieJar(), timeout=self.request_timeout, validate_certs=self.verify_ssl)
@@ -397,9 +405,9 @@ class ControllerAPIModule(ControllerModule):
             # Maybe someone gave us a named URL so lets see if we get anything from that.
             url_quoted_name = quote(name_or_id, safe="+")
             named_endpoint = f'{endpoint}/{url_quoted_name}/'
-            named_response = self.get_endpoint(named_endpoint)
+            named_response = self.get_endpoint(named_endpoint, **{'return_none_on_404': True})
 
-            if named_response['status_code'] == 200 and 'json' in named_response:
+            if named_response is not None and named_response['status_code'] == 200 and 'json' in named_response:
                 # We found a named item but we expect to deal with a list view so mock that up
                 response = {
                     'json': {
