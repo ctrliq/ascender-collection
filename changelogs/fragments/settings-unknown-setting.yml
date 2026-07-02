@@ -1,0 +1,4 @@
+bugfixes:
+  - settings - fail with a clear error message instead of a ``KeyError`` traceback when a setting
+    name does not exist on the controller (for example a typo in ``name`` or in a ``settings``
+    dict key).
