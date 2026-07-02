@@ -58,7 +58,7 @@ EXAMPLES = '''
 
 RETURN = '''
 id:
-    description: project id of the updated project
+    description: ID of the project update job that was launched
     returned: success
     type: int
     sample: 86
