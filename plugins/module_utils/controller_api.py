@@ -1030,7 +1030,7 @@ class ControllerAPIModule(ControllerModule):
             wait_on_field = 'finished'
         while not result['json'][wait_on_field]:
             # If we are past our time out fail with a message
-            if timeout and timeout < time.time() - start:
+            if timeout is not None and timeout < time.time() - start:
                 # Account for Legacy messages
                 if object_type == 'legacy_job_wait':
                     self.json_output['msg'] = f'Monitoring of Job - {object_name} aborted due to timeout'
@@ -1071,7 +1071,7 @@ class ControllerAPIModule(ControllerModule):
 
         while result["json"]["count"] == 0:
             # If we are past our time out fail with a message
-            if timeout and timeout < time.time() - start:
+            if timeout is not None and timeout < time.time() - start:
                 # Account for Legacy messages
                 self.json_output["msg"] = f"Monitoring of {object_type} - {object_name} aborted due to timeout, {url}"
                 self.wait_output(result)
