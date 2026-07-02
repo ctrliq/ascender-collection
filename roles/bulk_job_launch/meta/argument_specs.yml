@@ -1,10 +1,10 @@
 ---
 argument_specs:
   main:
-    short_description: An Ansible Role to run a list of ad hoc commands on Ansible Controller.
+    short_description: An Ansible Role to launch bulk jobs on Ansible Controller.
     options:
-      controller_bulk_job_launch_commands:
-        description: Data structure describing your ad hoc commands to run
+      controller_bulk_launch_jobs:
+        description: Data structure describing the bulk jobs to launch
         type: list
         elements: dict
 
@@ -13,8 +13,7 @@ argument_specs:
         default: "{{ controller_configuration_secure_logging | default(false) }}"
         required: false
         type: bool
-        description: Whether or not to include the sensitive ad_hoc_command role tasks in the log. Set this value to `true` if you will be providing your sensitive
-          values from elsewhere.
+        description: Whether or not to include the sensitive tasks in the log. Set to `true` if providing sensitive values elsewhere.
       controller_configuration_secure_logging:
         default: false
         required: false

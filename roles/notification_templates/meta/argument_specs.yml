@@ -3,7 +3,7 @@ argument_specs:
   main:
     short_description: An Ansible Role to create notification templates on Ansible Controller.
     options:
-      controller_notification_templates:
+      controller_notifications:
         description: Data structure describing your notification_templates
         type: list
         elements: dict
