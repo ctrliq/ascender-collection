@@ -112,7 +112,10 @@ def main():
     )
     response = module.post_endpoint(f"{approval_job['related']['job']}{action}")
     if response["status_code"] != 204:
-        module.fail_json(msg=f"Unable to {action} the workflow approval, see response for details", response=response)
+        module.fail_json(
+            msg=f"The {action} request for the workflow approval failed with HTTP {response['status_code']}, see response for details",
+            response=response,
+        )
     module.json_output["changed"] = True
 
     module.exit_json(**module.json_output)
