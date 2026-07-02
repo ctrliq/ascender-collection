@@ -113,7 +113,6 @@ The role will strip the double space between the curly bracket in order to provi
 |`execution_environment`|""|no|Execution Environment to use for the source.|
 |`overwrite`|""|no|Delete child groups and hosts not found in source.|
 |`overwrite_vars`|""|no|Override vars in child groups and hosts with those from external source.|
-|`custom_virtualenv`|""|no|Local absolute file path containing a custom Python virtualenv to use.|
 |`timeout`|""|no|The amount of time (in seconds) to run before the task is canceled.|
 |`verbosity`|""|no|The verbosity level to run this inventory source under.|
 |`update_on_launch`|""|no|Refresh inventory data from its source each time a job is run.|
