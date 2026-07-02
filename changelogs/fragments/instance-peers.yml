@@ -1,0 +1,5 @@
+bugfixes:
+  - instance - coerce numeric peer values to integers so repeat runs are idempotent; previously string IDs never
+    matched the API response and every run issued a needless update, with check mode always reporting a change.
+  - instance - fix the "Remove peers" example to use ``peers=[]``; the documented bare ``peers`` value is null
+    and is (correctly) ignored, making the example a no-op.
