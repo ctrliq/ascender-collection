@@ -338,7 +338,7 @@
 
     # Turn off ask_ * settings to test that the issue/10057 has been fixed
     - name: Turn ask_* settings OFF
-      tower_workflow_job_template:
+      workflow_job_template:
         name: "{{ wfjt_name }}"
         ask_inventory_on_launch: false
         ask_scm_branch_on_launch: false
@@ -346,6 +346,7 @@
         ask_tags_on_launch: false
         ask_variables_on_launch: false
         state: present
+      register: result
 
     - assert:
         that:
