@@ -1,0 +1,3 @@
+bugfixes:
+  - notification_template - send an explicitly empty ``notification_configuration`` to the API
+    instead of silently dropping it (an empty dict was discarded by a truthiness check).
