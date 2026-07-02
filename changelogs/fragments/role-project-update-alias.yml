@@ -1,0 +1,3 @@
+bugfixes:
+  - project_update role - honor the documented ``projects`` alias; previously the task was skipped unless
+    ``controller_projects`` was defined, so alias usage silently launched no project updates.

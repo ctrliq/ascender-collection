@@ -4,4 +4,5 @@ controller_configuration_project_update_async_retries: "{{ controller_configurat
 controller_configuration_project_update_async_delay: "{{ controller_configuration_async_delay | default(10) }}"
 controller_configuration_project_update_loop_delay: "{{ controller_configuration_loop_delay | default(0) }}"
 controller_configuration_async_dir:
+controller_projects: []
 ...

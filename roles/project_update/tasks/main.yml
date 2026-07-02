@@ -27,7 +27,6 @@
         label: "{{ (__project_update_update_item.organization | default('<no_org>')) }}/{{ __project_update_update_item.name }}"
         pause: "{{ controller_configuration_project_update_loop_delay }}"
       when:
-        - controller_projects is defined
         - __project_update_update_item.update_project | default(true)
         - __project_update_update_item.state | default('present') != "absent"
       async: "{{ ansible_check_mode | ternary(0, 1000) }}"
