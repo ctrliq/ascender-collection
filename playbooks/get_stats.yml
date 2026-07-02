@@ -22,7 +22,7 @@
         return_content: true
         headers:
           Content-Type: application/json
-        validate_certs: false
+        validate_certs: "{{ controller_validate_certs | bool }}"
       register: r_metrics
 
     - name: Debug metrics
@@ -46,7 +46,7 @@
         return_content: true
         headers:
           Content-Type: application/json
-        validate_certs: false
+        validate_certs: "{{ controller_validate_certs | bool }}"
       register: r_users
 
     - name: Debug users
@@ -62,8 +62,7 @@
 
     - name: Remove users who have never logged in (null)
       ansible.builtin.set_fact:
-        temp_user_list: "{{ (active_users | default([])) + [item['last_login']] }}"
-        active_users: []
+        temp_user_list: "{{ (temp_user_list | default([])) + [item['last_login']] }}"
       when: item['last_login'] is regex('[0-9]{4}-[0-9]{2}-[0-9]{2}(.*)')
       loop: "{{ r_users['json']['results'] }}"
 
@@ -71,15 +70,15 @@
       ansible.builtin.debug:
         verbosity: 1
         msg:
-          - "{{ temp_user_list }}"
+          - "{{ temp_user_list | default([]) }}"
 
     - name: Find active users
+      vars:
+        item_date: "{{ (item | regex_search('[0-9]{4}-[0-9]{2}-[0-9]{2}', '\\0') | first) | to_datetime('%Y-%m-%d') }}"
       ansible.builtin.set_fact:
-        active_users: "{{ active_users + [item] }}"
-      # when: (((item | regex_search('[0-9]{4}-[0-9]{2}-[0-9]{2}', '\\0') | first) | to_datetime('%Y-%m-%d')) - ('2023-03-30' | to_datetime('%Y-%m-%d'))).days <= 30
-      when: ((((item | regex_search('[0-9]{4}-[0-9]{2}-[0-9]{2}', '\\0') | first) | to_datetime('%Y-%m-%d')) - (ansible_facts['date_time']['date'] | to_datetime('%Y-%m-%d'))).days)
-        <= 30
-      loop: "{{ temp_user_list }}"
+        active_users: "{{ (active_users | default([])) + [item] }}"
+      when: (((ansible_facts['date_time']['date'] | to_datetime('%Y-%m-%d')) - item_date).days) <= 30
+      loop: "{{ temp_user_list | default([]) }}"
 
     - name: Get subscription info
       ansible.builtin.uri:
@@ -91,7 +90,7 @@
         return_content: true
         headers:
           Content-Type: application/json
-        validate_certs: false
+        validate_certs: "{{ controller_validate_certs | bool }}"
       register: r_subscription
 
     - name: Output
