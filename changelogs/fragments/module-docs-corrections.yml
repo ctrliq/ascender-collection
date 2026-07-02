@@ -1,0 +1,9 @@
+bugfixes:
+  - job_cancel - the RETURN documentation no longer describes an ``id`` value that the module
+    never returns.
+  - organization - correct the ``notification_templates_approvals`` description, which was a
+    copy-paste of the on-start notifications description.
+  - job_wait - correct the ``interval`` description ("in seconds", and drop the reference to
+    nonexistent min/max interval parameters).
+  - job_list - document ``next`` and ``previous`` as page URL strings as returned by the API,
+    not integers.

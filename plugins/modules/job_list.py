@@ -49,15 +49,15 @@ count:
     type: int
     sample: 51
 next:
-    description: next page available for the listing
+    description: URL of the next page of results, if any
     returned: success
-    type: int
-    sample: 3
+    type: str
+    sample: /api/v2/jobs/?page=3
 previous:
-    description: previous page available for the listing
+    description: URL of the previous page of results, if any
     returned: success
-    type: int
-    sample: 1
+    type: str
+    sample: /api/v2/jobs/?page=1
 results:
     description: a list of job objects represented as dictionaries
     returned: success

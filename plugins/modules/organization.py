@@ -61,7 +61,7 @@ options:
       elements: str
     notification_templates_approvals:
       description:
-        - list of notifications to send on start
+        - list of notifications to send on workflow approval
       type: list
       elements: str
     galaxy_credentials:
