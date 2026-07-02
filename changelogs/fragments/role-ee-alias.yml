@@ -1,0 +1,4 @@
+bugfixes:
+  - execution_environments role - honor the documented ``execution_environments`` alias; previously the task
+    was skipped unless ``controller_execution_environments`` was defined, so alias usage silently created
+    nothing. A default empty list is added, matching the sibling roles.
