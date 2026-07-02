@@ -64,7 +64,7 @@ DOCUMENTATION = """
           - A description on when this schedule will run
           - Two strings separated by a space
           - First string is one of first, second, third, fourth, last
-          - Second string is one of sunday, monday, tuesday, wednesday, thursday, friday
+          - Second string is one of sunday, monday, tuesday, wednesday, thursday, friday, saturday
           - Used for month type schedules
           - Cannot be used with month_day_number parameters
 """
