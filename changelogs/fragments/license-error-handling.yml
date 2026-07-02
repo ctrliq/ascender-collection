@@ -1,0 +1,5 @@
+bugfixes:
+  - license - fail with a useful error message when the controller rejects a license manifest
+    or pool ID instead of silently reporting success.
+  - license - report ``changed`` correctly when removing the license with ``state=absent``
+    (previously always reported ``changed=false``) and fail cleanly if the removal is rejected.
