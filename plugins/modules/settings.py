@@ -133,7 +133,7 @@ def main():
     # Fail with a clear message if any of the specified settings do not exist on the controller
     unknown_settings = [a_setting for a_setting in new_settings if a_setting not in existing_settings]
     if unknown_settings:
-        module.fail_json(msg=f"The following settings do not exist on the controller: {', '.join(unknown_settings)}")
+        module.fail_json(msg=f"The following settings do not exist on the controller: {', '.join(sorted(str(s) for s in unknown_settings))}")
 
     # Begin a json response
     json_output = {'changed': False, 'old_values': {}, 'new_values': {}}
