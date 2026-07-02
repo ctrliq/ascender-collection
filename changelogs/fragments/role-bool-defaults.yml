@@ -1,0 +1,3 @@
+bugfixes:
+  - hosts, instances roles - honor an explicit ``enabled=false`` and ``managed_by_policy=false``; the
+    boolean-true form of ``default()`` treated an explicit false as unset, dropping or inverting the value.
