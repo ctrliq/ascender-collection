@@ -1,0 +1,6 @@
+bugfixes:
+  - execution_environment - do not send ``image`` when it was not specified; previously updating any other
+    attribute of an existing execution environment without re-passing ``image`` always failed with an API
+    validation error.
+  - execution_environment - allow the description to be cleared by passing an empty string (previously an
+    empty description was silently dropped).
