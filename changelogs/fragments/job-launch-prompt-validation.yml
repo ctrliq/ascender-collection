@@ -1,0 +1,4 @@
+bugfixes:
+  - job_launch - validate falsy prompt values such as ``verbosity=0`` and ``diff_mode=false`` against
+    the job template's prompt-on-launch flags; previously they bypassed the check and were silently
+    ignored by the API, so the job launched with the template's value instead of failing.

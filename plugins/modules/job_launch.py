@@ -290,10 +290,10 @@ def main():
 
     param_errors = []
     for variable_name, prompt in check_vars_to_prompts.items():
-        if module.params.get(variable_name) and not job_template[prompt]:
+        if module.params.get(variable_name) is not None and not job_template[prompt]:
             param_errors.append(f"The field {variable_name} was specified but the job template does not allow for it to be overridden")
     # Check if Either ask_variables_on_launch, or survey_enabled is enabled for use of extra vars.
-    if module.params.get('extra_vars') and not (job_template['ask_variables_on_launch'] or job_template['survey_enabled']):
+    if module.params.get('extra_vars') is not None and not (job_template['ask_variables_on_launch'] or job_template['survey_enabled']):
         param_errors.append("The field extra_vars was specified but the job template does not allow for it to be overridden")
     if len(param_errors) > 0:
         module.fail_json(msg="Parameters specified which can not be passed into job template, see errors for details", **{'errors': param_errors})
