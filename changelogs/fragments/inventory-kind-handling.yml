@@ -1,0 +1,6 @@
+bugfixes:
+  - inventory - do not send ``kind`` and ``host_filter`` when they were not specified; previously updating any
+    attribute of a smart or constructed inventory without re-passing ``kind`` silently converted it to a regular
+    inventory, and every run issued a needless PATCH that made check mode always report a change.
+  - inventory - honor ``input_inventories`` when updating an existing constructed inventory without re-passing
+    ``kind=constructed`` in the same task.

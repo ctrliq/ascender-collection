@@ -191,9 +191,11 @@ def main():
     inventory_fields = {
         'name': new_name if new_name else (module.get_item_name(inventory) if inventory else name),
         'organization': org_id,
-        'kind': kind,
-        'host_filter': host_filter,
     }
+    if kind is not None:
+        inventory_fields['kind'] = kind
+    if host_filter is not None:
+        inventory_fields['host_filter'] = host_filter
     if prevent_instance_group_fallback is not None:
         inventory_fields['prevent_instance_group_fallback'] = prevent_instance_group_fallback
     if description is not None:
@@ -210,10 +212,10 @@ def main():
             association_fields['instance_groups'].append(module.resolve_name_to_id('instance_groups', item))
 
     # We need to perform a check to make sure you are not trying to convert a regular inventory into a smart one.
-    if inventory and inventory['kind'] == '' and inventory_fields['kind'] == 'smart':
+    if inventory and inventory['kind'] == '' and kind == 'smart':
         module.fail_json(msg='You cannot turn a regular inventory into a "smart" inventory.')
 
-    if kind == 'constructed':
+    if kind == 'constructed' or (kind is None and inventory is not None and inventory['kind'] == 'constructed'):
         input_inventory_names = module.params.get('input_inventories')
         if input_inventory_names is not None:
             association_fields['input_inventories'] = []
