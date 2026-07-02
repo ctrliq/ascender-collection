@@ -1,0 +1,3 @@
+bugfixes:
+  - license role - stop passing ``eula_accepted``, which the license module does not accept; setting the
+    documented value made the license installation fail with "Unsupported parameters".
