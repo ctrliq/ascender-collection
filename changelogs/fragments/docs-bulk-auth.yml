@@ -1,0 +1,5 @@
+bugfixes:
+  - bulk_job_launch - remove the nonexistent top-level ``credentials`` parameter from the documented example,
+    which failed with "Unsupported parameters" when copy-pasted.
+  - auth documentation fragment - document the ``CONTROLLER_REQUEST_TIMEOUT`` environment variable fallback for
+    ``request_timeout`` and refer to the real ``controller_config_file`` parameter name in the notes.
