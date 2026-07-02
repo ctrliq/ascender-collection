@@ -1,0 +1,3 @@
+bugfixes:
+  - bulk_host_create role - default ``controller_bulk_hosts`` to an empty list so including the role without
+    the variable no-ops instead of failing with an undefined variable error.
