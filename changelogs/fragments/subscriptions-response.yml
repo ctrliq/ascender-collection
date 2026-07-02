@@ -1,0 +1,3 @@
+bugfixes:
+  - subscriptions - fail with the API error details when the controller rejects the request (for example on bad
+    Red Hat credentials) instead of reporting success with a garbage subscription list.
