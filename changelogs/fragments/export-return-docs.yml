@@ -1,0 +1,3 @@
+bugfixes:
+  - export - document that ``assets`` is always returned on success; the previous condition referenced a
+    file-writing option that does not exist.
