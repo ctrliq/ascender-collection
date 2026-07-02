@@ -127,7 +127,11 @@ def main():
 
     # Invoke wait function
     module.wait_on_url(
-        url=inventory_source_update_results['json']['url'], object_name=inventory_object, object_type='inventory_update', timeout=timeout, interval=interval
+        url=inventory_source_update_results['json']['url'],
+        object_name=module.get_item_name(inventory_source_object),
+        object_type='inventory_update',
+        timeout=timeout,
+        interval=interval,
     )
 
     module.exit_json(**module.json_output)
