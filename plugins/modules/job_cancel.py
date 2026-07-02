@@ -32,11 +32,11 @@ EXAMPLES = '''
 '''
 
 RETURN = '''
-id:
-    description: job id requesting to cancel
+changed:
+    description: Whether the job was canceled.
     returned: success
-    type: int
-    sample: 94
+    type: bool
+    sample: true
 '''
 
 from ..module_utils.controller_api import ControllerAPIModule
