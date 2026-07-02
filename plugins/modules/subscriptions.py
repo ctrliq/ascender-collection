@@ -77,7 +77,10 @@ def main():
         'subscriptions_password': module.params.get('password'),
         'subscriptions_username': module.params.get('username'),
     }
-    all_subscriptions = module.post_endpoint('config/subscriptions', data=post_data)['json']
+    response = module.post_endpoint('config/subscriptions', data=post_data)
+    if response['status_code'] >= 400:
+        module.fail_json(msg="Failed to fetch subscriptions, see response for details", response=response)
+    all_subscriptions = response['json']
     json_output['subscriptions'] = []
     for subscription in all_subscriptions:
         add = True
