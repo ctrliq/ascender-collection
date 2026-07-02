@@ -1,0 +1,5 @@
+bugfixes:
+  - schedule - fail with a clear error message instead of a ``TypeError`` traceback when the
+    ``unified_job_template`` cannot be found on the controller.
+  - schedule - allow ``unified_job_template`` to be specified by ID or named URL, as the
+    documentation already promised (previously only an exact name match worked).
