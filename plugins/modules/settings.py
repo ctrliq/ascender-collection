@@ -130,13 +130,18 @@ def main():
     # Load the existing settings
     existing_settings = module.get_endpoint('settings/all')['json']
 
+    # Fail with a clear message if any of the specified settings do not exist on the controller
+    unknown_settings = [a_setting for a_setting in new_settings if a_setting not in existing_settings]
+    if unknown_settings:
+        module.fail_json(msg=f"The following settings do not exist on the controller: {', '.join(unknown_settings)}")
+
     # Begin a json response
     json_output = {'changed': False, 'old_values': {}, 'new_values': {}}
 
     # Check any of the settings to see if anything needs to be updated
     needs_update = False
     for a_setting in new_settings:
-        if a_setting not in existing_settings or existing_settings[a_setting] != new_settings[a_setting]:
+        if existing_settings[a_setting] != new_settings[a_setting]:
             # At least one thing is different so we need to patch
             needs_update = True
             json_output['old_values'][a_setting] = existing_settings[a_setting]
