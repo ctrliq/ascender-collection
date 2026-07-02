@@ -1,0 +1,5 @@
+bugfixes:
+  - inventory_source - fail with the intended error message instead of a ``KeyError`` traceback when creating
+    a new inventory source without the ``source`` parameter.
+  - inventory_source - do not rename the inventory source to its numeric ID when it is looked up by ID and
+    ``new_name`` is not given.
