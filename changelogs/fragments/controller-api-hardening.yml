@@ -1,0 +1,10 @@
+bugfixes:
+  - import - honor the module's declared lack of check mode support; previously ``--check`` was accepted and the
+    import was actually performed against the controller.
+  - controller_api module utils - fall through to the normal name search when a named URL lookup for a name
+    containing ``++`` returns 404, instead of failing the module (this made ``state=present`` unable to create
+    such objects and ``state=absent`` non-idempotent).
+  - controller_api module utils - show the real error message when ``controller_config_file`` cannot be loaded,
+    instead of crashing with ``TypeError - Value of unknown type`` while formatting the failure.
+  - controller_api module utils - coerce ``request_timeout`` read from an INI config file to a number; previously
+    every request failed with a ``TypeError`` when the setting came from an INI file.
