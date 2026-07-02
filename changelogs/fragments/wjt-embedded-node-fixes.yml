@@ -1,0 +1,19 @@
+bugfixes:
+  - workflow_job_template - do not run the approval template step for nodes with ``state=absent``; previously
+    the module deleted the node and then crashed with a ``TypeError``.
+  - workflow_job_template - only treat a node's existing unified job template as the approval template when
+    it really is one; previously converting a job template node to an approval node overwrote the unrelated
+    job template with the approval fields.
+  - workflow_job_template - fail with clear messages instead of ``TypeError`` or ``KeyError`` tracebacks when
+    a node's execution environment, inventory, or unified job template entry cannot be resolved.
+  - workflow_job_template - move the identifier and execution environment handling out of the field-copy
+    loop, removing up to 14 redundant API lookups per node.
+  - workflow_job_template - stop sending the node ``state`` value to the API; it made every run report
+    changed for nodes with an explicit ``state=present``.
+  - workflow_job_template - send approval node ``timeout=0`` and empty descriptions instead of dropping them.
+  - workflow_job_template - allow ``survey_spec={}`` to delete an existing survey, matching job_template.
+  - workflow_job_template - reset the association lookup filter between items so one credential's
+    organization no longer leaks into the next lookup, apply empty association lists so stale links are
+    removed, and run the node association update once instead of once per association type.
+  - workflow_job_template - fix the example showing node ``credentials`` as plain strings, which the module
+    cannot parse.

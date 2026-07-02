@@ -456,8 +456,8 @@ EXAMPLES = '''
             - identifier: node201
           always_nodes: []
           credentials:
-            - local_cred
-            - suplementary cred
+            - name: local_cred
+            - name: suplementary cred
       - identifier: node201
         unified_job_template:
           organization:
@@ -589,8 +589,8 @@ def create_workflow_nodes(module, response, workflow_nodes, workflow_id):
         association_fields = {}
 
         # Lookup Job Template ID
-        if workflow_node['unified_job_template']['name']:
-            if workflow_node['unified_job_template']['type'] is None:
+        if workflow_node.get('unified_job_template', {}).get('name'):
+            if workflow_node['unified_job_template'].get('type') is None:
                 module.fail_json(msg=f'Could not find unified job template type in workflow_nodes {workflow_node}')
             search_fields['type'] = workflow_node['unified_job_template']['type']
             if workflow_node['unified_job_template']['type'] == 'inventory_source':
@@ -628,17 +628,18 @@ def create_workflow_nodes(module, response, workflow_nodes, workflow_id):
             'job_slice_count',
             'timeout',
             'all_parents_must_converge',
-            'state',
         ):
             field_val = workflow_node.get(field_name)
             if field_val is not None:
                 workflow_node_fields[field_name] = field_val
-            if workflow_node['identifier']:
-                search_fields = {'identifier': workflow_node['identifier']}
-            if 'execution_environment' in workflow_node:
-                workflow_node_fields['execution_environment'] = module.get_one(
-                    'execution_environments', name_or_id=workflow_node['execution_environment']['name']
-                )['id']
+
+        if workflow_node.get('identifier'):
+            search_fields = {'identifier': workflow_node['identifier']}
+        if 'execution_environment' in workflow_node:
+            execution_environment = module.get_one('execution_environments', name_or_id=workflow_node['execution_environment']['name'])
+            if execution_environment is None:
+                module.fail_json(msg=f"Unable to find execution environment: {workflow_node['execution_environment']['name']}")
+            workflow_node_fields['execution_environment'] = execution_environment['id']
 
         # Two lookup methods are used based on a fix added in 21.11.0, and the awx export model
         if 'inventory' in workflow_node:
@@ -646,9 +647,12 @@ def create_workflow_nodes(module, response, workflow_nodes, workflow_id):
                 inv_lookup_data = {}
                 if 'organization' in workflow_node['inventory']:
                     inv_lookup_data['organization'] = module.resolve_name_to_id('organizations', workflow_node['inventory']['organization']['name'])
-                workflow_node_fields['inventory'] = module.get_one('inventories', name_or_id=workflow_node['inventory']['name'], data=inv_lookup_data)['id']
+                inventory = module.get_one('inventories', name_or_id=workflow_node['inventory']['name'], data=inv_lookup_data)
             else:
-                workflow_node_fields['inventory'] = module.get_one('inventories', name_or_id=workflow_node['inventory'])['id']
+                inventory = module.get_one('inventories', name_or_id=workflow_node['inventory'])
+            if inventory is None:
+                module.fail_json(msg=f"Unable to find inventory: {workflow_node['inventory']}")
+            workflow_node_fields['inventory'] = inventory['id']
 
         # Set Search fields
         search_fields['workflow_job_template'] = workflow_node_fields['workflow_job_template'] = workflow_id
@@ -681,23 +685,27 @@ def create_workflow_nodes(module, response, workflow_nodes, workflow_id):
             )
 
         # Start Approval Node creation process
-        if workflow_node['unified_job_template']['type'] == 'workflow_approval':
+        if state and workflow_node.get('unified_job_template', {}).get('type') == 'workflow_approval':
             for field_name in (
                 'name',
                 'description',
                 'timeout',
             ):
                 field_val = workflow_node['unified_job_template'].get(field_name)
-                if field_val:
+                if field_val is not None:
                     workflow_node_fields[field_name] = field_val
 
             # Attempt to look up an existing item just created
             workflow_job_template_node = module.get_one('workflow_job_template_nodes', **{'data': search_fields})
+            if workflow_job_template_node is None:
+                module.fail_json(msg=f'Unable to find the workflow job template node for approval: {search_fields}')
             workflow_job_template_node_id = workflow_job_template_node['id']
             existing_item = None
             # Due to not able to lookup workflow_approval_templates, find the existing item in another place
             if workflow_job_template_node['related'].get('unified_job_template') is not None:
-                existing_item = module.get_endpoint(workflow_job_template_node['related']['unified_job_template'])['json']
+                related_ujt = module.get_endpoint(workflow_job_template_node['related']['unified_job_template'])['json']
+                if related_ujt.get('type') == 'workflow_approval_template':
+                    existing_item = related_ujt
             approval_endpoint = f'workflow_job_template_nodes/{workflow_job_template_node_id}/create_approval_template/'
 
             module.create_or_update_if_needed(
@@ -748,8 +756,8 @@ def create_workflow_nodes_association(module, response, workflow_nodes, workflow
                 prompt_lookup = ['credentials', 'labels', 'instance_groups']
                 if association in workflow_node['related']:
                     id_list = []
-                    lookup_data = {}
                     for sub_name in workflow_node['related'][association]:
+                        lookup_data = {}
                         if association in prompt_lookup:
                             endpoint = association
                             if 'organization' in sub_name:
@@ -763,17 +771,17 @@ def create_workflow_nodes_association(module, response, workflow_nodes, workflow
                         if sub_obj is None:
                             module.fail_json(msg=f'Could not find {association} entry with name {sub_name}')
                         id_list.append(sub_obj['id'])
-                    if id_list:
-                        association_fields[association] = id_list
+                    association_fields[association] = id_list
 
-                    module.create_or_update_if_needed(
-                        existing_item,
-                        workflow_node_fields,
-                        endpoint='workflow_job_template_nodes',
-                        item_type='workflow_job_template_node',
-                        auto_exit=False,
-                        associations=association_fields,
-                    )
+            if association_fields:
+                module.create_or_update_if_needed(
+                    existing_item,
+                    workflow_node_fields,
+                    endpoint='workflow_job_template_nodes',
+                    item_type='workflow_job_template_node',
+                    auto_exit=False,
+                    associations=association_fields,
+                )
 
 
 def destroy_workflow_nodes(module, response, workflow_id):
@@ -944,7 +952,7 @@ def main():
 
     survey_callback = None
     new_spec = module.params.get('survey_spec')
-    if new_spec:
+    if new_spec is not None:
         existing_spec = None
         if existing_item:
             spec_endpoint = existing_item.get('related', {}).get('survey_spec')
