@@ -1,0 +1,8 @@
+bugfixes:
+  - workflow_job_template_node - send valid falsy field values such as ``all_parents_must_converge=false``, ``diff_mode=false``, ``verbosity=0``,
+    ``forks=0``, or empty strings to the API instead of silently dropping them.
+  - workflow_job_template_node - fail with a clear error message instead of a ``TypeError`` traceback when ``unified_job_template`` cannot be found.
+  - workflow_job_template_node - when adding ``approval_node`` to a node that currently points at a regular job template, create the approval
+    template instead of corrupting the existing job template with approval fields.
+  - workflow_job_template_node - do not re-apply node associations to the approval template endpoint, which caused a spurious 404 failure when
+    ``approval_node`` was combined with ``success_nodes`` or other associations.
