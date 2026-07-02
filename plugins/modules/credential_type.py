@@ -110,11 +110,11 @@ def main():
     }
     if kind:
         credential_type_params['kind'] = kind
-    if module.params.get('description'):
+    if module.params.get('description') is not None:
         credential_type_params['description'] = module.params.get('description')
-    if module.params.get('inputs'):
+    if module.params.get('inputs') is not None:
         credential_type_params['inputs'] = module.params.get('inputs')
-    if module.params.get('injectors'):
+    if module.params.get('injectors') is not None:
         credential_type_params['injectors'] = module.params.get('injectors')
 
     # Attempt to look up credential_type based on the provided name
