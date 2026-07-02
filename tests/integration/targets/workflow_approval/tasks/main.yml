@@ -51,6 +51,21 @@
           - "result is changed"
           - "result is not failed"
 
+    - name: Try to approve the same node a second time
+      workflow_approval:
+        workflow_job_id: "{{ workflow_job.id }}"
+        name: "{{ approval_node_name }}"
+        interval: 10
+        timeout: 20
+        action: approve
+      register: second_approval
+      ignore_errors: true
+
+    - name: Assert that approving an already approved node fails
+      assert:
+        that:
+          - "second_approval is failed"
+
   always:
     - name: Delete the workflow job template
       workflow_job_template:
