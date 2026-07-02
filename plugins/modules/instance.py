@@ -93,7 +93,7 @@ EXAMPLES = '''
 - name: Remove peers
   ctrliq.ascender.instance:
     hostname: execution.example.com
-    peers:
+    peers: []
 '''
 
 RETURN = '''
@@ -146,7 +146,7 @@ def main():
                 p_id = module.get_one('receptor_addresses', allow_none=False, data={'address': p})
                 peers_ids.append(p_id['id'])
             else:
-                peers_ids.append(p)
+                peers_ids.append(int(p))
 
     # Create the data that gets sent for create and update
     new_fields = {'hostname': hostname}
