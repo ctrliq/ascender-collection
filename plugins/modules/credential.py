@@ -286,7 +286,7 @@ def main():
         'credential_type': cred_type_id,
     }
 
-    if inputs:
+    if inputs is not None:
         credential_fields['inputs'] = inputs
     if description is not None:
         if description == '':
