@@ -1,0 +1,5 @@
+bugfixes:
+  - get_stats playbook - correctly accumulate the logged-in user list (previously the accumulator was reset
+    every iteration, so at most one user was counted), compare last login against today instead of an
+    always-true inverted subtraction, and honor ``CONTROLLER_VERIFY_SSL`` instead of hardcoding
+    ``validate_certs=false``.
