@@ -9,7 +9,7 @@ module: workflow_node_wait
 author: "Sean Sullivan (@sean-m-sullivan)"
 short_description: Wait for a workflow node to finish.
 description:
-    - Approve an approval node in a workflow job. See
+    - Wait for a workflow job node's spawned job to finish. See
       U(https://ascender-automation.org) for an overview.
 options:
     workflow_job_id:
@@ -24,13 +24,13 @@ options:
       type: str
     interval:
       description:
-        - The interval in sections, to request an update from the controller.
+        - The interval in seconds, to request an update from the controller.
       required: False
       default: 1
       type: float
     timeout:
       description:
-        - Maximum time in seconds to wait for a workflow job to reach approval node.
+        - Maximum time in seconds to wait for the workflow node to appear and its job to finish.
       default: 10
       type: int
 extends_documentation_fragment: ctrliq.ascender.auth
