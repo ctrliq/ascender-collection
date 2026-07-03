@@ -36,7 +36,7 @@
         workflow: "{{ __workflow_loop_item.name | mandatory }}" # Workflow job template name to associate with
         state: "{{ __workflow_loop_node_item.state | default(controller_state | default('present')) }}"
         all_parents_must_converge: "{{ __workflow_loop_node_item.all_parents_must_converge | default('false') }}"
-        organization: "{{ __workflow_loop_item.organization.name | default(__workflow_loop_item.organization) }}" # Workflow job template organization
+        organization: "{{ __workflow_loop_item.organization.name | default(__workflow_loop_item.organization | default(omit)) }}" # organization
 
         # Role Standard Options
         controller_username: "{{ controller_username | default(omit, true) }}"
@@ -55,7 +55,7 @@
       poll: 0
       register: __workflows_node_async
       no_log: "{{ workflow_job_templates_secure_logging }}"
-      changed_when: not __workflows_node_async.changed
+      changed_when: (__workflows_node_async.changed if ansible_check_mode else false)
 
     - name: add_workflows_schema | Flag for errors (check mode only)
       ansible.builtin.set_fact:
@@ -90,7 +90,7 @@
         failure_nodes: "{{ __workflow_loop_node_item.failure_nodes | default(__workflow_loop_node_item.related.failure_nodes | default([], true) | selectattr('identifier',
           'defined') | map(attribute='identifier')) | list }}" # Nodes to advance on failure (red links)
         state: "{{ __workflow_loop_node_item.state | default(controller_state | default('present')) }}"
-        organization: "{{ __workflow_loop_item.organization.name | default(__workflow_loop_item.organization) }}" # Workflow job template organization
+        organization: "{{ __workflow_loop_item.organization.name | default(__workflow_loop_item.organization | default(omit)) }}" # organization
         controller_username: "{{ controller_username | default(omit, true) }}"
         controller_password: "{{ controller_password | default(omit, true) }}"
         controller_oauthtoken: "{{ controller_oauthtoken | default(omit, true) }}"
@@ -140,7 +140,7 @@
       ansible.builtin.async_status:
         jid: "{{ __workflows_schema_results_item.ansible_job_id }}"
         mode: cleanup
-      loop: "{{ __workflows_node_async.results + __workflows_link_async.results }}"
+      loop: "{{ (__workflows_node_async.results | default([])) + (__workflows_link_async.results | default([])) }}"
       loop_control:
         loop_var: __workflows_schema_results_item
         label: "Cleaning up job results file: {{ __workflows_schema_results_item.results_file | default('Unknown') }}"

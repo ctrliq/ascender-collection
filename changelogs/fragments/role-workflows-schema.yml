@@ -1,0 +1,6 @@
+bugfixes:
+  - workflow_job_templates role - do not fail node creation for workflows without an ``organization`` key;
+    the schema tasks dereferenced it without a final default.
+  - workflow_job_templates role - report the async node task's changed status using the collection-wide
+    pattern instead of an inverted expression, and guard the cleanup loop so a node creation failure is not
+    masked by an undefined register in the always block.
