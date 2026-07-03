@@ -54,7 +54,8 @@
         cas_async_retries: "{{ controller_configuration_teams_async_retries }}"
         cas_job_async_results_item: "{{ __controller_team_job_async_results_item }}"
         cas_error_list_var_name: "controller_teams_errors"
-        __operation: "{{ operation_translate[__controller_team_job_asycn_results_item.__controller_team_item.state | default(controller_state) | default('present')] }}"
+        __operation: "{{ operation_translate[__controller_team_job_async_results_item.__controller_team_item.state |
+          default(controller_state) | default('present')] }}"
 
   always:
     - name: Cleanup async results files

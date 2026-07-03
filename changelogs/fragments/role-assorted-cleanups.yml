@@ -1,0 +1,6 @@
+bugfixes:
+  - credentials, teams roles - fix stale and misspelled loop variable references in the async status labels.
+  - credentials role - default secure logging to false as documented in the README and as every sibling role
+    does (it silently defaulted to true).
+  - collect_async_status role - honor the collection-wide ``controller_configuration_*`` variables instead of
+    ``aap_configuration_*`` names that nothing in this collection sets.
