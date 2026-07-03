@@ -1,0 +1,3 @@
+bugfixes:
+  - group - allow all hosts or children to be removed by passing an empty list; previously ``hosts=[]`` and
+    ``children=[]`` were silently ignored and the existing members were left in place.
