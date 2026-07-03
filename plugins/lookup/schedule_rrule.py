@@ -51,11 +51,11 @@ DOCUMENTATION = """
       on_days:
         description:
           - The days to run this schedule on
-          - A comma-separated list which can contain values sunday, monday, tuesday, wednesday, thursday, friday
+          - A comma-separated list which can contain values sunday, monday, tuesday, wednesday, thursday, friday, saturday
           - Used for week type schedules
       month_day_number:
         description:
-          - The day of the month this schedule will run on (0-31)
+          - The day of the month this schedule will run on (1-31)
           - Used for month type schedules
           - Cannot be used with on_the parameter
         type: int
@@ -64,7 +64,7 @@ DOCUMENTATION = """
           - A description on when this schedule will run
           - Two strings separated by a space
           - First string is one of first, second, third, fourth, last
-          - Second string is one of sunday, monday, tuesday, wednesday, thursday, friday
+          - Second string is one of sunday, monday, tuesday, wednesday, thursday, friday, saturday
           - Used for month type schedules
           - Cannot be used with month_day_number parameters
 """
@@ -169,8 +169,8 @@ class LookupModule(LookupBase):
             # All non-none frequencies can have an end_on option
             if 'end_on' in kwargs:
                 end_on = kwargs['end_on']
-                if re.match(r'^\d+$', end_on):
-                    rrule_kwargs['count'] = end_on
+                if re.match(r'^\d+$', str(end_on)):
+                    rrule_kwargs['count'] = int(end_on)
                 else:
                     try:
                         rrule_kwargs['until'] = LookupModule.parse_date_time(end_on)

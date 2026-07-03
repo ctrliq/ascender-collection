@@ -59,22 +59,22 @@ DOCUMENTATION = """
           bysetpos:
             description:
               - Specify an occurrence number, corresponding to the nth occurrence of the rule inside the frequency period.
-              - A comma-separated list of positions (first, second, third, forth or last)
+              - A comma-separated list of positions (first, second, third, fourth or last)
             type: string
           bymonth:
             description:
               - The months this schedule will run on
-              - A comma-separated list which can contain values 0-12
+              - A comma-separated list which can contain values 1-12
             type: string
           bymonthday:
             description:
               - The day of the month this schedule will run on
-              - A comma-separated list which can contain values 0-31
+              - A comma-separated list which can contain values 1-31
             type: string
           byyearday:
             description:
               - The year day numbers to run this schedule on
-              - A comma-separated list which can contain values 0-366
+              - A comma-separated list which can contain values 1-366
             type: string
           byweekno:
             description:
@@ -84,7 +84,7 @@ DOCUMENTATION = """
           byweekday:
             description:
               - The days to run this schedule on
-              - A comma-separated list which can contain values sunday, monday, tuesday, wednesday, thursday, friday
+              - A comma-separated list which can contain values sunday, monday, tuesday, wednesday, thursday, friday, saturday
             type: string
           byhour:
             description:
@@ -278,8 +278,8 @@ class LookupModule(LookupBase):
                 # All non-none frequencies can have an end_on option
                 if 'end_on' in rule:
                     end_on = rule['end_on']
-                    if re.match(r'^\d+$', end_on):
-                        rrule_kwargs['count'] = end_on
+                    if re.match(r'^\d+$', str(end_on)):
+                        rrule_kwargs['count'] = int(end_on)
                     else:
                         try:
                             rrule_kwargs['until'] = LookupModule.parse_date_time(end_on)
@@ -301,7 +301,7 @@ class LookupModule(LookupBase):
                 rrule_kwargs['byyearday'] = self.process_integer('byyearday', rule, 1, 366, rule_number)  # 366 for leap years
 
             if 'byweekno' in rule:
-                rrule_kwargs['byweekno'] = self.process_integer('byweekno', rule, 1, 52, rule_number)
+                rrule_kwargs['byweekno'] = self.process_integer('byweekno', rule, 1, 53, rule_number)
 
             if 'byweekday' in rule:
                 rrule_kwargs['byweekday'] = self.process_list('byweekday', rule, self.weekdays, rule_number)

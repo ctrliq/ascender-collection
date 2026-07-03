@@ -1,0 +1,7 @@
+bugfixes:
+  - schedule_rrule, schedule_rruleset - accept an integer ``end_on`` value as documented instead of crashing with a
+    ``TypeError`` (previously only a numeric string worked).
+  - schedule_rruleset - accept ``byweekno`` 53, which is a valid ISO 8601 week number.
+  - schedule_rrule, schedule_rruleset - correct the documented value ranges for ``month_day_number``, ``bymonth``,
+    ``bymonthday``, and ``byyearday``, document the accepted ``saturday`` value for day lists, and fix the
+    ``bysetpos`` example value ``forth`` to ``fourth``.
