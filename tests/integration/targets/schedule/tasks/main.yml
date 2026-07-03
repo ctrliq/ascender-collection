@@ -78,7 +78,7 @@
 
     - name: Use lookup to check that schedules was enabled
       ansible.builtin.set_fact:
-        schedules_enabled_test: "lookup('ctrliq.ascender.controller_api', 'schedules/{{result.id}}/').enabled"
+        schedules_enabled_test: "{{ lookup('ctrliq.ascender.controller_api', 'schedules/' ~ result.id ~ '/').enabled }}"
 
     - name: Newly created schedules should have API default value for enabled
       assert:
