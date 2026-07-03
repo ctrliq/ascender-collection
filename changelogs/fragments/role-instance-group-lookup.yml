@@ -1,0 +1,4 @@
+bugfixes:
+  - role - do not apply the ``lookup_organization`` filter to instance group lookups; instance groups have no
+    organization field and the controller rejected the filtered query with HTTP 400, so instance group roles
+    could not be granted together with ``lookup_organization``.
