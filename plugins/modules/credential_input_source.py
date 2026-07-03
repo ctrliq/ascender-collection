@@ -110,9 +110,9 @@ def main():
     }
     if source_credential:
         credential_input_source_fields['source_credential'] = module.resolve_name_to_id('credentials', source_credential)
-    if metadata:
+    if metadata is not None:
         credential_input_source_fields['metadata'] = metadata
-    if description:
+    if description is not None:
         credential_input_source_fields['description'] = description
 
     # If the state was present we can let the module build or update the existing group, this will return on its own
