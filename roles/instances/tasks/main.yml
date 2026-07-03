@@ -8,7 +8,7 @@
     - name: Add Controller Instance
       ctrliq.ascender.instance:
         hostname: "{{ __controller_instance_item.hostname | mandatory }}"
-        capacity_adjustment: "{{ __controller_instance_item.capacity_adjustment | default((1.0 if controller_configuration_instances_enforce_defaults else omit), true)
+        capacity_adjustment: "{{ __controller_instance_item.capacity_adjustment | default((1.0 if controller_configuration_instances_enforce_defaults else omit))
           }}"
         enabled: "{{ __controller_instance_item.enabled | default((true if controller_configuration_instances_enforce_defaults else omit)) }}"
         managed_by_policy: "{{ __controller_instance_item.managed_by_policy |
