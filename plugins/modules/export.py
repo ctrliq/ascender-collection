@@ -116,7 +116,7 @@ EXAMPLES = '''
 RETURN = '''
 assets:
     description: The exported assets, in a structure suitable for the import module.
-    returned: when not writing the export to a file
+    returned: success
     type: dict
 '''
 
