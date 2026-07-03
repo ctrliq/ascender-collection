@@ -1,0 +1,3 @@
+bugfixes:
+  - workflow_approval - fail with the API error details when the approve or deny action is rejected by the controller
+    (for example when the step was already approved or denied) instead of silently reporting success.
