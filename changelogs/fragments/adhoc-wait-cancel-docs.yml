@@ -1,0 +1,3 @@
+bugfixes:
+  - ad_hoc_command_wait, ad_hoc_command_cancel - fix the ``interval`` descriptions ("in sections" typo and a
+    sentence truncated mid-word).

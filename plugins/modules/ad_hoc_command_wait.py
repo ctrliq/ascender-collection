@@ -19,7 +19,7 @@ options:
       type: int
     interval:
       description:
-        - The interval in sections, to request an update from the controller.
+        - The interval in seconds, to request an update from the controller.
       required: False
       default: 2
       type: float
