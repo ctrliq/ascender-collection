@@ -105,6 +105,8 @@ def main():
         job_list = module.get_all_endpoint('jobs', **{'data': job_search_data})
     else:
         job_list = module.get_endpoint('jobs', **{'data': job_search_data})
+        if job_list['status_code'] != 200:
+            module.fail_json(msg="Failed to list jobs, see response for details", response=job_list)
 
     # Attempt to look up jobs based on the status
     module.exit_json(**job_list['json'])

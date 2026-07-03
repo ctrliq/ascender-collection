@@ -381,8 +381,10 @@ class ControllerAPIModule(ControllerModule):
 
     def get_all_endpoint(self, endpoint, **kwargs):
         response = self.get_endpoint(endpoint, **kwargs)
+        if response['status_code'] != 200:
+            self.fail_json(msg=f"Got a {response['status_code']} response when trying to list {endpoint}", response=response)
         if 'next' not in response['json']:
-            raise RuntimeError(f'Expected list from API at {endpoint}, got: {response}')
+            self.fail_json(msg=f'Expected list from API at {endpoint}, got unexpected response shape')
         next_page = response['json']['next']
 
         if response['json']['count'] > 10000:
@@ -390,6 +392,8 @@ class ControllerAPIModule(ControllerModule):
 
         while next_page is not None:
             next_response = self.get_endpoint(next_page)
+            if next_response['status_code'] != 200:
+                self.fail_json(msg=f"Got a {next_response['status_code']} response when trying to paginate {endpoint}", response=next_response)
             response['json']['results'] = response['json']['results'] + next_response['json']['results']
             next_page = next_response['json']['next']
             response['json']['next'] = next_page
