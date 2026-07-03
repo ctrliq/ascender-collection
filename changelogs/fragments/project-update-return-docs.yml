@@ -1,0 +1,2 @@
+bugfixes:
+  - project_update - document that the returned ``id`` is the project update job's ID, not the project's ID.
