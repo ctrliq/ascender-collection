@@ -86,7 +86,6 @@ This role accepts two data models. A simple straightforward easy to maintain mod
 |`name`|""|yes|str|Name of Organization|
 |`new_name`|""|no|str|New name of Organization|
 |`description`|`False`|no|str|Description of  of Organization.|
-|`custom_virtualenv`|""|no|str|Local absolute file path containing a custom Python virtualenv to use.|
 |`max_hosts`|""|no|int|The max hosts allowed in this organization.|
 |`instance_groups`|""|no|list|list of Instance Groups for this Organization to run on.|
 |`galaxy_credentials`|""|no|list|The credentials to use with private automationhub.|
@@ -111,7 +110,6 @@ This role accepts two data models. A simple straightforward easy to maintain mod
       {
         "name": "Automation Group",
         "description": "This is the Automation Group",
-        "custom_virtualenv": "/opt/cust/environment/",
         "max_hosts": 10,
         "galaxy_credentials": "Automation Hub",
         "notification_templates_error": [
@@ -131,7 +129,6 @@ controller_organizations:
   description: This is the Default Group
 - name: Automation Group
   description: This is the Automation Group
-  custom_virtualenv: "/opt/cust/environment/"
   max_hosts: 10
 ```
 
@@ -145,7 +142,6 @@ controller_organizations:
 - name: Satellite
   description: Satellite
   max_hosts: 0
-  custom_virtualenv:
   related:
     notification_templates_started: []
     notification_templates_success: []
@@ -155,7 +151,6 @@ controller_organizations:
 - name: Default
   description: Default
   max_hosts: 0
-  custom_virtualenv:
   galaxy_credentials:
     - Automation Hub
   related:

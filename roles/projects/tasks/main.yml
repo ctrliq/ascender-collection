@@ -29,7 +29,6 @@
         allow_override: "{{ __controller_project_item.allow_override | default((false if controller_configuration_projects_enforce_defaults else omit)) }}"
         timeout: "{{ __controller_project_item.job_timeout | default(__controller_project_item.timeout | default(0, true) if __controller_project_item.timeout is defined
           or __controller_project_item.job_timeout is defined or controller_configuration_projects_enforce_defaults else omit) }}"
-        custom_virtualenv: "{{ __controller_project_item.custom_virtualenv | default(('' if controller_configuration_projects_enforce_defaults else omit), true) }}"
         organization: "{{ __controller_project_item.organization.name | default(__controller_project_item.organization | default(('' if controller_configuration_projects_enforce_defaults
           else omit))) }}"
         state: "{{ __controller_project_item.state | default(controller_state | default('present')) }}"

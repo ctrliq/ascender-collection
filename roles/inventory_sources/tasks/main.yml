@@ -25,7 +25,6 @@
         execution_environment: "{{ __controller_source_item.execution_environment | default(omit, true) }}"
         overwrite: "{{ __controller_source_item.overwrite | default((false if controller_configuration_inventory_sources_enforce_defaults else omit)) }}"
         overwrite_vars: "{{ __controller_source_item.overwrite_vars | default((false if controller_configuration_inventory_sources_enforce_defaults else omit)) }}"
-        custom_virtualenv: "{{ __controller_source_item.custom_virtualenv | default(('' if controller_configuration_inventory_sources_enforce_defaults else omit), true) }}"
         timeout: "{{ __controller_source_item.timeout
                        | default(0, true) if __controller_source_item.timeout is defined or controller_configuration_inventory_sources_enforce_defaults else omit }}"
         verbosity: "{{ __controller_source_item.verbosity | default((1 if controller_configuration_inventory_sources_enforce_defaults else omit), true) }}"

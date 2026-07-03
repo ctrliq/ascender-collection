@@ -12,8 +12,6 @@
         description: "{{ __controller_template_item.description | default(('' if controller_configuration_job_templates_enforce_defaults else omit), true) }}"
         execution_environment: "{{ __controller_template_item.execution_environment.name | default(__controller_template_item.execution_environment | default(omit, true))
           }}"
-        custom_virtualenv: "{{ __controller_template_item.custom_virtualenv | default(('' if controller_configuration_job_templates_enforce_defaults else omit), true)
-          }}"
         job_type: "{{ __controller_template_item.job_type | default('run') }}"
         inventory: "{{ __controller_template_item.inventory.name | default(__controller_template_item.inventory | default(omit, true)) }}"
         organization: "{{ __controller_template_item.organization.name | default(__controller_template_item.organization | default(('' if controller_configuration_job_templates_enforce_defaults

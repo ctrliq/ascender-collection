@@ -1,0 +1,4 @@
+bugfixes:
+  - job_templates, projects, inventory_sources, organizations roles - stop passing ``custom_virtualenv`` to
+    modules that do not accept it; with ``enforce_defaults`` enabled every item failed with "Unsupported
+    parameters", and the roles' documentation advertised an option that could never work.
