@@ -1,0 +1,4 @@
+bugfixes:
+  - job_wait, ad_hoc_command_wait, project_update, workflow_node_wait, and other wait paths - honor an
+    explicit ``timeout=0`` by aborting immediately instead of waiting forever (0 was treated as "no
+    timeout" by a truthiness check).
