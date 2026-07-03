@@ -1,0 +1,5 @@
+bugfixes:
+  - bulk_job_launch role - read the documented ``job_tags`` item key; previously the role read ``tags``, so
+    the user's tag restriction was silently dropped and all jobs ran untagged.
+  - bulk_job_launch role - do not fail on items without the optional ``name`` key; the loop label
+    dereferenced it unguarded.
