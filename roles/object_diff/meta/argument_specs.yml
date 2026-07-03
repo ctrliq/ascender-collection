@@ -29,7 +29,7 @@ argument_specs:
         description: This variable sets delay between retries across all roles as a default.
 
       # No_log variables
-      controller_configuration_filetree_create_secure_logging:
+      controller_configuration_object_diff_secure_logging:
         default: "{{ controller_configuration_secure_logging | default(false) }}"
         required: false
         type: bool

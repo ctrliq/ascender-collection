@@ -1,0 +1,5 @@
+bugfixes:
+  - multiple roles - correct copy-pasted variable names in ``meta/argument_specs.yml`` (bulk_job_launch,
+    jobs_cancel, users, notification_templates, workflow_job_templates, workflow_launch, license,
+    project_update, object_diff); the specs advertised variables the roles never read, so spec-driven usage
+    silently did nothing.
