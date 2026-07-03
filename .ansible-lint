@@ -70,6 +70,9 @@ skip_list:
   - name[play]
   # Allow FQCN usage flexibility in the collection itself
   - fqcn[action-core]
+  # mock_modules provides no arg specs, so args[module] always falls back to basic.py
+  # and flags every collection-specific parameter as unsupported -- all false positives
+  - args[module]
 
 # Rules that produce warnings instead of errors
 warn_list:
@@ -77,4 +80,3 @@ warn_list:
   - no-changed-when
   - command-instead-of-shell
   - risky-shell-pipe
-  - args[module]
