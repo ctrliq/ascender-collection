@@ -1,0 +1,4 @@
+bugfixes:
+  - workflow_job_templates role - link workflow nodes when the workflows are passed via the documented
+    ``workflow_job_templates`` alias; previously the node loop always used ``controller_workflows`` (default
+    empty), so the templates were created but no nodes were linked.

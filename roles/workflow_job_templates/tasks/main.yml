@@ -107,7 +107,7 @@
     # Create links between workflow node
     - name: Loop over nodes in schema to add to workflow templates
       ansible.builtin.include_tasks: add_workflows_schema.yml
-      loop: "{{ controller_workflows | default(workflow_job_templates) }}"
+      loop: "{{ workflow_job_templates if workflow_job_templates is defined else controller_workflows }}"
       loop_control:
         loop_var: __workflow_loop_item
       when:
