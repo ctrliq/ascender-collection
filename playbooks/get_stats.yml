@@ -96,7 +96,7 @@
     - name: Output
       ansible.builtin.debug:
         msg:
-          - "Number of active users: {{ active_users | length }}"
+          - "Number of active users: {{ active_users | default([]) | length }}"
           - "Number of subs: {{ r_metrics['json']['awx_license_instance_total']['samples'][0]['value'] }}"
           - "Number of avalible subs: {{ r_metrics['json']['awx_license_instance_free']['samples'][0]['value'] }}"
           - "Number of orgs: {{ r_metrics['json']['awx_organizations_total']['samples'][0]['value'] }}"
