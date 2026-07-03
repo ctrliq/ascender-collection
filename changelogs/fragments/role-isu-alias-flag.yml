@@ -1,0 +1,5 @@
+bugfixes:
+  - inventory_source_update role - honor the documented ``inventory_sources`` alias; previously the task was
+    skipped unless ``controller_inventory_sources`` was defined, so alias usage silently launched nothing.
+  - inventory_source_update role - fix a misspelled register reference in the check mode error flag, which
+    could never fire, so failing source updates were silently missed in check mode.

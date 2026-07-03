@@ -29,7 +29,6 @@
           }}"
         pause: "{{ controller_configuration_inventory_source_update_loop_delay }}"
       when:
-        - controller_inventory_sources is defined
         - __inventory_source_update_item.state | default('present') != "absent"
       async: "{{ ansible_check_mode | ternary(0, 1000) }}"
       poll: 0
@@ -40,7 +39,7 @@
     - name: Flag for errors (check mode only)
       ansible.builtin.set_fact:
         error_flag: true
-      when: ansible_check_mode and __inventory_source_update_async.failed is defined and __inventory_source_update_async.failed
+      when: ansible_check_mode and __inventory_source_update_job_async.failed is defined and __inventory_source_update_job_async.failed
 
     - name: Controller inventory source update | Wait for finish of the inventory source update
       when:
