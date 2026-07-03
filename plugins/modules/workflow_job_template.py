@@ -589,7 +589,7 @@ def create_workflow_nodes(module, response, workflow_nodes, workflow_id):
         association_fields = {}
 
         # Lookup Job Template ID
-        if workflow_node.get('unified_job_template', {}).get('name'):
+        if (workflow_node.get('unified_job_template') or {}).get('name'):
             if workflow_node['unified_job_template'].get('type') is None:
                 module.fail_json(msg=f'Could not find unified job template type in workflow_nodes {workflow_node}')
             search_fields['type'] = workflow_node['unified_job_template']['type']
@@ -635,7 +635,9 @@ def create_workflow_nodes(module, response, workflow_nodes, workflow_id):
 
         if workflow_node.get('identifier'):
             search_fields = {'identifier': workflow_node['identifier']}
-        if 'execution_environment' in workflow_node:
+        if workflow_node.get('execution_environment'):
+            if not isinstance(workflow_node['execution_environment'], dict) or 'name' not in workflow_node['execution_environment']:
+                module.fail_json(msg=f"execution_environment must be a dict with a 'name' key, got: {workflow_node['execution_environment']}")
             execution_environment = module.get_one('execution_environments', name_or_id=workflow_node['execution_environment']['name'])
             if execution_environment is None:
                 module.fail_json(msg=f"Unable to find execution environment: {workflow_node['execution_environment']['name']}")
@@ -685,7 +687,7 @@ def create_workflow_nodes(module, response, workflow_nodes, workflow_id):
             )
 
         # Start Approval Node creation process
-        if state and workflow_node.get('unified_job_template', {}).get('type') == 'workflow_approval':
+        if state and (workflow_node.get('unified_job_template') or {}).get('type') == 'workflow_approval':
             for field_name in (
                 'name',
                 'description',
