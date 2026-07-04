@@ -60,6 +60,7 @@ exclude_paths:
   - test/
   - tests/
   - tools/
+  - changelogs/
 
 # Rules to skip entirely
 skip_list:
