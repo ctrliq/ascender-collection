@@ -156,7 +156,10 @@ jobs:
       - name: Run unit tests
         env:
           DJANGO_SETTINGS_MODULE: awx.main.tests.settings_for_test
-        run: pytest tests/unit/ -v --nomigrations --reuse-db
+        run: |
+          sudo mkdir -p /var/log/tower
+          sudo chmod 777 /var/log/tower
+          pytest tests/unit/ -v --nomigrations --reuse-db
 
   changelog:
     name: Changelog
