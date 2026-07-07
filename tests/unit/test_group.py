@@ -4,11 +4,13 @@ __metaclass__ = type
 
 import pytest
 
-from awx.main.models import Organization, Inventory, Group, Host
 
 
 @pytest.mark.django_db
 def test_create_group(run_module, admin_user):
+    from awx.main.models import Group
+    from awx.main.models import Inventory
+    from awx.main.models import Organization
     org = Organization.objects.create(name='test-org')
     inv = Inventory.objects.create(name='test-inv', organization=org)
     variables = {"ansible_network_os": "iosxr"}
@@ -30,6 +32,9 @@ def test_create_group(run_module, admin_user):
 
 @pytest.mark.django_db
 def test_associate_hosts_and_children(run_module, admin_user, organization):
+    from awx.main.models import Group
+    from awx.main.models import Host
+    from awx.main.models import Inventory
     inv = Inventory.objects.create(name='test-inv', organization=organization)
     group = Group.objects.create(name='Test Group', inventory=inv)
 
@@ -52,6 +57,9 @@ def test_associate_hosts_and_children(run_module, admin_user, organization):
 
 @pytest.mark.django_db
 def test_associate_on_create(run_module, admin_user, organization):
+    from awx.main.models import Group
+    from awx.main.models import Host
+    from awx.main.models import Inventory
     inv = Inventory.objects.create(name='test-inv', organization=organization)
     child = Group.objects.create(name='test-child', inventory=inv)
     host = Host.objects.create(name='test-host', inventory=inv)
@@ -67,6 +75,8 @@ def test_associate_on_create(run_module, admin_user, organization):
 
 @pytest.mark.django_db
 def test_children_alias_of_groups(run_module, admin_user, organization):
+    from awx.main.models import Group
+    from awx.main.models import Inventory
     inv = Inventory.objects.create(name='test-inv', organization=organization)
     group = Group.objects.create(name='Test Group', inventory=inv)
     child = Group.objects.create(inventory=inv, name='child_group')
@@ -80,6 +90,9 @@ def test_children_alias_of_groups(run_module, admin_user, organization):
 @pytest.mark.django_db
 def test_group_idempotent(run_module, admin_user):
     # https://github.com/ansible/ansible/issues/46803
+    from awx.main.models import Group
+    from awx.main.models import Inventory
+    from awx.main.models import Organization
     org = Organization.objects.create(name='test-org')
     inv = Inventory.objects.create(name='test-inv', organization=org)
     group = Group.objects.create(

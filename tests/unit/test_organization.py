@@ -5,12 +5,12 @@ __metaclass__ = type
 import pytest
 import random
 
-from awx.main.models import Organization, Credential, CredentialType
 
 
 @pytest.mark.django_db
 def test_create_organization(run_module, admin_user):
 
+    from awx.main.models import Organization
     module_args = {
         'name': 'foo',
         'description': 'barfoo',
@@ -35,6 +35,9 @@ def test_create_organization(run_module, admin_user):
 
 @pytest.mark.django_db
 def test_galaxy_credential_order(run_module, admin_user):
+    from awx.main.models import Credential
+    from awx.main.models import CredentialType
+    from awx.main.models import Organization
     org = Organization.objects.create(name='foo')
     cred_type = CredentialType.defaults['galaxy_api_token']()
     cred_type.save()

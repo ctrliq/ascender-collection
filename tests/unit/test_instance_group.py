@@ -4,11 +4,12 @@ __metaclass__ = type
 
 import pytest
 
-from awx.main.models import InstanceGroup, Instance
 
 
 @pytest.mark.django_db
 def test_instance_group_create(run_module, admin_user):
+    from awx.main.models import Instance
+    from awx.main.models import InstanceGroup
     result = run_module(
         'instance_group', {'name': 'foo-group', 'policy_instance_percentage': 34, 'policy_instance_minimum': 12, 'state': 'present'}, admin_user
     )
@@ -38,6 +39,7 @@ def test_instance_group_create(run_module, admin_user):
 
 @pytest.mark.django_db
 def test_container_group_create(run_module, admin_user, kube_credential):
+    from awx.main.models import InstanceGroup
     pod_spec = "{ 'Nothing': True }"
 
     result = run_module('instance_group', {'name': 'foo-c-group', 'credential': kube_credential.id, 'is_container_group': True, 'state': 'present'}, admin_user)

@@ -2,7 +2,6 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-from awx.main.tests.functional.conftest import _request
 import yaml
 import os
 import re
@@ -212,6 +211,7 @@ def determine_state(module_id, endpoint, module, parameter, api_option, module_o
 
 
 def test_completeness(collection_import, request, admin_user, job_template, execution_environment):
+    from awx.main.tests.functional.conftest import _request
     option_comparison = {}
     # Load a list of existing module files from disk
     base_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))

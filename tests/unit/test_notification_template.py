@@ -4,7 +4,6 @@ __metaclass__ = type
 
 import pytest
 
-from awx.main.models import NotificationTemplate, Job
 
 
 def compare_with_encrypted(model_config, param_config):
@@ -23,6 +22,7 @@ def compare_with_encrypted(model_config, param_config):
 
 @pytest.mark.django_db
 def test_create_modify_notification_template(run_module, admin_user, organization):
+    from awx.main.models import NotificationTemplate
     nt_config = {
         'username': 'user',
         'password': 'password',
@@ -132,6 +132,8 @@ def test_deprecated_to_modern_no_op(run_module, admin_user, organization):
 
 @pytest.mark.django_db
 def test_build_notification_message_undefined(run_module, admin_user, organization):
+    from awx.main.models import Job
+    from awx.main.models import NotificationTemplate
     """Job notification templates may encounter undefined values in the context when they are
     rendered. Make sure that accessing attributes or items of an undefined value returns another
     instance of Undefined, rather than raising an UndefinedError. This enables the use of expressions

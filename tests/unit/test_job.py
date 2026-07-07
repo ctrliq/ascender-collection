@@ -3,13 +3,13 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 import pytest
-from django.utils.timezone import now
 
-from awx.main.models import Job
 
 
 @pytest.mark.django_db
 def test_job_wait_successful(run_module, admin_user):
+    from awx.main.models import Job
+    from django.utils.timezone import now
     job = Job.objects.create(status='successful', started=now(), finished=now())
     result = run_module('job_wait', dict(job_id=job.id), admin_user)
     result.pop('invocation', None)
@@ -21,6 +21,8 @@ def test_job_wait_successful(run_module, admin_user):
 
 @pytest.mark.django_db
 def test_job_wait_failed(run_module, admin_user):
+    from awx.main.models import Job
+    from django.utils.timezone import now
     job = Job.objects.create(status='failed', started=now(), finished=now())
     result = run_module('job_wait', dict(job_id=job.id), admin_user)
     result.pop('invocation', None)

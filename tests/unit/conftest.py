@@ -28,28 +28,7 @@ if _awxkit_path and _awxkit_path not in sys.path:
     if 'awxkit' in sys.modules:
         del sys.modules['awxkit']
 
-from requests.models import Response, PreparedRequest
-
 import pytest
-
-
-from awx.main.tests.functional.conftest import _request
-from awx.main.tests.functional.conftest import credentialtype_scm, credentialtype_ssh  # noqa: F401; pylint: disable=unused-import
-from awx.main.models import (
-    Organization,
-    Project,
-    Inventory,
-    JobTemplate,
-    Credential,
-    CredentialType,
-    ExecutionEnvironment,
-    UnifiedJob,
-    WorkflowJobTemplate,
-    NotificationTemplate,
-    Schedule,
-)
-
-from django.db import transaction
 
 
 HAS_TOWER_CLI = False
@@ -121,6 +100,9 @@ def collection_import():
 def run_module(request, collection_import):
     def rf(module_name, module_params, request_user):
         def new_request(self, method, url, **kwargs):
+            from django.db import transaction
+            from awx.main.tests.functional.conftest import _request
+            from requests.models import Response, PreparedRequest
             kwargs_copy = kwargs.copy()
             if 'data' in kwargs:
                 if isinstance(kwargs['data'], dict):
@@ -262,11 +244,13 @@ def survey_spec():
 
 @pytest.fixture
 def organization():
+    from awx.main.models import Organization
     return Organization.objects.create(name='Default')
 
 
 @pytest.fixture
 def project(organization):
+    from awx.main.models import Project
     return Project.objects.create(
         name="test-proj",
         description="test-proj-desc",
@@ -281,21 +265,37 @@ def project(organization):
 
 @pytest.fixture
 def inventory(organization):
+    from awx.main.models import Inventory
     return Inventory.objects.create(name='test-inv', organization=organization)
 
 
 @pytest.fixture
 def job_template(project, inventory):
+    from awx.main.models import JobTemplate
     return JobTemplate.objects.create(name='test-jt', project=project, inventory=inventory, playbook='helloworld.yml')
 
 
 @pytest.fixture
+def credentialtype_ssh():
+    from awx.main.tests.functional.conftest import credentialtype_ssh as _fixture
+    return _fixture()
+
+
+@pytest.fixture
+def credentialtype_scm():
+    from awx.main.tests.functional.conftest import credentialtype_scm as _fixture
+    return _fixture()
+
+
+@pytest.fixture
 def machine_credential(credentialtype_ssh, organization):  # noqa: F811
+    from awx.main.models import Credential
     return Credential.objects.create(credential_type=credentialtype_ssh, name='machine-cred', inputs={'username': 'test_user', 'password': 'pas4word'})
 
 
 @pytest.fixture
 def vault_credential(organization):
+    from awx.main.models import Credential, CredentialType
     ct = CredentialType.defaults['vault']()
     ct.save()
     return Credential.objects.create(credential_type=ct, name='vault-cred', inputs={'vault_id': 'foo', 'vault_password': 'pas4word'})
@@ -303,6 +303,7 @@ def vault_credential(organization):
 
 @pytest.fixture
 def kube_credential():
+    from awx.main.models import Credential, CredentialType
     ct = CredentialType.defaults['kubernetes_bearer_token']()
     ct.save()
     return Credential.objects.create(credential_type=ct, name='kube-cred', inputs={'host': 'my.cluster', 'bearer_token': 'my-token', 'verify_ssl': False})
@@ -326,6 +327,7 @@ def silence_warning():
 
 @pytest.fixture
 def execution_environment():
+    from awx.main.models import ExecutionEnvironment
     return ExecutionEnvironment.objects.create(name="test-ee", description="test-ee", managed=False)
 
 
@@ -336,17 +338,20 @@ def mock_has_unpartitioned_events():
     # this method looks up when the partition migration occurred. When
     # Django's unit tests run, however, there will be no record of the migration.
     # We mock this out to circumvent the migration query.
+    from awx.main.models import UnifiedJob
     with mock.patch.object(UnifiedJob, 'has_unpartitioned_events', new=False) as _fixture:
         yield _fixture
 
 
 @pytest.fixture
 def workflow_job_template(organization, inventory):
+    from awx.main.models import WorkflowJobTemplate
     return WorkflowJobTemplate.objects.create(name='test-workflow_job_template', organization=organization, inventory=inventory)
 
 
 @pytest.fixture
 def notification_template(organization):
+    from awx.main.models import NotificationTemplate
     return NotificationTemplate.objects.create(
         name='test-notification_template',
         organization=organization,
@@ -364,6 +369,7 @@ def notification_template(organization):
 
 @pytest.fixture
 def scm_credential(credentialtype_scm, organization):  # noqa: F811
+    from awx.main.models import Credential
     return Credential.objects.create(
         credential_type=credentialtype_scm, name='scm-cred', inputs={'username': 'optimus', 'password': 'prime'}, organization=organization
     )
@@ -376,6 +382,7 @@ def rrule():
 
 @pytest.fixture
 def schedule(job_template, rrule):
+    from awx.main.models import Schedule
     return Schedule.objects.create(unified_job_template=job_template, name='test-sched', rrule=rrule)
 
 

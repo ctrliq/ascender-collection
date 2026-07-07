@@ -4,12 +4,12 @@ __metaclass__ = type
 
 import pytest
 
-from awx.main.models import WorkflowJobTemplate, User
 
 
 @pytest.mark.django_db
 @pytest.mark.parametrize('state', ('present', 'absent'))
 def test_grant_organization_permission(run_module, admin_user, organization, state):
+    from awx.main.models import User
     rando = User.objects.create(username='rando')
     if state == 'absent':
         organization.admin_role.members.add(rando)
@@ -26,6 +26,8 @@ def test_grant_organization_permission(run_module, admin_user, organization, sta
 @pytest.mark.django_db
 @pytest.mark.parametrize('state', ('present', 'absent'))
 def test_grant_workflow_permission(run_module, admin_user, organization, state):
+    from awx.main.models import User
+    from awx.main.models import WorkflowJobTemplate
     wfjt = WorkflowJobTemplate.objects.create(organization=organization, name='foo-workflow')
     rando = User.objects.create(username='rando')
     if state == 'absent':
@@ -43,6 +45,8 @@ def test_grant_workflow_permission(run_module, admin_user, organization, state):
 @pytest.mark.django_db
 @pytest.mark.parametrize('state', ('present', 'absent'))
 def test_grant_workflow_list_permission(run_module, admin_user, organization, state):
+    from awx.main.models import User
+    from awx.main.models import WorkflowJobTemplate
     wfjt = WorkflowJobTemplate.objects.create(organization=organization, name='foo-workflow')
     rando = User.objects.create(username='rando')
     if state == 'absent':
@@ -64,6 +68,8 @@ def test_grant_workflow_list_permission(run_module, admin_user, organization, st
 @pytest.mark.django_db
 @pytest.mark.parametrize('state', ('present', 'absent'))
 def test_grant_workflow_approval_permission(run_module, admin_user, organization, state):
+    from awx.main.models import User
+    from awx.main.models import WorkflowJobTemplate
     wfjt = WorkflowJobTemplate.objects.create(organization=organization, name='foo-workflow')
     rando = User.objects.create(username='rando')
     if state == 'absent':
@@ -80,6 +86,7 @@ def test_grant_workflow_approval_permission(run_module, admin_user, organization
 
 @pytest.mark.django_db
 def test_invalid_role(run_module, admin_user, project):
+    from awx.main.models import User
     rando = User.objects.create(username='rando')
     result = run_module('role', {'user': rando.username, 'project': project.name, 'role': 'adhoc', 'state': 'present'}, admin_user)
     assert result.get('failed', False)

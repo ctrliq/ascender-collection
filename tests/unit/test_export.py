@@ -4,10 +4,7 @@ __metaclass__ = type
 
 import pytest
 
-from awx.main.models.execution_environments import ExecutionEnvironment
-from awx.main.models.jobs import JobTemplate
 
-from awx.main.tests.functional.conftest import user, system_auditor  # noqa: F401; pylint: disable=unused-import
 
 
 ASSETS = set([
@@ -30,6 +27,7 @@ ASSETS = set([
 
 @pytest.fixture
 def job_template(project, inventory, organization, machine_credential):
+    from awx.main.models.jobs import JobTemplate
     jt = JobTemplate.objects.create(name='test-jt', project=project, inventory=inventory, organization=organization, playbook='helloworld.yml')
     jt.credentials.add(machine_credential)
     jt.save()
@@ -38,6 +36,7 @@ def job_template(project, inventory, organization, machine_credential):
 
 @pytest.fixture
 def execution_environment(organization):
+    from awx.main.models.execution_environments import ExecutionEnvironment
     return ExecutionEnvironment.objects.create(name="test-ee", description="test-ee", managed=False, organization=organization)
 
 
@@ -135,6 +134,7 @@ def test_export_simple(
 
 @pytest.mark.django_db
 def test_export_system_auditor(run_module, organization, system_auditor):  # noqa: F811
+    from awx.main.tests.functional.conftest import system_auditor
     """
     This test illustrates that export of resources can now happen
     when ran as non-root user (i.e. system auditor). The OPTIONS

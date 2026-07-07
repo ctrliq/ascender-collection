@@ -4,12 +4,12 @@ __metaclass__ = type
 
 import pytest
 
-from awx.main.models import CredentialType
 
 
 @pytest.mark.django_db
 def test_create_custom_credential_type(run_module, admin_user, silence_deprecation):
     # Example from docs
+    from awx.main.models import CredentialType
     result = run_module(
         'credential_type',
         dict(

@@ -4,11 +4,12 @@ __metaclass__ = type
 
 import pytest
 
-from awx.main.models import Organization, Inventory, InventorySource, Project
 
 
 @pytest.fixture
 def base_inventory():
+    from awx.main.models import Inventory
+    from awx.main.models import Organization
     org = Organization.objects.create(name='test-org')
     inv = Inventory.objects.create(name='test-inv', organization=org)
     return inv
@@ -16,6 +17,7 @@ def base_inventory():
 
 @pytest.fixture
 def project(base_inventory):
+    from awx.main.models import Project
     return Project.objects.create(
         name='test-proj',
         organization=base_inventory.organization,
@@ -26,6 +28,7 @@ def project(base_inventory):
 
 @pytest.mark.django_db
 def test_inventory_source_create(run_module, admin_user, base_inventory, project):
+    from awx.main.models import InventorySource
     source_path = '/var/lib/awx/example_source_path/'
     result = run_module(
         'inventory_source',
@@ -45,6 +48,9 @@ def test_inventory_source_create(run_module, admin_user, base_inventory, project
 
 @pytest.mark.django_db
 def test_create_inventory_source_implied_org(run_module, admin_user):
+    from awx.main.models import Inventory
+    from awx.main.models import InventorySource
+    from awx.main.models import Organization
     org = Organization.objects.create(name='test-org')
     inv = Inventory.objects.create(name='test-inv', organization=org)
 
@@ -64,6 +70,9 @@ def test_create_inventory_source_implied_org(run_module, admin_user):
 
 @pytest.mark.django_db
 def test_create_inventory_source_multiple_orgs(run_module, admin_user):
+    from awx.main.models import Inventory
+    from awx.main.models import InventorySource
+    from awx.main.models import Organization
     org = Organization.objects.create(name='test-org')
     Inventory.objects.create(name='test-inv', organization=org)
 
@@ -90,6 +99,7 @@ def test_create_inventory_source_multiple_orgs(run_module, admin_user):
 
 @pytest.mark.django_db
 def test_falsy_value(run_module, admin_user, base_inventory):
+    from awx.main.models import InventorySource
     result = run_module('inventory_source', dict(name='falsy-test', inventory=base_inventory.name, source='ec2', update_on_launch=True), admin_user)
     assert not result.get('failed', False), result.get('msg', result)
     assert result.get('changed', None), result

@@ -4,12 +4,12 @@ __metaclass__ = type
 
 import pytest
 
-from awx.main.models import OAuth2AccessToken
 
 
 @pytest.mark.django_db
 def test_create_token(run_module, admin_user):
 
+    from awx.main.models import OAuth2AccessToken
     module_args = {
         'description': 'barfoo',
         'state': 'present',

@@ -4,11 +4,11 @@ __metaclass__ = type
 
 import pytest
 
-from awx.main.models import Project
 
 
 @pytest.mark.django_db
 def test_create_project(run_module, admin_user, organization, silence_warning):
+    from awx.main.models import Project
     result = run_module(
         'project',
         dict(name='foo', organization=organization.name, scm_type='git', scm_url='https://foo.invalid', wait=False, scm_update_cache_timeout=5),
@@ -28,6 +28,7 @@ def test_create_project(run_module, admin_user, organization, silence_warning):
 
 @pytest.mark.django_db
 def test_create_manual_project(run_module, admin_user, organization, mocker):
+    from awx.main.models import Project
     mocker.patch('awx.main.models.projects.Project.get_local_path_choices', return_value=['foo_folder/'])
     result = run_module(
         'project',

@@ -6,12 +6,11 @@ import pytest
 
 from ansible.errors import AnsibleError
 
-from awx.main.models import JobTemplate, Schedule
-from awx.api.serializers import SchedulePreviewSerializer
 
 
 @pytest.mark.django_db
 def test_create_schedule(run_module, job_template, admin_user):
+    from awx.main.models import Schedule
     my_rrule = 'DTSTART;TZID=Zulu:20200416T034507 RRULE:FREQ=MONTHLY;INTERVAL=1'
     result = run_module('schedule', {'name': 'foo_schedule', 'unified_job_template': job_template.name, 'rrule': my_rrule}, admin_user)
     assert not result.get('failed', False), result.get('msg', result)
@@ -26,6 +25,8 @@ def test_create_schedule(run_module, job_template, admin_user):
 
 @pytest.mark.django_db
 def test_delete_same_named_schedule(run_module, project, inventory, admin_user):
+    from awx.main.models import JobTemplate
+    from awx.main.models import Schedule
     jt1 = JobTemplate.objects.create(name='jt1', project=project, inventory=inventory, playbook='helloworld.yml')
     jt2 = JobTemplate.objects.create(name='jt2', project=project, inventory=inventory, playbook='helloworld2.yml')
     Schedule.objects.create(name='Some Schedule', rrule='DTSTART:20300112T210000Z RRULE:FREQ=DAILY;INTERVAL=1', unified_job_template=jt1)
@@ -81,6 +82,7 @@ def test_delete_same_named_schedule(run_module, project, inventory, admin_user):
     ],
 )
 def test_rrule_lookup_plugin(collection_import, freq, kwargs, expect):
+    from awx.api.serializers import SchedulePreviewSerializer
     LookupModule = collection_import('plugins.lookup.schedule_rrule').LookupModule()
     generated_rule = LookupModule.get_rrule(freq, kwargs)[0]
     assert generated_rule == expect

@@ -5,11 +5,11 @@ __metaclass__ = type
 
 import pytest
 
-from awx.main.models import WorkflowJobTemplateNode, WorkflowJobTemplate, JobTemplate, UnifiedJobTemplate
 
 
 @pytest.fixture
 def job_template(project, inventory):
+    from awx.main.models import JobTemplate
     return JobTemplate.objects.create(
         project=project,
         inventory=inventory,
@@ -23,12 +23,14 @@ def job_template(project, inventory):
 
 @pytest.fixture
 def wfjt(organization):
+    from awx.main.models import WorkflowJobTemplate
     WorkflowJobTemplate.objects.create(organization=None, name='foo-workflow')  # to test org scoping
     return WorkflowJobTemplate.objects.create(organization=organization, name='foo-workflow')
 
 
 @pytest.mark.django_db
 def test_create_workflow_job_template_node(run_module, admin_user, wfjt, job_template):
+    from awx.main.models import WorkflowJobTemplateNode
     this_identifier = '42🐉'
     result = run_module(
         'workflow_job_template_node',
@@ -55,6 +57,8 @@ def test_create_workflow_job_template_node(run_module, admin_user, wfjt, job_tem
 
 @pytest.mark.django_db
 def test_create_workflow_job_template_node_approval_node(run_module, admin_user, wfjt, job_template):
+    from awx.main.models import UnifiedJobTemplate
+    from awx.main.models import WorkflowJobTemplateNode
     """This is a part of the API contract for creating approval nodes"""
     this_identifier = '42🐉'
     result = run_module(
@@ -82,6 +86,7 @@ def test_create_workflow_job_template_node_approval_node(run_module, admin_user,
 
 @pytest.mark.django_db
 def test_make_use_of_prompts(run_module, admin_user, wfjt, job_template, machine_credential, vault_credential):
+    from awx.main.models import WorkflowJobTemplateNode
     result = run_module(
         'workflow_job_template_node',
         {
@@ -108,6 +113,7 @@ def test_make_use_of_prompts(run_module, admin_user, wfjt, job_template, machine
 
 @pytest.mark.django_db
 def test_create_with_edges(run_module, admin_user, wfjt, job_template):
+    from awx.main.models import WorkflowJobTemplateNode
     next_nodes = [
         WorkflowJobTemplateNode.objects.create(identifier='foo{0}'.format(i), workflow_job_template=wfjt, unified_job_template=job_template) for i in range(3)
     ]

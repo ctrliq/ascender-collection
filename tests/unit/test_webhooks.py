@@ -4,7 +4,6 @@ __metaclass__ = type
 
 import pytest
 
-from awx.main.models import JobTemplate, WorkflowJobTemplate
 
 
 # The backend supports these webhook services on job/workflow templates
@@ -19,6 +18,7 @@ WEBHOOK_SERVICES = ['github', 'gitlab', 'bitbucket_dc']
 @pytest.mark.django_db
 @pytest.mark.parametrize('webhook_service', WEBHOOK_SERVICES)
 def test_job_template_accepts_webhook_service(run_module, admin_user, project, inventory, webhook_service):
+    from awx.main.models import JobTemplate
     result = run_module(
         'job_template',
         {
@@ -58,6 +58,7 @@ def test_job_template_accepts_webhook_service(run_module, admin_user, project, i
 @pytest.mark.django_db
 @pytest.mark.parametrize('webhook_service', WEBHOOK_SERVICES)
 def test_workflow_job_template_accepts_webhook_service(run_module, admin_user, organization, webhook_service):
+    from awx.main.models import WorkflowJobTemplate
     result = run_module(
         'workflow_job_template',
         {

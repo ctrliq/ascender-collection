@@ -6,7 +6,6 @@ import pytest
 
 from unittest import mock
 
-from awx.main.models import User
 
 
 @pytest.fixture
@@ -20,6 +19,7 @@ def mock_auth_stuff():
 
 @pytest.mark.django_db
 def test_create_user(run_module, admin_user, mock_auth_stuff):
+    from awx.main.models import User
     result = run_module('user', dict(username='Bob', password='pass4word'), admin_user)
     assert not result.get('failed', False), result.get('msg', result)
     assert result.get('changed'), result
@@ -52,6 +52,7 @@ def test_update_password_on_create(run_module, admin_user, mock_auth_stuff):
 
 @pytest.mark.django_db
 def test_update_user(run_module, admin_user, mock_auth_stuff):
+    from awx.main.models import User
     result = run_module('user', dict(username='Bob', password='pass4word', is_system_auditor=True), admin_user)
     assert not result.get('failed', False), result.get('msg', result)
     assert result.get('changed'), result

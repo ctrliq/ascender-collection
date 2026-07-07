@@ -4,13 +4,13 @@ __metaclass__ = type
 
 import pytest
 
-from awx.main.models import Inventory
 
 
 @pytest.mark.django_db
 def test_inventory_create(run_module, admin_user, organization):
     # Create an insights credential
 
+    from awx.main.models import Inventory
     result = run_module(
         'inventory',
         {
@@ -47,6 +47,7 @@ def test_invalid_smart_inventory_create(run_module, admin_user, organization):
 
 @pytest.mark.django_db
 def test_valid_smart_inventory_create(run_module, admin_user, organization):
+    from awx.main.models import Inventory
     result = run_module(
         'inventory',
         {'name': 'foo-inventory', 'organization': organization.name, 'kind': 'smart', 'host_filter': 'name=my_host', 'state': 'present'},

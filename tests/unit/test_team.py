@@ -4,11 +4,12 @@ __metaclass__ = type
 
 import pytest
 
-from awx.main.models import Organization, Team
 
 
 @pytest.mark.django_db
 def test_create_team(run_module, admin_user):
+    from awx.main.models import Organization
+    from awx.main.models import Team
     org = Organization.objects.create(name='foo')
 
     result = run_module('team', {'name': 'foo_team', 'description': 'fooin around', 'state': 'present', 'organization': 'foo'}, admin_user)
@@ -28,6 +29,8 @@ def test_create_team(run_module, admin_user):
 
 @pytest.mark.django_db
 def test_modify_team(run_module, admin_user):
+    from awx.main.models import Organization
+    from awx.main.models import Team
     org = Organization.objects.create(name='foo')
     team = Team.objects.create(name='foo_team', organization=org, description='flat foo')
     assert team.description == 'flat foo'

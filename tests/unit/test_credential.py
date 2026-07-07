@@ -4,12 +4,12 @@ __metaclass__ = type
 
 import pytest
 
-from awx.main.models import Credential, CredentialType, Organization
 
 
 @pytest.fixture
 def cred_type():
     # Make a credential type which will be used by the credential
+    from awx.main.models import CredentialType
     ct = CredentialType.objects.create(
         name='Ansible Galaxy Token',
         inputs={"fields": [{"id": "token", "type": "string", "secret": True, "label": "Ansible Galaxy Secret Token Value"}], "required": ["token"]},
@@ -24,6 +24,9 @@ def cred_type():
 
 @pytest.mark.django_db
 def test_create_machine_credential(run_module, admin_user, organization):
+    from awx.main.models import Credential
+    from awx.main.models import CredentialType
+    from awx.main.models import Organization
     Organization.objects.create(name='test-org')
     # create the ssh credential type
     ct = CredentialType.defaults['ssh']()
@@ -50,6 +53,9 @@ def test_create_machine_credential(run_module, admin_user, organization):
 @pytest.mark.django_db
 def test_create_vault_credential(run_module, admin_user, organization):
     # https://github.com/ansible/ansible/issues/61324
+    from awx.main.models import Credential
+    from awx.main.models import CredentialType
+    from awx.main.models import Organization
     Organization.objects.create(name='test-org')
     ct = CredentialType.defaults['vault']()
     ct.save()
@@ -77,6 +83,7 @@ def test_create_vault_credential(run_module, admin_user, organization):
 
 @pytest.mark.django_db
 def test_missing_credential_type(run_module, admin_user, organization):
+    from awx.main.models import Organization
     Organization.objects.create(name='test-org')
     result = run_module('credential', dict(name='A credential', organization=organization.name, credential_type='foobar', state='present'), admin_user)
     assert result.get('failed', False), result
@@ -87,6 +94,7 @@ def test_missing_credential_type(run_module, admin_user, organization):
 
 @pytest.mark.django_db
 def test_make_use_of_custom_credential_type(run_module, organization, admin_user, cred_type):
+    from awx.main.models import Credential
     result = run_module(
         'credential',
         dict(name='Galaxy Token for Steve', organization=organization.name, credential_type=cred_type.name, inputs={'token': '7rEZK38DJl58A7RxA6EC7lLvUHbBQ1'}),
@@ -108,6 +116,7 @@ def test_make_use_of_custom_credential_type(run_module, organization, admin_user
 @pytest.mark.django_db
 @pytest.mark.parametrize('update_secrets', [True, False])
 def test_secret_field_write_twice(run_module, organization, admin_user, cred_type, update_secrets):
+    from awx.main.models import Credential
     val1 = '7rEZK38DJl58A7RxA6EC7lLvUHbBQ1'
     val2 = '7rEZ238DJl5837rxA6xxxlLvUHbBQ1'
     for val in (val1, val2):

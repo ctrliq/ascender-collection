@@ -5,8 +5,6 @@ __metaclass__ = type
 import json
 import sys
 
-from awx.main.models import Organization, Team, Project, Inventory
-from requests.models import Response
 from unittest import mock
 
 awx_name = 'AWX'
@@ -38,6 +36,7 @@ def status(self):
 
 
 def mock_controller_ping_response(self, method, url, **kwargs):
+    from requests.models import Response
     r = Response()
     r.getheader = getTowerheader.__get__(r)
     r.read = read.__get__(r)
@@ -46,6 +45,7 @@ def mock_controller_ping_response(self, method, url, **kwargs):
 
 
 def mock_awx_ping_response(self, method, url, **kwargs):
+    from requests.models import Response
     r = Response()
     r.getheader = getAWXheader.__get__(r)
     r.read = read.__get__(r)
@@ -54,6 +54,7 @@ def mock_awx_ping_response(self, method, url, **kwargs):
 
 
 def mock_no_ping_response(self, method, url, **kwargs):
+    from requests.models import Response
     r = Response()
     r.getheader = getNoheader.__get__(r)
     r.read = read.__get__(r)
@@ -182,6 +183,7 @@ def test_conflicting_name_and_id(run_module, admin_user):
     We should preference the id over the name.
     Otherwise, the universality of the controller_api lookup plugin is compromised.
     """
+    from awx.main.models import Organization, Team
     org_by_id = Organization.objects.create(name='foo')
     slug = str(org_by_id.id)
     Organization.objects.create(name=slug)
@@ -193,6 +195,7 @@ def test_conflicting_name_and_id(run_module, admin_user):
 
 
 def test_multiple_lookup(run_module, admin_user):
+    from awx.main.models import Organization, Inventory, Project
     org1 = Organization.objects.create(name='foo')
     org2 = Organization.objects.create(name='bar')
     inv = Inventory.objects.create(name='Foo Inv')

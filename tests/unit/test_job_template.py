@@ -6,12 +6,12 @@ import random
 
 import pytest
 
-from awx.main.models import ActivityStream, JobTemplate, Job, NotificationTemplate, Label
 
 
 @pytest.mark.django_db
 def test_create_job_template(run_module, admin_user, project, inventory):
 
+    from awx.main.models import JobTemplate
     module_args = {
         'name': 'foo',
         'playbook': 'helloworld.yml',
@@ -36,6 +36,7 @@ def test_create_job_template(run_module, admin_user, project, inventory):
 @pytest.mark.django_db
 def test_resets_job_template_values(run_module, admin_user, project, inventory):
 
+    from awx.main.models import JobTemplate
     module_args = {
         'name': 'foo',
         'playbook': 'helloworld.yml',
@@ -108,6 +109,8 @@ def test_resets_job_template_values(run_module, admin_user, project, inventory):
 
 @pytest.mark.django_db
 def test_job_launch_with_prompting(run_module, admin_user, project, organization, inventory, machine_credential):
+    from awx.main.models import Job
+    from awx.main.models import JobTemplate
     JobTemplate.objects.create(
         name='foo',
         project=project,
@@ -137,6 +140,8 @@ def test_job_launch_with_prompting(run_module, admin_user, project, organization
 
 @pytest.mark.django_db
 def test_job_template_with_new_credentials(run_module, admin_user, project, inventory, machine_credential, vault_credential):
+    from awx.main.models import ActivityStream
+    from awx.main.models import JobTemplate
     result = run_module(
         'job_template',
         dict(
@@ -169,6 +174,8 @@ def test_job_template_with_new_credentials(run_module, admin_user, project, inve
 
 @pytest.mark.django_db
 def test_job_template_with_survey_spec(run_module, admin_user, project, inventory, survey_spec):
+    from awx.main.models import ActivityStream
+    from awx.main.models import JobTemplate
     result = run_module(
         'job_template',
         dict(name='foo', playbook='helloworld.yml', project=project.name, inventory=inventory.name, survey_spec=survey_spec, survey_enabled=True),
@@ -197,6 +204,8 @@ def test_job_template_with_survey_spec(run_module, admin_user, project, inventor
 
 @pytest.mark.django_db
 def test_job_template_with_wrong_survey_spec(run_module, admin_user, project, inventory, survey_spec):
+    from awx.main.models import ActivityStream
+    from awx.main.models import JobTemplate
     result = run_module(
         'job_template',
         dict(name='foo', playbook='helloworld.yml', project=project.name, inventory=inventory.name, survey_spec=survey_spec, survey_enabled=True),
@@ -248,6 +257,8 @@ def test_job_template_with_survey_encrypted_default(run_module, admin_user, proj
 @pytest.mark.django_db
 def test_associate_changed_status(run_module, admin_user, organization, project):
     # create JT and labels
+    from awx.main.models import JobTemplate
+    from awx.main.models import Label
     jt = JobTemplate.objects.create(name='foo', project=project, playbook='helloworld.yml')
     labels = [Label.objects.create(name=f'foo{i}', organization=organization) for i in range(10)]
 
@@ -283,6 +294,8 @@ def test_associate_changed_status(run_module, admin_user, organization, project)
 
 @pytest.mark.django_db
 def test_associate_only_on_success(run_module, admin_user, organization, project):
+    from awx.main.models import JobTemplate
+    from awx.main.models import NotificationTemplate
     jt = JobTemplate.objects.create(
         name='foo',
         project=project,

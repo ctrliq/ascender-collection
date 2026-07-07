@@ -4,11 +4,11 @@ __metaclass__ = type
 
 import pytest
 
-from awx.main.models import CredentialInputSource, Credential, CredentialType
 
 
 @pytest.fixture
 def aim_cred_type():
+    from awx.main.models import CredentialType
     ct = CredentialType.defaults['aim']()
     ct.save()
     return ct
@@ -17,6 +17,7 @@ def aim_cred_type():
 # Test CyberArk AIM credential source
 @pytest.fixture
 def source_cred_aim(aim_cred_type):
+    from awx.main.models import Credential
     return Credential.objects.create(
         name='CyberArk AIM Cred', credential_type=aim_cred_type, inputs={"url": "https://cyberark.example.com", "app_id": "myAppID", "verify": "false"}
     )
@@ -24,6 +25,9 @@ def source_cred_aim(aim_cred_type):
 
 @pytest.mark.django_db
 def test_aim_credential_source(run_module, admin_user, organization, source_cred_aim, silence_deprecation):
+    from awx.main.models import Credential
+    from awx.main.models import CredentialInputSource
+    from awx.main.models import CredentialType
     ct = CredentialType.defaults['ssh']()
     ct.save()
     tgt_cred = Credential.objects.create(name='Test Machine Credential', organization=organization, credential_type=ct, inputs={'username': 'bob'})
@@ -57,6 +61,8 @@ def test_aim_credential_source(run_module, admin_user, organization, source_cred
 @pytest.fixture
 def source_cred_conjur(organization):
     # Make a credential type which will be used by the credential
+    from awx.main.models import Credential
+    from awx.main.models import CredentialType
     ct = CredentialType.defaults['conjur']()
     ct.save()
     return Credential.objects.create(
@@ -68,6 +74,9 @@ def source_cred_conjur(organization):
 
 @pytest.mark.django_db
 def test_conjur_credential_source(run_module, admin_user, organization, source_cred_conjur, silence_deprecation):
+    from awx.main.models import Credential
+    from awx.main.models import CredentialInputSource
+    from awx.main.models import CredentialType
     ct = CredentialType.defaults['ssh']()
     ct.save()
     tgt_cred = Credential.objects.create(name='Test Machine Credential', organization=organization, credential_type=ct, inputs={'username': 'bob'})
@@ -101,6 +110,8 @@ def test_conjur_credential_source(run_module, admin_user, organization, source_c
 @pytest.fixture
 def source_cred_hashi_secret(organization):
     # Make a credential type which will be used by the credential
+    from awx.main.models import Credential
+    from awx.main.models import CredentialType
     ct = CredentialType.defaults['hashivault_kv']()
     ct.save()
     return Credential.objects.create(
@@ -118,6 +129,9 @@ def source_cred_hashi_secret(organization):
 
 @pytest.mark.django_db
 def test_hashi_secret_credential_source(run_module, admin_user, organization, source_cred_hashi_secret, silence_deprecation):
+    from awx.main.models import Credential
+    from awx.main.models import CredentialInputSource
+    from awx.main.models import CredentialType
     ct = CredentialType.defaults['ssh']()
     ct.save()
     tgt_cred = Credential.objects.create(name='Test Machine Credential', organization=organization, credential_type=ct, inputs={'username': 'bob'})
@@ -154,6 +168,8 @@ def test_hashi_secret_credential_source(run_module, admin_user, organization, so
 @pytest.fixture
 def source_cred_hashi_ssh(organization):
     # Make a credential type which will be used by the credential
+    from awx.main.models import Credential
+    from awx.main.models import CredentialType
     ct = CredentialType.defaults['hashivault_ssh']()
     ct.save()
     return Credential.objects.create(
@@ -165,6 +181,9 @@ def source_cred_hashi_ssh(organization):
 
 @pytest.mark.django_db
 def test_hashi_ssh_credential_source(run_module, admin_user, organization, source_cred_hashi_ssh, silence_deprecation):
+    from awx.main.models import Credential
+    from awx.main.models import CredentialInputSource
+    from awx.main.models import CredentialType
     ct = CredentialType.defaults['ssh']()
     ct.save()
     tgt_cred = Credential.objects.create(name='Test Machine Credential', organization=organization, credential_type=ct, inputs={'username': 'bob'})
@@ -202,6 +221,8 @@ def test_hashi_ssh_credential_source(run_module, admin_user, organization, sourc
 @pytest.fixture
 def source_cred_azure_kv(organization):
     # Make a credential type which will be used by the credential
+    from awx.main.models import Credential
+    from awx.main.models import CredentialType
     ct = CredentialType.defaults['azure_kv']()
     ct.save()
     return Credential.objects.create(
@@ -219,6 +240,9 @@ def source_cred_azure_kv(organization):
 
 @pytest.mark.django_db
 def test_azure_kv_credential_source(run_module, admin_user, organization, source_cred_azure_kv, silence_deprecation):
+    from awx.main.models import Credential
+    from awx.main.models import CredentialInputSource
+    from awx.main.models import CredentialType
     ct = CredentialType.defaults['ssh']()
     ct.save()
     tgt_cred = Credential.objects.create(name='Test Machine Credential', organization=organization, credential_type=ct, inputs={'username': 'bob'})
@@ -251,6 +275,7 @@ def test_azure_kv_credential_source(run_module, admin_user, organization, source
 # Test Changing Credential Source
 @pytest.fixture
 def source_cred_aim_alt(aim_cred_type):
+    from awx.main.models import Credential
     return Credential.objects.create(
         name='Alternate CyberArk AIM Cred',
         credential_type=aim_cred_type,
@@ -260,6 +285,9 @@ def source_cred_aim_alt(aim_cred_type):
 
 @pytest.mark.django_db
 def test_aim_credential_source_change_source(run_module, admin_user, organization, source_cred_aim, source_cred_aim_alt, silence_deprecation):
+    from awx.main.models import Credential
+    from awx.main.models import CredentialInputSource
+    from awx.main.models import CredentialType
     ct = CredentialType.defaults['ssh']()
     ct.save()
     tgt_cred = Credential.objects.create(name='Test Machine Credential', organization=organization, credential_type=ct, inputs={'username': 'bob'})
@@ -316,6 +344,8 @@ def test_aim_credential_source_change_source(run_module, admin_user, organizatio
 @pytest.fixture
 def source_cred_centrify_secret(organization):
     # Make a credential type which will be used by the credential
+    from awx.main.models import Credential
+    from awx.main.models import CredentialType
     ct = CredentialType.defaults['centrify_vault_kv']()
     ct.save()
     return Credential.objects.create(
@@ -331,6 +361,9 @@ def source_cred_centrify_secret(organization):
 
 @pytest.mark.django_db
 def test_centrify_vault_credential_source(run_module, admin_user, organization, source_cred_centrify_secret, silence_deprecation):
+    from awx.main.models import Credential
+    from awx.main.models import CredentialInputSource
+    from awx.main.models import CredentialType
     ct = CredentialType.defaults['ssh']()
     ct.save()
     tgt_cred = Credential.objects.create(name='Test Machine Credential', organization=organization, credential_type=ct, inputs={'username': 'bob'})

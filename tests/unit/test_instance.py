@@ -4,12 +4,12 @@ __metaclass__ = type
 
 import pytest
 
-from awx.main.models import Instance
-from django.test.utils import override_settings
 
 
 @pytest.mark.django_db
 def test_peers_adding_and_removing(run_module, admin_user):
+    from awx.main.models import Instance
+    from django.test.utils import override_settings
     with override_settings(IS_K8S=True):
         result = run_module(
             'instance',

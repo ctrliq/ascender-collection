@@ -4,12 +4,12 @@ __metaclass__ = type
 
 import pytest
 
-from awx.main.models import Organization
-from awx.main.models.oauth import OAuth2Application
 
 
 @pytest.mark.django_db
 def test_create_application(run_module, admin_user):
+    from awx.main.models import Organization
+    from awx.main.models.oauth import OAuth2Application
     org = Organization.objects.create(name='foo')
 
     module_args = {

@@ -4,11 +4,11 @@ __metaclass__ = type
 
 import pytest
 
-from awx.main.models import WorkflowJobTemplate, WorkflowJob, NotificationTemplate
 
 
 @pytest.mark.django_db
 def test_create_workflow_job_template(run_module, admin_user, organization, survey_spec):
+    from awx.main.models import WorkflowJobTemplate
     result = run_module(
         'workflow_job_template',
         {
@@ -37,6 +37,7 @@ def test_create_workflow_job_template(run_module, admin_user, organization, surv
 
 @pytest.mark.django_db
 def test_create_modify_no_survey(run_module, admin_user, organization, survey_spec):
+    from awx.main.models import WorkflowJobTemplate
     result = run_module(
         'workflow_job_template',
         {
@@ -63,6 +64,7 @@ def test_create_modify_no_survey(run_module, admin_user, organization, survey_sp
 
 @pytest.mark.django_db
 def test_survey_spec_only_changed(run_module, admin_user, organization, survey_spec):
+    from awx.main.models import WorkflowJobTemplate
     wfjt = WorkflowJobTemplate.objects.create(organization=organization, name='foo-workflow', survey_enabled=True, survey_spec=survey_spec)
     result = run_module('workflow_job_template', {'name': 'foo-workflow', 'organization': organization.name, 'state': 'present'}, admin_user)
     assert not result.get('failed', False), result.get('msg', result)
@@ -83,6 +85,7 @@ def test_survey_spec_only_changed(run_module, admin_user, organization, survey_s
 
 @pytest.mark.django_db
 def test_survey_spec_missing_field(run_module, admin_user, organization, survey_spec):
+    from awx.main.models import WorkflowJobTemplate
     wfjt = WorkflowJobTemplate.objects.create(organization=organization, name='foo-workflow', survey_enabled=True, survey_spec=survey_spec)
     result = run_module('workflow_job_template', {'name': 'foo-workflow', 'organization': organization.name, 'state': 'present'}, admin_user)
     assert not result.get('failed', False), result.get('msg', result)
@@ -101,6 +104,8 @@ def test_survey_spec_missing_field(run_module, admin_user, organization, survey_
 
 @pytest.mark.django_db
 def test_associate_only_on_success(run_module, admin_user, organization, project):
+    from awx.main.models import NotificationTemplate
+    from awx.main.models import WorkflowJobTemplate
     wfjt = WorkflowJobTemplate.objects.create(
         organization=organization,
         name='foo-workflow',
@@ -137,6 +142,8 @@ def test_associate_only_on_success(run_module, admin_user, organization, project
 
 @pytest.mark.django_db
 def test_workflow_launch_with_prompting(run_module, admin_user, organization, inventory):
+    from awx.main.models import WorkflowJob
+    from awx.main.models import WorkflowJobTemplate
     WorkflowJobTemplate.objects.create(
         name='foo-workflow-launch-test',
         organization=organization,
@@ -168,6 +175,7 @@ def test_workflow_launch_with_prompting(run_module, admin_user, organization, in
 
 @pytest.mark.django_db
 def test_delete_with_spec(run_module, admin_user, organization, survey_spec):
+    from awx.main.models import WorkflowJobTemplate
     WorkflowJobTemplate.objects.create(organization=organization, name='foo-workflow', survey_enabled=True, survey_spec=survey_spec)
     result = run_module('workflow_job_template', {'name': 'foo-workflow', 'organization': organization.name, 'state': 'absent'}, admin_user)
     assert not result.get('failed', False), result.get('msg', result)
