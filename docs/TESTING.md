@@ -1,13 +1,19 @@
 # Testing the Ascender Collection
 
-We strive to have test coverage for all modules in the Ascender Collection. The `/test` and `/tests` directories contain unit and integration tests, respectively. Tests ensure that any changes to the Ascender Collection do not adversely affect expected behavior and functionality.
+We strive to have test coverage for all modules in the Ascender Collection. The `/tests` directory contains unit, integration, and sanity tests. Tests ensure that any changes to the Ascender Collection do not adversely affect expected behavior and functionality.
 
-When trying to fix a bug, it is best to replicate its behavior within a test with an assertion for the desired behavior. After that, edit the code and running the test to ensure your changes corrected the problem and did not affect anything else.
+When trying to fix a bug, it is best to replicate its behavior within a test with an assertion for the desired behavior. After that, edit the code and run the test suite to ensure your changes corrected the problem and did not affect anything else.
 
+
+- [Unit Tests](#unit-tests)
+- [Sanity Tests](#sanity-tests)
+- [Integration Tests](#integration-tests)
+
+---
 
 ## Unit Tests
 
-The unit tests are stored in the `test/ascender` directory and, where possible, test interactions between the collections modules and the Ascender database. This is achieved by using a Python testing suite and having a mocked layer which emulates interactions with the API. You do not need a server to run these unit tests. The depth of testing is not fixed and can change from module to module.
+The unit tests are stored in the `tests/unit` directory and, where possible, test interactions between the collections modules and the Ascender database. This is achieved by using a Python testing suite and having a mocked layer which emulates interactions with the API. You do not need a server to run these unit tests. The depth of testing is not fixed and can change from module to module.
 
 Let's take a closer look at the `test_token.py` file (which tests the `token` module):
 
@@ -45,7 +51,7 @@ This test has a single test called `test_create_token`. It creates a `module_arg
 
 ### Completion Test
 
-The completeness check is run from the unit tests and can be found in `test/ascender/test_completeness.py`. It compares the CRUD modules to the API endpoints and looks for discrepancies in options between the two.
+The completeness check is run from the unit tests and can be found in `tests/unit/test_completeness.py`. It compares the CRUD modules to the API endpoints and looks for discrepancies in options between the two.
 
 For example, when creating a new module for an endpoint and the module has parameters A, B and C, and the endpoint supports options A, B and D, then errors around parameter C and option D being mismatched would come up.
 
@@ -56,16 +62,48 @@ A completeness failure will generate a large ASCII table in the CI log indicatin
 To find the error, look at the last column and search for the term "failure". There will most likely be some failures which have been deemed acceptable and will typically say "non-blocking" next to them. Those errors can be safely ignored.
 
 
+### Running Unit Tests
+
+The unit tests require a checkout of the [Ascender](https://github.com/ctrliq/ascender) repo for the Django models. Set up a virtualenv with the necessary dependencies:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+pip install -e <path to your ascender checkout>
+pip install -e <path to your ascender checkout>/awxkit
+```
+
+Once your environment is established, run all unit tests:
+
+```
+$ pytest tests/unit -v
+==================================== test session starts ====================================
+...
+```
+
+You can also run a specific test file:
+
+```
+$ pytest tests/unit/test_token.py
+============================ test session starts ============================
+...
+tests/unit/test_token.py .                               [100%]
+========================= 1 passed in 1.72 seconds =========================
+```
+
+
+---
+
+## Sanity Tests
+
+Sanity tests are stored in the `/tests/sanity` directory. These are file directives for specific Ansible versions which contain information about which tests to skip for specific files. There are a number of reasons you may need to skip a sanity test. See the [`ansible-test` documentation](https://docs.ansible.com/ansible/latest/dev_guide/testing_running_locally.html) for more details about how and why you might want to skip a test.
+
+---
+
 ## Integration Tests
 
-Integration tests are stored in the `/tests` directory and will be familiar to Ansible developers as these tests are executed with the ansible-test command line program.
-
-Inside the `/tests` directory, there are two folders:
-
-- `/integration`
-- `/sanity`
-
-In the `/sanity` folder are file directives for specific Ansible versions which contain information about which tests to skip for specific files. There are a number of reasons you may need to skip a sanity test. See the [`ansible-test` documentation](https://docs.ansible.com/ansible/latest/dev_guide/testing_running_locally.html) for more details about how and why you might want to skip a test.
+Integration tests are stored in the `/tests/integration` directory and will be familiar to Ansible developers as these tests are executed with the ansible-test command line program.
 
 In the `integration/targets` folder you will see directories (which act as roles) for all of the different modules and plugins. When the collection is tested, an instance of Ascender will be spun up and these roles will be applied to the target server to validate the functionality of the modules. Since these are really roles, each directory will contain a tasks folder under it with a `main.yml` file as an entry point.
 
@@ -135,38 +173,7 @@ While not strictly followed, the general flow of a test should be:
 When writing an integration test, a test of asset type A does not need to make assertions for asset type B. For example, if you are writing an integration test for a credential and you create a custom credential type, you do not need to assert that the `credential_type` call properly worked, you can assume it will. In addition, when cleaning up and deleting the `credential_type`, you do not need to assert that it properly deleted the credential type.
 
 
-## Running Unit Tests
-
-The unit tests require a checkout of the [Ascender](https://github.com/ctrliq/ascender) repo for the Django models. Set up a virtualenv with the necessary dependencies:
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-pip install -e <path to your ascender checkout>
-pip install -e <path to your ascender checkout>/awxkit
-```
-
-Once your environment is established, run all unit tests:
-
-```
-$ pytest test/ascender -v
-==================================== test session starts ====================================
-...
-```
-
-You can also run a specific test file:
-
-```
-$ pytest test/ascender/test_token.py
-============================ test session starts ============================
-...
-test/ascender/test_token.py .                               [100%]
-========================= 1 passed in 1.72 seconds =========================
-```
-
-
-## Running Integration Tests
+### Running Integration Tests
 
 For integration tests, you will need an existing Ascender instance to run the test playbooks against. You can write a simple `run_it.yml` playbook to invoke the main method:
 
@@ -204,3 +211,4 @@ ln -s $(pwd) ~/.ansible/collections/ansible_collections/ctrliq/ascender
 ```
 
 > **Note:** Collections and symlinks can be unstable.
+

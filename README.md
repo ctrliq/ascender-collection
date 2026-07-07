@@ -107,10 +107,10 @@ Per-plugin documentation is available with `ansible-doc`, e.g.
 
 ## Testing
 
-See [TESTING.md](./TESTING.md) for full details.
+See [TESTING.md](./docs/TESTING.md) for full details.
 
 - **Sanity** — `ansible-test sanity` from an installed copy.
-- **Unit** — `py.test test/ascender/` against the
+- **Unit** — `py.test tests/unit/` against the
   [Ascender](https://github.com/ctrliq/ascender) Django models.
 - **Integration** — `ansible-test integration` with a running controller.
 

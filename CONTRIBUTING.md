@@ -48,7 +48,7 @@ ansible-test sanity --docker
 
 ```bash
 DJANGO_SETTINGS_MODULE=awx.main.tests.settings_for_test \
-  py.test test/ascender/ -v --timeout=120 --nomigrations --create-db
+  py.test tests/unit/ -v --timeout=120 --nomigrations --create-db
 ```
 
 ### Linting
