@@ -15,7 +15,7 @@ body:
     attributes:
       label: Collection Version
       description: "Output of: ansible-galaxy collection list ctrliq.ascender"
-      placeholder: "ctrliq.ascender 25.4.0"
+      placeholder: "ctrliq.ascender <version>"
     validations:
       required: true
   - type: input

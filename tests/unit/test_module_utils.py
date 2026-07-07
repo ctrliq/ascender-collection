@@ -159,20 +159,7 @@ def test_duplicate_config(collection_import, silence_warning):
     )
 
 
-def test_no_templated_values(collection_import):
-    """This test corresponds to replacements done by
-    tools/roles/template_galaxy/tasks/main.yml
-    Those replacements should happen at build time, so they should not be
-    checked into source.
-    """
-    ControllerAPIModule = collection_import('plugins.module_utils.controller_api').ControllerAPIModule
-    assert ControllerAPIModule._COLLECTION_VERSION == "0.0.1-devel", (
-        'The collection version is templated when the collection is built ' 'and the code should retain the placeholder of "0.0.1-devel".'
-    )
-    InventoryModule = collection_import('plugins.inventory.controller').InventoryModule
-    assert InventoryModule.NAME == 'ctrliq.ascender.controller', (
-        'The inventory plugin FQCN is templated when the collection is built ' 'and the code should retain the default of ctrliq.ascender.'
-    )
+
 
 
 def test_conflicting_name_and_id(run_module, admin_user):

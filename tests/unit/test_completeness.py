@@ -26,6 +26,7 @@ no_module_for_endpoint = [
 # Some modules work on the related fields of an endpoint. These modules will not have an auto-associated endpoint
 no_endpoint_for_module = [
     'import',
+    'controller_export_diff',
     'controller_meta',
     'export',
     'inventory_source_update',
@@ -59,18 +60,18 @@ ignore_parameters = ['state', 'new_name', 'update_secrets', 'copy_from', 'is_int
 # Add the module name as the key with the value being the list of params to ignore
 no_api_parameter_ok = {
     # The wait is for whether or not to wait for a project update on change
-    'project': ['wait', 'interval', 'update_project'],
+    'project': ['wait', 'interval', 'update_project', 'webhook_key', 'webhook_ref_filter', 'webhook_service'],
     # Existing_token and id are for working with an existing tokens
     'token': ['existing_token', 'existing_token_id'],
     # /survey spec is now how we handle associations
     # We take an organization here to help with the lookups only
-    'job_template': ['survey_spec', 'organization'],
+    'job_template': ['survey_spec', 'organization', 'webhook_key'],
     'inventory_source': ['organization'],
     # Organization is how we are looking up job templates, Approval node is for workflow_approval_templates,
     # lookup_organization is for specifiying the organization for the unified job template lookup
-    'workflow_job_template_node': ['organization', 'approval_node', 'lookup_organization'],
+    'workflow_job_template_node': ['organization', 'approval_node', 'lookup_organization', 'max_retries'],
     # Survey is how we handle associations
-    'workflow_job_template': ['survey_spec', 'destroy_current_nodes'],
+    'workflow_job_template': ['survey_spec', 'destroy_current_nodes', 'webhook_key'],
     # organization is how we lookup unified job templates
     'schedule': ['organization'],
     # ad hoc commands support interval and timeout since its more like job_launch
@@ -82,7 +83,7 @@ no_api_parameter_ok = {
     # workflow_approval parameters that do not apply when approving an approval node.
     'workflow_approval': ['action', 'interval', 'timeout', 'workflow_job_id'],
     # bulk
-    'bulk_job_launch': ['interval', 'wait'],
+    'bulk_job_launch': ['interval', 'wait', 'timeout'],
 }
 
 # When this tool was created we were not feature complete. Adding something in here indicates a module

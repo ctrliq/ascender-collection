@@ -206,7 +206,7 @@ def run_module(request, collection_import):
             raise RuntimeError("The module has neither a ControllerAWXKitModule or a ControllerAPIModule")
 
         # The collection-vs-server version compatibility check warns whenever the
-        # source _COLLECTION_VERSION placeholder ("0.0.1-devel") does not match the
+        # source _COLLECTION_VERSION does not match the
         # connected server version, which would pollute the warning-count
         # assertions in the module tests. That check has dedicated coverage in
         # test_module_utils.py, so suppress it for the general module invocations.
