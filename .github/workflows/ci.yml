@@ -136,6 +136,8 @@ jobs:
         run: |
           pip install ansible-core
           pip install -r tests/unit/requirements.txt
+          pip install -r ascender/requirements/requirements.txt
+          pip install -r ascender/requirements/requirements_git.txt
           pip install -e ascender
           pip install -e ascender/awxkit
 
