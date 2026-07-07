@@ -122,17 +122,50 @@ jobs:
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
 
+      - name: Checkout ascender (for Django models)
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+        with:
+          repository: ctrliq/ascender
+          persist-credentials: false
+          path: ascender
+
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1  # v6.3.0
         with:
           python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: |
+            tests/unit/requirements.txt
+            ascender/requirements/requirements.txt
+            ascender/requirements/requirements_git.txt
+            ascender/requirements/requirements_dev.txt
+
+      - name: Install system build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libldap2-dev \
+            libsasl2-dev \
+            libxml2-dev \
+            libxmlsec1-dev \
+            libxmlsec1-openssl \
+            pkg-config
 
       - name: Install dependencies
         run: |
           pip install ansible-core
           pip install -r tests/unit/requirements.txt
+          pip install -r ascender/requirements/requirements.txt
+          pip install -r ascender/requirements/requirements_git.txt
+          pip install -r ascender/requirements/requirements_dev.txt
+          pip install -e ascender
+          pip install -e ascender/awxkit
 
       - name: Run unit tests
-        run: pytest tests/unit/ -v
+        env:
+          DJANGO_SETTINGS_MODULE: awx.main.tests.settings_for_test
+        run: |
+          sudo install -d -o "$USER" -g "$USER" -m 0755 /var/log/tower
+          pytest tests/unit/ -v --nomigrations --reuse-db
 
   changelog:
     name: Changelog
