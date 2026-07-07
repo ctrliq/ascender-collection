@@ -164,8 +164,7 @@ jobs:
         env:
           DJANGO_SETTINGS_MODULE: awx.main.tests.settings_for_test
         run: |
-          sudo mkdir -p /var/log/tower
-          sudo chmod 777 /var/log/tower
+          sudo install -d -o "$USER" -g "$USER" -m 0755 /var/log/tower
           pytest tests/unit/ -v --nomigrations --reuse-db
 
   changelog:
