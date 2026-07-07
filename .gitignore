@@ -30,6 +30,9 @@ dist/
 .claude/
 CLAUDE.md
 
+# ansible-test symlink target
+.ansible/
+
 # OS files
 .DS_Store
 Thumbs.db

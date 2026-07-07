@@ -39,7 +39,7 @@ build_ignore:
   - CLAUDE.md
   - CONTRIBUTING.md
   - SECURITY.md
-  - TESTING.md
+  - docs/TESTING.md
   - images
   - pyproject.toml
   - ruff.toml

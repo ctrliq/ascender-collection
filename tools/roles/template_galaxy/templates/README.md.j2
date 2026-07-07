@@ -162,7 +162,7 @@ The collection is verified three ways:
   `ansible-test sanity`.
 {% if collection_package | lower() == "ascender" %}
 - **Unit** — compatibility tests against the current controller code live in
-  `test/ascender` and require a checkout of the
+  `tests/unit` and require a checkout of the
   [Ascender](https://github.com/ctrliq/ascender) repo for the Django models.
   To run them, use a dedicated virtualenv:
 
@@ -171,7 +171,7 @@ The collection is verified three ways:
   pip install -r requirements.txt
   pip install -e <path to your ascender checkout>
   pip install -e <path to your ascender checkout>/awxkit
-  py.test test/ascender/
+  py.test tests/unit/
   ```
 
 - **Integration** — require a virtualenv with `ansible-core >= 2.16` and
