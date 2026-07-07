@@ -149,11 +149,14 @@ jobs:
           pip install -r tests/unit/requirements.txt
           pip install -r ascender/requirements/requirements.txt
           pip install -r ascender/requirements/requirements_git.txt
+          pip install -r ascender/requirements/requirements_dev.txt
           pip install -e ascender
           pip install -e ascender/awxkit
 
       - name: Run unit tests
-        run: pytest tests/unit/ -v
+        env:
+          DJANGO_SETTINGS_MODULE: awx.main.tests.settings_for_test
+        run: pytest tests/unit/ -v --nomigrations --reuse-db
 
   changelog:
     name: Changelog
