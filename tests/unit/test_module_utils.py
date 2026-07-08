@@ -159,9 +159,6 @@ def test_duplicate_config(collection_import, silence_warning):
     )
 
 
-
-
-
 def test_conflicting_name_and_id(run_module, admin_user):
     """In the event that 2 related items match our search criteria in this way:
     one item has an id that matches input
