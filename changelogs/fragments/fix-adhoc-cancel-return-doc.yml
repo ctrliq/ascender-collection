@@ -1,0 +1,3 @@
+bugfixes:
+  - ad_hoc_command_cancel - document that ``changed`` is returned on success; the previous ``id`` entry did
+    not match what the module actually exits with.
