@@ -34,7 +34,7 @@ options:
     version_added: "3.7.0"
   validate_certs:
     description:
-    - Whether to allow insecure connections to Ascender.
+    - Whether to validate SSL certificates for connections to Ascender.
     - If C(no), SSL certificates will not be validated.
     - This should only be used on personally controlled sites using self-signed certificates.
     - If value not set, will try environment variable C(CONTROLLER_VERIFY_SSL) and then config files
@@ -43,6 +43,7 @@ options:
     description:
     - Specify the timeout Ansible should use in requests to the controller host.
     - Defaults to 10s, but this is handled by the shared module_utils code
+    - This parameter is not honored by the M(ctrliq.ascender.export) and M(ctrliq.ascender.import) modules.
     - If value not set, will try environment variable C(CONTROLLER_REQUEST_TIMEOUT) and then config files
     type: float
   controller_config_file:

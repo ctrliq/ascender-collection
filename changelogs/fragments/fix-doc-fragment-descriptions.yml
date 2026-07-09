@@ -1,0 +1,9 @@
+bugfixes:
+  - auth doc fragment - the ``validate_certs`` description lead sentence was inverted ("Whether
+    to allow insecure connections"); it now correctly describes SSL certificate validation.
+  - auth doc fragment - document that ``request_timeout`` is not honored by the export and
+    import modules, which connect through awxkit without a timeout. The caveat previously lived
+    in the plugin doc fragment, where it was wrong (lookup and inventory plugins do honor
+    ``request_timeout``), and has been removed from there.
+  - auth_plugin doc fragment - the notes no longer reference a ``config_file`` option that no
+    plugin exposes; config files in the standard locations are still read.

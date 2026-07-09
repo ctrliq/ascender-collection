@@ -36,15 +36,14 @@ options:
     description:
     - Specify the timeout Ansible should use in requests to the controller host.
     - Defaults to 10 seconds
-    - This will not work with the export or import modules.
     type: float
     env:
     - name: CONTROLLER_REQUEST_TIMEOUT
 
 notes:
-- If no I(config_file) is provided we will attempt to find a config file in standard locations
+- We will attempt to find a config file in standard locations
   (./controller_cli.cfg, ~/.controller_cli.cfg, /etc/controller/controller_cli.cfg).
-- I(config_file) should be in the following format
+- The config file should be in the following format
     host=hostname
     username=username
     password=password
