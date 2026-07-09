@@ -1,0 +1,6 @@
+bugfixes:
+  - job_launch - validate ``execution_environment``, ``forks``, ``instance_groups``, ``job_slice_count``,
+    ``labels``, and ``job_timeout`` against the job template's corresponding prompt-on-launch flags;
+    previously these fields were posted to the API unchecked, so the API silently dropped them when the
+    template did not allow prompting for them, and the module reported success instead of failing like it
+    already does for ``limit`` and ``tags``.
