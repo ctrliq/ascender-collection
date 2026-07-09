@@ -1,0 +1,4 @@
+bugfixes:
+  - workflow_job_template_node - change ``verbosity`` to ``type=int`` with integer choices to match the
+    API, which stores it as an integer; previously the string-typed parameter never matched the
+    server value, causing the module to report ``changed`` on every run even when nothing changed.
