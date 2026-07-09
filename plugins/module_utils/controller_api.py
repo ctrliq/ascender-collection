@@ -550,6 +550,16 @@ class ControllerAPIModule(ControllerModule):
             # A 405 means we used a method that isn't allowed. Usually this is a bad request, but it requires special treatment because the
             # API sends it as a logic error in a few situations (e.g. trying to cancel a job that isn't running).
             elif he.code == 405:
+                if kwargs.get('tolerate_405', False):
+                    # Some callers (e.g. job/ad hoc command cancel) check whether an action is possible and then
+                    # perform it in a second request. The state can change between the two calls (a job can finish
+                    # running in that window), in which case the controller responds with a 405 here too. Let the
+                    # caller handle that instead of us hard failing.
+                    page_data = he.read()
+                    try:
+                        return {'status_code': he.code, 'json': loads(page_data)}
+                    except ValueError:
+                        return {'status_code': he.code, 'text': page_data}
                 self.fail_json(msg=f"Cannot make a request with the {method} method to this endpoint {url.path}")
             # Sanity check: Did we get some other kind of error?  If so, write an appropriate error message.
             elif he.code >= 400:
