@@ -60,18 +60,18 @@ ignore_parameters = ['state', 'new_name', 'update_secrets', 'copy_from', 'is_int
 # Add the module name as the key with the value being the list of params to ignore
 no_api_parameter_ok = {
     # The wait is for whether or not to wait for a project update on change
-    'project': ['wait', 'interval', 'update_project', 'webhook_key', 'webhook_ref_filter', 'webhook_service'],
+    'project': ['wait', 'interval', 'update_project'],
     # Existing_token and id are for working with an existing tokens
     'token': ['existing_token', 'existing_token_id'],
     # /survey spec is now how we handle associations
     # We take an organization here to help with the lookups only
-    'job_template': ['survey_spec', 'organization', 'webhook_key'],
+    'job_template': ['survey_spec', 'organization'],
     'inventory_source': ['organization'],
     # Organization is how we are looking up job templates, Approval node is for workflow_approval_templates,
     # lookup_organization is for specifiying the organization for the unified job template lookup
-    'workflow_job_template_node': ['organization', 'approval_node', 'lookup_organization', 'max_retries'],
+    'workflow_job_template_node': ['organization', 'approval_node', 'lookup_organization'],
     # Survey is how we handle associations
-    'workflow_job_template': ['survey_spec', 'destroy_current_nodes', 'webhook_key'],
+    'workflow_job_template': ['survey_spec', 'destroy_current_nodes'],
     # organization is how we lookup unified job templates
     'schedule': ['organization'],
     # ad hoc commands support interval and timeout since its more like job_launch
@@ -93,6 +93,12 @@ needs_development = ['inventory_script', 'instance']
 needs_param_development = {
     'host': ['instance_id'],
     'workflow_approval': ['description', 'execution_environment'],
+    # New writable API fields (project webhooks, workflow node retries, slice host pinning)
+    # that the modules do not support yet
+    'job_template': ['job_slice_pinned_hosts', 'webhook_key'],
+    'project': ['webhook_key', 'webhook_ref_filter', 'webhook_service'],
+    'workflow_job_template': ['webhook_key'],
+    'workflow_job_template_node': ['max_retries'],
 }
 # -----------------------------------------------------------------------------------------------------------
 

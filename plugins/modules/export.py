@@ -169,12 +169,6 @@ def main():
     # Set up a log gobbler to get error messages from export_assets
     log_capture_string = StringIO()
     ch = logging.StreamHandler(log_capture_string)
-
-    class IgnoreNaturalKeyFilter(logging.Filter):
-        def filter(self, record):
-            return 'Unable to construct a natural key' not in record.getMessage()
-
-    ch.addFilter(IgnoreNaturalKeyFilter())
     for logger_name in ['awxkit.api.pages.api', 'awxkit.api.pages.page']:
         logger = logging.getLogger(logger_name)
         logger.setLevel(logging.ERROR)
