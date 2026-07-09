@@ -1,0 +1,4 @@
+bugfixes:
+  - build - update the stale ``build_ignore`` entry for the images directory to ``docs/images``, matching
+    where the directory was moved; previously the entry matched nothing and ``docs/images/completeness_test_output.png``
+    (an asset only referenced by the already-excluded ``docs/TESTING.md``) shipped in the built collection artifact.

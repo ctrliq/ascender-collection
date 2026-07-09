@@ -40,7 +40,7 @@ build_ignore:
   - CONTRIBUTING.md
   - SECURITY.md
   - docs/TESTING.md
-  - images
+  - docs/images
   - pyproject.toml
   - ruff.toml
   - bindep.txt
