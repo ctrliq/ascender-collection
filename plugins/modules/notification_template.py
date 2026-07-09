@@ -235,8 +235,10 @@ def main():
 
     # Attempt to look up the related items the user specified (these will fail the module if not found)
     organization_id = None
+    search_fields = {}
     if organization:
         organization_id = module.resolve_name_to_id('organizations', organization)
+        search_fields['organization'] = organization_id
 
     # Attempt to look up an existing item based on the provided data
     existing_item = module.get_one(
@@ -244,9 +246,7 @@ def main():
         name_or_id=name,
         check_exists=(state == 'exists'),
         **{
-            'data': {
-                'organization': organization_id,
-            }
+            'data': search_fields
         }
     )
 
