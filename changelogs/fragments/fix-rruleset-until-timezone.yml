@@ -1,0 +1,4 @@
+bugfixes:
+  - schedule_rruleset lookup - fix ``end_on`` accepting a date so it no longer fails with
+    "RRULE UNTIL values must be specified in UTC when DTSTART is timezone-aware"; the local
+    end date is now converted to UTC before being emitted as the rule's ``UNTIL`` value.
