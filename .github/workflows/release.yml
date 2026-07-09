@@ -15,6 +15,17 @@ jobs:
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
 
+      - name: Verify galaxy.yml version matches release tag
+        run: |
+          TAG="${{ github.event.release.tag_name }}"
+          TAG="${TAG#v}"
+          GALAXY_VERSION="$(grep -E '^version:' galaxy.yml | sed -E 's/^version:[[:space:]]*//')"
+          if [ "$TAG" != "$GALAXY_VERSION" ]; then
+            echo "::error::Release tag '${{ github.event.release.tag_name }}' does not match galaxy.yml version '$GALAXY_VERSION'"
+            exit 1
+          fi
+          echo "Release tag matches galaxy.yml version: $GALAXY_VERSION"
+
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1  # v6.3.0
         with:
           python-version: "3.12"
