@@ -1,0 +1,4 @@
+bugfixes:
+  - controller_api module utils - stop including the raw login response body in the failure message when the
+    ``/api/v2/tokens/`` response cannot be parsed; a token minted by the server before the parse failure was being
+    leaked into module failure output with no way to look up and delete it afterwards.

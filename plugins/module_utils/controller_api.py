@@ -639,7 +639,6 @@ class ControllerAPIModule(ControllerModule):
                 # Sanity check: Did the server send back some kind of internal error?
                 self.fail_json(msg=f'Failed to get token: {e}')
 
-            token_response = None
             try:
                 token_response = response.read()
                 response_json = loads(token_response)
@@ -647,7 +646,10 @@ class ControllerAPIModule(ControllerModule):
                 self.oauth_token = response_json['token']
                 self.authenticated = True
             except Exception as e:
-                self.fail_json(msg=f"Failed to extract token information from login response: {e}", **{'response': token_response})
+                # Do not include the raw response body or token_response here: a token may have been minted
+                # server-side even though parsing it failed, and leaking it into failure output would expose
+                # a live credential that we have no way to look up and delete (we never recorded its id).
+                self.fail_json(msg=f"Failed to extract token information from login response (HTTP {response.status}): {e}")
 
     def delete_if_needed(self, existing_item, on_delete=None, auto_exit=True):
         # This will exit from the module on its own.
