@@ -218,7 +218,7 @@ def main():
         module = AnsibleModule(argument_spec=argument_spec)
         module.fail_json(msg="Failed to import ControllerAWXKitModule. Install ctrliq.ascender collection.")
 
-    module = ControllerAWXKitModule(argument_spec=argument_spec)
+    module = ControllerAWXKitModule(argument_spec=argument_spec, supports_check_mode=True)
 
     if not HAS_EXPORTABLE_RESOURCES:
         module.fail_json(msg="Your version of awxkit does not have import/export")
