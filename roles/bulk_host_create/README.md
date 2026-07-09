@@ -133,7 +133,7 @@ controller_bulk_hosts:
         ignore_files: [controller_config.yml.template]
         extensions: ["yml"]
   roles:
-    - {role: redhat_cop.controller_configuration.bulk_host_create, when: controller_bulk_hosts is defined}
+    - {role: ctrliq.ascender.bulk_host_create, when: controller_bulk_hosts is defined}
 ```
 
 ## License
