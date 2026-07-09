@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - schedule - keep the organization filter when looking up labels so that a label name that exists in multiple organizations no longer fails the lookup with "returned 2 items, expected 1", matching the behavior of the job_template module.
