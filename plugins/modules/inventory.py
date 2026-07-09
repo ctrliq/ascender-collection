@@ -215,12 +215,15 @@ def main():
     if inventory and inventory['kind'] == '' and kind == 'smart':
         module.fail_json(msg='You cannot turn a regular inventory into a "smart" inventory.')
 
-    if kind == 'constructed' or (kind is None and inventory is not None and inventory['kind'] == 'constructed'):
-        input_inventory_names = module.params.get('input_inventories')
-        if input_inventory_names is not None:
-            association_fields['input_inventories'] = []
-            for item in input_inventory_names:
-                association_fields['input_inventories'].append(module.resolve_name_to_id('inventories', item))
+    is_constructed = kind == 'constructed' or (kind is None and inventory is not None and inventory['kind'] == 'constructed')
+    input_inventory_names = module.params.get('input_inventories')
+    if input_inventory_names is not None and not is_constructed:
+        module.fail_json(msg='input_inventories requires kind=constructed.')
+
+    if is_constructed and input_inventory_names is not None:
+        association_fields['input_inventories'] = []
+        for item in input_inventory_names:
+            association_fields['input_inventories'].append(module.resolve_name_to_id('inventories', item))
 
     # If the state was present and we can let the module build or update the existing inventory, this will return on its own
     module.create_or_update_if_needed(
