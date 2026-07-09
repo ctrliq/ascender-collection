@@ -1,0 +1,10 @@
+bugfixes:
+  - controller_export_diff - compare organizations safely when either side is ``None`` (e.g. a user-owned
+    credential) or given as a plain string instead of a dict; previously this crashed with
+    ``AttributeError``.
+  - controller_export_diff - stop including controller-only leftovers in the output when ``set_absent=False``
+    and ``with_present=True``; they were spliced in with no ``state`` key at all, which defeated
+    ``set_absent=False`` for anything applying the returned states. The output in that combination is now
+    just the compare items, all marked ``present``.
+  - controller_export_diff - fix a ``NameError`` in the failure handler that could mask the real error when
+    the exception happened before any compare item had been processed for a resource.
