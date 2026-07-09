@@ -1,0 +1,4 @@
+minor_changes:
+  - controller inventory plugin - support the standard Ansible inventory caching options (``cache``, ``cache_plugin``, ``cache_timeout``,
+    ``cache_connection``, ``cache_prefix``). Previously the plugin accepted the ``cache`` argument but never used it, so every run
+    refetched the inventory from the API.
