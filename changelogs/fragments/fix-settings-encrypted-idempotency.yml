@@ -1,0 +1,5 @@
+bugfixes:
+  - settings - treat the ``$encrypted$`` placeholder returned by the API for encrypted settings
+    (for example ``AUTH_LDAP_BIND_PASSWORD``) as potentially equal to the desired value, using the
+    same comparison logic as the other modules; previously every run reported ``changed`` and
+    re-submitted the setting.

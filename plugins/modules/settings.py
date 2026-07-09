@@ -139,9 +139,14 @@ def main():
     json_output = {'changed': False, 'old_values': {}, 'new_values': {}}
 
     # Check any of the settings to see if anything needs to be updated
+    # Encrypted settings are returned by the API as the placeholder value
+    # ControllerAPIModule.ENCRYPTED_STRING ("$encrypted$") rather than their real value, so a
+    # plain != comparison always reports a change for them. Use the same
+    # fields_could_be_same() logic the base class uses elsewhere to treat an
+    # existing "$encrypted$" value as a wildcard that could match the desired value.
     needs_update = False
     for a_setting in new_settings:
-        if existing_settings[a_setting] != new_settings[a_setting]:
+        if not module.fields_could_be_same(existing_settings[a_setting], new_settings[a_setting]):
             # At least one thing is different so we need to patch
             needs_update = True
             json_output['old_values'][a_setting] = existing_settings[a_setting]
