@@ -1,0 +1,2 @@
+bugfixes:
+  - awxkit module utils - catch errors from ``connection.logout()`` and downgrade them to a warning instead of letting them raise, so a connection problem during the original failure does not mask the real error with a raw traceback (previously ``fail_json`` calling ``logout()`` on a dropped connection could crash the module instead of reporting the original failure).
