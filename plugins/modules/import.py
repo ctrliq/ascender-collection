@@ -71,14 +71,13 @@ def main():
     # Currently the import process does not return anything on error
     # It simply just logs to Python's logger
     # Set up a log gobbler to get error messages from import_assets
-    logger = logging.getLogger('awxkit.api.pages.api')
-    logger.setLevel(logging.ERROR)
-
     log_capture_string = StringIO()
     ch = logging.StreamHandler(log_capture_string)
-    ch.setLevel(logging.ERROR)
-
-    logger.addHandler(ch)
+    for logger_name in ['awxkit.api.pages.api', 'awxkit.api.pages.page']:
+        logger = logging.getLogger(logger_name)
+        logger.setLevel(logging.ERROR)
+        ch.setLevel(logging.ERROR)
+        logger.addHandler(ch)
     log_contents = ''
 
     # Run the import process
