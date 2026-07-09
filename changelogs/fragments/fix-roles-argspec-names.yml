@@ -1,0 +1,7 @@
+bugfixes:
+  - job_launch, groups, inventory_source_update, notification_templates, workflow_job_templates roles -
+    correct the async retry/delay and secure logging variable names in ``meta/argument_specs.yml`` (and the
+    README tables that repeated them) to match the variables the tasks actually read; the specs advertised
+    names such as ``controller_configuration_groups_secure_logging`` or
+    ``controller_configuration_notification_templates_async_retries`` that the roles never consumed, so
+    anyone setting the documented variable was silently ignored.
