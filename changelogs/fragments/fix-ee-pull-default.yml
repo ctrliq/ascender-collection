@@ -1,0 +1,5 @@
+bugfixes:
+  - execution_environment - do not default ``pull`` to ``missing`` and only send it when explicitly specified;
+    previously any playbook that merely ensured an execution environment existed silently overwrote a blank
+    (server-default) pull policy with ``missing`` and reported changed. Add ``''`` to the allowed choices so a
+    blank pull policy can be restored explicitly.
