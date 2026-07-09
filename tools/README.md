@@ -87,5 +87,5 @@ ansible-playbook -i localhost, tools/integration_testing.yml -e test=$(ls -1Am t
 ```
 
 Depending on the module, you may need special dependencies.
-For instance, the rrule lookup plugins need `pytz`.
+For instance, the rrule lookup plugins need `python-dateutil`.
 These will be satisfied if you install the requirements in `requirements.txt`.

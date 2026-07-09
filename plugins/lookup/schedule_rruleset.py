@@ -6,7 +6,6 @@ DOCUMENTATION = """
     author: John Westcott IV (@john-westcott-iv)
     short_description: Generate an rruleset string
     requirements:
-      - pytz
       - python-dateutil >= 2.7.0
     description:
       - Returns a string based on criteria which represents an rrule
@@ -128,9 +127,9 @@ import re
 from ansible.plugins.lookup import LookupBase
 from ansible.errors import AnsibleError
 from datetime import datetime
+from zoneinfo import available_timezones
 
 try:
-    import pytz
     from dateutil import rrule
 except ImportError as imp_exc:
     LIBRARY_IMPORT_ERROR = imp_exc
@@ -233,7 +232,7 @@ class LookupModule(LookupBase):
         # So we will do a string manip here if we need to
         timezone = 'America/New_York'
         if 'timezone' in kwargs:
-            if kwargs['timezone'] not in pytz.all_timezones:
+            if kwargs['timezone'] not in available_timezones():
                 raise AnsibleError('Timezone parameter is not valid')
             timezone = kwargs['timezone']
 
