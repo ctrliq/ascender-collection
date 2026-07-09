@@ -85,9 +85,25 @@ def main():
 
     json_output = {'changed': False}
 
-    # If the state was absent we can delete the endpoint and exit.
+    # If the state is absent, only delete the license if one is actually present so
+    # the module remains idempotent.
     state = module.params.get('state')
     if state == 'absent':
+        config = module.get_endpoint('config')['json']
+        is_licensed = (
+            'license_info' in config
+            and 'instance_count' in config['license_info']
+            and config['license_info']['instance_count'] > 0
+        )
+
+        # Handle check mode
+        if module.check_mode:
+            json_output['changed'] = is_licensed
+            module.exit_json(**json_output)
+
+        if not is_licensed:
+            module.exit_json(**json_output)
+
         response = module.delete_endpoint('config')
         if response['status_code'] >= 400:
             module.fail_json(msg="Failed to remove the license, see response for details", response=response)

@@ -1,0 +1,5 @@
+bugfixes:
+  - license - state=absent now checks whether a license is actually present before deleting it,
+    so the module is idempotent and reports ``changed=false`` when no license is installed;
+    previously it always deleted ``/api/v2/config/`` and reported ``changed=true`` on every run,
+    including in check mode.
