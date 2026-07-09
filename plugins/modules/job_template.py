@@ -266,6 +266,18 @@ options:
       description:
         - Personal Access Token for posting back the status to the service API
       type: str
+    webhook_key:
+      description:
+        - Shared secret that the webhook service will use to sign requests.
+        - Leave blank to have the controller generate a new one once webhook_service is set.
+        - Omitting this field entirely leaves the existing value on the server untouched.
+        - The API never returns this value, so supplying it always reports the task as changed.
+      type: str
+    job_slice_pinned_hosts:
+      description:
+        - Comma separated list of host names to include in every slice of a sliced job, in addition to the hosts of the slice itself.
+        - Useful when a play targets a coordinating host, such as localhost, that all slices need.
+      type: str
     scm_branch:
       description:
         - Branch to use in job run. Project default used if blank. Only allowed if project allow_override field is set to true.
@@ -416,6 +428,8 @@ def main():
         job_slice_count=dict(type='int'),
         webhook_service=dict(choices=['github', 'gitlab', 'bitbucket_dc', '']),
         webhook_credential=dict(),
+        webhook_key=dict(no_log=True),
+        job_slice_pinned_hosts=dict(),
         labels=dict(type="list", elements='str'),
         notification_templates_started=dict(type="list", elements='str'),
         notification_templates_success=dict(type="list", elements='str'),
@@ -517,7 +531,9 @@ def main():
         'diff_mode',
         'allow_simultaneous',
         'job_slice_count',
+        'job_slice_pinned_hosts',
         'webhook_service',
+        'webhook_key',
         'prevent_instance_group_fallback',
     ):
         field_val = module.params.get(field_name)

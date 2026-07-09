@@ -1,0 +1,3 @@
+minor_changes:
+  - job_template - add ``webhook_key`` parameter to set the shared secret that the webhook service uses to sign requests. The API treats this field as write-only, so supplying it always reports a change; omit it to leave the server value untouched.
+  - job_template - add ``job_slice_pinned_hosts`` parameter, a comma separated list of host names to include in every slice of a sliced job.
