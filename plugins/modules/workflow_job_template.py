@@ -114,6 +114,11 @@ options:
       description:
         - Personal Access Token for posting back the status to the service API
       type: str
+    webhook_key:
+      description:
+        - Shared secret that the webhook service will use to sign requests.
+        - Leave this unset to leave the server value untouched, or set it to an empty string to have the server generate a new one when the webhook service is set.
+      type: str
     survey_enabled:
       description:
         - Setting that variable will prompt the user for job type on the
@@ -824,6 +829,7 @@ def main():
         ask_limit_on_launch=dict(type='bool'),
         webhook_service=dict(choices=['github', 'gitlab', 'bitbucket_dc', '']),
         webhook_credential=dict(),
+        webhook_key=dict(no_log=True),
         labels=dict(type="list", elements='str'),
         notification_templates_started=dict(type="list", elements='str'),
         notification_templates_success=dict(type="list", elements='str'),
@@ -902,6 +908,7 @@ def main():
         'ask_tags_on_launch',
         'ask_skip_tags_on_launch',
         'webhook_service',
+        'webhook_key',
         'job_tags',
         'skip_tags',
     ):
