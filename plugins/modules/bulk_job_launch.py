@@ -94,8 +94,8 @@ options:
           description:
             - The number of jobs to slice into at runtime, if job template prompts for job slices.
             - Will cause the Job Template to launch a workflow if value is greater than 1.
+            - If not provided, the job template's own job slice count is used.
           type: int
-          default: '1'
         identifier:
           description:
             - Identifier for the resulting workflow node that represents this job
@@ -205,7 +205,31 @@ from ..module_utils.controller_api import ControllerAPIModule
 def main():
     # Any additional arguments that are not fields of the item can be added here
     argument_spec = dict(
-        jobs=dict(required=True, type='list', elements='dict'),
+        jobs=dict(
+            required=True,
+            type='list',
+            elements='dict',
+            options=dict(
+                unified_job_template=dict(required=True, type='int'),
+                inventory=dict(type='int'),
+                execution_environment=dict(type='int'),
+                instance_groups=dict(type='list', elements='int'),
+                credentials=dict(type='list', elements='int'),
+                labels=dict(type='list', elements='int'),
+                extra_data=dict(type='dict', default={}),
+                diff_mode=dict(type='bool'),
+                verbosity=dict(type='int', choices=[0, 1, 2, 3, 4, 5]),
+                scm_branch=dict(type='str'),
+                job_type=dict(type='str', choices=['run', 'check']),
+                job_tags=dict(type='str'),
+                skip_tags=dict(type='str'),
+                limit=dict(type='str'),
+                forks=dict(type='int'),
+                job_slice_count=dict(type='int'),
+                identifier=dict(type='str'),
+                timeout=dict(type='int'),
+            ),
+        ),
         name=dict(),
         description=dict(),
         organization=dict(type='str'),
@@ -238,6 +262,9 @@ def main():
         val = module.params.get(p)
         if val is not None:
             post_data[p] = val
+
+    # Suboption validation fills absent fields with None; drop them so the API applies its own defaults
+    post_data['jobs'] = [{k: v for k, v in job.items() if v is not None} for job in post_data['jobs']]
 
     # Resolve name to ID for related resources
     # Do not resolve name for "jobs" suboptions, for optimization

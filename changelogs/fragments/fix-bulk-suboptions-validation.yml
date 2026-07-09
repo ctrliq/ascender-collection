@@ -1,0 +1,9 @@
+---
+bugfixes:
+  - bulk_host_create - declare the documented suboptions of ``hosts`` in the argument spec so that missing required fields and
+    misspelled suboptions fail with a clear module validation error instead of an opaque API 400.
+  - bulk_job_launch - declare the documented suboptions of ``jobs`` in the argument spec so that a missing ``unified_job_template``,
+    invalid ``job_type``/``verbosity`` choices, and misspelled suboptions fail with a clear module validation error instead of an
+    opaque API 400.
+  - bulk_job_launch - correct the documented default of ``job_slice_count``; it was documented as the string ``'1'`` for an integer
+    field, but the API applies no default and falls back to the job template's own job slice count.
