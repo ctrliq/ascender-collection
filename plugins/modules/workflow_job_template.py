@@ -802,6 +802,10 @@ def destroy_workflow_nodes(module, response, workflow_id):
     for workflow_node in existing_items['json']['results']:
         response.append(module.delete_endpoint(workflow_node['url']))
 
+    # Report back how many nodes were actually deleted so the caller can
+    # determine whether this operation resulted in a change.
+    return len(existing_items['json']['results'])
+
 
 def main():
     # Any additional arguments that are not fields of the item can be added here
@@ -990,8 +994,9 @@ def main():
     response = []
     # Destroy current nodes if selected.
     if destroy_current_nodes:
-        destroy_workflow_nodes(module, response, workflow_job_template_id)
-        module.json_output['changed'] = True
+        deleted_node_count = destroy_workflow_nodes(module, response, workflow_job_template_id)
+        if deleted_node_count:
+            module.json_output['changed'] = True
 
     # Work thorugh and lookup value for schema fields
     if workflow_nodes:
