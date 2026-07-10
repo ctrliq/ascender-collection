@@ -142,7 +142,7 @@ def main():
         for resource in EXPORTABLE_RESOURCES:
             argument_spec[resource] = dict(type='list', elements='str')
 
-    module = ControllerAWXKitModule(argument_spec=argument_spec)
+    module = ControllerAWXKitModule(argument_spec=argument_spec, supports_check_mode=True)
 
     if not HAS_EXPORTABLE_RESOURCES:
         module.fail_json(msg="Your version of awxkit does not have import/export")

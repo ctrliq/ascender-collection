@@ -18,7 +18,7 @@ class ControllerAWXKitModule(ControllerModule):
     apiV2Ref = None
 
     def __init__(self, argument_spec, **kwargs):
-        kwargs['supports_check_mode'] = False
+        kwargs.setdefault('supports_check_mode', False)
 
         super().__init__(argument_spec=argument_spec, **kwargs)
 

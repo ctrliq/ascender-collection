@@ -1,0 +1,4 @@
+bugfixes:
+  - export, controller_export_diff - allow these read-only modules to run under ``--check`` instead of failing;
+    the shared awxkit module utils forced ``supports_check_mode=False`` on every module regardless of what it
+    declared. ``import`` still declines check mode since it writes to the controller.
