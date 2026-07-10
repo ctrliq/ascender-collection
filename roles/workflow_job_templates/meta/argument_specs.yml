@@ -284,7 +284,7 @@ argument_specs:
         #         description: Tags to skip, applied as a prompt, if job template prompts for job tags
 
       # Async variables
-      controller_configuration_workflow_job_templates_async_retries:
+      controller_configuration_workflow_async_retries:
         default: "{{ controller_configuration_async_retries | default(30) }}"
         required: false
         description: This variable sets the number of retries to attempt for the role.
@@ -292,7 +292,7 @@ argument_specs:
         default: 30
         required: false
         description: This variable sets number of retries across all roles as a default.
-      controller_configuration_workflow_job_templates_async_delay:
+      controller_configuration_workflow_async_delay:
         default: "{{ controller_configuration_async_delay | default(1) }}"
         required: false
         description: This variable sets delay between retries for the role.
@@ -306,7 +306,7 @@ argument_specs:
         description: Sets the directory to write the results file for async tasks. The default value is set to `null` which uses the Ansible Default of `/root/.ansible_async/`.
 
       # No_log variables
-      controller_configuration_workflow_job_templates_secure_logging:
+      workflow_job_templates_secure_logging:
         default: "{{ controller_configuration_secure_logging | default(false) }}"
         required: false
         type: bool
