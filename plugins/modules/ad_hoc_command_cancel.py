@@ -44,11 +44,11 @@ EXAMPLES = '''
 '''
 
 RETURN = '''
-id:
-    description: command id requesting to cancel
+changed:
+    description: Whether the command was canceled.
     returned: success
-    type: int
-    sample: 94
+    type: bool
+    sample: true
 '''
 
 import time
