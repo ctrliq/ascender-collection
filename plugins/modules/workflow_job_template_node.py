@@ -167,6 +167,11 @@ options:
       description:
         - Timeout applied as a prompt, assuming job template prompts for timeout
       type: int
+    max_retries:
+      description:
+        - Maximum number of times this node's job is automatically retried after failing before its failure paths are followed.
+        - Canceled jobs are never retried.
+      type: int
     state:
       description:
         - Desired state of the resource.
@@ -284,6 +289,7 @@ def main():
         job_slice_count=dict(type='int'),
         labels=dict(type='list', elements='str'),
         timeout=dict(type='int'),
+        max_retries=dict(type='int'),
         state=dict(choices=['present', 'absent', 'exists'], default='present'),
     )
     mutually_exclusive = [("unified_job_template", "approval_node")]
@@ -361,6 +367,7 @@ def main():
         'forks',
         'job_slice_count',
         'timeout',
+        'max_retries',
     ):
         field_val = module.params.get(field_name)
         if field_val is not None:

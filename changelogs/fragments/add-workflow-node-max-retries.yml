@@ -1,0 +1,2 @@
+minor_changes:
+  - workflow_job_template_node - add the ``max_retries`` parameter to control how many times a node's job is automatically retried after failing before its failure paths are followed.
