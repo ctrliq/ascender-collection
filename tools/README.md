@@ -16,11 +16,12 @@ This reads the version from `galaxy.yml` and produces a
 ### Template Galaxy (optional)
 
 The `template_galaxy.yml` playbook copies the source into `build/` and
-injects the version and namespace into the Python source code. This is
-only needed when building a non-default namespace variant (e.g.
-`ansible.controller`) or when you want `_COLLECTION_VERSION` in the
-modules to reflect the release version instead of the `0.0.1-devel`
-development placeholder:
+injects the version and namespace into the Python source code. The
+source already carries the real, released `_COLLECTION_VERSION` (kept
+in sync with `galaxy.yml`), so this playbook is only needed when
+building a non-default namespace variant (e.g. `ansible.controller`)
+or when you want to stamp the build with a version other than the one
+currently committed:
 
 ```bash
 ansible-playbook -i localhost, tools/template_galaxy.yml

@@ -3,7 +3,10 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 import json
+import os
 import sys
+
+import yaml
 
 from awx.main.models import Organization, Team, Project, Inventory
 from requests.models import Response
@@ -159,19 +162,18 @@ def test_duplicate_config(collection_import, silence_warning):
     )
 
 
-def test_no_templated_values(collection_import):
-    """This test corresponds to replacements done by
-    tools/roles/template_galaxy/tasks/main.yml
-    Those replacements should happen at build time, so they should not be
-    checked into source.
-    """
+def test_collection_version_matches_galaxy_yml(collection_import):
+    # The hardcoded _COLLECTION_VERSION is what powers the collection-vs-server
+    # version compatibility warning, so it must be bumped in lockstep with
+    # galaxy.yml. A release that only updates one of the two would leave the
+    # shipped collection permanently warning about a stale version mismatch.
     ControllerAPIModule = collection_import('plugins.module_utils.controller_api').ControllerAPIModule
-    assert ControllerAPIModule._COLLECTION_VERSION == "0.0.1-devel", (
-        'The collection version is templated when the collection is built ' 'and the code should retain the placeholder of "0.0.1-devel".'
-    )
-    InventoryModule = collection_import('plugins.inventory.controller').InventoryModule
-    assert InventoryModule.NAME == 'ctrliq.ascender.controller', (
-        'The inventory plugin FQCN is templated when the collection is built ' 'and the code should retain the default of ctrliq.ascender.'
+    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
+    with open(os.path.join(repo_root, 'galaxy.yml')) as f:
+        galaxy_version = yaml.safe_load(f)['version']
+    assert ControllerAPIModule._COLLECTION_VERSION == galaxy_version, (
+        '_COLLECTION_VERSION in plugins/module_utils/controller_api.py ({0}) does not match the version in '
+        'galaxy.yml ({1}); a release must bump both together.'.format(ControllerAPIModule._COLLECTION_VERSION, galaxy_version)
     )
 
 

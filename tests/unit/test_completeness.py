@@ -26,6 +26,7 @@ no_module_for_endpoint = [
 # Some modules work on the related fields of an endpoint. These modules will not have an auto-associated endpoint
 no_endpoint_for_module = [
     'import',
+    'controller_export_diff',
     'controller_meta',
     'export',
     'inventory_source_update',
@@ -82,7 +83,7 @@ no_api_parameter_ok = {
     # workflow_approval parameters that do not apply when approving an approval node.
     'workflow_approval': ['action', 'interval', 'timeout', 'workflow_job_id'],
     # bulk
-    'bulk_job_launch': ['interval', 'wait'],
+    'bulk_job_launch': ['interval', 'wait', 'timeout'],
 }
 
 # When this tool was created we were not feature complete. Adding something in here indicates a module
@@ -92,6 +93,12 @@ needs_development = ['inventory_script', 'instance']
 needs_param_development = {
     'host': ['instance_id'],
     'workflow_approval': ['description', 'execution_environment'],
+    # New writable API fields (project webhooks, workflow node retries, slice host pinning)
+    # that the modules do not support yet
+    'job_template': ['job_slice_pinned_hosts', 'webhook_key'],
+    'project': ['webhook_key', 'webhook_ref_filter', 'webhook_service'],
+    'workflow_job_template': ['webhook_key'],
+    'workflow_job_template_node': ['max_retries'],
 }
 # -----------------------------------------------------------------------------------------------------------
 
