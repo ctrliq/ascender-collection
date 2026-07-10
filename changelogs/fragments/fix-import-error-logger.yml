@@ -1,0 +1,4 @@
+bugfixes:
+  - import - capture errors logged by both the ``awxkit.api.pages.api`` and ``awxkit.api.pages.page``
+    loggers during import_assets, matching the export module; previously errors logged only by the
+    page logger were swallowed and the module could report success despite import failures.
