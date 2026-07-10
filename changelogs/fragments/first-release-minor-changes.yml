@@ -1,0 +1,12 @@
+minor_changes:
+  - >-
+    user - added the ``preferred_language`` option, matching the per-user
+    UI language field exposed by the controller API.
+  - >-
+    Added RETURN documentation to every module that was missing it, so the
+    full module reference now documents its return values.
+  - >-
+    Updated the inventory and lookup plugins to import from
+    ``ansible.module_utils.common.text.converters`` and the Python 3
+    standard library instead of the deprecated ``_text`` and ``six``
+    modules.

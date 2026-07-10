@@ -58,21 +58,11 @@ options:
       description:
         - Path to the playbook to use for the job template within the project provided.
       type: str
-    credential:
-      description:
-        - Name, ID, or named URL of the credential to use for the job template.
-        - Deprecated, use 'credentials'.
-      type: str
     credentials:
       description:
         - List of credential names, IDs, or named URLs to use for the job template.
       type: list
       elements: str
-    vault_credential:
-      description:
-        - Name, ID, or named URL of the vault credential to use for the job template.
-        - Deprecated, use 'credentials'.
-      type: str
     execution_environment:
       description:
         - Execution Environment name, ID, or named URL to use for the job template.
@@ -107,8 +97,6 @@ options:
       description:
         - Enable forcing playbook handlers to run even if a task fails.
       type: bool
-      aliases:
-        - force_handlers_enabled
     skip_tags:
       description:
         - Comma separated list of the tags to skip for the job template.
@@ -121,14 +109,10 @@ options:
       description:
         - Enable diff mode for the job template.
       type: bool
-      aliases:
-        - diff_mode_enabled
     use_fact_cache:
       description:
         - Enable use of fact caching for the job template.
       type: bool
-      aliases:
-        - fact_caching_enabled
     host_config_key:
       description:
         - Allow provisioning callbacks using this host config key.
@@ -243,8 +227,6 @@ options:
       description:
         - Allow simultaneous runs of the job template.
       type: bool
-      aliases:
-        - concurrent_jobs_enabled
     timeout:
       description:
         - Maximum time in seconds to wait for a job to finish (server-side).
@@ -387,8 +369,6 @@ def main():
         inventory=dict(),
         project=dict(),
         playbook=dict(),
-        credential=dict(),
-        vault_credential=dict(),
         credentials=dict(type='list', elements='str'),
         execution_environment=dict(),
         instance_groups=dict(type="list", elements='str'),
@@ -397,11 +377,11 @@ def main():
         verbosity=dict(type='int', choices=[0, 1, 2, 3, 4, 5]),
         extra_vars=dict(type='dict'),
         job_tags=dict(),
-        force_handlers=dict(type='bool', aliases=['force_handlers_enabled']),
+        force_handlers=dict(type='bool'),
         skip_tags=dict(),
         start_at_task=dict(),
         timeout=dict(type='int'),
-        use_fact_cache=dict(type='bool', aliases=['fact_caching_enabled']),
+        use_fact_cache=dict(type='bool'),
         host_config_key=dict(no_log=False),
         ask_diff_mode_on_launch=dict(type='bool', aliases=['ask_diff_mode']),
         ask_variables_on_launch=dict(type='bool', aliases=['ask_extra_vars']),
@@ -421,8 +401,8 @@ def main():
         survey_enabled=dict(type='bool'),
         survey_spec=dict(type="dict"),
         become_enabled=dict(type='bool'),
-        diff_mode=dict(type='bool', aliases=['diff_mode_enabled']),
-        allow_simultaneous=dict(type='bool', aliases=['concurrent_jobs_enabled']),
+        diff_mode=dict(type='bool'),
+        allow_simultaneous=dict(type='bool'),
         scm_branch=dict(),
         ask_scm_branch_on_launch=dict(type='bool'),
         job_slice_count=dict(type='int'),
@@ -446,19 +426,7 @@ def main():
     new_name = module.params.get("new_name")
     copy_from = module.params.get('copy_from')
     state = module.params.get('state')
-
-    # Deal with legacy credential and vault_credential
-    credential = module.params.get('credential')
-    vault_credential = module.params.get('vault_credential')
     credentials = module.params.get('credentials')
-    if vault_credential:
-        if credentials is None:
-            credentials = []
-        credentials.append(vault_credential)
-    if credential:
-        if credentials is None:
-            credentials = []
-        credentials.append(credential)
 
     new_fields = {}
     search_fields = {}

@@ -1,0 +1,4 @@
+release_summary: >-
+  First release of the collection under the ``ctrliq.ascender`` namespace,
+  modernized for current ansible-core and brought up to Ansible Galaxy
+  standards.

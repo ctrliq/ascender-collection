@@ -283,7 +283,8 @@
     project: "{{ proj1 }}"
     inventory: "{{ inv1 }}"
     playbook: hello_world.yml
-    credential: "{{ cred3 }}"
+    credentials:
+      - "{{ cred3 }}"
     job_type: run
     labels:
       - "{{ lab1 }}"
@@ -301,7 +302,8 @@
     project: "{{ proj1 }}"
     inventory: "{{ inv1 }}"
     playbook: hello_world.yml
-    credential: "{{ cred3 }}"
+    credentials:
+      - "{{ cred3 }}"
     job_type: run
     labels:
       - label_bad
@@ -449,7 +451,8 @@
     project: "{{ proj1 }}"
     inventory: "{{ inv1 }}"
     playbook: hello_world.yml
-    credential: "{{ cred3 }}"
+    credentials:
+      - "{{ cred3 }}"
     job_type: run
     state: absent
   register: result

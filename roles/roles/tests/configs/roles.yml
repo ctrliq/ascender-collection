@@ -1,11 +1,15 @@
 ---
 controller_roles:
-  - user: admin
-    job_template: Demo Job Template
+  - users:
+      - admin
+    job_templates:
+      - Demo Job Template
     roles:
       - read
       - execute
-  - inventory: Demo Inventory
-    user: admin
+  - inventories:
+      - Demo Inventory
+    users:
+      - admin
     role: read
 ...

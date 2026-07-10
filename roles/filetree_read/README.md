@@ -59,7 +59,7 @@ controller_templates:
     inventory: "Global Localhost"
     playbook: "dummy-playbooks.yml"
     job_type: run
-    concurrent_jobs_enabled: true
+    allow_simultaneous: true
     credentials:
       - "{{ orgs }} {{ env }} aap_vault_credentials"
     execution_environment: "Default execution environment"
