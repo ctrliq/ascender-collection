@@ -179,6 +179,16 @@ except ImportError:
     HAS_EXPORTABLE_RESOURCES = False
 
 
+def _organization_name(item):
+    # An item's "organization" can be a nested dict (e.g. {"name": "Default"}), a plain string, or None
+    # (e.g. user-owned credentials have no organization at all). Normalize to a name, or None, so two
+    # organizations can be compared without assuming either side is a dict.
+    organization = item.get("organization")
+    if isinstance(organization, dict):
+        return organization.get("name")
+    return organization
+
+
 def main():
     argument_spec = dict(
         all=dict(type="bool", default=False),
@@ -273,6 +283,7 @@ def main():
     # Loop over each resource type that we gathered from the API.
     output_list = {}
     for resource in export_args:
+        resource_object = None
         try:
             if resource in compare_items:
                 for resource_object in compare_items[resource]:
@@ -289,7 +300,7 @@ def main():
                                 break
                         else:
                             names_match = resource_object["name"] == dict_["name"]
-                            orgs_match = resource_object.get("organization", {}).get("name") == dict_.get("organization", {}).get("name")
+                            orgs_match = _organization_name(resource_object) == _organization_name(dict_)
                             if names_match and orgs_match:
                                 awxkit_list[resource].pop(idx)
                                 break
@@ -301,7 +312,11 @@ def main():
 
                 if with_present:
                     output_list[resource] = compare_items[resource]
-                    output_list[resource].extend(awxkit_list[resource])
+                    # Only append the controller-only leftovers when they were actually marked absent above;
+                    # otherwise they would end up in the output with no "state" key at all, silently
+                    # defeating set_absent=False for anything applying the returned states.
+                    if set_absent:
+                        output_list[resource].extend(awxkit_list[resource])
                 else:
                     output_list[resource] = awxkit_list[resource]
         except Exception as e:
