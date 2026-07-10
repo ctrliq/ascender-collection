@@ -236,6 +236,12 @@ def wait_for_project_update(module, last_request):
     interval = module.params.get('interval')
     scm_revision_original = last_request['scm_revision']
 
+    # A real field change (e.g. description) may already have set changed=True
+    # before we got here. The SCM-revision comparison below only decides whether
+    # the update itself counts as a change, so it must not clobber a change that
+    # was already legitimately recorded by the earlier PATCH.
+    changed_before_wait = module.json_output.get('changed', False)
+
     if 'current_update' in last_request['summary_fields']:
         # A project update is already in progress (e.g. the automatic update that
         # fires when a project is first created). Wait on it through the same
@@ -250,10 +256,8 @@ def wait_for_project_update(module, last_request):
                 interval=interval,
             )
 
-            # Set Changed to correct value depending on if hash changed
-            module.json_output['changed'] = True
-            if result_final['json']['scm_revision'] == scm_revision_original:
-                module.json_output['changed'] = False
+            # Changed if the hash changed, or if it was already changed beforehand
+            module.json_output['changed'] = changed_before_wait or (result_final['json']['scm_revision'] != scm_revision_original)
     elif update_project:
         result = module.post_endpoint(last_request['related']['update'])
 
@@ -268,10 +272,8 @@ def wait_for_project_update(module, last_request):
             url=result['json']['url'], object_name=module.get_item_name(last_request), object_type='Project Update', timeout=timeout, interval=interval
         )
 
-        # Set Changed to correct value depending on if hash changed Also output refspec comparision
-        module.json_output['changed'] = True
-        if result_final['json']['scm_revision'] == scm_revision_original:
-            module.json_output['changed'] = False
+        # Changed if the hash changed, or if it was already changed beforehand
+        module.json_output['changed'] = changed_before_wait or (result_final['json']['scm_revision'] != scm_revision_original)
 
     module.exit_json(**module.json_output)
 

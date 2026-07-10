@@ -1,0 +1,4 @@
+bugfixes:
+  - project - fix ``changed`` being reset to ``false`` after waiting for a project
+    update when a real field change (e.g. ``description``) had already been made
+    in the same run but the SCM revision did not move.
