@@ -1,0 +1,4 @@
+bugfixes:
+  - notification_template - only filter the existence lookup by organization when the ``organization``
+    parameter is provided; previously the lookup always sent ``organization`` as ``None``, which the API
+    treated as an organization IS NULL filter and caused org-owned templates to never match.
