@@ -50,4 +50,9 @@ class ControllerAWXKitModule(ControllerModule):
 
     def logout(self):
         if self.authenticated:
-            self.connection.logout()
+            try:
+                self.connection.logout()
+            except Exception as e:
+                self.warn(f"Failed to logout: {e}")
+            finally:
+                self.authenticated = False
