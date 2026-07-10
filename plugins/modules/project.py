@@ -150,6 +150,28 @@ options:
         - Name, ID, or named URL of the credential to use for signature validation.
         - If signature validation credential is provided, signature validation will be enabled.
       type: str
+    webhook_service:
+      description:
+        - Service that webhook requests will be accepted from.
+        - If not provided, the value on the server is left untouched.
+      type: str
+      choices:
+        - ''
+        - 'github'
+        - 'gitlab'
+        - 'bitbucket_dc'
+    webhook_ref_filter:
+      description:
+        - Only sync the project when the webhook ref matches this fnmatch pattern (e.g. C(refs/heads/main) or C(refs/heads/release-*)).
+        - When empty, any push or tag event triggers a sync.
+        - If not provided, the value on the server is left untouched.
+      type: str
+    webhook_key:
+      description:
+        - Shared secret that the webhook service will use to sign requests.
+        - Leave blank to generate a new one when the webhook service is set.
+        - If not provided, the value on the server is left untouched.
+      type: str
 
 extends_documentation_fragment: ctrliq.ascender.auth
 '''
@@ -180,6 +202,17 @@ EXAMPLES = '''
     description: Foo copy project
     organization: Foo
     state: present
+
+- name: Add project with a github webhook
+  ctrliq.ascender.project:
+    name: "Foo"
+    scm_type: "git"
+    scm_url: "https://github.com/example/example.git"
+    organization: "test"
+    webhook_service: github
+    webhook_ref_filter: "refs/heads/main"
+    state: present
+    controller_config_file: "~/controller.cfg"
 '''
 
 RETURN = '''
@@ -273,6 +306,9 @@ def main():
         update_project=dict(default=False, type='bool'),
         interval=dict(default=2.0, type='float'),
         signature_validation_credential=dict(type='str'),
+        webhook_service=dict(choices=['', 'github', 'gitlab', 'bitbucket_dc']),
+        webhook_ref_filter=dict(),
+        webhook_key=dict(no_log=True),
     )
 
     # Create a module for ourselves
@@ -366,6 +402,9 @@ def main():
         'timeout',
         'description',
         'allow_override',
+        'webhook_service',
+        'webhook_ref_filter',
+        'webhook_key',
     ):
         field_val = module.params.get(field_name)
         if field_val is not None:
