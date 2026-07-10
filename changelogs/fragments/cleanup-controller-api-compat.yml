@@ -1,0 +1,17 @@
+bugfixes:
+  - controller_api module utils - guard the ``X-API-Product-Version`` comparison against a single-component
+    version header (for example ``4``), which previously raised an uncaught ``IndexError`` and failed the
+    module for what should at most be a version-mismatch warning.
+  - controller_api module utils - pass a null ``timeout`` through ``wait_on_workflow_node_url`` correctly
+    instead of raising a ``TypeError`` when computing the revised timeout after the workflow node is found.
+minor_changes:
+  - controller_api module utils - remove the broken ``packaging.version.Version`` fallback for parsing
+    versions; ansible-core 2.16+ always provides ``ansible.module_utils.compat.version.LooseVersion``, and the
+    fallback would have crashed on first use since ``Version`` lacks the ``.version`` attribute used at the
+    call site.
+  - controller_api module utils - catch ``json.JSONDecodeError`` directly instead of the broader ``ValueError``,
+    dropping a stale "only available on Python 3.5+" comment.
+  - controller_api module utils - use the ``boolean`` helper directly instead of aliasing it to the
+    removed-in-Python-3.12 ``strtobool`` name.
+  - controller_api module utils - match the ``controller_host`` scheme check case-insensitively with a raw
+    string regex, so a host given as ``HTTPS://...`` is not double-prefixed into ``https://HTTPS://...``.

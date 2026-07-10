@@ -2,7 +2,7 @@
 
 from ansible.module_utils.basic import AnsibleModule, env_fallback
 from ansible.module_utils.urls import Request, SSLValidationError, ConnectionError
-from ansible.module_utils.parsing.convert_bool import boolean as strtobool
+from ansible.module_utils.parsing.convert_bool import boolean
 from io import StringIO
 from urllib.error import HTTPError
 from http.cookiejar import CookieJar
@@ -11,17 +11,11 @@ from configparser import ConfigParser, NoOptionError
 from socket import getaddrinfo, IPPROTO_TCP
 import time
 import re
-from json import loads, dumps
+from json import loads, dumps, JSONDecodeError
 from os.path import isfile, expanduser, split, join, exists, isdir
 from os import access, R_OK, getcwd, environ
 
-try:
-    from ansible.module_utils.compat.version import LooseVersion as Version
-except ImportError:
-    try:
-        from packaging.version import Version
-    except ImportError:
-        raise AssertionError('To use this plugin or module you need to use Python >= 3.12')
+from ansible.module_utils.compat.version import LooseVersion as Version
 
 try:
     import yaml
@@ -135,7 +129,7 @@ class ControllerModule(AnsibleModule):
                 self.fail_json(msg=error_msg)
 
         # Perform some basic validation
-        if not re.match('^https{0,1}://', self.host):
+        if not re.match(r'^https?://', self.host, re.IGNORECASE):
             self.host = f"https://{self.host}"
 
         # Try to parse the hostname as a url
@@ -260,7 +254,7 @@ class ControllerModule(AnsibleModule):
                 # Verify SSL must be a boolean
                 if honored_setting == 'verify_ssl':
                     if isinstance(config_data[honored_setting], str):
-                        setattr(self, honored_setting, strtobool(config_data[honored_setting]))
+                        setattr(self, honored_setting, boolean(config_data[honored_setting]))
                     else:
                         setattr(self, honored_setting, bool(config_data[honored_setting]))
                 # The request timeout needs to be a float; INI config files always produce strings
@@ -557,8 +551,7 @@ class ControllerAPIModule(ControllerModule):
                 page_data = he.read()
                 try:
                     return {'status_code': he.code, 'json': loads(page_data)}
-                # JSONDecodeError only available on Python 3.5+
-                except ValueError:
+                except JSONDecodeError:
                     return {'status_code': he.code, 'text': page_data}
             else:
                 self.fail_json(msg=f"Unexpected return code when calling {url.geturl()}: {he}")
@@ -572,7 +565,7 @@ class ControllerAPIModule(ControllerModule):
             parsed_collection_version = Version(self._COLLECTION_VERSION).version
             if controller_version:
                 parsed_controller_version = Version(controller_version).version
-                if controller_type == 'AWX':
+                if controller_type == 'AWX' or len(parsed_controller_version) < 2:
                     collection_compare_ver = parsed_collection_version[0]
                     controller_compare_ver = parsed_controller_version[0]
                 else:
@@ -1100,7 +1093,7 @@ class ControllerAPIModule(ControllerModule):
             return result["json"]["results"][0]
         else:
             # Removed time so far from timeout.
-            revised_timeout = timeout - (time.time() - start)
+            revised_timeout = None if timeout is None else timeout - (time.time() - start)
             # Now that Job has been found, wait for it to finish
             result = self.wait_on_url(
                 url=result["json"]["results"][0]["related"]["job"],
