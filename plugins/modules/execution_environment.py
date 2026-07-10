@@ -46,8 +46,9 @@ options:
     pull:
       description:
         - determine image pull behavior
-      choices: ["always", "missing", "never"]
-      default: 'missing'
+        - If not set, the existing pull policy on the server is left untouched.
+        - Set to an empty string to explicitly select the blank/default pull policy.
+      choices: ["always", "missing", "never", ""]
       type: str
 extends_documentation_fragment: ctrliq.ascender.auth
 '''
@@ -80,8 +81,7 @@ def main():
         organization=dict(),
         credential=dict(),
         state=dict(choices=['present', 'absent', 'exists'], default='present'),
-        # NOTE: Default for pull differs from API (which is blank by default)
-        pull=dict(choices=['always', 'missing', 'never'], default='missing'),
+        pull=dict(choices=['always', 'missing', 'never', '']),
     )
 
     # Create a module for ourselves
@@ -108,7 +108,7 @@ def main():
     if description is not None:
         new_fields['description'] = description
 
-    if pull:
+    if pull is not None:
         new_fields['pull'] = pull
 
     # Attempt to look up the related items the user specified (these will fail the module if not found)
