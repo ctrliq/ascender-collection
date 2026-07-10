@@ -117,7 +117,8 @@ options:
     webhook_key:
       description:
         - Shared secret that the webhook service will use to sign requests.
-        - Leave this unset to leave the server value untouched, or set it to an empty string to have the server generate a new one when the webhook service is set.
+        - Leave this unset to leave the server value untouched, or set it to an empty string to have the server generate a new one when
+          the webhook service is set.
       type: str
     survey_enabled:
       description:
