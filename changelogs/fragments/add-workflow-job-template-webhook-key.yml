@@ -1,0 +1,2 @@
+minor_changes:
+  - workflow_job_template - add the ``webhook_key`` parameter to set the shared secret the webhook service uses to sign requests, matching the existing ``webhook_service``/``webhook_credential`` support.
