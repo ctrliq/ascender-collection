@@ -86,15 +86,16 @@
 
     - name: Add Joe and teams to the update role of the default Project with lookup Organization
       role:
-        user: "{{ username }}"
         users:
+          - "{{ username }}"
           - "{{ username }}2"
         teams:
           - "{{ team_name }}"
           - "{{ team2_name }}"
         role: update
         lookup_organization: Default
-        project: "Demo Project"
+        projects:
+          - "Demo Project"
         state: "{{ item }}"
       register: result
       with_items:
@@ -107,14 +108,15 @@
 
     - name: Add Joe to the new project by ID
       role:
-        user: "{{ username }}"
         users:
+          - "{{ username }}"
           - "{{ username }}2"
         teams:
           - "{{ team_name }}"
           - "{{ team2_name }}"
         role: update
-        project: "{{ project_info['id'] }}"
+        projects:
+          - "{{ project_info['id'] }}"
         state: "{{ item }}"
       register: result
       with_items:
@@ -127,11 +129,12 @@
 
     - name: Add Joe as execution admin to Default Org.
       role:
-        user: "{{ username }}"
         users:
+          - "{{ username }}"
           - "{{ username }}2"
         role: execution_environment_admin
-        organizations: Default
+        organizations:
+          - Default
         state: "{{ item }}"
       register: result
       with_items:
@@ -150,11 +153,12 @@
 
     - name: Add Joe to workflow execute role
       role:
-        user: "{{ username }}"
         users:
+          - "{{ username }}"
           - "{{ username }}2"
         role: execute
-        workflow: test-role-workflow
+        workflows:
+          - test-role-workflow
         job_templates:
           - jt1
           - jt2
@@ -167,11 +171,12 @@
 
     - name: Add Joe to nonexistant job template execute role
       role:
-        user: "{{ username }}"
         users:
+          - "{{ username }}"
           - "{{ username }}2"
         role: execute
-        workflow: test-role-workflow
+        workflows:
+          - test-role-workflow
         job_templates:
           - non existant temp
         state: present
@@ -185,11 +190,12 @@
 
     - name: Add Joe to workflow execute role, no-op
       role:
-        user: "{{ username }}"
         users:
+          - "{{ username }}"
           - "{{ username }}2"
         role: execute
-        workflow: test-role-workflow
+        workflows:
+          - test-role-workflow
         state: present
       register: result
 
@@ -202,7 +208,8 @@
         users:
           - "{{ username }}2"
         role: approval
-        workflow: test-role-workflow
+        workflows:
+          - test-role-workflow
         state: present
       register: result
 
@@ -225,15 +232,16 @@
 
     - name: Add Joe and teams to the update role of the default Project with lookup from the 2nd Organization
       role:
-        user: "{{ username }}"
         users:
+          - "{{ username }}"
           - "{{ username }}2"
         teams:
           - "{{ team_name }}"
           - "{{ team2_name }}"
         role: update
         lookup_organization: "{{ org2_name }}"
-        project: "{{ project_name }}"
+        projects:
+          - "{{ project_name }}"
         state: "{{ item }}"
       register: result
       with_items:

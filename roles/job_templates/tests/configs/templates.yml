@@ -17,7 +17,7 @@ controller_templates:
     job_type: run
     playbook: helloworld.yml
     ask_extra_vars: false
-    concurrent_jobs_enabled: false
+    allow_simultaneous: false
     credentials: Demo Credential
     verbosity: 0
     inventory: localhost

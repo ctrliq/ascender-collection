@@ -77,27 +77,18 @@ This also speeds up the overall role.
 
 |Variable Name|Default Value|Required|Type|Description|
 |:---:|:---:|:---:|:---:|:---:|
-|`user`|""|no|str|The user for which the role applies|
 |`users`|""|no|list|The users for which the role applies|
-|`team`|""|no|str|The team for which the role applies|
 |`teams`|""|no|list|The teams for which the role applies|
-|`roles`|""|no|str (see note below)|The roles which are applied to one of {`target_team`, `inventory`, `job_template`, `target_team`, `inventory`, `job_template`} for either `user` or `team`|
-|`role`|""|no|str (see note below)|The role which is applied to one of {`target_team`, `inventory`, `job_template`, `target_team`, `inventory`, `job_template`} for either `user` or `team`|
-|`target_team`|""|no|str|The team the role applies against|
+|`roles`|""|no|str (see note below)|The roles which are applied to one of {`target_teams`, `inventories`, `job_templates`} for either `users` or `teams`|
+|`role`|""|no|str (see note below)|The role which is applied to one of {`target_teams`, `inventories`, `job_templates`} for either `users` or `teams`|
 |`target_teams`|""|no|list|The teams the role applies against|
-|`inventory`|""|no|str|The inventory the role applies against|
 |`inventories`|""|no|list|The inventories the role applies against|
-|`job_template`|""|no|str|The job template the role applies against|
 |`job_templates`|""|no|list|The job templates the role applies against|
-|`workflow`|""|no|str|The workflow the role applies against|
 |`workflows`|""|no|list|The workflows the role applies against|
-|`credential`|""|no|str|The credential the role applies against|
 |`credentials`|""|no|list|The credentials the role applies against|
-|`organization`|""|no|str|The organization the role applies against|
 |`organizations`|""|no|list|The organizations the role applies against|
-|`lookup_organization`|""|no|str|Organization the inventories, job templates, projects, or workflows the items exists in. Used to help lookup the object, for organization roles see organization. If not provided, will lookup by name only, which does not work with duplicates.|
-|`project`|""|no|str|The project the role applies against|
-|`projects`|""|no|list|The project the role applies against|
+|`lookup_organization`|""|no|str|Organization the inventories, job templates, projects, or workflows the items exists in. Used to help lookup the object, for organization roles see organizations. If not provided, will lookup by name only, which does not work with duplicates.|
+|`projects`|""|no|list|The projects the role applies against|
 |`instance_groups`|""|no|list|The instance groups the role applies against|
 |`state`|`present`|no|str|Desired state of the resource.|
 
@@ -132,13 +123,13 @@ Note that the `roles` option takes precedence over the `role` option and simply 
 {
   "controller_roles": [
     {
-      "user": "jdoe",
-      "target_team": "My Team",
+      "users": ["jdoe"],
+      "target_teams": ["My Team"],
       "role": "member"
     },
     {
-      "team": "My Team",
-      "organization": "Default",
+      "teams": ["My Team"],
+      "organizations": ["Default"],
       "roles": [
         "execute",
         "read"
@@ -153,14 +144,17 @@ git check
 ```yaml
 ---
 controller_roles:
-- user: jdoe
-  users:
+- users:
+    - jdoe
     - thing1
     - thing2
-  target_team: "My Team"
+  target_teams:
+    - "My Team"
   role: member
-- team: "My Team"
-  organization: "Default"
+- teams:
+    - "My Team"
+  organizations:
+    - "Default"
   roles:
     - execute
     - read

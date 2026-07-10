@@ -8,67 +8,45 @@ argument_specs:
         type: list
         elements: dict
         # options:
-        #   user:
+        #   users:
         #     required: false
-        #     type: str
-        #     description: The user for which the role applies
-        #   team:
+        #     type: list
+        #     elements: str
+        #     description: The users for which the role applies
+        #   teams:
         #     required: false
-        #     type: str
-        #     description: The team for which the role applies
+        #     type: list
+        #     elements: str
+        #     description: The teams for which the role applies
         #   role:
         #     required: false
         #     type: str
-        #     description: The role which is applied to one of {`target_team`, `inventory`, `job_template`, `target_team`, `inventory`, `job_template`} for either `user` or `team`
-        #   target_team:
-        #     required: false
-        #     type: str
-        #     description: The team the role applies against
+        #     description: The role which is applied to one of {`target_teams`, `inventories`, `job_templates`} for either `users` or `teams`
         #   target_teams:
         #     required: false
         #     type: list
         #     elements: str
         #     description: The teams the role applies against
-        #   inventory:
-        #     required: false
-        #     type: str
-        #     description: The inventory the role applies against
         #   inventories:
         #     required: false
         #     type: list
         #     elements: str
         #     description: The inventories the role applies against
-        #   job_template:
-        #     required: false
-        #     type: str
-        #     description: The job template the role applies against
         #   job_templates:
         #     required: false
         #     type: list
         #     elements: str
         #     description: The job templates the role applies against
-        #   workflow:
-        #     required: false
-        #     type: str
-        #     description: The workflow the role applies against
         #   workflows:
         #     required: false
         #     type: list
         #     elements: str
         #     description: The workflows the role applies against
-        #   credential:
-        #     required: false
-        #     type: str
-        #     description: The credential the role applies against
         #   credentials:
         #     required: false
         #     type: list
         #     elements: str
         #     description: The credentials the role applies against
-        #   organization:
-        #     required: false
-        #     type: str
-        #     description: The organization the role applies against
         #   organizations:
         #     required: false
         #     type: list
@@ -78,12 +56,8 @@ argument_specs:
         #     required: false
         #     type: str
         #     description: Organization the inventories, job templates, projects, or workflows the items exists in.
-        #       Used to help lookup the object, for organization roles see organization. If not provided,
+        #       Used to help lookup the object, for organization roles see organizations. If not provided,
         #       will lookup by name only, which does not work with duplicates.
-        #   project:
-        #     required: false
-        #     type: str
-        #     description: The project the role applies against
         #   projects:
         #     required: false
         #     type: list

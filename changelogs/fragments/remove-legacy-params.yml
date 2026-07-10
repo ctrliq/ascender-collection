@@ -1,0 +1,10 @@
+removed_features:
+  - job_template - removed the deprecated ``credential`` and ``vault_credential`` parameters, use the
+    ``credentials`` list parameter instead.
+  - job_template - removed the legacy ``force_handlers_enabled``, ``fact_caching_enabled``, ``diff_mode_enabled``
+    and ``concurrent_jobs_enabled`` aliases, use the ``force_handlers``, ``use_fact_cache``, ``diff_mode`` and
+    ``allow_simultaneous`` parameters instead.
+  - role - removed the deprecated singular ``user``, ``team``, ``target_team``, ``inventory``, ``job_template``,
+    ``workflow``, ``credential``, ``organization`` and ``project`` parameters, use the plural equivalents
+    (``users``, ``teams``, ``target_teams``, ``inventories``, ``job_templates``, ``workflows``, ``credentials``,
+    ``organizations``, ``projects``) instead.
