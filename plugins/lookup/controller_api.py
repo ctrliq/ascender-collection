@@ -145,45 +145,50 @@ class LookupModule(LookupBase):
         # Create our module
         module = ControllerAPIModule(argument_spec={}, direct_params=module_params, error_callback=self.handle_error, warn_callback=self.warn_callback)
 
-        response = module.get_endpoint(terms[0], data=self.get_option('query_params', {}))
+        # Ensure any write-scope token created for username/password auth is always released,
+        # even on the success path (module.exit_json/fail_json are never called from a lookup).
+        try:
+            response = module.get_endpoint(terms[0], data=self.get_option('query_params', {}))
 
-        if 'status_code' not in response:
-            raise AnsibleError(f"Unclear response from API: {response}")
+            if 'status_code' not in response:
+                raise AnsibleError(f"Unclear response from API: {response}")
 
-        if response['status_code'] != 200:
-            raise AnsibleError(f"Failed to query the API: {response['json'].get('detail', response['json'])}")
+            if response['status_code'] != 200:
+                raise AnsibleError(f"Failed to query the API: {response['json'].get('detail', response['json'])}")
 
-        return_data = response['json']
+            return_data = response['json']
 
-        if self.get_option('expect_objects') or self.get_option('expect_one'):
-            if ('id' not in return_data) and ('results' not in return_data):
-                raise AnsibleError(f'Did not obtain a list or detail view at {terms[0]}, and expect_objects or expect_one is set to True')
+            if self.get_option('expect_objects') or self.get_option('expect_one'):
+                if ('id' not in return_data) and ('results' not in return_data):
+                    raise AnsibleError(f'Did not obtain a list or detail view at {terms[0]}, and expect_objects or expect_one is set to True')
 
-        if self.get_option('expect_one'):
-            if 'results' in return_data and len(return_data['results']) != 1:
-                raise AnsibleError(f'Expected one object from endpoint {terms[0]}, but obtained {len(return_data["results"])} from API')
+            if self.get_option('expect_one'):
+                if 'results' in return_data and len(return_data['results']) != 1:
+                    raise AnsibleError(f'Expected one object from endpoint {terms[0]}, but obtained {len(return_data["results"])} from API')
 
-        if self.get_option('return_all') and 'results' in return_data:
-            if return_data['count'] > self.get_option('max_objects'):
-                raise AnsibleError(
-                    f'List view at {terms[0]} returned {return_data["count"]} objects, which is more than the maximum allowed '
-                    f'by max_objects, {self.get_option("max_objects")}'
-                )
+            if self.get_option('return_all') and 'results' in return_data:
+                if return_data['count'] > self.get_option('max_objects'):
+                    raise AnsibleError(
+                        f'List view at {terms[0]} returned {return_data["count"]} objects, which is more than the maximum allowed '
+                        f'by max_objects, {self.get_option("max_objects")}'
+                    )
 
-            next_page = return_data['next']
-            while next_page is not None:
-                next_response = module.get_endpoint(next_page)
-                return_data['results'] += next_response['json']['results']
-                next_page = next_response['json']['next']
-            return_data['next'] = None
+                next_page = return_data['next']
+                while next_page is not None:
+                    next_response = module.get_endpoint(next_page)
+                    return_data['results'] += next_response['json']['results']
+                    next_page = next_response['json']['next']
+                return_data['next'] = None
 
-        if self.get_option('return_ids'):
-            if 'results' in return_data:
-                return_data['results'] = [str(item['id']) for item in return_data['results']]
-            elif 'id' in return_data:
-                return_data = str(return_data['id'])
+            if self.get_option('return_ids'):
+                if 'results' in return_data:
+                    return_data['results'] = [str(item['id']) for item in return_data['results']]
+                elif 'id' in return_data:
+                    return_data = str(return_data['id'])
 
-        if self.get_option('return_objects') and 'results' in return_data:
-            return return_data['results']
-        else:
-            return [return_data]
+            if self.get_option('return_objects') and 'results' in return_data:
+                return return_data['results']
+            else:
+                return [return_data]
+        finally:
+            module.logout()

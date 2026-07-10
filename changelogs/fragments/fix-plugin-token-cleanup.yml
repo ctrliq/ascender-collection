@@ -1,0 +1,5 @@
+bugfixes:
+  - controller_api lookup - release the write-scope OAuth token created for username/password auth once the
+    query completes; previously the lookup never logged out, leaking one token per call.
+  - controller inventory plugin - release the write-scope OAuth token created for username/password auth once
+    the inventory refresh completes; previously the plugin never logged out, leaking one token per refresh.
