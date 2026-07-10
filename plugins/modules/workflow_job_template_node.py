@@ -54,14 +54,14 @@ options:
     verbosity:
       description:
         - Verbosity applied as a prompt, if job template prompts for verbosity
-      type: str
+      type: int
       choices:
-        - '0'
-        - '1'
-        - '2'
-        - '3'
-        - '4'
-        - '5'
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
     workflow_job_template:
       description:
         - The workflow job template name, ID, or named URL the node exists in.
@@ -274,7 +274,7 @@ def main():
         skip_tags=dict(),
         limit=dict(),
         diff_mode=dict(type='bool'),
-        verbosity=dict(choices=['0', '1', '2', '3', '4', '5']),
+        verbosity=dict(type='int', choices=[0, 1, 2, 3, 4, 5]),
         unified_job_template=dict(),
         lookup_organization=dict(),
         approval_node=dict(type='dict'),
