@@ -67,7 +67,18 @@ import json
 def main():
     # Any additional arguments that are not fields of the item can be added here
     argument_spec = dict(
-        hosts=dict(required=True, type='list', elements='dict'),
+        hosts=dict(
+            required=True,
+            type='list',
+            elements='dict',
+            options=dict(
+                name=dict(required=True, type='str'),
+                description=dict(type='str'),
+                enabled=dict(type='bool'),
+                variables=dict(type='dict'),
+                instance_id=dict(type='str'),
+            ),
+        ),
         inventory=dict(required=True, type='str'),
     )
 
@@ -76,7 +87,8 @@ def main():
 
     # Extract our parameters
     inv_name = module.params.get('inventory')
-    hosts = module.params.get('hosts')
+    # Suboption validation fills absent fields with None; drop them so the API applies its own defaults
+    hosts = [{k: v for k, v in h.items() if v is not None} for h in module.params.get('hosts')]
 
     for h in hosts:
         if 'variables' in h:
