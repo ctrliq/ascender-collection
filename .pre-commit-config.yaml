@@ -19,7 +19,6 @@ repos:
     rev: v1.38.0
     hooks:
       - id: yamllint
-        args: [-d, relaxed]
         files: ^(meta/|galaxy\.yml)
 
   - repo: https://github.com/ansible/ansible-lint
