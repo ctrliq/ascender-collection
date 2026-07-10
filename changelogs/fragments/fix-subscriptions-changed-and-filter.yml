@@ -1,0 +1,8 @@
+bugfixes:
+  - subscriptions - report ``changed=true`` when the credentials are posted to the controller
+    (the module always stores them for future use), and predict ``changed=true`` in check mode
+    without contacting the subscription service instead of relying on the generic check-mode
+    short circuit, which exited without a ``subscriptions`` key.
+  - subscriptions - fix the client side ``filters`` option raising a ``TypeError`` when a
+    subscription field is a non-string (for example an int or bool), and silently including
+    subscriptions when the filtered field is missing or ``None``.
