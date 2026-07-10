@@ -1,0 +1,3 @@
+bugfixes:
+  - inventory - fail with a clear error when ``input_inventories`` is provided but the inventory is not, and will
+    not become, ``kind=constructed``; previously the option was silently discarded with no error and no effect.
