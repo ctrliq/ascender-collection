@@ -100,7 +100,7 @@ oauth_token = LEdCpKVKc4znzffcpQL5vLG8oyeku6
 - **39 roles** for declarative controller configuration.
 - **5 playbooks** for common configuration workflows.
 - **Inventory plugin:** `ctrliq.ascender.controller`.
-- **Lookup plugins:** `controller_api`, `schedule_rrule`, `schedule_rruleset`.
+- **Lookup plugins:** `controller_api`, `controller_object_diff`, `schedule_rrule`, `schedule_rruleset`.
 
 Per-plugin documentation is available with `ansible-doc`, e.g.
 `ansible-doc ctrliq.ascender.job_launch`.

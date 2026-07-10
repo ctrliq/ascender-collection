@@ -1,0 +1,8 @@
+trivial:
+  - >-
+    bulk_host_create and bulk_job_launch role READMEs - fix the example playbooks to reference the
+    ``ctrliq.ascender`` roles instead of ``redhat_cop.controller_configuration``; the bulk_job_launch
+    example also referenced the license role and its condition instead of bulk_job_launch.
+  - >-
+    README - add the ``controller_object_diff`` lookup plugin to the included-content listing, which
+    named only three of the four lookup plugins.

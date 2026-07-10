@@ -130,7 +130,7 @@ This also speeds up the overall role.
         ignore_files: [controller_config.yml.template]
         extensions: ["yml"]
   roles:
-    - {role: redhat_cop.controller_configuration.license, when: controller_license is defined}
+    - {role: ctrliq.ascender.bulk_job_launch, when: controller_bulk_launch_jobs is defined}
 ```
 
 ## License
