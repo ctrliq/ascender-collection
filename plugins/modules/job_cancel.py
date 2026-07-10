@@ -79,7 +79,15 @@ def main():
         else:
             module.exit_json(**{'changed': False})
 
-    results = module.post_endpoint(job['related']['cancel'], **{'data': {}})
+    # tolerate_405 covers the race where the job finishes between the can_cancel check above and this
+    # request; the controller returns a 405 in that case too, so treat it the same as can_cancel being False.
+    results = module.post_endpoint(job['related']['cancel'], **{'data': {}, 'tolerate_405': True})
+
+    if results['status_code'] == 405:
+        if fail_if_not_running:
+            module.fail_json(msg="Job is not running")
+        else:
+            module.exit_json(**{'changed': False})
 
     if results['status_code'] != 202:
         module.fail_json(msg="Failed to cancel job, see response for details", **{'response': results})

@@ -1,0 +1,5 @@
+bugfixes:
+  - job_cancel, ad_hoc_command_cancel - no longer fail with a generic HTTP 405 error when the job or command
+    finishes between the ``can_cancel`` check and the cancel request; the race is now treated the same as a
+    job that is not running, so ``fail_if_not_running=false`` tolerates it and ``fail_if_not_running=true``
+    fails with the intended message.
