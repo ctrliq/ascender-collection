@@ -270,6 +270,10 @@ class LookupModule(LookupBase):
                 'dtstart': start_date,
             }
 
+            # Set when end_on is a date rather than a count; holds the UTC form of that date
+            # which RFC 5545 requires once DTSTART carries a TZID (spliced in further down).
+            until_utc = None
+
             # If we are a none frequency we don't need anything else
             if frequency == 'none':
                 rrule_kwargs['count'] = 1
@@ -281,11 +285,16 @@ class LookupModule(LookupBase):
                         rrule_kwargs['count'] = int(end_on)
                     else:
                         try:
-                            rrule_kwargs['until'] = LookupModule.parse_date_time(end_on)
+                            until_local = LookupModule.parse_date_time(end_on)
                         except Exception as e:
                             raise AnsibleError(
                                 f'In rule {rule_number} end_on must either be an integer or in the format YYYY-MM-DD [HH:MM:SS]'
                             ) from e
+                        rrule_kwargs['until'] = until_local
+                        # end_on is a local time in the rule's timezone; dateutil's rrulestr sanity
+                        # check below requires UNTIL to be expressed in UTC when DTSTART is
+                        # timezone-aware, so work out the UTC equivalent here.
+                        until_utc = pytz.timezone(timezone).localize(until_local).astimezone(pytz.utc)
 
             if 'bysetpos' in rule:
                 rrule_kwargs['bysetpos'] = self.process_list('bysetpos', rule, self.set_positions, rule_number)
@@ -315,6 +324,15 @@ class LookupModule(LookupBase):
                 generated_rule = str(rrule.rrule(**rrule_kwargs))
             except Exception as e:
                 raise AnsibleError(f'Failed to parse rrule for rule {rule_number} {rrule_kwargs}: {e}') from e
+
+            if until_utc is not None:
+                # rrule always serializes UNTIL using dtstart's naive local clock time; swap in the
+                # RFC 5545 UTC form (trailing Z) instead, to match the TZID we splice into DTSTART below.
+                generated_rule = re.sub(
+                    r'UNTIL=\d{8}T\d{6}',
+                    f"UNTIL={until_utc.strftime('%Y%m%dT%H%M%S')}Z",
+                    generated_rule,
+                )
 
             # AWX requires an interval. rrule will not add interval if it's set to 1
             if rule.get('interval', 1) == 1:
