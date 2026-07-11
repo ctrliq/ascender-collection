@@ -1,0 +1,5 @@
+---
+trivial:
+  - Removed the ``tools/`` directory; module scaffolding, namespace-stamping,
+    and integration test wrapper playbooks are not needed
+    (https://github.com/ctrliq/ascender-collection/pull/204).

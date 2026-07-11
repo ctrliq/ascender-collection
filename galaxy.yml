@@ -19,12 +19,9 @@ tags:
   - automation
 version: 25.4.0
 build_ignore:
-  - tools
   - test
   - tests
   - setup.cfg
-  - galaxy.yml.j2
-  - template_galaxy.yml
   - '*.tar.gz'
   - .ansible
   - .claude
