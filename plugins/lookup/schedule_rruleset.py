@@ -126,8 +126,8 @@ import re
 
 from ansible.plugins.lookup import LookupBase
 from ansible.errors import AnsibleError
-from datetime import datetime
-from zoneinfo import available_timezones
+from datetime import datetime, timezone as dt_timezone
+from zoneinfo import available_timezones, ZoneInfo
 
 try:
     from dateutil import rrule
@@ -294,7 +294,7 @@ class LookupModule(LookupBase):
                         # end_on is a local time in the rule's timezone; dateutil's rrulestr sanity
                         # check below requires UNTIL to be expressed in UTC when DTSTART is
                         # timezone-aware, so work out the UTC equivalent here.
-                        until_utc = pytz.timezone(timezone).localize(until_local).astimezone(pytz.utc)
+                        until_utc = until_local.replace(tzinfo=ZoneInfo(timezone)).astimezone(tz=dt_timezone.utc)
 
             if 'bysetpos' in rule:
                 rrule_kwargs['bysetpos'] = self.process_list('bysetpos', rule, self.set_positions, rule_number)
