@@ -29,7 +29,9 @@ options:
         description: Make extra requests to provide all group vars with metadata about the source host.
         type: bool
         default: False
-extends_documentation_fragment: ctrliq.ascender.auth_plugin
+extends_documentation_fragment:
+- ctrliq.ascender.auth_plugin
+- ansible.builtin.inventory_cache
 '''
 
 EXAMPLES = '''
@@ -43,6 +45,10 @@ host: your_automation_controller_server_network_address
 username: your_automation_controller_username
 password: your_automation_controller_password
 inventory_id: the_ID_of_targeted_automation_controller_inventory
+# Optionally cache the fetched inventory data (see the inventory_cache documentation fragment):
+# cache: true
+# cache_plugin: jsonfile
+# cache_connection: /path/to/cache/directory
 # Then you can run the following command.
 # If some of the arguments are missing, Ansible will attempt to read them from environment variables.
 # ansible-inventory -i /path/to/controller_inventory.yml --list
@@ -63,7 +69,7 @@ import os
 
 from ansible.module_utils.common.text.converters import to_text, to_native
 from ansible.errors import AnsibleParserError, AnsibleOptionsError
-from ansible.plugins.inventory import BaseInventoryPlugin
+from ansible.plugins.inventory import BaseInventoryPlugin, Cacheable
 from ansible.config.manager import ensure_type
 
 from ..module_utils.controller_api import ControllerAPIModule
@@ -73,7 +79,7 @@ def handle_error(**kwargs):
     raise AnsibleParserError(to_native(kwargs.get('msg')))
 
 
-class InventoryModule(BaseInventoryPlugin):
+class InventoryModule(BaseInventoryPlugin, Cacheable):
     NAME = 'ctrliq.ascender.controller'
     # Stays backward compatible with the inventory script.
     # If the user supplies '@controller_inventory' as path, the plugin will read from environment variables.
@@ -110,8 +116,6 @@ class InventoryModule(BaseInventoryPlugin):
             if opt_val is not None:
                 module_params[module_param] = opt_val
 
-        module = ControllerAPIModule(argument_spec={}, direct_params=module_params, error_callback=handle_error, warn_callback=self.warn_callback)
-
         # validate type of inventory_id because we allow two types as special case
         inventory_id = self.get_option('inventory_id')
         if isinstance(inventory_id, int):
@@ -126,51 +130,87 @@ class InventoryModule(BaseInventoryPlugin):
         inventory_id = inventory_id.replace('/', '')
         inventory_url = f'/api/v2/inventories/{inventory_id}/script/'
 
-        # Ensure any write-scope token created for username/password auth is always released,
-        # even on the success path (module.exit_json/fail_json are never called from an inventory plugin).
-        try:
-            inventory = module.get_endpoint(inventory_url, data={'hostvars': '1', 'towervars': '1', 'all': '1'})['json']
+        # The cache plugin is normally loaded by _read_config_data(); load it explicitly to
+        # also cover the case where all settings come from environment variables.
+        self.load_cache_plugin()
+        host = self.get_option('host') or ''
+        include_metadata = self.get_option('include_metadata')
+        cache_key = self.get_cache_key(f'{path}:{host}:{inventory_id}:{include_metadata}')
 
-            # To start with, create all the groups.
-            for group_name in inventory:
-                if group_name != '_meta':
-                    self.inventory.add_group(group_name)
+        # cache may be True or False at this point to indicate if the inventory is being refreshed
+        # get the user's cache option too to see if we should save the cache if it is changing
+        user_cache_setting = self.get_option('cache')
+        # read if the user has caching enabled and the cache is not being refreshed
+        attempt_to_read_cache = user_cache_setting and cache
+        # update if the user has caching enabled and the cache is being refreshed;
+        # this is also set to True below if the cache has expired or is missing
+        cache_needs_update = user_cache_setting and not cache
 
-            # Then, create all hosts and add the host vars.
-            all_hosts = inventory['_meta']['hostvars']
-            for host_name, host_vars in all_hosts.items():
-                self.inventory.add_host(host_name)
-                for var_name, var_value in host_vars.items():
-                    self.inventory.set_variable(host_name, var_name, var_value)
+        inventory_data = None
+        if attempt_to_read_cache:
+            try:
+                inventory_data = self._cache[cache_key]
+            except KeyError:
+                # cache expired or no cache entry yet, fetch from the API and update it below
+                cache_needs_update = True
 
-            # Lastly, create to group-host and group-group relationships, and set group vars.
-            for group_name, group_content in inventory.items():
-                if group_name != 'all' and group_name != '_meta':
-                    # First add hosts to groups
-                    for host_name in group_content.get('hosts', []):
-                        self.inventory.add_host(host_name, group_name)
-                    # Then add the parent-children group relationships.
-                    for child_group_name in group_content.get('children', []):
-                        # add the child group to groups, if its already there it will just throw a warning
-                        self.inventory.add_group(child_group_name)
-                        self.inventory.add_child(group_name, child_group_name)
-                # Set the group vars. Note we should set group var for 'all', but not '_meta'.
-                if group_name != '_meta':
-                    for var_name, var_value in group_content.get('vars', {}).items():
-                        self.inventory.set_variable(group_name, var_name, var_value)
+        if inventory_data is None:
+            module = ControllerAPIModule(argument_spec={}, direct_params=module_params, error_callback=handle_error, warn_callback=self.warn_callback)
+            # Ensure any write-scope token created for username/password auth is always released,
+            # even on the success path (module.exit_json/fail_json are never called from an inventory plugin).
+            try:
+                inventory_data = {
+                    'inventory': module.get_endpoint(inventory_url, data={'hostvars': '1', 'towervars': '1', 'all': '1'})['json'],
+                    'config': None,
+                }
+                if include_metadata:
+                    inventory_data['config'] = module.get_endpoint('/api/v2/config/')['json']
+            finally:
+                module.logout()
 
-            # Fetch extra variables if told to do so
-            if self.get_option('include_metadata'):
+        if cache_needs_update:
+            self._cache[cache_key] = inventory_data
 
-                config_data = module.get_endpoint('/api/v2/config/')['json']
+        inventory = inventory_data['inventory']
 
-                server_data = {}
-                server_data['license_type'] = config_data.get('license_info', {}).get('license_type', 'unknown')
-                for key in ('version', 'ansible_version'):
-                    server_data[key] = config_data.get(key, 'unknown')
-                self.inventory.set_variable('all', 'controller_metadata', server_data)
-        finally:
-            module.logout()
+        # To start with, create all the groups.
+        for group_name in inventory:
+            if group_name != '_meta':
+                self.inventory.add_group(group_name)
+
+        # Then, create all hosts and add the host vars.
+        all_hosts = inventory['_meta']['hostvars']
+        for host_name, host_vars in all_hosts.items():
+            self.inventory.add_host(host_name)
+            for var_name, var_value in host_vars.items():
+                self.inventory.set_variable(host_name, var_name, var_value)
+
+        # Lastly, create to group-host and group-group relationships, and set group vars.
+        for group_name, group_content in inventory.items():
+            if group_name != 'all' and group_name != '_meta':
+                # First add hosts to groups
+                for host_name in group_content.get('hosts', []):
+                    self.inventory.add_host(host_name, group_name)
+                # Then add the parent-children group relationships.
+                for child_group_name in group_content.get('children', []):
+                    # add the child group to groups, if its already there it will just throw a warning
+                    self.inventory.add_group(child_group_name)
+                    self.inventory.add_child(group_name, child_group_name)
+            # Set the group vars. Note we should set group var for 'all', but not '_meta'.
+            if group_name != '_meta':
+                for var_name, var_value in group_content.get('vars', {}).items():
+                    self.inventory.set_variable(group_name, var_name, var_value)
+
+        # Add extra variables if told to do so
+        if include_metadata:
+
+            config_data = inventory_data['config'] or {}
+
+            server_data = {}
+            server_data['license_type'] = config_data.get('license_info', {}).get('license_type', 'unknown')
+            for key in ('version', 'ansible_version'):
+                server_data[key] = config_data.get(key, 'unknown')
+            self.inventory.set_variable('all', 'controller_metadata', server_data)
 
         # Clean up the inventory.
         self.inventory.reconcile_inventory()
