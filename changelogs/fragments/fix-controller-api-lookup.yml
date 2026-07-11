@@ -1,0 +1,7 @@
+bugfixes:
+  - controller_api lookup - stop passing ``{}`` as the ``hostvars`` positional argument of ``get_option('query_params')``; the second positional
+    parameter is not a default value.
+  - controller_api lookup - make ``expect_one`` compare and report the API ``count`` of matching objects instead of the length of the first page of
+    results, which silently passed or reported the page size (for example 25) on paginated endpoints.
+  - controller_api lookup - raise a clear error when ``expect_one`` is set and a list view response has no ``count`` field, instead of failing with a
+    raw ``KeyError``.

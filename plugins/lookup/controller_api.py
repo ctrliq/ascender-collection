@@ -148,7 +148,7 @@ class LookupModule(LookupBase):
         # Ensure any write-scope token created for username/password auth is always released,
         # even on the success path (module.exit_json/fail_json are never called from a lookup).
         try:
-            response = module.get_endpoint(terms[0], data=self.get_option('query_params', {}))
+            response = module.get_endpoint(terms[0], data=self.get_option('query_params') or {})
 
             if 'status_code' not in response:
                 raise AnsibleError(f"Unclear response from API: {response}")
@@ -163,8 +163,11 @@ class LookupModule(LookupBase):
                     raise AnsibleError(f'Did not obtain a list or detail view at {terms[0]}, and expect_objects or expect_one is set to True')
 
             if self.get_option('expect_one'):
-                if 'results' in return_data and len(return_data['results']) != 1:
-                    raise AnsibleError(f'Expected one object from endpoint {terms[0]}, but obtained {len(return_data["results"])} from API')
+                if 'results' in return_data:
+                    if 'count' not in return_data:
+                        raise AnsibleError(f'Expected a paginated list view at {terms[0]}, but the response had no count field')
+                    if return_data['count'] != 1:
+                        raise AnsibleError(f'Expected one object from endpoint {terms[0]}, but obtained {return_data["count"]} from API')
 
             if self.get_option('return_all') and 'results' in return_data:
                 if return_data['count'] > self.get_option('max_objects'):
