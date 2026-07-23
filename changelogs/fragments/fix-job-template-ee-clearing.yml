@@ -1,2 +1,2 @@
 bugfixes:
-  - job_template - Fix inability to clear ``execution_environment`` by passing an empty string, aligning with the pattern used by other modules (https://github.com/ctrliq/ascender-collection/pull/XXX).
+  - job_template - Fix inability to clear ``execution_environment`` by passing an empty string, aligning with the pattern used by other modules (https://github.com/ctrliq/ascender-collection/pull/209).
