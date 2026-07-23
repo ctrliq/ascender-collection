@@ -117,8 +117,11 @@ def main():
         new_fields['organization'] = module.resolve_name_to_id('organizations', organization)
 
     credential = module.params.get('credential')
-    if credential:
-        new_fields['credential'] = module.resolve_name_to_id('credentials', credential)
+    if credential is not None:
+        if credential == '':
+            new_fields['credential'] = ''
+        else:
+            new_fields['credential'] = module.resolve_name_to_id('credentials', credential)
 
     module.create_or_update_if_needed(existing_item, new_fields, endpoint='execution_environments', item_type='execution_environment')
 

@@ -1,2 +1,4 @@
 bugfixes:
   - job_template - Fix inability to clear ``execution_environment`` by passing an empty string, aligning with the pattern used by other modules (https://github.com/ctrliq/ascender-collection/pull/209).
+  - execution_environment - Fix inability to clear ``credential`` by passing an empty string (https://github.com/ctrliq/ascender-collection/pull/209).
+  - workflow_job_template - Fix inability to clear ``inventory`` and ``webhook_credential`` by passing an empty string (https://github.com/ctrliq/ascender-collection/pull/209).
