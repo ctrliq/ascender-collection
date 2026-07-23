@@ -694,6 +694,7 @@ def create_workflow_nodes(module, response, workflow_nodes, workflow_id):
 
         # Start Approval Node creation process
         if state and (workflow_node.get('unified_job_template') or {}).get('type') == 'workflow_approval':
+            approval_fields = {}
             for field_name in (
                 'name',
                 'description',
@@ -701,7 +702,7 @@ def create_workflow_nodes(module, response, workflow_nodes, workflow_id):
             ):
                 field_val = workflow_node['unified_job_template'].get(field_name)
                 if field_val is not None:
-                    workflow_node_fields[field_name] = field_val
+                    approval_fields[field_name] = field_val
 
             # Attempt to look up an existing item just created
             workflow_job_template_node = module.get_one('workflow_job_template_nodes', **{'data': search_fields})
@@ -718,7 +719,7 @@ def create_workflow_nodes(module, response, workflow_nodes, workflow_id):
 
             module.create_or_update_if_needed(
                 existing_item,
-                workflow_node_fields,
+                approval_fields,
                 endpoint=approval_endpoint,
                 item_type='workflow_job_template_approval_node',
                 associations=association_fields,
