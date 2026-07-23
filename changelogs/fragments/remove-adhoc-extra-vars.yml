@@ -1,0 +1,2 @@
+breaking_changes:
+  - ad_hoc_command - Remove ``extra_vars`` parameter that is no longer supported by the Ascender API (https://github.com/ctrliq/ascender-collection/pull/XXX).
