@@ -1,2 +1,2 @@
 bugfixes:
-  - controller_object_diff lookup - Fix ``KeyError`` crash when comparing resources that have no organization, such as default execution environments and the built-in Ansible Galaxy credential (https://github.com/ctrliq/ascender-collection/pull/XXX).
+  - controller_object_diff lookup - Fix ``KeyError`` crash when comparing resources that have no organization, such as default execution environments and the built-in Ansible Galaxy credential (https://github.com/ctrliq/ascender-collection/pull/212).
