@@ -1,2 +1,3 @@
 bugfixes:
   - inventory_source - Fix error messages when inventory or source project is not found to display the resource name instead of an internal filter dictionary (https://github.com/ctrliq/ascender-collection/pull/210).
+  - inventory_source_update - Fix error message when inventory is not found to display the resource name instead of an internal filter dictionary (https://github.com/ctrliq/ascender-collection/pull/210).
