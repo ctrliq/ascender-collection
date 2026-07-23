@@ -1,0 +1,2 @@
+minor_changes:
+  - workflow_job_template_node - Add ``condition_nodes`` parameter for conditional workflow connectors that route execution based on upstream ``set_stats`` artifacts (https://github.com/ctrliq/ascender-collection/pull/XXX).
