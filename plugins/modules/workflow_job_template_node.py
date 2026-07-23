@@ -110,6 +110,18 @@ options:
           description:
             - A Jinja2 template string rendered at runtime into a context message using upstream set_stats artifacts.
           type: str
+        required_approvals:
+          description:
+            - The number of approvals required before the approval node passes.
+            - Defaults to 1 if not specified.
+          type: int
+        on_timeout:
+          description:
+            - The action taken when the approval node times out.
+          type: str
+          choices:
+            - deny
+            - approve
     all_parents_must_converge:
       description:
         - If enabled then the node will only run if all of the parent nodes have met the criteria to reach this node
@@ -262,6 +274,18 @@ EXAMPLES = '''
       description: "Review the deployment details before approving"
       timeout: 3600
       context_template: "Deploying {{ artifacts.project_name }} version {{ artifacts.version }}"
+
+- name: Create an approval node requiring multiple approvals
+  ctrliq.ascender.workflow_job_template_node:
+    identifier: my-quorum-approval-node
+    workflow_job_template: my-workflow-job-template
+    organization: Default
+    approval_node:
+      name: production-deploy-approval
+      description: "Requires sign-off from two team members"
+      timeout: 7200
+      required_approvals: 2
+      on_timeout: deny
 '''
 
 RETURN = '''
@@ -448,6 +472,10 @@ def main():
             new_fields['timeout'] = approval_node['timeout']
         if approval_node.get('context_template') is not None:
             new_fields['context_template'] = approval_node['context_template']
+        if approval_node.get('required_approvals') is not None:
+            new_fields['required_approvals'] = approval_node['required_approvals']
+        if approval_node.get('on_timeout') is not None:
+            new_fields['on_timeout'] = approval_node['on_timeout']
 
         # Find created workflow node ID
         search_fields = {'identifier': identifier}
