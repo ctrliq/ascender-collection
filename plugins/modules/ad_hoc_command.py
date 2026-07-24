@@ -55,10 +55,6 @@ options:
         - Verbosity level for this ad hoc command run
       type: int
       choices: [ 0, 1, 2, 3, 4, 5 ]
-    extra_vars:
-      description:
-        - Extra variables to use for the ad hoc command..
-      type: dict
     become_enabled:
       description:
         - If the become flag should be set.
@@ -109,7 +105,6 @@ status:
 '''
 
 from ..module_utils.controller_api import ControllerAPIModule
-import json
 
 
 def main():
@@ -123,7 +118,6 @@ def main():
         module_args=dict(),
         forks=dict(type='int'),
         verbosity=dict(type='int', choices=[0, 1, 2, 3, 4, 5]),
-        extra_vars=dict(type='dict'),
         become_enabled=dict(type='bool'),
         diff_mode=dict(type='bool'),
         wait=dict(default=False, type='bool'),
@@ -151,13 +145,9 @@ def main():
         'module_name': module_name,
         'module_args': module_args,
     }
-    for arg in ['job_type', 'limit', 'forks', 'verbosity', 'extra_vars', 'become_enabled', 'diff_mode']:
+    for arg in ['job_type', 'limit', 'forks', 'verbosity', 'become_enabled', 'diff_mode']:
         if module.params.get(arg) is not None:
-            # extra_var can receive a dict or a string, if a dict covert it to a string
-            if arg == 'extra_vars' and not isinstance(module.params.get(arg), str):
-                post_data[arg] = json.dumps(module.params.get(arg))
-            else:
-                post_data[arg] = module.params.get(arg)
+            post_data[arg] = module.params.get(arg)
 
     # Attempt to look up the related items the user specified (these will fail the module if not found)
     post_data['inventory'] = module.resolve_name_to_id('inventories', inventory)
