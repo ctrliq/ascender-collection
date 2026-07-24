@@ -109,8 +109,9 @@ def main():
     host_fields = {
         'name': new_name if new_name else (module.get_item_name(host) if host else name),
         'inventory': inventory_id,
-        'enabled': enabled,
     }
+    if enabled is not None:
+        host_fields['enabled'] = enabled
     if description is not None:
         host_fields['description'] = description
     if variables is not None:
