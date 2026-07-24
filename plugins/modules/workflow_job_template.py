@@ -889,12 +889,18 @@ def main():
         module.delete_if_needed(existing_item)
 
     inventory = module.params.get('inventory')
-    if inventory:
-        new_fields['inventory'] = module.resolve_name_to_id('inventories', inventory)
+    if inventory is not None:
+        if inventory == '':
+            new_fields['inventory'] = ''
+        else:
+            new_fields['inventory'] = module.resolve_name_to_id('inventories', inventory)
 
     webhook_credential = module.params.get('webhook_credential')
-    if webhook_credential:
-        new_fields['webhook_credential'] = module.resolve_name_to_id('credentials', webhook_credential)
+    if webhook_credential is not None:
+        if webhook_credential == '':
+            new_fields['webhook_credential'] = ''
+        else:
+            new_fields['webhook_credential'] = module.resolve_name_to_id('credentials', webhook_credential)
 
     # Create the data that gets sent for create and update
     new_fields['name'] = new_name if new_name else (module.get_item_name(existing_item) if existing_item else name)

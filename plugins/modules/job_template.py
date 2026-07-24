@@ -439,8 +439,11 @@ def main():
         search_fields['organization'] = new_fields['organization'] = organization_id
 
     ee = module.params.get('execution_environment')
-    if ee:
-        new_fields['execution_environment'] = module.resolve_name_to_id('execution_environments', ee)
+    if ee is not None:
+        if ee == '':
+            new_fields['execution_environment'] = ''
+        else:
+            new_fields['execution_environment'] = module.resolve_name_to_id('execution_environments', ee)
 
     # Attempt to look up an existing item based on the provided data
     existing_item = module.get_one('job_templates', name_or_id=name, check_exists=(state == 'exists'), **{'data': search_fields})
