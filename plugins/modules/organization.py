@@ -187,7 +187,10 @@ def main():
     if description is not None:
         org_fields['description'] = description
     if default_ee is not None:
-        org_fields['default_environment'] = module.resolve_name_to_id('execution_environments', default_ee)
+        if default_ee == '':
+            org_fields['default_environment'] = ''
+        else:
+            org_fields['default_environment'] = module.resolve_name_to_id('execution_environments', default_ee)
     if max_hosts is not None:
         org_fields['max_hosts'] = max_hosts
 

@@ -325,7 +325,10 @@ def main():
     if extra_data is not None:
         new_fields['extra_data'] = extra_data
     if inventory is not None:
-        new_fields['inventory'] = inventory_id
+        if inventory == '':
+            new_fields['inventory'] = ''
+        else:
+            new_fields['inventory'] = inventory_id
     if scm_branch is not None:
         new_fields['scm_branch'] = scm_branch
     if job_type is not None:

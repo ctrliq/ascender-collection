@@ -1,0 +1,6 @@
+---
+bugfixes:
+  - instance_group, schedule, inventory_source, organization, project, job_template,
+    workflow_job_template_node - Fixed nullable foreign key fields not being
+    clearable by passing an empty string, matching the pattern already used
+    by other modules.

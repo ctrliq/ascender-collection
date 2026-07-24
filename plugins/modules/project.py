@@ -418,7 +418,10 @@ def main():
         (signature_validation_credential, 'signature_validation_credential', 'credentials'),
     ):
         if variable is not None:
-            project_fields[field] = module.resolve_name_to_id(endpoint, variable)
+            if variable == '':
+                project_fields[field] = ''
+            else:
+                project_fields[field] = module.resolve_name_to_id(endpoint, variable)
 
     if org_id is not None:
         # this is resolved earlier, so save an API call and don't do it again in the loop above
