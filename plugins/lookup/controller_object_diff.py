@@ -214,7 +214,7 @@ class LookupModule(LookupBase):
                 item.pop("summary_fields")
         elif api_list[0]["type"] == "credential":
             for item in api_list_reduced:
-                item.update({"organization": (item["summary_fields"]["organization"]["name"] if item["summary_fields"]["organization"] else "")})
+                item.update({"organization": (item["summary_fields"]["organization"]["name"] if item["summary_fields"].get("organization") else "")})
                 item.update({"credential_type": item["summary_fields"]["credential_type"]["name"]})
                 item.pop("summary_fields")
         elif api_list[0]["type"] == "workflow_job_template_node":
@@ -325,7 +325,7 @@ class LookupModule(LookupBase):
             and api_list[0]["type"] != "instance_group"
         ):
             for item in api_list_reduced:
-                item.update({"organization": item["summary_fields"]["organization"]["name"]})
+                item.update({"organization": item["summary_fields"]["organization"]["name"] if item["summary_fields"].get("organization") else ""})
                 item.pop("summary_fields")
 
         self.display.v(f"compare_list_reduced: {compare_list_reduced}")
