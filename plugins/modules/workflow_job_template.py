@@ -700,6 +700,8 @@ def create_workflow_nodes(module, response, workflow_nodes, workflow_id):
                 'description',
                 'timeout',
                 'context_template',
+                'required_approvals',
+                'on_timeout',
             ):
                 field_val = workflow_node['unified_job_template'].get(field_name)
                 if field_val is not None:
