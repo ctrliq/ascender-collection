@@ -84,8 +84,8 @@ import re
 
 from ansible.plugins.lookup import LookupBase
 from ansible.errors import AnsibleError
-from datetime import datetime
-from zoneinfo import available_timezones
+from datetime import datetime, timezone as dt_timezone
+from zoneinfo import available_timezones, ZoneInfo
 
 try:
     from dateutil import rrule
@@ -161,6 +161,10 @@ class LookupModule(LookupBase):
             except Exception as e:
                 raise AnsibleError('Parameter start_date must be in the format YYYY-MM-DD [HH:MM:SS]') from e
 
+        # Set when end_on is a date rather than a count; RFC 5545 requires UNTIL to be
+        # expressed in UTC once DTSTART carries a TZID (spliced in further down).
+        until_local = None
+
         # If we are a none frequency we don't need anything else
         if frequency == 'none':
             rrule_kwargs['count'] = 1
@@ -172,9 +176,10 @@ class LookupModule(LookupBase):
                     rrule_kwargs['count'] = int(end_on)
                 else:
                     try:
-                        rrule_kwargs['until'] = LookupModule.parse_date_time(end_on)
+                        until_local = LookupModule.parse_date_time(end_on)
                     except Exception as e:
                         raise AnsibleError('Parameter end_on must either be an integer or in the format YYYY-MM-DD [HH:MM:SS]') from e
+                    rrule_kwargs['until'] = until_local
 
             # A week-based frequency can also take the on_days parameter
             if frequency == 'week' and 'on_days' in kwargs:
@@ -228,6 +233,16 @@ class LookupModule(LookupBase):
 
         # rrule puts a \n in the rule instad of a space and can't handle timezones
         return_rrule = str(my_rule).replace('\n', ' ').replace('DTSTART:', f'DTSTART;TZID={timezone}:')
+
+        if until_local is not None:
+            # rrule always serializes UNTIL using dtstart's naive local clock time; swap in the
+            # RFC 5545 UTC form (trailing Z) instead, to match the TZID spliced into DTSTART above.
+            until_utc = until_local.replace(tzinfo=ZoneInfo(timezone)).astimezone(tz=dt_timezone.utc)
+            return_rrule = re.sub(
+                r'UNTIL=\d{8}T\d{6}',
+                f"UNTIL={until_utc.strftime('%Y%m%dT%H%M%S')}Z",
+                return_rrule,
+            )
         # AWX requires an interval. rrule will not add interval if it's set to 1
         if kwargs.get('every', 1) == 1:
             return_rrule = f"{return_rrule};INTERVAL=1"
