@@ -1,0 +1,2 @@
+bugfixes:
+  - workflow_job_template - Fix approval node creation via ``workflow_nodes`` sending extraneous node-level fields to the approval template endpoint, which caused spurious updates on every run and could leak the node timeout value into the approval template (https://github.com/ctrliq/ascender-collection/pull/211).
