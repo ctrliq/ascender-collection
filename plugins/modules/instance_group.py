@@ -147,7 +147,10 @@ def main():
     new_fields = {}
     new_fields['name'] = new_name if new_name else (module.get_item_name(existing_item) if existing_item else name)
     if credential is not None:
-        new_fields['credential'] = credential_id
+        if credential == '':
+            new_fields['credential'] = ''
+        else:
+            new_fields['credential'] = credential_id
     if is_container_group is not None:
         new_fields['is_container_group'] = is_container_group
     if policy_instance_percentage is not None:

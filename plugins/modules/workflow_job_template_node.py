@@ -388,8 +388,11 @@ def main():
             'unified_job_templates', name_or_id=unified_job_template, allow_none=False, **{'data': search_fields}
         )['id']
     inventory = module.params.get('inventory')
-    if inventory:
-        new_fields['inventory'] = module.resolve_name_to_id('inventories', inventory)
+    if inventory is not None:
+        if inventory == '':
+            new_fields['inventory'] = ''
+        else:
+            new_fields['inventory'] = module.resolve_name_to_id('inventories', inventory)
 
     # Create the data that gets sent for create and update
     for field_name in (

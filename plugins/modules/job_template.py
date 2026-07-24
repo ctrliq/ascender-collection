@@ -522,9 +522,14 @@ def main():
     webhook_credential = module.params.get('webhook_credential')
 
     if inventory is not None:
-        new_fields['inventory'] = module.resolve_name_to_id('inventories', inventory)
+        if inventory == '':
+            new_fields['inventory'] = ''
+        else:
+            new_fields['inventory'] = module.resolve_name_to_id('inventories', inventory)
     if project is not None:
-        if organization_id is not None:
+        if project == '':
+            new_fields['project'] = ''
+        elif organization_id is not None:
             project_data = module.get_one(
                 'projects',
                 name_or_id=project,
@@ -540,7 +545,10 @@ def main():
         else:
             new_fields['project'] = module.resolve_name_to_id('projects', project)
     if webhook_credential is not None:
-        new_fields['webhook_credential'] = module.resolve_name_to_id('credentials', webhook_credential)
+        if webhook_credential == '':
+            new_fields['webhook_credential'] = ''
+        else:
+            new_fields['webhook_credential'] = module.resolve_name_to_id('credentials', webhook_credential)
 
     association_fields = {}
 
