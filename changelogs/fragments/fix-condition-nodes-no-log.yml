@@ -1,0 +1,2 @@
+bugfixes:
+  - workflow_job_template_node - Mark ``artifact_key`` in ``condition_nodes`` as ``no_log=False`` to fix validate-modules sanity failure.

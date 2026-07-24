@@ -391,7 +391,7 @@ def main():
             options=dict(
                 identifier=dict(required=True),
                 trigger=dict(choices=['success', 'failure', 'always'], default='success'),
-                artifact_key=dict(required=True),
+                artifact_key=dict(required=True, no_log=False),
                 operator=dict(choices=['eq', 'ne', 'lt', 'gt', 'le', 'ge', 'in', 'not_in'], default='eq'),
                 expected_value=dict(type='raw', required=True),
             ),
