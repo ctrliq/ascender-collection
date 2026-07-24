@@ -150,6 +150,52 @@ options:
         - List of node identifiers.
       type: list
       elements: str
+    condition_nodes:
+      description:
+        - Nodes that will run after this node when a specified condition is met.
+        - Each entry is a dictionary specifying the target node identifier and the condition to evaluate.
+        - Conditions are evaluated against artifacts set by upstream nodes using C(set_stats).
+      type: list
+      elements: dict
+      suboptions:
+        identifier:
+          description:
+            - The identifier of the target node within the same workflow.
+          type: str
+          required: True
+        trigger:
+          description:
+            - When to evaluate the condition relative to this node's completion status.
+          type: str
+          choices:
+            - success
+            - failure
+            - always
+          default: success
+        artifact_key:
+          description:
+            - The key in the upstream artifacts (set via C(set_stats)) to evaluate.
+          type: str
+          required: True
+        operator:
+          description:
+            - The comparison operator to apply.
+          type: str
+          choices:
+            - eq
+            - ne
+            - lt
+            - gt
+            - le
+            - ge
+            - "in"
+            - not_in
+          default: eq
+        expected_value:
+          description:
+            - The value to compare the artifact against.
+          type: raw
+          required: True
     credentials:
       description:
         - Credential names, IDs, or named URLs to be applied to job as launch-time prompts.
@@ -286,6 +332,24 @@ EXAMPLES = '''
       timeout: 7200
       required_approvals: 2
       on_timeout: deny
+
+- name: Create a conditional workflow path based on artifacts
+  ctrliq.ascender.workflow_job_template_node:
+    identifier: my-check-node
+    workflow_job_template: my-workflow-job-template
+    unified_job_template: run-tests
+    organization: Default
+    condition_nodes:
+      - identifier: deploy-staging
+        trigger: success
+        artifact_key: test_result
+        operator: eq
+        expected_value: passed
+      - identifier: notify-failure
+        trigger: success
+        artifact_key: test_result
+        operator: ne
+        expected_value: passed
 '''
 
 RETURN = '''
@@ -321,6 +385,17 @@ def main():
         success_nodes=dict(type='list', elements='str'),
         always_nodes=dict(type='list', elements='str'),
         failure_nodes=dict(type='list', elements='str'),
+        condition_nodes=dict(
+            type='list',
+            elements='dict',
+            options=dict(
+                identifier=dict(required=True),
+                trigger=dict(choices=['success', 'failure', 'always'], default='success'),
+                artifact_key=dict(required=True),
+                operator=dict(choices=['eq', 'ne', 'lt', 'gt', 'le', 'ge', 'in', 'not_in'], default='eq'),
+                expected_value=dict(type='raw', required=True),
+            ),
+        ),
         credentials=dict(type='list', elements='str'),
         execution_environment=dict(type='str'),
         forks=dict(type='int'),
@@ -335,7 +410,7 @@ def main():
     required_if = [
         ['state', 'absent', ['identifier']],
         ['state', 'present', ['identifier']],
-        ['state', 'present', ['unified_job_template', 'approval_node', 'success_nodes', 'always_nodes', 'failure_nodes'], True],
+        ['state', 'present', ['unified_job_template', 'approval_node', 'success_nodes', 'always_nodes', 'failure_nodes', 'condition_nodes'], True],
     ]
 
     # Create a module for ourselves
@@ -449,15 +524,100 @@ def main():
     # In the case of a new object, the utils need to know it is a node
     new_fields['type'] = 'workflow_job_template_node'
 
+    # Handle condition_nodes association (requires per-edge metadata, can't use modify_associations)
+    condition_nodes = module.params.get('condition_nodes')
+
     # If the state was present and we can let the module build or update the existing item, this will return on its own
     module.create_or_update_if_needed(
         existing_item,
         new_fields,
         endpoint='workflow_job_template_nodes',
         item_type='workflow_job_template_node',
-        auto_exit=not approval_node,
+        auto_exit=not approval_node and condition_nodes is None,
         associations=association_fields,
     )
+
+    if condition_nodes is not None:
+        # Get the created/updated node
+        search_fields_cn = {'identifier': identifier, 'workflow_job_template': workflow_job_template_id}
+        current_node = module.get_one('workflow_job_template_nodes', **{'data': search_fields_cn})
+        condition_endpoint = f"{current_node['url']}condition_nodes/"
+
+        # Build desired condition list with resolved node IDs
+        desired_conditions = []
+        for cn in condition_nodes:
+            cn_lookup = {'identifier': cn['identifier']}
+            if workflow_job_template_id:
+                cn_lookup['workflow_job_template'] = workflow_job_template_id
+            target_node = module.get_one('workflow_job_template_nodes', **{'data': cn_lookup})
+            if target_node is None:
+                module.fail_json(msg=f"Could not find condition_nodes entry with identifier {cn['identifier']}")
+            desired_conditions.append({
+                'id': target_node['id'],
+                'trigger': cn.get('trigger', 'success'),
+                'artifact_key': cn['artifact_key'],
+                'operator': cn.get('operator', 'eq'),
+                'expected_value': cn['expected_value'],
+            })
+
+        # Get existing condition nodes
+        existing_response = module.get_all_endpoint(condition_endpoint)
+        existing_conditions = existing_response['json']['results']
+        existing_ids = {c['id'] for c in existing_conditions}
+        desired_ids = {c['id'] for c in desired_conditions}
+
+        # Disassociate removed condition nodes
+        for old_id in existing_ids - desired_ids:
+            response = module.post_endpoint(condition_endpoint, **{'data': {'id': int(old_id), 'disassociate': True}})
+            if response['status_code'] == 204:
+                module.json_output['changed'] = True
+            else:
+                module.fail_json(
+                    msg=f"Failed to disassociate condition node {response['json'].get('detail', response['json'])}"
+                )
+
+        # Associate new or update existing condition nodes
+        for dc in desired_conditions:
+            # Check if this condition node already exists with the same parameters
+            existing_match = None
+            for ec in existing_conditions:
+                if ec['id'] == dc['id']:
+                    existing_match = ec
+                    break
+
+            if existing_match is not None:
+                # Check if the condition parameters changed
+                changed = False
+                for field in ('trigger', 'artifact_key', 'operator', 'expected_value'):
+                    if str(dc[field]) != str(existing_match.get(field, '')):
+                        changed = True
+                        break
+                if changed:
+                    # Disassociate and re-associate with new parameters
+                    response = module.post_endpoint(
+                        condition_endpoint, **{'data': {'id': int(dc['id']), 'disassociate': True}}
+                    )
+                    if response['status_code'] == 204:
+                        module.json_output['changed'] = True
+                    response = module.post_endpoint(condition_endpoint, **{'data': dc})
+                    if response['status_code'] == 204:
+                        module.json_output['changed'] = True
+                    elif response['status_code'] not in [200, 201, 204]:
+                        module.fail_json(
+                            msg=f"Failed to associate condition node {response['json'].get('detail', response['json'])}"
+                        )
+            else:
+                # New association
+                response = module.post_endpoint(condition_endpoint, **{'data': dc})
+                if response['status_code'] in [200, 201, 204]:
+                    module.json_output['changed'] = True
+                else:
+                    module.fail_json(
+                        msg=f"Failed to associate condition node {response['json'].get('detail', response['json'])}"
+                    )
+
+        if not approval_node:
+            module.exit_json(**module.json_output)
 
     # Create approval node unified template or update existing
     if approval_node:
