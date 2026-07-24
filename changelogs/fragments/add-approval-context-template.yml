@@ -1,0 +1,2 @@
+minor_changes:
+  - workflow_job_template_node - Add ``context_template`` suboption to the ``approval_node`` parameter for rendering dynamic context messages from upstream artifacts (https://github.com/ctrliq/ascender-collection/pull/206).
