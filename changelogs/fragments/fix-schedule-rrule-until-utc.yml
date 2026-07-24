@@ -1,0 +1,5 @@
+---
+bugfixes:
+  - schedule_rrule - Fixed date-based ``end_on`` generating a naive UNTIL value
+    that conflicts with the timezone-aware DTSTART, causing the controller to
+    reject the rule string.
