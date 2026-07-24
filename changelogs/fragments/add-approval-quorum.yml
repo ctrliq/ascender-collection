@@ -1,0 +1,2 @@
+minor_changes:
+  - workflow_job_template_node - Add ``required_approvals`` and ``on_timeout`` suboptions to the ``approval_node`` parameter for multi-approver quorum support (https://github.com/ctrliq/ascender-collection/pull/207).
