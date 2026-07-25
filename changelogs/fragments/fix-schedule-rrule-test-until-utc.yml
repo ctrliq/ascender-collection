@@ -1,0 +1,2 @@
+trivial:
+  - schedule_rrule lookup - Update unit test expectation to match UTC UNTIL output from previous fix.

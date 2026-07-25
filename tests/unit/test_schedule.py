@@ -50,7 +50,7 @@ def test_delete_same_named_schedule(run_module, project, inventory, admin_user):
         (
             'minute',
             {'start_date': '2020-4-16 03:45:07', 'end_on': '2020-4-17 03:45:07'},
-            'DTSTART;TZID=America/New_York:20200416T034507 RRULE:FREQ=MINUTELY;UNTIL=20200417T034507;INTERVAL=1',
+            'DTSTART;TZID=America/New_York:20200416T034507 RRULE:FREQ=MINUTELY;UNTIL=20200417T074507Z;INTERVAL=1',
         ),
         # Test on_days as a single day
         (
