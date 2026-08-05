@@ -1,3 +1,0 @@
-bugfixes:
-  - workflow_job_template - only report ``changed`` for ``destroy_current_nodes`` when at least one workflow node was actually deleted, so runs against a
-    workflow with no existing nodes are idempotent.

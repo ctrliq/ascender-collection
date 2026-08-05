@@ -1,2 +1,602 @@
 ancestor: null
-releases: {}
+releases:
+  25.5.0:
+    changes:
+      breaking_changes:
+      - Raised the minimum required ansible-core to 2.16. The modules and plugins
+        are now Python 3 only; the legacy ``six`` based Python 2 compatibility shims
+        have been removed.
+      - Removed the long-deprecated ``tower_*`` module and plugin redirects (their
+        announced removal date was 2022-01-23). Use the current ``ctrliq.ascender.*``
+        names instead.
+      - Renamed the collection from ``awx.awx`` to ``ctrliq.ascender``. Playbooks
+        must update their fully-qualified module, plugin and doc-fragment names (for
+        example ``awx.awx.job_launch`` becomes ``ctrliq.ascender.job_launch``). The
+        collection now lives in its own repository at https://github.com/ctrliq/ascender-collection.
+      - ad_hoc_command - Remove ``extra_vars`` parameter that is no longer supported
+        by the Ascender API (https://github.com/ctrliq/ascender-collection/pull/213).
+      bugfixes:
+      - ad_hoc_command_cancel - document that ``changed`` is returned on success;
+        the previous ``id`` entry did not match what the module actually exits with.
+      - ad_hoc_command_wait, ad_hoc_command_cancel - fix the ``interval`` descriptions
+        ("in sections" typo and a sentence truncated mid-word).
+      - application - apply the ``skip_authorization`` parameter, which was documented
+        and in the argument spec but never read or sent to the API.
+      - auth doc fragment - document that ``request_timeout`` is not honored by the
+        export and import modules, which connect through awxkit without a timeout.
+        The caveat previously lived in the plugin doc fragment, where it was wrong
+        (lookup and inventory plugins do honor ``request_timeout``), and has been
+        removed from there.
+      - auth doc fragment - the ``validate_certs`` description lead sentence was inverted
+        ("Whether to allow insecure connections"); it now correctly describes SSL
+        certificate validation.
+      - auth documentation fragment - document the ``CONTROLLER_REQUEST_TIMEOUT``
+        environment variable fallback for ``request_timeout`` and refer to the real
+        ``controller_config_file`` parameter name in the notes.
+      - auth_plugin doc fragment - the notes no longer reference a ``config_file``
+        option that no plugin exposes; config files in the standard locations are
+        still read.
+      - awxkit module utils - catch errors from ``connection.logout()`` and downgrade
+        them to a warning instead of letting them raise, so a connection problem during
+        the original failure does not mask the real error with a raw traceback (previously
+        ``fail_json`` calling ``logout()`` on a dropped connection could crash the
+        module instead of reporting the original failure).
+      - build - update the stale ``build_ignore`` entry for the images directory to
+        ``docs/images``, matching where the directory was moved; previously the entry
+        matched nothing and ``docs/images/completeness_test_output.png`` (an asset
+        only referenced by the already-excluded ``docs/TESTING.md``) shipped in the
+        built collection artifact.
+      - bulk_host_create - declare the documented suboptions of ``hosts`` in the argument
+        spec so that missing required fields and misspelled suboptions fail with a
+        clear module validation error instead of an opaque API 400.
+      - bulk_host_create role - default ``controller_bulk_hosts`` to an empty list
+        so including the role without the variable no-ops instead of failing with
+        an undefined variable error.
+      - bulk_job_launch - correct the documented default of ``job_slice_count``; it
+        was documented as the string ``'1'`` for an integer field, but the API applies
+        no default and falls back to the job template's own job slice count.
+      - bulk_job_launch - declare the documented suboptions of ``jobs`` in the argument
+        spec so that a missing ``unified_job_template``, invalid ``job_type``/``verbosity``
+        choices, and misspelled suboptions fail with a clear module validation error
+        instead of an opaque API 400.
+      - bulk_job_launch - remove the nonexistent top-level ``credentials`` parameter
+        from the documented example, which failed with "Unsupported parameters" when
+        copy-pasted.
+      - bulk_job_launch role - do not fail on items without the optional ``name``
+        key; the loop label dereferenced it unguarded.
+      - bulk_job_launch role - read the documented ``job_tags`` item key; previously
+        the role read ``tags``, so the user's tag restriction was silently dropped
+        and all jobs ran untagged.
+      - collect_async_status role - honor the collection-wide ``controller_configuration_*``
+        variables instead of ``aap_configuration_*`` names that nothing in this collection
+        sets.
+      - controller inventory plugin - release the write-scope OAuth token created
+        for username/password auth once the inventory refresh completes; previously
+        the plugin never logged out, leaking one token per refresh.
+      - controller_api - map the ``ascender`` collection type to the ``AWX`` product
+        name the server reports, so the version check no longer emits "You are using
+        the ascender version of this collection but connecting to AWX" on every task
+        and again compares the collection and controller major versions.
+      - controller_api lookup - make ``expect_one`` compare and report the API ``count``
+        of matching objects instead of the length of the first page of results, which
+        silently passed or reported the page size (for example 25) on paginated endpoints.
+      - controller_api lookup - raise a clear error when ``expect_one`` is set and
+        a list view response has no ``count`` field, instead of failing with a raw
+        ``KeyError``.
+      - controller_api lookup - release the write-scope OAuth token created for username/password
+        auth once the query completes; previously the lookup never logged out, leaking
+        one token per call.
+      - controller_api lookup - stop passing ``{}`` as the ``hostvars`` positional
+        argument of ``get_option('query_params')``; the second positional parameter
+        is not a default value.
+      - controller_api module utils - coerce ``request_timeout`` read from an INI
+        config file to a number; previously every request failed with a ``TypeError``
+        when the setting came from an INI file.
+      - controller_api module utils - fall through to the normal name search when
+        a named URL lookup for a name containing ``++`` returns 404, instead of failing
+        the module (this made ``state=present`` unable to create such objects and
+        ``state=absent`` non-idempotent).
+      - controller_api module utils - guard the ``X-API-Product-Version`` comparison
+        against a single-component version header (for example ``4``), which previously
+        raised an uncaught ``IndexError`` and failed the module for what should at
+        most be a version-mismatch warning.
+      - controller_api module utils - pass a null ``timeout`` through ``wait_on_workflow_node_url``
+        correctly instead of raising a ``TypeError`` when computing the revised timeout
+        after the workflow node is found.
+      - controller_api module utils - show the real error message when ``controller_config_file``
+        cannot be loaded, instead of crashing with ``TypeError - Value of unknown
+        type`` while formatting the failure.
+      - controller_api module utils - stop including the raw login response body in
+        the failure message when the ``/api/v2/tokens/`` response cannot be parsed;
+        a token minted by the server before the parse failure was being leaked into
+        module failure output with no way to look up and delete it afterwards.
+      - controller_export_diff - compare organizations safely when either side is
+        ``None`` (e.g. a user-owned credential) or given as a plain string instead
+        of a dict; previously this crashed with ``AttributeError``.
+      - controller_export_diff - fix a ``NameError`` in the failure handler that could
+        mask the real error when the exception happened before any compare item had
+        been processed for a resource.
+      - controller_export_diff - stop including controller-only leftovers in the output
+        when ``set_absent=False`` and ``with_present=True``; they were spliced in
+        with no ``state`` key at all, which defeated ``set_absent=False`` for anything
+        applying the returned states. The output in that combination is now just the
+        compare items, all marked ``present``.
+      - controller_object_diff lookup - Fix ``KeyError`` crash when comparing resources
+        that have no organization, such as default execution environments and the
+        built-in Ansible Galaxy credential (https://github.com/ctrliq/ascender-collection/pull/212).
+      - credential - allow a credential's description to be cleared by passing an
+        empty string (previously an empty description was silently dropped).
+      - credential - resolve user-owned credentials when ``user`` is set by clearing
+        the organization from the lookup, so they can be found and removed.
+      - credential - send an explicitly empty ``inputs`` dict to the API so stored
+        inputs can be wiped; previously ``inputs={}`` was silently dropped.
+      - credential_input_source - allow ``metadata`` and ``description`` to be cleared
+        by passing empty values; previously they were silently dropped.
+      - credential_type - allow ``description``, ``inputs``, and ``injectors`` to
+        be cleared by passing empty values; previously they were silently dropped
+        and the old values kept.
+      - credentials role - default secure logging to false as documented in the README
+        and as every sibling role does (it silently defaulted to true).
+      - credentials, teams roles - fix stale and misspelled loop variable references
+        in the async status labels.
+      - execution_environment - Fix inability to clear ``credential`` by passing an
+        empty string (https://github.com/ctrliq/ascender-collection/pull/209).
+      - execution_environment - allow the description to be cleared by passing an
+        empty string (previously an empty description was silently dropped).
+      - execution_environment - do not default ``pull`` to ``missing`` and only send
+        it when explicitly specified; previously any playbook that merely ensured
+        an execution environment existed silently overwrote a blank (server-default)
+        pull policy with ``missing`` and reported changed. Add ``''`` to the allowed
+        choices so a blank pull policy can be restored explicitly.
+      - execution_environment - do not send ``image`` when it was not specified; previously
+        updating any other attribute of an existing execution environment without
+        re-passing ``image`` always failed with an API validation error.
+      - execution_environments role - honor the documented ``execution_environments``
+        alias; previously the task was skipped unless ``controller_execution_environments``
+        was defined, so alias usage silently created nothing. A default empty list
+        is added, matching the sibling roles.
+      - export - document that ``assets`` is always returned on success; the previous
+        condition referenced a file-writing option that does not exist.
+      - export, controller_export_diff - allow these read-only modules to run under
+        ``--check`` instead of failing; the shared awxkit module utils forced ``supports_check_mode=False``
+        on every module regardless of what it declared. ``import`` still declines
+        check mode since it writes to the controller.
+      - get_stats playbook - correctly accumulate the logged-in user list (previously
+        the accumulator was reset every iteration, so at most one user was counted),
+        compare last login against today instead of an always-true inverted subtraction,
+        and honor ``CONTROLLER_VERIFY_SSL`` instead of hardcoding ``validate_certs=false``.
+      - group - allow all hosts or children to be removed by passing an empty list;
+        previously ``hosts=[]`` and ``children=[]`` were silently ignored and the
+        existing members were left in place.
+      - host - Fixed ``enabled`` being unconditionally sent in the API payload, which
+        could reset a host's enabled state when the parameter was not specified.
+      - hosts, instances roles - honor an explicit ``enabled=false`` and ``managed_by_policy=false``;
+        the boolean-true form of ``default()`` treated an explicit false as unset,
+        dropping or inverting the value.
+      - import - capture errors logged by both the ``awxkit.api.pages.api`` and ``awxkit.api.pages.page``
+        loggers during import_assets, matching the export module; previously errors
+        logged only by the page logger were swallowed and the module could report
+        success despite import failures.
+      - import - honor the module's declared lack of check mode support; previously
+        ``--check`` was accepted and the import was actually performed against the
+        controller.
+      - instance - coerce numeric peer values to integers so repeat runs are idempotent;
+        previously string IDs never matched the API response and every run issued
+        a needless update, with check mode always reporting a change.
+      - instance - fix the "Remove peers" example to use ``peers=[]``; the documented
+        bare ``peers`` value is null and is (correctly) ignored, making the example
+        a no-op.
+      - instance_group, schedule, inventory_source, organization, project, job_template,
+        workflow_job_template_node - Fixed nullable foreign key fields not being clearable
+        by passing an empty string, matching the pattern already used by other modules.
+      - inventory - do not send ``kind`` and ``host_filter`` when they were not specified;
+        previously updating any attribute of a smart or constructed inventory without
+        re-passing ``kind`` silently converted it to a regular inventory, and every
+        run issued a needless PATCH that made check mode always report a change.
+      - inventory - fail with a clear error when ``input_inventories`` is provided
+        but the inventory is not, and will not become, ``kind=constructed``; previously
+        the option was silently discarded with no error and no effect.
+      - inventory - honor ``input_inventories`` when updating an existing constructed
+        inventory without re-passing ``kind=constructed`` in the same task.
+      - inventory - preserve the order of ``input_inventories`` on a constructed inventory
+        by treating them as an ordered association.
+      - inventory_source - Fix error messages when inventory or source project is
+        not found to display the resource name instead of an internal filter dictionary
+        (https://github.com/ctrliq/ascender-collection/pull/210).
+      - inventory_source - do not rename the inventory source to its numeric ID when
+        it is looked up by ID and ``new_name`` is not given.
+      - inventory_source - fail with the intended error message instead of a ``KeyError``
+        traceback when creating a new inventory source without the ``source`` parameter.
+      - inventory_source_update - Fix error message when inventory is not found to
+        display the resource name instead of an internal filter dictionary (https://github.com/ctrliq/ascender-collection/pull/210).
+      - inventory_source_update - report the inventory source name instead of dumping
+        the whole inventory JSON object into failure and timeout messages while waiting
+        for the update.
+      - inventory_source_update role - fix a misspelled register reference in the
+        check mode error flag, which could never fire, so failing source updates were
+        silently missed in check mode.
+      - inventory_source_update role - honor the documented ``inventory_sources``
+        alias; previously the task was skipped unless ``controller_inventory_sources``
+        was defined, so alias usage silently launched nothing.
+      - job_cancel - the RETURN documentation no longer describes an ``id`` value
+        that the module never returns.
+      - job_cancel, ad_hoc_command_cancel - no longer fail with a generic HTTP 405
+        error when the job or command finishes between the ``can_cancel`` check and
+        the cancel request; the race is now treated the same as a job that is not
+        running, so ``fail_if_not_running=false`` tolerates it and ``fail_if_not_running=true``
+        fails with the intended message.
+      - job_launch - validate ``execution_environment``, ``forks``, ``instance_groups``,
+        ``job_slice_count``, ``labels``, and ``job_timeout`` against the job template's
+        corresponding prompt-on-launch flags; previously these fields were posted
+        to the API unchecked, so the API silently dropped them when the template did
+        not allow prompting for them, and the module reported success instead of failing
+        like it already does for ``limit`` and ``tags``.
+      - job_launch - validate falsy prompt values such as ``verbosity=0`` and ``diff_mode=false``
+        against the job template's prompt-on-launch flags; previously they bypassed
+        the check and were silently ignored by the API, so the job launched with the
+        template's value instead of failing.
+      - job_launch, groups, inventory_source_update, notification_templates, workflow_job_templates
+        roles - correct the async retry/delay and secure logging variable names in
+        ``meta/argument_specs.yml`` (and the README tables that repeated them) to
+        match the variables the tasks actually read; the specs advertised names such
+        as ``controller_configuration_groups_secure_logging`` or ``controller_configuration_notification_templates_async_retries``
+        that the roles never consumed, so anyone setting the documented variable was
+        silently ignored.
+      - job_list - document ``next`` and ``previous`` as page URL strings as returned
+        by the API, not integers.
+      - job_list - fail with the API error details when the controller rejects the
+        query (for example an invalid filter field) instead of exiting successfully
+        with the error body as output, or crashing with a raw ``RuntimeError`` when
+        ``all_pages`` is enabled.
+      - job_template - Fix inability to clear ``execution_environment`` by passing
+        an empty string, aligning with the pattern used by other modules (https://github.com/ctrliq/ascender-collection/pull/209).
+      - job_templates, projects, inventory_sources, organizations roles - stop passing
+        ``custom_virtualenv`` to modules that do not accept it; with ``enforce_defaults``
+        enabled every item failed with "Unsupported parameters", and the roles' documentation
+        advertised an option that could never work.
+      - job_wait - correct the ``interval`` description ("in seconds", and drop the
+        reference to nonexistent min/max interval parameters).
+      - job_wait, ad_hoc_command_wait, project_update, workflow_node_wait, and other
+        wait paths - honor an explicit ``timeout=0`` by aborting immediately instead
+        of waiting forever (0 was treated as "no timeout" by a truthiness check).
+      - license - fail with a useful error message when the controller rejects a license
+        manifest or pool ID instead of silently reporting success.
+      - license - report ``changed`` correctly when removing the license with ``state=absent``
+        (previously always reported ``changed=false``) and fail cleanly if the removal
+        is rejected.
+      - license - state=absent now checks whether a license is actually present before
+        deleting it, so the module is idempotent and reports ``changed=false`` when
+        no license is installed; previously it always deleted ``/api/v2/config/``
+        and reported ``changed=true`` on every run, including in check mode.
+      - license role - stop passing ``eula_accepted``, which the license module does
+        not accept; setting the documented value made the license installation fail
+        with "Unsupported parameters".
+      - module_utils - wait on ``event_processing_finished`` when the API exposes
+        it (falling back to ``finished``) so job events are fully flushed before a
+        wait returns.
+      - multiple roles - correct copy-pasted variable names in ``meta/argument_specs.yml``
+        (bulk_job_launch, jobs_cancel, users, notification_templates, workflow_job_templates,
+        workflow_launch, license, project_update, object_diff); the specs advertised
+        variables the roles never read, so spec-driven usage silently did nothing.
+      - notification_template - only filter the existence lookup by organization when
+        the ``organization`` parameter is provided; previously the lookup always sent
+        ``organization`` as ``None``, which the API treated as an organization IS
+        NULL filter and caused org-owned templates to never match.
+      - notification_template - send an explicitly empty ``notification_configuration``
+        to the API instead of silently dropping it (an empty dict was discarded by
+        a truthiness check).
+      - organization - correct the ``notification_templates_approvals`` description,
+        which was a copy-paste of the on-start notifications description.
+      - project - fix ``changed`` being reset to ``false`` after waiting for a project
+        update when a real field change (e.g. ``description``) had already been made
+        in the same run but the SCM revision did not move.
+      - project_update - document that the returned ``id`` is the project update job's
+        ID, not the project's ID.
+      - project_update role - honor the documented ``projects`` alias; previously
+        the task was skipped unless ``controller_projects`` was defined, so alias
+        usage silently launched no project updates.
+      - role - do not apply the ``lookup_organization`` filter to instance group lookups;
+        instance groups have no organization field and the controller rejected the
+        filtered query with HTTP 400, so instance group roles could not be granted
+        together with ``lookup_organization``.
+      - role - look up teams without the organization filter (as already done for
+        organizations and users), so a team that lives in a different organization
+        than ``lookup_organization`` can be resolved.
+      - schedule - allow ``unified_job_template`` to be specified by ID or named URL,
+        as the documentation already promised (previously only an exact name match
+        worked).
+      - schedule - fail with a clear error message instead of a ``TypeError`` traceback
+        when the ``unified_job_template`` cannot be found on the controller.
+      - schedule - keep the organization filter when looking up labels so that a label
+        name that exists in multiple organizations no longer fails the lookup with
+        "returned 2 items, expected 1", matching the behavior of the job_template
+        module.
+      - schedule_rrule - Fixed date-based ``end_on`` generating a naive UNTIL value
+        that conflicts with the timezone-aware DTSTART, causing the controller to
+        reject the rule string.
+      - schedule_rrule, schedule_rruleset - accept an integer ``end_on`` value as
+        documented instead of crashing with a ``TypeError`` (previously only a numeric
+        string worked).
+      - schedule_rrule, schedule_rruleset - correct the documented value ranges for
+        ``month_day_number``, ``bymonth``, ``bymonthday``, and ``byyearday``, document
+        the accepted ``saturday`` value for day lists, and fix the ``bysetpos`` example
+        value ``forth`` to ``fourth``.
+      - schedule_rrule, schedule_rruleset - return a list as Ansible lookup plugins
+        are expected to, instead of a bare string. Use ``lookup`` for a single rule
+        string and ``query`` for the list.
+      - schedule_rruleset - accept ``byweekno`` 53, which is a valid ISO 8601 week
+        number.
+      - schedule_rruleset lookup - fix ``end_on`` accepting a date so it no longer
+        fails with "RRULE UNTIL values must be specified in UTC when DTSTART is timezone-aware";
+        the local end date is now converted to UTC before being emitted as the rule's
+        ``UNTIL`` value.
+      - settings - fail with a clear error message instead of a ``KeyError`` traceback
+        when a setting name does not exist on the controller (for example a typo in
+        ``name`` or in a ``settings`` dict key).
+      - settings - treat the ``$encrypted$`` placeholder returned by the API for encrypted
+        settings (for example ``AUTH_LDAP_BIND_PASSWORD``) as potentially equal to
+        the desired value, using the same comparison logic as the other modules; previously
+        every run reported ``changed`` and re-submitted the setting.
+      - subscriptions - fail with the API error details when the controller rejects
+        the request (for example on bad Red Hat credentials) instead of reporting
+        success with a garbage subscription list.
+      - subscriptions - fix the client side ``filters`` option raising a ``TypeError``
+        when a subscription field is a non-string (for example an int or bool), and
+        silently including subscriptions when the filtered field is missing or ``None``.
+      - subscriptions - report ``changed=true`` when the credentials are posted to
+        the controller (the module always stores them for future use), and predict
+        ``changed=true`` in check mode without contacting the subscription service
+        instead of relying on the generic check-mode short circuit, which exited without
+        a ``subscriptions`` key.
+      - workflow_approval - fail with the API error details when the approve or deny
+        action is rejected by the controller (for example when the step was already
+        approved or denied) instead of silently reporting success.
+      - workflow_job_template - Fix approval node creation via ``workflow_nodes``
+        sending extraneous node-level fields to the approval template endpoint, which
+        caused spurious updates on every run and could leak the node timeout value
+        into the approval template (https://github.com/ctrliq/ascender-collection/pull/211).
+      - workflow_job_template - Fix inability to clear ``inventory`` and ``webhook_credential``
+        by passing an empty string (https://github.com/ctrliq/ascender-collection/pull/209).
+      - workflow_job_template - Fixed inline approval node creation via ``workflow_nodes``
+        silently dropping the ``context_template`` field.
+      - workflow_job_template - Fixed inline approval node creation via ``workflow_nodes``
+        silently dropping the ``required_approvals`` and ``on_timeout`` fields.
+      - workflow_job_template - allow ``survey_spec={}`` to delete an existing survey,
+        matching job_template.
+      - workflow_job_template - do not run the approval template step for nodes with
+        ``state=absent``; previously the module deleted the node and then crashed
+        with a ``TypeError``.
+      - workflow_job_template - fail with clear messages instead of ``TypeError``
+        or ``KeyError`` tracebacks when a node's execution environment, inventory,
+        or unified job template entry cannot be resolved.
+      - workflow_job_template - fix the example showing node ``credentials`` as plain
+        strings, which the module cannot parse.
+      - workflow_job_template - move the identifier and execution environment handling
+        out of the field-copy loop, removing up to 14 redundant API lookups per node.
+      - workflow_job_template - only report ``changed`` for ``destroy_current_nodes``
+        when at least one workflow node was actually deleted, so runs against a workflow
+        with no existing nodes are idempotent.
+      - workflow_job_template - only treat a node's existing unified job template
+        as the approval template when it really is one; previously converting a job
+        template node to an approval node overwrote the unrelated job template with
+        the approval fields.
+      - workflow_job_template - reset the association lookup filter between items
+        so one credential's organization no longer leaks into the next lookup, apply
+        empty association lists so stale links are removed, and run the node association
+        update once instead of once per association type.
+      - workflow_job_template - send approval node ``timeout=0`` and empty descriptions
+        instead of dropping them.
+      - workflow_job_template - stop sending the node ``state`` value to the API;
+        it made every run report changed for nodes with an explicit ``state=present``.
+      - workflow_job_template_node - Mark ``artifact_key`` in ``condition_nodes``
+        as ``no_log=False`` to fix validate-modules sanity failure.
+      - workflow_job_template_node - change ``verbosity`` to ``type=int`` with integer
+        choices to match the API, which stores it as an integer; previously the string-typed
+        parameter never matched the server value, causing the module to report ``changed``
+        on every run even when nothing changed.
+      - workflow_job_template_node - do not re-apply node associations to the approval
+        template endpoint, which caused a spurious 404 failure when ``approval_node``
+        was combined with ``success_nodes`` or other associations.
+      - workflow_job_template_node - fail with a clear error message instead of a
+        ``TypeError`` traceback when ``unified_job_template`` cannot be found.
+      - workflow_job_template_node - send valid falsy field values such as ``all_parents_must_converge=false``,
+        ``diff_mode=false``, ``verbosity=0``, ``forks=0``, or empty strings to the
+        API instead of silently dropping them.
+      - workflow_job_template_node - when adding ``approval_node`` to a node that
+        currently points at a regular job template, create the approval template instead
+        of corrupting the existing job template with approval fields.
+      - workflow_job_templates role - do not fail node creation for workflows without
+        an ``organization`` key; the schema tasks dereferenced it without a final
+        default.
+      - workflow_job_templates role - link workflow nodes when the workflows are passed
+        via the documented ``workflow_job_templates`` alias; previously the node loop
+        always used ``controller_workflows`` (default empty), so the templates were
+        created but no nodes were linked.
+      - workflow_job_templates role - report the async node task's changed status
+        using the collection-wide pattern instead of an inverted expression, and guard
+        the cleanup loop so a node creation failure is not masked by an undefined
+        register in the always block.
+      - workflow_node_wait - correct the module description, which claimed the module
+        approves approval nodes; it only waits for a node's job to finish. Also fix
+        the ``interval`` typo and the ``timeout`` wording.
+      minor_changes:
+      - Added RETURN documentation to every module that was missing it, so the full
+        module reference now documents its return values.
+      - Updated the inventory and lookup plugins to import from ``ansible.module_utils.common.text.converters``
+        and the Python 3 standard library instead of the deprecated ``_text`` and
+        ``six`` modules.
+      - application - return the OAuth2 ``client_id`` and ``client_secret`` in the
+        module result so the secret (shown only once, at creation) can be captured.
+      - controller inventory plugin - support the standard Ansible inventory caching
+        options (``cache``, ``cache_plugin``, ``cache_timeout``, ``cache_connection``,
+        ``cache_prefix``). Previously the plugin accepted the ``cache`` argument but
+        never used it, so every run refetched the inventory from the API.
+      - controller_api module utils - catch ``json.JSONDecodeError`` directly instead
+        of the broader ``ValueError``, dropping a stale "only available on Python
+        3.5+" comment.
+      - controller_api module utils - match the ``controller_host`` scheme check case-insensitively
+        with a raw string regex, so a host given as ``HTTPS://...`` is not double-prefixed
+        into ``https://HTTPS://...``.
+      - controller_api module utils - remove the broken ``packaging.version.Version``
+        fallback for parsing versions; ansible-core 2.16+ always provides ``ansible.module_utils.compat.version.LooseVersion``,
+        and the fallback would have crashed on first use since ``Version`` lacks the
+        ``.version`` attribute used at the call site.
+      - controller_api module utils - use the ``boolean`` helper directly instead
+        of aliasing it to the removed-in-Python-3.12 ``strtobool`` name.
+      - inventory_source - accept ``terraform`` as a ``source``, matching the Terraform
+        state inventory plugin supported by the controller.
+      - job_template - add ``job_slice_pinned_hosts`` parameter, a comma separated
+        list of host names to include in every slice of a sliced job.
+      - job_template - add ``webhook_key`` parameter to set the shared secret that
+        the webhook service uses to sign requests. The API treats this field as write-only,
+        so supplying it always reports a change; omit it to leave the server value
+        untouched.
+      - job_template, workflow_job_template - accept ``bitbucket_dc`` as a ``webhook_service``,
+        which the controller has supported since migration 0188.
+      - project - add ``webhook_service``, ``webhook_ref_filter``, and ``webhook_key``
+        parameters to configure webhook-triggered syncs, matching the fields already
+        supported on ``job_template``.
+      - schedule_rrule and schedule_rruleset lookup plugins - validate timezone names
+        with the standard library ``zoneinfo`` module instead of ``pytz``, removing
+        the third-party ``pytz`` requirement.
+      - user - added the ``preferred_language`` option, matching the per-user UI language
+        field exposed by the controller API.
+      - workflow_job_template - add the ``webhook_key`` parameter to set the shared
+        secret the webhook service uses to sign requests, matching the existing ``webhook_service``/``webhook_credential``
+        support.
+      - workflow_job_template_node - Add ``condition_nodes`` parameter for conditional
+        workflow connectors that route execution based on upstream ``set_stats`` artifacts
+        (https://github.com/ctrliq/ascender-collection/pull/208).
+      - workflow_job_template_node - Add ``context_template`` suboption to the ``approval_node``
+        parameter for rendering dynamic context messages from upstream artifacts (https://github.com/ctrliq/ascender-collection/pull/206).
+      - workflow_job_template_node - Add ``required_approvals`` and ``on_timeout``
+        suboptions to the ``approval_node`` parameter for multi-approver quorum support
+        (https://github.com/ctrliq/ascender-collection/pull/207).
+      - workflow_job_template_node - add the ``max_retries`` parameter to control
+        how many times a node's job is automatically retried after failing before
+        its failure paths are followed.
+      - workflow_launch - add ``tags`` and ``skip_tags`` parameters that drive the
+        ``job_tags``/``skip_tags`` prompts on a workflow job template launched with
+        ``ask_tags_on_launch``/``ask_skip_tags_on_launch``.
+      release_summary: First release of the collection under the ``ctrliq.ascender``
+        namespace, modernized for current ansible-core and brought up to Ansible Galaxy
+        standards.
+      removed_features:
+      - job_template - removed the deprecated ``credential`` and ``vault_credential``
+        parameters, use the ``credentials`` list parameter instead.
+      - job_template - removed the legacy ``force_handlers_enabled``, ``fact_caching_enabled``,
+        ``diff_mode_enabled`` and ``concurrent_jobs_enabled`` aliases, use the ``force_handlers``,
+        ``use_fact_cache``, ``diff_mode`` and ``allow_simultaneous`` parameters instead.
+      - role - removed the deprecated singular ``user``, ``team``, ``target_team``,
+        ``inventory``, ``job_template``, ``workflow``, ``credential``, ``organization``
+        and ``project`` parameters, use the plural equivalents (``users``, ``teams``,
+        ``target_teams``, ``inventories``, ``job_templates``, ``workflows``, ``credentials``,
+        ``organizations``, ``projects``) instead.
+    fragments:
+    - add-approval-context-template.yml
+    - add-approval-quorum.yml
+    - add-inventory-plugin-caching.yml
+    - add-job-template-webhook-key-slice-pinned-hosts.yml
+    - add-project-webhook-params.yml
+    - add-workflow-condition-nodes.yml
+    - add-workflow-job-template-webhook-key.yml
+    - add-workflow-node-max-retries.yml
+    - adhoc-wait-cancel-docs.yml
+    - application-client-secret-output.yml
+    - application-skip-authorization.yml
+    - cleanup-controller-api-compat.yml
+    - collection-housekeeping.yml
+    - constructed-input-inventories-order.yml
+    - controller-api-hardening.yml
+    - credential-clear-description.yml
+    - credential-falsy-drops.yml
+    - credential-user-owned-removal.yml
+    - docs-bulk-auth.yml
+    - execution-environment-update.yml
+    - export-return-docs.yml
+    - first-release-breaking-changes.yml
+    - first-release-minor-changes.yml
+    - first-release-summary.yml
+    - fix-adhoc-cancel-return-doc.yml
+    - fix-awxkit-logout-errors.yml
+    - fix-bulk-suboptions-validation.yml
+    - fix-cancel-finished-race.yml
+    - fix-condition-nodes-no-log.yml
+    - fix-controller-api-lookup.yml
+    - fix-doc-fragment-descriptions.yml
+    - fix-ee-pull-default.yml
+    - fix-export-check-mode.yml
+    - fix-export-diff-comparison.yml
+    - fix-fk-clearing-empty-string.yml
+    - fix-galaxy-build-ignore-images.yml
+    - fix-get-stats-playbook.yml
+    - fix-host-enabled-null.yml
+    - fix-import-error-logger.yml
+    - fix-inventory-input-inventories-guard.yml
+    - fix-inventory-source-error-messages.yml
+    - fix-job-launch-prompt-validation.yml
+    - fix-job-template-ee-clearing.yml
+    - fix-license-absent-idempotency.yml
+    - fix-notification-template-org-lookup.yml
+    - fix-object-diff-org-keyerror.yml
+    - fix-plugin-token-cleanup.yml
+    - fix-project-wait-changed-overwrite.yml
+    - fix-roles-argspec-names.yml
+    - fix-rruleset-until-timezone.yml
+    - fix-schedule-label-org-lookup.yml
+    - fix-schedule-rrule-test-until-utc.yml
+    - fix-schedule-rrule-until-utc.yml
+    - fix-settings-encrypted-idempotency.yml
+    - fix-subscriptions-changed-and-filter.yml
+    - fix-token-error-output.yml
+    - fix-wfjt-approval-payload.yml
+    - fix-wfjt-destroy-nodes-changed.yml
+    - fix-wfjt-inline-approval-context-template.yml
+    - fix-wfjt-inline-approval-quorum.yml
+    - fix-wfjt-node-verbosity-type.yml
+    - group-empty-associations.yml
+    - instance-peers.yml
+    - inventory-kind-handling.yml
+    - inventory-source-lookup.yml
+    - inventory-source-terraform.yml
+    - inventory-source-update-msg.yml
+    - job-launch-prompt-validation.yml
+    - job-list-response.yml
+    - license-error-handling.yml
+    - lookup-schedule-return-list.yml
+    - module-docs-corrections.yml
+    - notification-config-empty-dict.yml
+    - project-update-return-docs.yml
+    - readme-doc-rot.yml
+    - remove-adhoc-extra-vars.yml
+    - remove-legacy-params.yml
+    - remove-tools-folder.yml
+    - replace-pytz-with-zoneinfo.yml
+    - role-argument-specs.yml
+    - role-assorted-cleanups.yml
+    - role-bool-defaults.yml
+    - role-bulk-host-create-default.yml
+    - role-bulk-job-launch.yml
+    - role-ee-alias.yml
+    - role-instance-group-lookup.yml
+    - role-isu-alias-flag.yml
+    - role-license-eula.yml
+    - role-project-update-alias.yml
+    - role-team-cross-organization.yml
+    - role-wfjt-node-loop.yml
+    - role-workflows-schema.yml
+    - roles-custom-virtualenv.yml
+    - rrule-lookup-fixes.yml
+    - schedule-ujt-lookup.yml
+    - settings-unknown-setting.yml
+    - subscriptions-response.yml
+    - version-check-collection-type.yml
+    - wait-event-processing-finished.yml
+    - wait-timeout-zero.yml
+    - webhook-service-bitbucket-dc.yml
+    - wjt-embedded-node-fixes.yml
+    - wjt-node-fixes.yml
+    - workflow-approval-response.yml
+    - workflow-launch-tags-skip-tags.yml
+    - workflow-node-wait-docs.yml
+    release_date: '2026-08-04'

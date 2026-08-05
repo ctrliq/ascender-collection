@@ -1,3 +1,0 @@
-minor_changes:
-  - project - add ``webhook_service``, ``webhook_ref_filter``, and ``webhook_key`` parameters to configure webhook-triggered
-    syncs, matching the fields already supported on ``job_template``.

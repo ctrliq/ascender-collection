@@ -1,3 +1,0 @@
-bugfixes:
-  - inventory_source_update - report the inventory source name instead of dumping the whole inventory JSON
-    object into failure and timeout messages while waiting for the update.

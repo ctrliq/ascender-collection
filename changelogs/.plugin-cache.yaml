@@ -1,0 +1,415 @@
+objects:
+  role:
+    ad_hoc_command:
+      description: An Ansible Role to run a list of ad hoc commands on Ansible Controller.
+      name: ad_hoc_command
+      version_added: null
+    ad_hoc_command_cancel:
+      description: An Ansible Role to cancel a list of ad hoc commands on Ansible
+        Controller.
+      name: ad_hoc_command_cancel
+      version_added: null
+    applications:
+      description: An Ansible Role to create Applications on Ansible Controller.
+      name: applications
+      version_added: null
+    bulk_host_create:
+      description: An Ansible Role to run a list of ad hoc commands on Ansible Controller.
+      name: bulk_host_create
+      version_added: null
+    bulk_job_launch:
+      description: An Ansible Role to launch bulk jobs on Ansible Controller.
+      name: bulk_job_launch
+      version_added: null
+    credential_input_sources:
+      description: An Ansible Role to create Credential Input Sources on Ansible Controller.
+      name: credential_input_sources
+      version_added: null
+    credential_types:
+      description: An Ansible Role to create credential types on Ansible Controller.
+      name: credential_types
+      version_added: null
+    credentials:
+      description: An Ansible Role to create credentials on Ansible Controller.
+      name: credentials
+      version_added: null
+    dispatch:
+      description: An Ansible Role to call other roles to create objects on Ansible
+        Controller.
+      name: dispatch
+      version_added: null
+    execution_environments:
+      description: An Ansible Role to create execution environment objects on Ansible
+        Controller.
+      name: execution_environments
+      version_added: null
+    filetree_create:
+      description: An Ansible Role to create a local file tree of objects existing
+        in Controller
+      name: filetree_create
+      version_added: null
+    filetree_read:
+      description: An Ansible Role to read from a local file tree and create objects
+        in Controller
+      name: filetree_read
+      version_added: null
+    groups:
+      description: An Ansible Role to create groups on Ansible Controller.
+      name: groups
+      version_added: null
+    hosts:
+      description: An Ansible Role to create hosts on Ansible Controller.
+      name: hosts
+      version_added: null
+    instance_groups:
+      description: An Ansible Role to create instance groups on Ansible Controller.
+      name: instance_groups
+      version_added: null
+    instances:
+      description: An Ansible Role to create instances on Ansible Controller.
+      name: instances
+      version_added: null
+    inventories:
+      description: An Ansible Role to create inventories on Ansible Controller.
+      name: inventories
+      version_added: null
+    inventory_source_update:
+      description: An Ansible Role to update inventory sources on Ansible Controller.
+      name: inventory_source_update
+      version_added: null
+    inventory_sources:
+      description: An Ansible Role to create inventory sources on Ansible Controller.
+      name: inventory_sources
+      version_added: null
+    job_launch:
+      description: An Ansible Role to launch jobs on Ansible Controller.
+      name: job_launch
+      version_added: null
+    job_templates:
+      description: An Ansible Role to create job templates on Ansible Controller.
+      name: job_templates
+      version_added: null
+    jobs_cancel:
+      description: An Ansible Role to cancel a list of jobs on Ansible Controller.
+      name: jobs_cancel
+      version_added: null
+    labels:
+      description: An Ansible Role to create labels on Ansible Controller.
+      name: labels
+      version_added: null
+    license:
+      description: An Ansible Role to deploy a license on Ansible Controller.
+      name: license
+      version_added: null
+    notification_templates:
+      description: An Ansible Role to create notification templates on Ansible Controller.
+      name: notification_templates
+      version_added: null
+    object_diff:
+      description: An Ansible Role to read from a local file tree and create objects
+        in Controller
+      name: object_diff
+      version_added: null
+    organizations:
+      description: An Ansible Role to create organizations on Ansible Controller.
+      name: organizations
+      version_added: null
+    project_update:
+      description: An Ansible Role to update projects on Ansible Controller.
+      name: project_update
+      version_added: null
+    projects:
+      description: An Ansible Role to create projects on Ansible Controller.
+      name: projects
+      version_added: null
+    roles:
+      description: An Ansible Role to create roles on Ansible Controller.
+      name: roles
+      version_added: null
+    schedules:
+      description: An Ansible Role to create schedules on Ansible Controller.
+      name: schedules
+      version_added: null
+    settings:
+      description: An Ansible Role to create settings on Ansible Controller.
+      name: settings
+      version_added: null
+    teams:
+      description: An Ansible Role to create teams on Ansible Controller.
+      name: teams
+      version_added: null
+    users:
+      description: An Ansible Role to create users on Ansible Controller.
+      name: users
+      version_added: null
+    workflow_job_templates:
+      description: An Ansible Role to create workflow job templates on Ansible Controller.
+      name: workflow_job_templates
+      version_added: null
+    workflow_launch:
+      description: An Ansible Role to launch workflows on Ansible Controller.
+      name: workflow_launch
+      version_added: null
+plugins:
+  become: {}
+  cache: {}
+  callback: {}
+  cliconf: {}
+  connection: {}
+  filter: {}
+  httpapi: {}
+  inventory:
+    controller:
+      description: Ansible dynamic inventory plugin for Ascender.
+      name: controller
+      version_added: null
+  lookup:
+    controller_api:
+      description: Search the API for objects
+      name: controller_api
+      version_added: null
+    controller_object_diff:
+      description: Return difference for objects from Controller API
+      name: controller_object_diff
+      version_added: null
+    schedule_rrule:
+      description: Generate an rrule string which can be used for Schedules
+      name: schedule_rrule
+      version_added: null
+    schedule_rruleset:
+      description: Generate an rruleset string
+      name: schedule_rruleset
+      version_added: null
+  module:
+    ad_hoc_command:
+      description: create, update, or destroy Ascender ad hoc commands.
+      name: ad_hoc_command
+      namespace: ''
+      version_added: 4.0.0
+    ad_hoc_command_cancel:
+      description: Cancel an Ad Hoc Command.
+      name: ad_hoc_command_cancel
+      namespace: ''
+      version_added: null
+    ad_hoc_command_wait:
+      description: Wait for Ascender Ad Hoc Command to finish.
+      name: ad_hoc_command_wait
+      namespace: ''
+      version_added: null
+    application:
+      description: create, update, or destroy Ascender applications
+      name: application
+      namespace: ''
+      version_added: null
+    bulk_host_create:
+      description: Bulk host create in Ascender
+      name: bulk_host_create
+      namespace: ''
+      version_added: null
+    bulk_host_delete:
+      description: Bulk host delete in Ascender
+      name: bulk_host_delete
+      namespace: ''
+      version_added: null
+    bulk_job_launch:
+      description: Bulk job launch in Ascender
+      name: bulk_job_launch
+      namespace: ''
+      version_added: null
+    controller_export_diff:
+      description: Compare controller configuration resources with those defined in
+        code.
+      name: controller_export_diff
+      namespace: ''
+      version_added: null
+    controller_meta:
+      description: Returns metadata about the collection this module lives in.
+      name: controller_meta
+      namespace: ''
+      version_added: null
+    credential:
+      description: create, update, or destroy Ascender credential.
+      name: credential
+      namespace: ''
+      version_added: null
+    credential_input_source:
+      description: create, update, or destroy Ascender credential input sources.
+      name: credential_input_source
+      namespace: ''
+      version_added: 2.3.0
+    credential_type:
+      description: Create, update, or destroy custom Ascender credential type.
+      name: credential_type
+      namespace: ''
+      version_added: null
+    execution_environment:
+      description: create, update, or destroy Execution Environments in Ascender.
+      name: execution_environment
+      namespace: ''
+      version_added: null
+    export:
+      description: export resources from Ascender.
+      name: export
+      namespace: ''
+      version_added: 3.7.0
+    group:
+      description: create, update, or destroy Ascender group.
+      name: group
+      namespace: ''
+      version_added: null
+    host:
+      description: create, update, or destroy Ascender host.
+      name: host
+      namespace: ''
+      version_added: null
+    import:
+      description: import resources into Ascender.
+      name: import
+      namespace: ''
+      version_added: 3.7.0
+    instance:
+      description: create, update, or destroy Ascender instances.
+      name: instance
+      namespace: ''
+      version_added: 4.3.0
+    instance_group:
+      description: create, update, or destroy Ascender instance groups.
+      name: instance_group
+      namespace: ''
+      version_added: 4.0.0
+    inventory:
+      description: create, update, or destroy Ascender inventory.
+      name: inventory
+      namespace: ''
+      version_added: null
+    inventory_source:
+      description: create, update, or destroy Ascender inventory source.
+      name: inventory_source
+      namespace: ''
+      version_added: null
+    inventory_source_update:
+      description: Update inventory source(s).
+      name: inventory_source_update
+      namespace: ''
+      version_added: null
+    job_cancel:
+      description: Cancel an Ascender Job.
+      name: job_cancel
+      namespace: ''
+      version_added: null
+    job_launch:
+      description: Launch an Ansible Job.
+      name: job_launch
+      namespace: ''
+      version_added: null
+    job_list:
+      description: List Ascender jobs.
+      name: job_list
+      namespace: ''
+      version_added: null
+    job_template:
+      description: create, update, or destroy Ascender job templates.
+      name: job_template
+      namespace: ''
+      version_added: null
+    job_wait:
+      description: Wait for Ascender job to finish.
+      name: job_wait
+      namespace: ''
+      version_added: null
+    label:
+      description: create, update, or destroy Ascender labels.
+      name: label
+      namespace: ''
+      version_added: null
+    license:
+      description: Set the license for Ascender
+      name: license
+      namespace: ''
+      version_added: null
+    notification_template:
+      description: create, update, or destroy Ascender notification.
+      name: notification_template
+      namespace: ''
+      version_added: null
+    organization:
+      description: create, update, or destroy Ascender organizations
+      name: organization
+      namespace: ''
+      version_added: null
+    project:
+      description: create, update, or destroy Ascender projects
+      name: project
+      namespace: ''
+      version_added: null
+    project_update:
+      description: Update a Project in Ascender
+      name: project_update
+      namespace: ''
+      version_added: null
+    role:
+      description: grant or revoke an Ascender role.
+      name: role
+      namespace: ''
+      version_added: null
+    schedule:
+      description: create, update, or destroy Ascender schedules.
+      name: schedule
+      namespace: ''
+      version_added: null
+    settings:
+      description: Modify Ascender settings.
+      name: settings
+      namespace: ''
+      version_added: null
+    subscriptions:
+      description: Get subscription list
+      name: subscriptions
+      namespace: ''
+      version_added: null
+    team:
+      description: create, update, or destroy Ascender team.
+      name: team
+      namespace: ''
+      version_added: null
+    token:
+      description: create, update, or destroy Ascender tokens.
+      name: token
+      namespace: ''
+      version_added: 2.3.0
+    user:
+      description: create, update, or destroy Ascender users.
+      name: user
+      namespace: ''
+      version_added: null
+    workflow_approval:
+      description: Approve an approval node in a workflow job.
+      name: workflow_approval
+      namespace: ''
+      version_added: null
+    workflow_job_template:
+      description: create, update, or destroy Ascender workflow job templates.
+      name: workflow_job_template
+      namespace: ''
+      version_added: null
+    workflow_job_template_node:
+      description: create, update, or destroy Ascender workflow job template nodes.
+      name: workflow_job_template_node
+      namespace: ''
+      version_added: null
+    workflow_launch:
+      description: Run a workflow in Ascender
+      name: workflow_launch
+      namespace: ''
+      version_added: null
+    workflow_node_wait:
+      description: Wait for a workflow node to finish.
+      name: workflow_node_wait
+      namespace: ''
+      version_added: null
+  netconf: {}
+  shell: {}
+  strategy: {}
+  test: {}
+  vars: {}
+version: 25.5.0

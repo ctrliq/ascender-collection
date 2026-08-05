@@ -1,3 +1,0 @@
-bugfixes:
-  - workflow_job_template - Fixed inline approval node creation via
-    ``workflow_nodes`` silently dropping the ``context_template`` field.
