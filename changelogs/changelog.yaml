@@ -601,4 +601,10 @@ releases:
     - workflow-node-wait-docs.yml
     release_date: '2026-08-04'
   25.5.1:
+    changes:
+      bugfixes:
+      - Resolve unit test to align with changes in Ascender Notifications with blank
+        bodies
+    fragments:
+    - fix_unit_test_ascender_notifications.yml
     release_date: '2026-08-05'

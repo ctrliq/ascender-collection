@@ -6,7 +6,11 @@ Ascender Ansible Collection Release Notes
 
 v25.5.1
 =======
-Release for Ascender 25.5.1
+
+Bugfixes
+--------
+
+- Resolve unit test to align with changes in Ascender Notifications with blank bodies
 
 v25.5.0
 =======
