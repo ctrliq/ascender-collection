@@ -293,7 +293,7 @@ class ControllerModule(AnsibleModule):
 
 
 class ControllerAPIModule(ControllerModule):
-    _COLLECTION_VERSION = "25.5.0"
+    _COLLECTION_VERSION = "25.5.1"
     _COLLECTION_TYPE = "ascender"
     # This maps the collection type (awx/ascender/tower) to the X-API-Product-Name
     # value returned by the server (see server_product_name() in
