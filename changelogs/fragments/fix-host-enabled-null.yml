@@ -1,5 +1,0 @@
----
-bugfixes:
-  - host - Fixed ``enabled`` being unconditionally sent in the API payload,
-    which could reset a host's enabled state when the parameter was not
-    specified.

@@ -1,3 +1,0 @@
-bugfixes:
-  - workflow_node_wait - correct the module description, which claimed the module approves approval nodes;
-    it only waits for a node's job to finish. Also fix the ``interval`` typo and the ``timeout`` wording.
