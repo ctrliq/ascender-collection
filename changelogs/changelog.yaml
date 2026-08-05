@@ -600,3 +600,5 @@ releases:
     - workflow-launch-tags-skip-tags.yml
     - workflow-node-wait-docs.yml
     release_date: '2026-08-04'
+  25.5.1:
+    release_date: '2026-08-05'

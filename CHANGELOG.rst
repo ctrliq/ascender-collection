@@ -4,6 +4,10 @@ Ascender Ansible Collection Release Notes
 
 .. contents:: Topics
 
+v25.5.1
+=======
+Release for Ascender 25.5.1
+
 v25.5.0
 =======
 
