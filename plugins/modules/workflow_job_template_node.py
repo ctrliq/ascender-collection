@@ -180,16 +180,11 @@ options:
         operator:
           description:
             - The comparison operator to apply.
+            - The controller only evaluates equality, so C(eq) matches the expected value and C(ne) matches anything else.
           type: str
           choices:
             - eq
             - ne
-            - lt
-            - gt
-            - le
-            - ge
-            - "in"
-            - not_in
           default: eq
         expected_value:
           description:
@@ -392,7 +387,7 @@ def main():
                 identifier=dict(required=True),
                 trigger=dict(choices=['success', 'failure', 'always'], default='success'),
                 artifact_key=dict(required=True, no_log=False),
-                operator=dict(choices=['eq', 'ne', 'lt', 'gt', 'le', 'ge', 'in', 'not_in'], default='eq'),
+                operator=dict(choices=['eq', 'ne'], default='eq'),
                 expected_value=dict(type='raw', required=True),
             ),
         ),
