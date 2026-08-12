@@ -13,7 +13,7 @@
         description: "{{ __application_item.description | default(('' if controller_configuration_applications_enforce_defaults else omit), true) }}"
         authorization_grant_type: "{{ __application_item.authorization_grant_type | default('password') }}"
         client_type: "{{ __application_item.client_type | default('public') }}"
-        redirect_uris: "{{ __application_item.redirect_uris | default([]) }}"
+        redirect_uris: "{{ __application_item.redirect_uris | default(([] if controller_configuration_applications_enforce_defaults else omit)) }}"
         skip_authorization: "{{ __application_item.skip_authorization | default((false if controller_configuration_applications_enforce_defaults else omit)) }}"
         state: "{{ __application_item.state | default(controller_state | default('present')) }}"
 
