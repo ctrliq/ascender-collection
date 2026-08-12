@@ -57,6 +57,44 @@ HAS_AWX_KIT = False
 logger = logging.getLogger('awx.main.tests')
 
 
+@pytest.fixture(scope='session')
+def django_db_setup(django_db_setup, django_db_blocker):  # pylint: disable=redefined-outer-name
+    """Populate django-ansible-base resource types once the test database exists.
+
+    The suite runs with ``--nomigrations``, which builds the schema straight from
+    the models and makes Django emit ``post_migrate`` with an empty plan.  Since
+    django-ansible-base 2026.8.7.0 (ansible/django-ansible-base#1094) an empty plan
+    makes ``initialize_resources`` return early, so ``dab_resource_registry_resourcetype``
+    is left empty on a database that is otherwise complete.  Saving any registered
+    model then fails with ``ContentType has no resource_type``, which errors out every
+    test that touches the database.
+
+    Calling ``initialize_resources`` directly repairs that.  No ``plan`` keyword is
+    passed, so the upstream guard does not fire.  The work it does is idempotent, so
+    this stays correct once the upstream bug is fixed and the resource types are
+    already present.
+
+    Args:
+        django_db_setup: The pytest-django fixture that creates the test database.
+            Requested so that this override runs after the database is built.
+        django_db_blocker: Handle used to permit database access outside of a test.
+
+    Returns:
+        None.
+    """
+    try:
+        from ansible_base.resource_registry.apps import initialize_resources
+    except ImportError:
+        # Nothing to repair on a django-ansible-base that no longer exposes this
+        # helper.  Warn rather than fail so a rename upstream does not take the
+        # whole suite down at collection time.
+        logger.warning('Could not import initialize_resources; skipping resource type initialization')
+        return
+
+    with django_db_blocker.unblock():
+        initialize_resources(None)
+
+
 @pytest.fixture(autouse=True)
 def import_awxkit():
     global HAS_TOWER_CLI
