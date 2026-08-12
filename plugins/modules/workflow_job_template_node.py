@@ -180,7 +180,7 @@ options:
         operator:
           description:
             - The comparison operator to apply.
-            - The controller only evaluates equality, so C(eq) matches the expected value and C(ne) matches anything else.
+            - The controller only evaluates equality, so C(eq) matches when the artifact value equals C(expected_value), and C(ne) matches when it does not.
           type: str
           choices:
             - eq
