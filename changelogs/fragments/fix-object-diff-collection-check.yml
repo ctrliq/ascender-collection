@@ -1,0 +1,6 @@
+---
+minor_changes:
+  - object_diff role - Simplified the check for the installed module collection. The rescue
+    branch ran the same ``ctrliq.ascender`` lookup as the block it was recovering from, and both
+    arms of the resulting expression produced the same plugin name, so it could never change the
+    outcome.
