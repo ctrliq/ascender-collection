@@ -338,7 +338,7 @@ class LookupModule(LookupBase):
             difference = []
             for item in api_list_reduced:
                 for compare_item in compare_list_reduced:
-                    if self.equal_dicts(compare_item, item, "state"):
+                    if self.equal_dicts(compare_item, item, ["state"]):
                         break
                     elif (
                         ("organization" in compare_item)  # permission applies to all objects in orga
