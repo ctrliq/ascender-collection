@@ -1,0 +1,5 @@
+---
+bugfixes:
+  - "applications role - Fixed ``skip_authorization: false`` being silently dropped. The value
+    was passed through ``default(..., true)``, whose boolean form treats ``false`` as unset, so
+    the flag could only ever be turned on."
