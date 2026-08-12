@@ -594,6 +594,12 @@ def create_workflow_nodes(module, response, workflow_nodes, workflow_id):
         search_fields = {}
         association_fields = {}
 
+        # The identifier is documented as required, but workflow_nodes has no suboptions in the
+        # argument spec, so nothing enforces it. Without one the node cannot be looked up, and
+        # create_workflow_nodes_association() raises a bare KeyError further into the run.
+        if not workflow_node.get('identifier'):
+            module.fail_json(msg=f'Every entry in workflow_nodes requires an identifier, got: {workflow_node}')
+
         # Lookup Job Template ID
         if (workflow_node.get('unified_job_template') or {}).get('name'):
             if workflow_node['unified_job_template'].get('type') is None:
@@ -639,8 +645,9 @@ def create_workflow_nodes(module, response, workflow_nodes, workflow_id):
             if field_val is not None:
                 workflow_node_fields[field_name] = field_val
 
-        if workflow_node.get('identifier'):
-            search_fields = {'identifier': workflow_node['identifier']}
+        # Start the node search from scratch. The type and organization filters set above belong
+        # to the unified job template lookup and are not fields of workflow_job_template_nodes.
+        search_fields = {'identifier': workflow_node['identifier']}
         if workflow_node.get('execution_environment'):
             if not isinstance(workflow_node['execution_environment'], dict) or 'name' not in workflow_node['execution_environment']:
                 module.fail_json(msg=f"execution_environment must be a dict with a 'name' key, got: {workflow_node['execution_environment']}")
