@@ -83,7 +83,7 @@ This also speeds up the overall role.
 |`description`|""|no|str|Description to use for the application.|
 |`authorization_grant_type`|"password"|yes|str|Grant type for tokens in this application, "password" or "authorization-code"|
 |`client_type`|"public"|yes|str|Application client type, "confidential" or "public"|
-|`redirect_uris`|""|no|str|Allowed urls list, space separated. Required with "authorization-code" grant type|
+|`redirect_uris`|""|no|list|List of allowed urls. Required with "authorization-code" grant type|
 |`skip_authorization`|"false"|yes|bool|Set True to skip authorization step for completely trusted applications.|
 |`state`|`present`|no|str|Desired state of the application.|
 
