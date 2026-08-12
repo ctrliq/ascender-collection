@@ -362,6 +362,8 @@ id:
 
 from ..module_utils.controller_api import ControllerAPIModule
 
+import json
+
 
 def main():
     # Any additional arguments that are not fields of the item can be added here
@@ -557,12 +559,17 @@ def main():
                 'trigger': cn.get('trigger', 'success'),
                 'artifact_key': cn['artifact_key'],
                 'operator': cn.get('operator', 'eq'),
-                'expected_value': cn['expected_value'],
+                # The API stores expected_value as text and JSON encodes anything that is not
+                # already a string, so encode it the same way here. That keeps what we send and
+                # what we compare against in the form the controller reports back.
+                'expected_value': cn['expected_value'] if isinstance(cn['expected_value'], str) else json.dumps(cn['expected_value']),
             })
 
-        # Get existing condition nodes
-        existing_response = module.get_all_endpoint(condition_endpoint)
-        existing_conditions = existing_response['json']['results']
+        # Get existing condition nodes. The condition_nodes sub-endpoint lists the target nodes,
+        # which carry none of the per-edge condition data, so read that data from the node itself:
+        # condition_edges holds one {id, trigger, artifact_key, operator, expected_value} entry per
+        # conditional link, where id is the target node.
+        existing_conditions = current_node.get('condition_edges') or []
         existing_ids = {c['id'] for c in existing_conditions}
         desired_ids = {c['id'] for c in desired_conditions}
 
@@ -589,7 +596,7 @@ def main():
                 # Check if the condition parameters changed
                 changed = False
                 for field in ('trigger', 'artifact_key', 'operator', 'expected_value'):
-                    if str(dc[field]) != str(existing_match.get(field, '')):
+                    if dc[field] != existing_match.get(field):
                         changed = True
                         break
                 if changed:

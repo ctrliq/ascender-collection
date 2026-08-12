@@ -1,0 +1,7 @@
+---
+bugfixes:
+  - workflow_job_template_node - Fixed ``condition_nodes`` always reporting changed and
+    rewriting every conditional link on each run. The existing conditions were read from the
+    ``condition_nodes`` sub-endpoint, which lists the target nodes without any of the per-edge
+    condition data, so every link always compared as different. The module now reads the node's
+    ``condition_edges`` data instead, and encodes ``expected_value`` the way the API stores it.
