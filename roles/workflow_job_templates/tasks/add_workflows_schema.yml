@@ -16,7 +16,7 @@
         skip_tags: "{{ __workflow_loop_node_item.skip_tags | default(omit, true) }}"
         limit: "{{ __workflow_loop_node_item.limit | default(omit, true) }}"
         diff_mode: "{{ __workflow_loop_node_item.diff_mode | default(omit) }}"
-        verbosity: "{{ __workflow_loop_node_item.verbosity | default(omit, true) }}"
+        verbosity: "{{ __workflow_loop_node_item.verbosity | default(omit) }}"
         credentials: "{{ __workflow_loop_node_item.credentials | default(__workflow_loop_node_item.related.credentials | default([]) | map(attribute='name') | list) |
           default(omit, true) }}"
         workflow_job_template: "{{ __workflow_loop_node_item.workflow_job_template.name | default(__workflow_loop_node_item.workflow_job_template | default(omit, true))
@@ -26,12 +26,12 @@
         lookup_organization: "{{ __workflow_loop_node_item.lookup_organization | default(omit, true) }}"
         execution_environment: "{{ __workflow_loop_node_item.execution_environment.name | default(__workflow_loop_node_item.execution_environment | default(omit, true))
           }}"
-        forks: "{{ __workflow_loop_node_item.forks | default(omit, true) }}"
+        forks: "{{ __workflow_loop_node_item.forks | default(omit) }}"
         instance_groups: "{{ __workflow_loop_node_item.instance_groups | default(omit, true) }}"
-        job_slice_count: "{{ __workflow_loop_node_item.job_slice_count | default(omit, true) }}"
+        job_slice_count: "{{ __workflow_loop_node_item.job_slice_count | default(omit) }}"
         labels: "{{ __workflow_loop_node_item.labels | default(__workflow_loop_node_item.related.labels | default([]) | map(attribute='name') | list if __workflow_loop_node_item.related.labels
           is defined else omit) }}"
-        timeout: "{{ __workflow_loop_node_item.timeout | default(omit, true) }}"
+        timeout: "{{ __workflow_loop_node_item.timeout | default(omit) }}"
         approval_node: "{{ __workflow_loop_node_item.approval_node | default(omit, true) }}"
         workflow: "{{ __workflow_loop_item.name | mandatory }}" # Workflow job template name to associate with
         state: "{{ __workflow_loop_node_item.state | default(controller_state | default('present')) }}"
