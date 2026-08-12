@@ -1,0 +1,4 @@
+---
+minor_changes:
+  - job_list - Documented the ``all_pages`` default as ``false`` instead of the string ``'no'``,
+    so the rendered documentation matches the argument spec.

@@ -25,7 +25,7 @@ options:
       description:
         - Fetch all the pages and return a single result.
       type: bool
-      default: 'no'
+      default: false
     query:
       description:
         - Query used to further filter the list of jobs. C({"foo":"bar"}) will be passed at C(?foo=bar)
