@@ -158,7 +158,7 @@ jobs:
           pip install -r ascender/requirements/requirements_git.txt
           pip install -r ascender/requirements/requirements_dev.txt
           pip install -e ascender
-          pip install -e ascender/awxkit
+          pip install awxkit
 
       - name: Run unit tests
         env:
