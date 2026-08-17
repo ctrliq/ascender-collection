@@ -1,0 +1,7 @@
+---
+bugfixes:
+  - controller_api module utils - ``create_if_needed`` and ``update_if_needed`` returned
+    ``None`` when an ``on_create`` or ``on_update`` callback was given and the callback
+    handed control back instead of exiting the module itself. Callers combining a callback
+    with ``auto_exit=false`` lost the created or updated item, so the item is now returned
+    on that path too, the same as the plain ``auto_exit=false`` path.

@@ -840,12 +840,12 @@ class ControllerAPIModule(ControllerModule):
             on_create(self, response['json'])
         elif auto_exit:
             self.exit_json(**self.json_output)
-        else:
-            if response is not None:
-                last_data = response['json']
-                return last_data
-            else:
-                return
+
+        # An on_create callback is free to hand control back instead of exiting the module
+        # itself, so always return the item, the same as the plain auto_exit=False path
+        if response is not None:
+            return response['json']
+        return None
 
     def _encrypted_changed_warning(self, field, old, warning=False):
         if not warning:
@@ -960,21 +960,20 @@ class ControllerAPIModule(ControllerModule):
                 endpoint = f'{item_url}{association_type}/'
                 self.modify_associations(endpoint, id_list)
 
+        if response is None:
+            last_data = existing_item
+        else:
+            last_data = response['json']
+
         # If we change something and have an on_change call it
         if on_update is not None and self.json_output['changed']:
-            if response is None:
-                last_data = existing_item
-            else:
-                last_data = response['json']
             on_update(self, last_data)
         elif auto_exit:
             self.exit_json(**self.json_output)
-        else:
-            if response is None:
-                last_data = existing_item
-            else:
-                last_data = response['json']
-            return last_data
+
+        # An on_update callback is free to hand control back instead of exiting the module
+        # itself, so always return the item, the same as the plain auto_exit=False path
+        return last_data
 
     def create_or_update_if_needed(
         self, existing_item, new_item, endpoint=None, item_type='unknown', on_create=None, on_update=None, auto_exit=True, associations=None
