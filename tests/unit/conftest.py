@@ -12,16 +12,12 @@ from contextlib import redirect_stdout, suppress
 from unittest import mock
 import logging
 
-# awxkit is not pip-installed inside the Ascender dev container; it is
-# available as a source tree at /awx_devel/awxkit/awxkit/.  We must
-# prepend the parent directory *before* Python caches a namespace
-# package from /awx_devel/awxkit (which lacks the api subpackage).
+# awxkit is normally pip-installed (see CONTRIBUTING.md).  It no longer ships
+# as a source tree inside the Ascender checkout, so set AWXKIT_PATH to the
+# directory *containing* the awxkit package to run against a working copy
+# instead.  It has to be prepended before Python caches a namespace package
+# from a directory that lacks the api subpackage.
 _awxkit_path = os.environ.get('AWXKIT_PATH')
-if not _awxkit_path:
-    for _candidate in ['/awx_devel/awxkit']:
-        if os.path.isdir(os.path.join(_candidate, 'awxkit', 'api')):
-            _awxkit_path = _candidate
-            break
 if _awxkit_path and _awxkit_path not in sys.path:
     sys.path.insert(0, _awxkit_path)
     # Invalidate any cached namespace-package stub so the real package loads.
