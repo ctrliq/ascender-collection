@@ -71,7 +71,7 @@ python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 pip install -e <path to your ascender checkout>
-pip install awxkit
+pip install ascender-kit
 ```
 
 Once your environment is established, run all unit tests:

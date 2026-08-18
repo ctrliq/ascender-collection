@@ -25,7 +25,7 @@ covers the development setup, testing, and PR guidelines.
    ```bash
    pip install -r requirements.txt
    pip install -e <path-to-ascender>
-   pip install awxkit
+   pip install ascender-kit
    ```
 
 4. Symlink the collection for `ansible-test`:

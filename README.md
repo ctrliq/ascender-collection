@@ -11,10 +11,10 @@ The `ctrliq.ascender` collection lets you manage an [Ascender](https://ascender-
 
 - `ansible-core` >= 2.16
 - Python 3.10+ on the controller node running the modules
-- [awxkit](https://pypi.org/project/awxkit/) — only required by a handful of
-  modules (notably `export` and `import`). The `DOCUMENTATION` block of each
-  module states whether it needs awxkit; the rest have no extra Python
-  dependencies.
+- [ascender-kit](https://pypi.org/project/ascender-kit/) — only required by a
+  handful of modules (notably `export` and `import`), and it needs Python 3.11+.
+  The `DOCUMENTATION` block of each module states whether it needs ascender-kit;
+  the rest have no extra Python dependencies.
 
 ## Installation
 

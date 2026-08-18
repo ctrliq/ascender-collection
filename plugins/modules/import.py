@@ -20,7 +20,7 @@ options:
       required: True
       type: dict
 requirements:
-  - "awxkit >= 9.3.0"
+  - "ascender-kit >= 25.5.1"
 extends_documentation_fragment: ctrliq.ascender.auth
 '''
 
@@ -43,15 +43,15 @@ RETURN = '''
 # This module returns only the standard module result keys (changed, failed, msg).
 '''
 
-from ..module_utils.awxkit import ControllerAWXKitModule
+from ..module_utils.ascenderkit import ControllerAscenderKitModule
 
-# These two lines are not needed if awxkit changes to do programatic notifications on issues
+# These two lines are not needed if ascender-kit changes to do programatic notifications on issues
 from io import StringIO
 import logging
 
-# In this module we don't use EXPORTABLE_RESOURCES, we just want to validate that our installed awxkit has import/export
+# In this module we don't use EXPORTABLE_RESOURCES, we just want to validate that our installed ascender-kit has import/export
 try:
-    from awxkit.api.pages.api import EXPORTABLE_RESOURCES  # noqa
+    from ascenderkit.api.pages.api import EXPORTABLE_RESOURCES  # noqa
 
     HAS_EXPORTABLE_RESOURCES = True
 except ImportError:
@@ -61,19 +61,19 @@ except ImportError:
 def main():
     argument_spec = dict(assets=dict(type='dict', required=True))
 
-    module = ControllerAWXKitModule(argument_spec=argument_spec, supports_check_mode=False)
+    module = ControllerAscenderKitModule(argument_spec=argument_spec, supports_check_mode=False)
 
     assets = module.params.get('assets')
 
     if not HAS_EXPORTABLE_RESOURCES:
-        module.fail_json(msg="Your version of awxkit does not appear to have import/export")
+        module.fail_json(msg="Your version of ascender-kit does not appear to have import/export")
 
     # Currently the import process does not return anything on error
     # It simply just logs to Python's logger
     # Set up a log gobbler to get error messages from import_assets
     log_capture_string = StringIO()
     ch = logging.StreamHandler(log_capture_string)
-    for logger_name in ['awxkit.api.pages.api', 'awxkit.api.pages.page']:
+    for logger_name in ['ascenderkit.api.pages.api', 'ascenderkit.api.pages.page']:
         logger = logging.getLogger(logger_name)
         logger.setLevel(logging.ERROR)
         ch.setLevel(logging.ERROR)

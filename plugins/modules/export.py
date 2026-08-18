@@ -88,7 +88,7 @@ options:
       type: list
       elements: str
 requirements:
-  - "awxkit >= 9.3.0"
+  - "ascender-kit >= 25.5.1"
 notes:
   - Specifying a name of "all" for any asset type will export all items of that asset type.
 extends_documentation_fragment: ctrliq.ascender.auth
@@ -122,10 +122,10 @@ assets:
 
 import logging
 from io import StringIO
-from ..module_utils.awxkit import ControllerAWXKitModule
+from ..module_utils.ascenderkit import ControllerAscenderKitModule
 
 try:
-    from awxkit.api.pages.api import EXPORTABLE_RESOURCES
+    from ascenderkit.api.pages.api import EXPORTABLE_RESOURCES
 
     HAS_EXPORTABLE_RESOURCES = True
 except ImportError:
@@ -137,15 +137,15 @@ def main():
         all=dict(type='bool', default=False),
     )
 
-    # We are not going to raise an error here because the __init__ method of ControllerAWXKitModule will do that for us
+    # We are not going to raise an error here because the __init__ method of ControllerAscenderKitModule will do that for us
     if HAS_EXPORTABLE_RESOURCES:
         for resource in EXPORTABLE_RESOURCES:
             argument_spec[resource] = dict(type='list', elements='str')
 
-    module = ControllerAWXKitModule(argument_spec=argument_spec, supports_check_mode=True)
+    module = ControllerAscenderKitModule(argument_spec=argument_spec, supports_check_mode=True)
 
     if not HAS_EXPORTABLE_RESOURCES:
-        module.fail_json(msg="Your version of awxkit does not have import/export")
+        module.fail_json(msg="Your version of ascender-kit does not have import/export")
 
     # The export process will never change the AWX system
     module.json_output['changed'] = False
@@ -169,7 +169,7 @@ def main():
     # Set up a log gobbler to get error messages from export_assets
     log_capture_string = StringIO()
     ch = logging.StreamHandler(log_capture_string)
-    for logger_name in ['awxkit.api.pages.api', 'awxkit.api.pages.page']:
+    for logger_name in ['ascenderkit.api.pages.api', 'ascenderkit.api.pages.page']:
         logger = logging.getLogger(logger_name)
         logger.setLevel(logging.ERROR)
         ch.setLevel(logging.ERROR)

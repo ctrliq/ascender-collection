@@ -1,0 +1,12 @@
+---
+breaking_changes:
+  - export, import, controller_export_diff - These modules now require
+    `ascender-kit <https://pypi.org/project/ascender-kit/>`_ (importable as ``ascenderkit``)
+    instead of ``awxkit``. The client moved out of the Ascender repository into
+    `its own project <https://github.com/ctrliq/ascender-kit>`_, where it was renamed; the
+    ``awxkit`` distribution on PyPI is the separate AWX client and is no longer used. Install
+    the new one with ``pip install ascender-kit``; it needs Python 3.11 or newer on the
+    controller node.
+  - module_utils - Renamed the shared client base class ``ControllerAWXKitModule`` to
+    ``ControllerAscenderKitModule`` and moved it from ``module_utils/awxkit.py`` to
+    ``module_utils/ascenderkit.py``, following the rename of the underlying library.

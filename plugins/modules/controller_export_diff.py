@@ -105,7 +105,7 @@ options:
       default: True
 extends_documentation_fragment: ctrliq.ascender.auth
 requirements:
-  - "awxkit >= 9.3.0"
+  - "ascender-kit >= 25.5.1"
   - ctrliq.ascender collection
 notes:
   - Specifying a name of "all" for any asset type will export all items of that asset type.
@@ -162,17 +162,17 @@ import logging
 from io import StringIO
 from copy import deepcopy
 
-ControllerAWXKitModule = None
+ControllerAscenderKitModule = None
 
 try:
-    from ansible_collections.ctrliq.ascender.plugins.module_utils.awxkit import (
-        ControllerAWXKitModule,
+    from ansible_collections.ctrliq.ascender.plugins.module_utils.ascenderkit import (
+        ControllerAscenderKitModule,
     )
 except ImportError:
     pass
 
 try:
-    from awxkit.api.pages.api import EXPORTABLE_RESOURCES
+    from ascenderkit.api.pages.api import EXPORTABLE_RESOURCES
 
     HAS_EXPORTABLE_RESOURCES = True
 except ImportError:
@@ -211,7 +211,7 @@ def main():
         with_present=dict(type="bool", default=True),
     )
 
-    if ControllerAWXKitModule is None:
+    if ControllerAscenderKitModule is None:
         from ansible.module_utils.basic import AnsibleModule
 
         argument_spec.update(
@@ -226,12 +226,12 @@ def main():
             )
         )
         module = AnsibleModule(argument_spec=argument_spec)
-        module.fail_json(msg="Failed to import ControllerAWXKitModule. Install ctrliq.ascender collection.")
+        module.fail_json(msg="Failed to import ControllerAscenderKitModule. Install ctrliq.ascender collection.")
 
-    module = ControllerAWXKitModule(argument_spec=argument_spec, supports_check_mode=True)
+    module = ControllerAscenderKitModule(argument_spec=argument_spec, supports_check_mode=True)
 
     if not HAS_EXPORTABLE_RESOURCES:
-        module.fail_json(msg="Your version of awxkit does not have import/export")
+        module.fail_json(msg="Your version of ascender-kit does not have import/export")
 
     compare_items = module.params.get("compare_items")
     set_absent = module.params.get("set_absent")
@@ -260,7 +260,7 @@ def main():
     # Set up a log gobbler to get error messages from export_assets
     log_capture_string = StringIO()
     ch = logging.StreamHandler(log_capture_string)
-    for logger_name in ["awxkit.api.pages.api", "awxkit.api.pages.page"]:
+    for logger_name in ["ascenderkit.api.pages.api", "ascenderkit.api.pages.page"]:
         logger = logging.getLogger(logger_name)
         logger.setLevel(logging.ERROR)
         ch.setLevel(logging.ERROR)
@@ -269,8 +269,8 @@ def main():
 
     # Run the export process
     try:
-        awxkit_list = module.get_api_v2_object().export_assets(**export_args)
-        module.json_output["controller_objects"] = deepcopy(awxkit_list)
+        exported_list = module.get_api_v2_object().export_assets(**export_args)
+        module.json_output["controller_objects"] = deepcopy(exported_list)
     except Exception as e:
         module.fail_json(msg=f"Failed to export assets {e}")
     finally:
@@ -289,25 +289,25 @@ def main():
                 for resource_object in compare_items[resource]:
                     if with_present:
                         resource_object.update({"state": "present"})
-                    for idx, dict_ in enumerate(awxkit_list[resource]):
+                    for idx, dict_ in enumerate(exported_list[resource]):
                         if resource == "users":
                             if resource_object["username"] == dict_["username"]:
-                                awxkit_list[resource].pop(idx)
+                                exported_list[resource].pop(idx)
                                 break
                         elif "organization" not in resource_object or resource_object["organization"] is None:
                             if resource_object["name"] == dict_["name"]:
-                                awxkit_list[resource].pop(idx)
+                                exported_list[resource].pop(idx)
                                 break
                         else:
                             names_match = resource_object["name"] == dict_["name"]
                             orgs_match = _organization_name(resource_object) == _organization_name(dict_)
                             if names_match and orgs_match:
-                                awxkit_list[resource].pop(idx)
+                                exported_list[resource].pop(idx)
                                 break
                 # After looping through every item in the compare_items the remaining are set to absent.
                 if set_absent:
-                    if awxkit_list[resource]:
-                        for remaining_item in awxkit_list[resource]:
+                    if exported_list[resource]:
+                        for remaining_item in exported_list[resource]:
                             remaining_item.update({"state": "absent"})
 
                 if with_present:
@@ -316,9 +316,9 @@ def main():
                     # otherwise they would end up in the output with no "state" key at all, silently
                     # defeating set_absent=False for anything applying the returned states.
                     if set_absent:
-                        output_list[resource].extend(awxkit_list[resource])
+                        output_list[resource].extend(exported_list[resource])
                 else:
-                    output_list[resource] = awxkit_list[resource]
+                    output_list[resource] = exported_list[resource]
         except Exception as e:
             module.fail_json(msg=f"Failed to export assets {e} with resource {resource_object}")
     module.json_output["difference"] = output_list
