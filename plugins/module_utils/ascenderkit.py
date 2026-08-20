@@ -4,16 +4,16 @@ from .controller_api import ControllerModule
 from ansible.module_utils.basic import missing_required_lib
 
 try:
-    from awxkit.api.client import Connection
-    from awxkit.api.pages.api import ApiV2
-    from awxkit.api import get_registered_page
+    from ascenderkit.api.client import Connection
+    from ascenderkit.api.pages.api import ApiV2
+    from ascenderkit.api import get_registered_page
 
-    HAS_AWX_KIT = True
+    HAS_ASCENDER_KIT = True
 except ImportError:
-    HAS_AWX_KIT = False
+    HAS_ASCENDER_KIT = False
 
 
-class ControllerAWXKitModule(ControllerModule):
+class ControllerAscenderKitModule(ControllerModule):
     connection = None
     apiV2Ref = None
 
@@ -22,9 +22,9 @@ class ControllerAWXKitModule(ControllerModule):
 
         super().__init__(argument_spec=argument_spec, **kwargs)
 
-        # Die if we don't have AWX_KIT installed
-        if not HAS_AWX_KIT:
-            self.fail_json(msg=missing_required_lib('awxkit'))
+        # Die if we don't have Ascender Kit installed
+        if not HAS_ASCENDER_KIT:
+            self.fail_json(msg=missing_required_lib('ascenderkit', url='https://pypi.org/project/ascender-kit/'))
 
         # Establish our connection object
         self.connection = Connection(self.host, verify=self.verify_ssl)

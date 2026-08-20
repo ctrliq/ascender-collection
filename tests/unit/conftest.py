@@ -12,17 +12,16 @@ from contextlib import redirect_stdout, suppress
 from unittest import mock
 import logging
 
-# awxkit is normally pip-installed (see CONTRIBUTING.md).  It no longer ships
-# as a source tree inside the Ascender checkout, so set AWXKIT_PATH to the
-# directory *containing* the awxkit package to run against a working copy
-# instead.  It has to be prepended before Python caches a namespace package
-# from a directory that lacks the api subpackage.
-_awxkit_path = os.environ.get('AWXKIT_PATH')
-if _awxkit_path and _awxkit_path not in sys.path:
-    sys.path.insert(0, _awxkit_path)
+# ascender-kit is normally pip-installed (see CONTRIBUTING.md).  Set
+# ASCENDERKIT_PATH to the directory *containing* the ascenderkit package to run
+# against a working copy instead.  It has to be prepended before Python caches a
+# namespace package from a directory that lacks the api subpackage.
+_ascenderkit_path = os.environ.get('ASCENDERKIT_PATH')
+if _ascenderkit_path and _ascenderkit_path not in sys.path:
+    sys.path.insert(0, _ascenderkit_path)
     # Invalidate any cached namespace-package stub so the real package loads.
-    if 'awxkit' in sys.modules:
-        del sys.modules['awxkit']
+    if 'ascenderkit' in sys.modules:
+        del sys.modules['ascenderkit']
 
 from requests.models import Response, PreparedRequest
 
@@ -49,14 +48,14 @@ from django.db import transaction
 
 
 HAS_TOWER_CLI = False
-HAS_AWX_KIT = False
+HAS_ASCENDER_KIT = False
 logger = logging.getLogger('awx.main.tests')
 
 
 @pytest.fixture(autouse=True)
-def import_awxkit():
+def import_ascenderkit():
     global HAS_TOWER_CLI
-    global HAS_AWX_KIT
+    global HAS_ASCENDER_KIT
     try:
         import tower_cli  # noqa
         HAS_TOWER_CLI = True
@@ -64,10 +63,10 @@ def import_awxkit():
         HAS_TOWER_CLI = False
 
     try:
-        import awxkit  # noqa
-        HAS_AWX_KIT = True
+        import ascenderkit  # noqa
+        HAS_ASCENDER_KIT = True
     except ImportError:
-        HAS_AWX_KIT = False
+        HAS_ASCENDER_KIT = False
 
 
 def sanitize_dict(din):
@@ -194,12 +193,12 @@ def run_module(request, collection_import):
             if getattr(basic, '_ANSIBLE_PROFILE', 'set') is None:
                 basic._ANSIBLE_PROFILE = 'legacy'
 
-        if getattr(resource_module, 'ControllerAWXKitModule', None):
-            resource_class = resource_module.ControllerAWXKitModule
+        if getattr(resource_module, 'ControllerAscenderKitModule', None):
+            resource_class = resource_module.ControllerAscenderKitModule
         elif getattr(resource_module, 'ControllerAPIModule', None):
             resource_class = resource_module.ControllerAPIModule
         else:
-            raise RuntimeError("The module has neither a ControllerAWXKitModule or a ControllerAPIModule")
+            raise RuntimeError("The module has neither a ControllerAscenderKitModule or a ControllerAPIModule")
 
         # The collection-vs-server version compatibility check warns whenever the
         # source _COLLECTION_VERSION does not match the
@@ -216,8 +215,8 @@ def run_module(request, collection_import):
             with mock.patch('ansible.module_utils.urls.Request.open', new=new_open):
                 if HAS_TOWER_CLI:
                     tower_cli_mgr = mock.patch('tower_cli.api.Session.request', new=new_request)
-                elif HAS_AWX_KIT:
-                    tower_cli_mgr = mock.patch('awxkit.api.client.requests.Session.request', new=new_request)
+                elif HAS_ASCENDER_KIT:
+                    tower_cli_mgr = mock.patch('ascenderkit.api.client.requests.Session.request', new=new_request)
                 else:
                     tower_cli_mgr = suppress()
                 with tower_cli_mgr:
