@@ -18,9 +18,9 @@ covers the development setup, testing, and PR guidelines.
    pip install ansible-core ruff yamllint ansible-lint antsibull-changelog
    ```
 
-3. For unit tests, you also need a checkout of the
-   [Ascender](https://github.com/ctrliq/ascender) main repo (the tests
-   import Django models from `awx.main`):
+3. Unit tests need a checkout of the
+   [Ascender](https://github.com/ctrliq/ascender) repo, since they import
+   models from `awx.main`:
 
    ```bash
    pip install -r requirements.txt
@@ -72,10 +72,10 @@ git checkout -b my-feature main
 ### Code style
 
 - Follow PEP 8 with a 200-character line limit (matching the existing codebase).
-- Every module must have complete `DOCUMENTATION`, `EXAMPLES`, and `RETURN`
-  blocks. Run `ansible-test sanity --test validate-modules` to check.
-- Use the `ControllerAPIModule` base class from `plugins/module_utils/controller_api.py`
-  for new modules.
+- Every module must have complete `DOCUMENTATION`, `EXAMPLES`, and `RETURN` blocks.
+- Check them with `ansible-test sanity --test validate-modules`.
+- New modules use the `ControllerAPIModule` base class.
+- It lives in `plugins/module_utils/controller_api.py`.
 
 ### Changelog fragments
 
@@ -138,7 +138,7 @@ extends_documentation_fragment: ctrliq.ascender.auth
 
 1. Make sure all tests pass locally (at minimum, sanity + lint).
 2. Include a changelog fragment if the change is user-facing.
-3. One logical change per PR — don't bundle unrelated fixes.
+3. One logical change per PR. Do not bundle unrelated fixes.
 4. Target the `main` branch.
 5. Fill in the PR template (summary, issue type, component, version).
 
