@@ -1,0 +1,7 @@
+---
+bugfixes:
+  - inventory_source_update role - Fixed the inverted ``changed_when`` on the async task that starts
+    the update. The condition reported changed exactly when the task had not changed anything, so a
+    run that updated nothing came back changed and a run that started an update came back ok. The
+    async task now reports changed only in check mode, where the result is the real one, matching the
+    other roles.
