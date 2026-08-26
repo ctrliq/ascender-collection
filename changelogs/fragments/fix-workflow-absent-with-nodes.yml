@@ -1,0 +1,5 @@
+---
+bugfixes:
+  - "workflow_job_templates role - Fixed ``state: absent`` on a workflow that also defines its nodes
+    failing the run. The schema tasks went on creating the nodes after the workflow they belong to had
+    been deleted. The node loop now runs only when the workflow's own state is present."
