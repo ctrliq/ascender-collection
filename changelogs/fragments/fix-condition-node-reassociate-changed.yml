@@ -1,0 +1,7 @@
+---
+minor_changes:
+  - workflow_job_template_node - Aligned the status check on the ``condition_nodes``
+    re-association with the one on a new association. Re-associating an edge whose condition
+    parameters changed set ``changed`` only on a 204, and let a 200 or a 201 through without
+    it. The disassociate that runs first returns 204 and sets the flag, so no run reported the
+    wrong result, but the two paths now accept the same statuses.
