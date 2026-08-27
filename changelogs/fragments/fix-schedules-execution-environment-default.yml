@@ -1,0 +1,6 @@
+---
+bugfixes:
+  - schedules role - Fixed a schedule with no ``execution_environment`` failing when
+    ``controller_configuration_schedules_enforce_defaults`` is set. The role sent an empty string,
+    which the API rejects, rather than leaving the argument out. It now falls back to ``omit``
+    whether or not defaults are enforced.
