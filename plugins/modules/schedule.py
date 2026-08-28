@@ -262,6 +262,8 @@ def main():
     unified_job_template_id = None
     if unified_job_template:
         unified_job_template_object = module.get_one('unified_job_templates', name_or_id=unified_job_template, allow_none=False, **{'data': search_fields})
+        if unified_job_template_object is None:
+            module.fail_json(msg='could not find unified_job_template entry with name {0}'.format(unified_job_template))
         unified_job_template_id = unified_job_template_object['id']
         sched_search_fields['unified_job_template'] = unified_job_template_id
 
