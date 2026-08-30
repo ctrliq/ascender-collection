@@ -1,0 +1,9 @@
+---
+bugfixes:
+  - >-
+    schedule - Fixed a ``TypeError`` on ``NoneType`` when ``unified_job_template`` names an
+    object that cannot be resolved. ``allow_none=False`` does not cover the case where the
+    lookup is additionally scoped by ``search_fields`` and matches nothing, so the module
+    indexed ``None`` and crashed with a traceback that named neither the schedule nor the
+    template. The lookup is now guarded the same way ``execution_environment`` already is,
+    failing with the name it could not find.
