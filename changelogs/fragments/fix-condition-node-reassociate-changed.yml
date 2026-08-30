@@ -5,3 +5,9 @@ minor_changes:
     parameters changed set ``changed`` only on a 204, and let a 200 or a 201 through without
     it. The disassociate that runs first returns 204 and sets the flag, so no run reported the
     wrong result, but the two paths now accept the same statuses.
+bugfixes:
+  - workflow_job_template_node - Fixed the disassociate on a changed ``condition_nodes`` edge
+    passing an error through in silence. The response was read only to set ``changed`` on a
+    204, so a 4xx or a 5xx fell straight into the re-associate that follows, hiding the
+    failure and leaving the edge in whatever state the controller had left it. It now fails
+    with the returned detail, the way the disassociate of a removed edge already did.

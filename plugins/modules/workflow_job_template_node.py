@@ -601,6 +601,10 @@ def main():
                     )
                     if response['status_code'] == 204:
                         module.json_output['changed'] = True
+                    else:
+                        module.fail_json(
+                            msg=f"Failed to disassociate condition node {response['json'].get('detail', response['json'])}"
+                        )
                     response = module.post_endpoint(condition_endpoint, **{'data': dc})
                     if response['status_code'] in [200, 201, 204]:
                         module.json_output['changed'] = True
