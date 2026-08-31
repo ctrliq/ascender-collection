@@ -105,7 +105,7 @@ options:
       default: True
 extends_documentation_fragment: ctrliq.ascender.auth
 requirements:
-  - "ascender-kit >= 25.5.1"
+  - "ascender-kit >= 25.6.0"
   - ctrliq.ascender collection
 notes:
   - Specifying a name of "all" for any asset type will export all items of that asset type.
