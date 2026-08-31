@@ -1,6 +1,0 @@
----
-bugfixes:
-  - credential_types role - Fixed a Jinja block tag in ``injectors`` reaching the controller with its
-    escaping still in place. The role turns the ``{  {`` an author writes back into ``{{`` so the
-    expression survives templating, but ``{  %`` had no such rule, so a credential type using
-    ``{% if %}`` or ``{% for %}`` in an injector was created with the literal spaced form.

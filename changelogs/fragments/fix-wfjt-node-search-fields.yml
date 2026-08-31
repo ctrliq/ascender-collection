@@ -1,7 +1,0 @@
----
-bugfixes:
-  - workflow_job_template - Fixed an entry in ``workflow_nodes`` without an ``identifier``
-    failing with a bare ``KeyError`` traceback part way through the run, after some nodes had
-    already been created. The suboption is documented as required but ``workflow_nodes`` has no
-    suboptions in the argument spec, so nothing enforced it. The module now fails up front with
-    a message naming the offending entry.

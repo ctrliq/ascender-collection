@@ -1,6 +1,0 @@
----
-bugfixes:
-  - "applications role - Documented ``redirect_uris`` as a ``list`` instead of a space
-    separated ``str``. The ``application`` module takes ``type: list`` with ``elements: str``
-    and joins the entries itself, so following the role README produced a type error at
-    runtime."

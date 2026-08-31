@@ -1,5 +1,0 @@
----
-bugfixes:
-  - collect_async_status role - Fixed a failed item being reported as ``Unknown Error`` when the API
-    returned its reason under ``detail`` or ``error`` rather than ``msg``. Both keys are now read
-    before falling back, so the controller's own explanation reaches the output.
