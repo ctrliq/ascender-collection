@@ -42,6 +42,8 @@ options:
     source_vars:
       description:
         - The variables or environment fields to apply to this source type.
+        - For a C(vmware) source, the C(plugin) key selects which collection performs the sync,
+          C(community.vmware.vmware_vm_inventory) (the default) or C(vmware.vmware.vms).
       type: dict
     enabled_var:
       description:
@@ -139,6 +141,16 @@ EXAMPLES = '''
     organization: Default
     source_vars:
       private: false
+
+- name: Add a VMware inventory source that syncs with the vmware.vmware collection
+  ctrliq.ascender.inventory_source:
+    name: "vmware-source-inventory"
+    inventory: previously-created-inventory
+    credential: previously-created-vmware-credential
+    source: vmware
+    organization: Default
+    source_vars:
+      plugin: vmware.vmware.vms
 '''
 
 RETURN = '''
