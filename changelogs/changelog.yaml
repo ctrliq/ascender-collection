@@ -608,3 +608,155 @@ releases:
     fragments:
     - fix_unit_test_ascender_notifications.yml
     release_date: '2026-08-05'
+  25.6.0:
+    changes:
+      breaking_changes:
+      - export, import, controller_export_diff - These modules now require `ascender-kit
+        <https://pypi.org/project/ascender-kit/>`_ (importable as ``ascenderkit``)
+        instead of ``awxkit``. The client moved out of the Ascender repository into
+        `its own project <https://github.com/ctrliq/ascender-kit>`_, where it was
+        renamed; the ``awxkit`` distribution on PyPI is the separate AWX client and
+        is no longer used. Install the new one with ``pip install ascender-kit``;
+        it needs Python 3.11 or newer on the controller node.
+      - module_utils - Renamed the shared client base class ``ControllerAWXKitModule``
+        to ``ControllerAscenderKitModule`` and moved it from ``module_utils/awxkit.py``
+        to ``module_utils/ascenderkit.py``, following the rename of the underlying
+        library.
+      bugfixes:
+      - ad_hoc_command, job_launch, schedules and workflow_job_templates roles - Fixed
+        integer fields set to ``0`` being silently dropped. ``forks``, ``verbosity``,
+        ``job_slice_count``, ``job_timeout`` and the schedule and workflow node ``timeout``
+        were passed through ``default(omit, true)``, whose boolean form treats ``0``
+        as unset, so those values never reached the module.
+      - 'applications role - Documented ``redirect_uris`` as a ``list`` instead of
+        a space separated ``str``. The ``application`` module takes ``type: list``
+        with ``elements: str`` and joins the entries itself, so following the role
+        README produced a type error at runtime.'
+      - 'applications role - Fixed ``skip_authorization: false`` being silently dropped.
+        The value was passed through ``default(..., true)``, whose boolean form treats
+        ``false`` as unset, so the flag could only ever be turned on.'
+      - applications role - Fixed an application's redirect URIs being cleared when
+        the item did not list ``redirect_uris``. The role sent an empty list, which
+        the module turns into an empty string. It is now omitted unless ``controller_configuration_applications_enforce_defaults``
+        is set, matching how the other optional fields in the role behave. An explicitly
+        provided empty list is still sent, so the URIs can be cleared on purpose.
+      - collect_async_status role - Fixed a failed item being reported as ``Unknown
+        Error`` when the API returned its reason under ``detail`` or ``error`` rather
+        than ``msg``. Both keys are now read before falling back, so the controller's
+        own explanation reaches the output.
+      - controller_api module utils - ``create_if_needed`` and ``update_if_needed``
+        returned ``None`` when an ``on_create`` or ``on_update`` callback was given
+        and the callback handed control back instead of exiting the module itself.
+        Callers combining a callback with ``auto_exit=false`` lost the created or
+        updated item, so the item is now returned on that path too, the same as the
+        plain ``auto_exit=false`` path.
+      - controller_object_diff lookup - Fixed the role comparison passing the ignored
+        key as a bare string, which made the filter match on substrings of ``state``
+        rather than on the key itself.
+      - credential_types role - Fixed a Jinja block tag in ``injectors`` reaching
+        the controller with its escaping still in place. The role turns the ``{  {``
+        an author writes back into ``{{`` so the expression survives templating, but
+        ``{  %`` had no such rule, so a credential type using ``{% if %}`` or ``{%
+        for %}`` in an injector was created with the literal spaced form.
+      - dispatch role - Moved ``instance_groups`` after ``credential_types``, ``credentials``
+        and ``credential_input_sources`` in ``controller_configuration_dispatcher_roles``.
+        A container group names the credential holding its Kubernetes or OpenShift
+        connection, and the credential did not exist yet when the instance groups
+        ran, so a full configuration run failed on the first pass and only worked
+        on a second.
+      - inventories, hosts, groups, inventory_sources, credential_types and notification_templates
+        roles - Fixed an item that leaves ``variables``, ``source_vars``, ``injectors``
+        or ``messages`` unset failing with ``argument ... is of type str and we were
+        unable to convert to dict`` on ansible-core 2.19 and later. The value was
+        piped through ``regex_replace`` after ``default(..., true)``, and that string
+        filter turned the fallback into text, so the module received the literal omit
+        placeholder instead of the argument being dropped. The filters now run only
+        when the item actually provides a value.
+      - inventory_source_update role - Fixed the inverted ``changed_when`` on the
+        async task that starts the update. The condition reported changed exactly
+        when the task had not changed anything, so a run that updated nothing came
+        back changed and a run that started an update came back ok. The async task
+        now reports changed only in check mode, where the result is the real one,
+        matching the other roles.
+      - inventory_sources, job_templates, organizations, projects, schedules and workflow_job_templates
+        roles - Fixed ``labels`` and the ``notification_templates_*`` lists being
+        dropped when an item sets them directly. The expressions read the API export
+        form, ``related.labels`` and ``related.notification_templates_*``, before
+        the key on the item itself, and an item that carries the direct key alone
+        came out as ``omit``, so the labels and notification templates were never
+        applied. The item's own key is now read first and the ``related`` form is
+        the fallback, which keeps exported data working.
+      - schedule - Fixed a ``TypeError`` on ``NoneType`` when ``unified_job_template``
+        names an object that cannot be resolved. ``allow_none=False`` does not cover
+        the case where the lookup is additionally scoped by ``search_fields`` and
+        matches nothing, so the module indexed ``None`` and crashed with a traceback
+        that named neither the schedule nor the template. The lookup is now guarded
+        the same way ``execution_environment`` already is, failing with the name it
+        could not find.
+      - schedules role - Fixed a schedule with no ``execution_environment`` failing
+        when ``controller_configuration_schedules_enforce_defaults`` is set. The role
+        sent an empty string, which the API rejects, rather than leaving the argument
+        out. It now falls back to ``omit`` whether or not defaults are enforced.
+      - workflow_job_template - Fixed an entry in ``workflow_nodes`` without an ``identifier``
+        failing with a bare ``KeyError`` traceback part way through the run, after
+        some nodes had already been created. The suboption is documented as required
+        but ``workflow_nodes`` has no suboptions in the argument spec, so nothing
+        enforced it. The module now fails up front with a message naming the offending
+        entry.
+      - workflow_job_template_node - Fixed ``condition_nodes`` always reporting changed
+        and rewriting every conditional link on each run. The existing conditions
+        were read from the ``condition_nodes`` sub-endpoint, which lists the target
+        nodes without any of the per-edge condition data, so every link always compared
+        as different. The module now reads the node's ``condition_edges`` data instead,
+        and encodes ``expected_value`` the way the API stores it.
+      - workflow_job_template_node - Fixed the disassociate on a changed ``condition_nodes``
+        edge passing an error through in silence. The response was read only to set
+        ``changed`` on a 204, so a 4xx or a 5xx fell straight into the re-associate
+        that follows, hiding the failure and leaving the edge in whatever state the
+        controller had left it. It now fails with the returned detail, the way the
+        disassociate of a removed edge already did.
+      - workflow_job_template_node - Restricted the ``condition_nodes`` ``operator``
+        choices to ``eq`` and ``ne``. The other choices (``lt``, ``gt``, ``le``, ``ge``,
+        ``in`` and ``not_in``) passed argument validation but were always rejected
+        by the controller, which only evaluates equality for conditional links.
+      - 'workflow_job_templates role - Fixed ``state: absent`` on a workflow that
+        also defines its nodes failing the run. The schema tasks went on creating
+        the nodes after the workflow they belong to had been deleted. The node loop
+        now runs only when the workflow''s own state is present.'
+      minor_changes:
+      - job_list - Documented the ``all_pages`` default as ``false`` instead of the
+        string ``'no'``, so the rendered documentation matches the argument spec.
+      - object_diff role - Simplified the check for the installed module collection.
+        The rescue branch ran the same ``ctrliq.ascender`` lookup as the block it
+        was recovering from, and both arms of the resulting expression produced the
+        same plugin name, so it could never change the outcome.
+      - workflow_job_template_node - Aligned the status check on the ``condition_nodes``
+        re-association with the one on a new association. Re-associating an edge whose
+        condition parameters changed set ``changed`` only on a 204, and let a 200
+        or a 201 through without it. The disassociate that runs first returns 204
+        and sets the flag, so no run reported the wrong result, but the two paths
+        now accept the same statuses.
+    fragments:
+    - fix-applications-redirect-uris-cleared.yml
+    - fix-applications-redirect-uris-doc-type.yml
+    - fix-applications-skip-authorization-false.yml
+    - fix-async-error-detail-keys.yml
+    - fix-condition-node-reassociate-changed.yml
+    - fix-condition-nodes-idempotency.yml
+    - fix-condition-nodes-operator-choices.yml
+    - fix-create-update-return-value.yml
+    - fix-direct-labels-and-notification-templates.yml
+    - fix-dispatch-credentials-before-instance-groups.yml
+    - fix-injectors-jinja-block-escaping.yml
+    - fix-inverted-changed-when-inventory-source-update.yml
+    - fix-job-list-doc-default.yml
+    - fix-object-diff-collection-check.yml
+    - fix-object-diff-ignore-keys.yml
+    - fix-omit-passed-as-literal-placeholder.yml
+    - fix-roles-zero-valued-integers.yml
+    - fix-schedule-unified-job-template-not-found.yml
+    - fix-schedules-execution-environment-default.yml
+    - fix-wfjt-node-search-fields.yml
+    - fix-workflow-absent-with-nodes.yml
+    - switch-to-ascender-kit.yml
+    release_date: '2026-08-31'

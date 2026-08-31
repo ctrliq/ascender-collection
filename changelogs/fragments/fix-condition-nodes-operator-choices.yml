@@ -1,6 +1,0 @@
----
-bugfixes:
-  - workflow_job_template_node - Restricted the ``condition_nodes`` ``operator`` choices to
-    ``eq`` and ``ne``. The other choices (``lt``, ``gt``, ``le``, ``ge``, ``in`` and ``not_in``)
-    passed argument validation but were always rejected by the controller, which only evaluates
-    equality for conditional links.

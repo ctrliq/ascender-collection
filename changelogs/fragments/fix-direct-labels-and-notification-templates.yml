@@ -1,8 +1,0 @@
----
-bugfixes:
-  - inventory_sources, job_templates, organizations, projects, schedules and workflow_job_templates roles -
-    Fixed ``labels`` and the ``notification_templates_*`` lists being dropped when an item sets them directly.
-    The expressions read the API export form, ``related.labels`` and ``related.notification_templates_*``,
-    before the key on the item itself, and an item that carries the direct key alone came out as ``omit``,
-    so the labels and notification templates were never applied. The item's own key is now read first and
-    the ``related`` form is the fallback, which keeps exported data working.

@@ -1,8 +1,0 @@
----
-bugfixes:
-  - inventories, hosts, groups, inventory_sources, credential_types and notification_templates roles -
-    Fixed an item that leaves ``variables``, ``source_vars``, ``injectors`` or ``messages`` unset failing
-    with ``argument ... is of type str and we were unable to convert to dict`` on ansible-core 2.19 and
-    later. The value was piped through ``regex_replace`` after ``default(..., true)``, and that string
-    filter turned the fallback into text, so the module received the literal omit placeholder instead of
-    the argument being dropped. The filters now run only when the item actually provides a value.

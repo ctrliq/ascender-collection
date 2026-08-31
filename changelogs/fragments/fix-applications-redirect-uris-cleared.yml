@@ -1,8 +1,0 @@
----
-bugfixes:
-  - applications role - Fixed an application's redirect URIs being cleared when the item did
-    not list ``redirect_uris``. The role sent an empty list, which the module turns into an
-    empty string. It is now omitted unless
-    ``controller_configuration_applications_enforce_defaults`` is set, matching how the other
-    optional fields in the role behave. An explicitly provided empty list is still sent, so
-    the URIs can be cleared on purpose.

@@ -1,7 +1,0 @@
----
-bugfixes:
-  - ad_hoc_command, job_launch, schedules and workflow_job_templates roles - Fixed integer
-    fields set to ``0`` being silently dropped. ``forks``, ``verbosity``, ``job_slice_count``,
-    ``job_timeout`` and the schedule and workflow node ``timeout`` were passed through
-    ``default(omit, true)``, whose boolean form treats ``0`` as unset, so those values never
-    reached the module.

@@ -1,4 +1,0 @@
----
-bugfixes:
-  - controller_object_diff lookup - Fixed the role comparison passing the ignored key as a bare
-    string, which made the filter match on substrings of ``state`` rather than on the key itself.
