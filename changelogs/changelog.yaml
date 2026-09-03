@@ -760,3 +760,8 @@ releases:
     - fix-workflow-absent-with-nodes.yml
     - switch-to-ascender-kit.yml
     release_date: '2026-08-31'
+  25.6.1:
+    changes:
+      minor_changes:
+        - No changes - New version to match Ascender
+    release_date: '2026-09-03'

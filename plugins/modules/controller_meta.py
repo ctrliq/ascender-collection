@@ -46,7 +46,7 @@ namespace:
 version:
     description: Version of the collection
     returned: success
-    sample: 25.6.0
+    sample: 25.6.1
     type: str
 '''
 
