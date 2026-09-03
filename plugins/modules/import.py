@@ -20,7 +20,7 @@ options:
       required: True
       type: dict
 requirements:
-  - "ascender-kit >= 25.6.0"
+  - "ascender-kit >= 25.6.1"
 extends_documentation_fragment: ctrliq.ascender.auth
 '''
 
