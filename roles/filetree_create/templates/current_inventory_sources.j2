@@ -64,6 +64,69 @@ controller_inventory_sources:
                     | default(template_overrides_global.inventory_source.credential)
                     | default(inventory_source.summary_fields.credential.name) }}"
 {% endif %}
+{% if template_overrides_resources.inventory_source[inventory_source.name].scm_branch is defined
+      or template_overrides_global.inventory_source.scm_branch is defined
+      or inventory_source.scm_branch is defined %}
+    scm_branch: "{{ template_overrides_resources.inventory_source[inventory_source.name].scm_branch
+                          | default(template_overrides_global.inventory_source.scm_branch)
+                          | default(inventory_source.scm_branch) }}"
+{% endif %}
+{% if template_overrides_resources.inventory_source[inventory_source.name].host_filter is defined
+      or template_overrides_global.inventory_source.host_filter is defined
+      or inventory_source.host_filter is defined %}
+    host_filter: "{{ template_overrides_resources.inventory_source[inventory_source.name].host_filter
+                           | default(template_overrides_global.inventory_source.host_filter)
+                           | default(inventory_source.host_filter) }}"
+{% endif %}
+{% if template_overrides_resources.inventory_source[inventory_source.name].enabled_var is defined
+      or template_overrides_global.inventory_source.enabled_var is defined
+      or inventory_source.enabled_var is defined %}
+    enabled_var: "{{ template_overrides_resources.inventory_source[inventory_source.name].enabled_var
+                           | default(template_overrides_global.inventory_source.enabled_var)
+                           | default(inventory_source.enabled_var) }}"
+{% endif %}
+{% if template_overrides_resources.inventory_source[inventory_source.name].enabled_value is defined
+      or template_overrides_global.inventory_source.enabled_value is defined
+      or inventory_source.enabled_value is defined %}
+    enabled_value: "{{ template_overrides_resources.inventory_source[inventory_source.name].enabled_value
+                             | default(template_overrides_global.inventory_source.enabled_value)
+                             | default(inventory_source.enabled_value) }}"
+{% endif %}
+{% if template_overrides_resources.inventory_source[inventory_source.name].overwrite_vars is defined
+      or template_overrides_global.inventory_source.overwrite_vars is defined
+      or inventory_source.overwrite_vars is defined %}
+    overwrite_vars: {{ template_overrides_resources.inventory_source[inventory_source.name].overwrite_vars
+                              | default(template_overrides_global.inventory_source.overwrite_vars)
+                              | default(inventory_source.overwrite_vars | bool | lower) }}
+{% endif %}
+{% if template_overrides_resources.inventory_source[inventory_source.name].timeout is defined
+      or template_overrides_global.inventory_source.timeout is defined
+      or inventory_source.timeout is defined %}
+    timeout: {{ template_overrides_resources.inventory_source[inventory_source.name].timeout
+                       | default(template_overrides_global.inventory_source.timeout)
+                       | default(inventory_source.timeout) }}
+{% endif %}
+{% if template_overrides_resources.inventory_source[inventory_source.name].verbosity is defined
+      or template_overrides_global.inventory_source.verbosity is defined
+      or inventory_source.verbosity is defined %}
+    verbosity: {{ template_overrides_resources.inventory_source[inventory_source.name].verbosity
+                         | default(template_overrides_global.inventory_source.verbosity)
+                         | default(inventory_source.verbosity) }}
+{% endif %}
+{% if template_overrides_resources.inventory_source[inventory_source.name].update_cache_timeout is defined
+      or template_overrides_global.inventory_source.update_cache_timeout is defined
+      or inventory_source.update_cache_timeout is defined %}
+    update_cache_timeout: {{ template_overrides_resources.inventory_source[inventory_source.name].update_cache_timeout
+                                    | default(template_overrides_global.inventory_source.update_cache_timeout)
+                                    | default(inventory_source.update_cache_timeout) }}
+{% endif %}
+{% if template_overrides_resources.inventory_source[inventory_source.name].execution_environment is defined
+      or template_overrides_global.inventory_source.execution_environment is defined
+      or inventory_source.summary_fields.execution_environment is defined %}
+    execution_environment: "{{ template_overrides_resources.inventory_source[inventory_source.name].execution_environment
+                               | default(template_overrides_global.inventory_source.execution_environment)
+                               | default(inventory_source.summary_fields.execution_environment.name) }}"
+{% endif %}
 {% set query_notification_error = query(controller_api_plugin, inventory_source.related.notification_templates_error,
                      host=controller_hostname, oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs,
                      return_all=true, max_objects=query_controller_api_max_objects) %}
