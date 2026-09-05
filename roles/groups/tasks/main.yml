@@ -16,11 +16,8 @@
           if (__controller_groups_item.variables is defined and __controller_groups_item.variables)
           else ({} if controller_configuration_groups_enforce_defaults else omit) }}"
         hosts: "{{ __controller_groups_item.hosts | default(([] if controller_configuration_groups_enforce_defaults else omit), true) }}"
-        children: "{{ __controller_groups_item.children | default(([] if controller_configuration_groups_enforce_defaults else omit), true) }}"
         preserve_existing_hosts: "{{ __controller_groups_item.preserve_existing_hosts | default((false if controller_configuration_groups_enforce_defaults else omit))
           }}"
-        preserve_existing_children: "{{ __controller_groups_item.preserve_existing_children | default((false if controller_configuration_groups_enforce_defaults else
-          omit)) }}"
         state: "{{ __controller_groups_item.state | default(controller_state | default('present')) }}"
 
         # Role Standard Options
@@ -67,6 +64,35 @@
         cas_job_async_results_item: "{{ __group_job_async_results_item }}"
         cas_error_list_var_name: "controller_groups_errors"
         __operation: "{{ operation_translate[__group_job_async_results_item.__controller_groups_item.state | default(controller_state) | default('present')] }}"
+
+    # Children are associated in a second pass. A group can name a child that this same
+    # run has not created yet, and the pass above is async, so the child is not guaranteed
+    # to exist while its parent is being handled.
+    - name: Managing Controller Groups | Associate the children
+      ctrliq.ascender.group: # noqa fqcn[action-core]
+        name: "{{ __controller_groups_children_item.new_name | default(__controller_groups_children_item.name, true) }}"
+        inventory: "{{ __controller_groups_children_item.inventory | mandatory }}"
+        children: "{{ __controller_groups_children_item.children | default([], true) }}"
+        preserve_existing_children: "{{ __controller_groups_children_item.preserve_existing_children | default((false if controller_configuration_groups_enforce_defaults
+          else omit)) }}"
+
+        # Role Standard Options
+        controller_username: "{{ controller_username | default(omit, true) }}"
+        controller_password: "{{ controller_password | default(omit, true) }}"
+        controller_oauthtoken: "{{ controller_oauthtoken | default(omit, true) }}"
+        request_timeout: "{{ controller_request_timeout | default(omit, true) }}"
+        controller_host: "{{ controller_hostname | default(omit, true) }}"
+        controller_config_file: "{{ controller_config_file | default(omit, true) }}"
+        validate_certs: "{{ controller_validate_certs | default(omit) }}"
+      loop: "{{ controller_groups }}"
+      loop_control:
+        loop_var: __controller_groups_children_item
+        label: "Associate the children of Controller Group {{ __controller_groups_children_item.name }}"
+        pause: "{{ controller_configuration_group_loop_delay }}"
+      when:
+        - (__controller_groups_children_item.state | default(controller_state) | default('present')) == 'present'
+        - __controller_groups_children_item.children is defined or controller_configuration_groups_enforce_defaults
+      no_log: "{{ controller_configuration_group_secure_logging }}"
 
   always:
     - name: Cleanup async results files

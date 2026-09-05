@@ -1,5 +1,11 @@
 ---
 controller_groups:
+  # the parent is listed before the child on purpose: children are associated in a
+  # second pass, so the order of the list must not matter
+  - name: localhost_parent_group
+    inventory: localhost
+    children:
+      - localhost_group
   - name: localhost_group
     inventory: localhost
     variables:
