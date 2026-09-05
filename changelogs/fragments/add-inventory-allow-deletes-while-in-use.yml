@@ -1,0 +1,3 @@
+minor_changes:
+  - inventory - add ``allow_deletes_while_in_use`` parameter, which lets hosts of the inventory be deleted while jobs are running against it.
+    The field was added to the API in Ascender 25.6.1 and defaults to disabled, so deletions keep being rejected until the running jobs finish.

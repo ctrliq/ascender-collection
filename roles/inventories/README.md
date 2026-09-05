@@ -108,6 +108,7 @@ The role will strip the double space between the curly bracket in order to provi
 |`kind`|""|no|str|The kind of inventory. Currently choices are '' and 'smart'|
 |`host_filter`|""|no|str|The host filter field, useful only when 'kind=smart'|
 |`prevent_instance_group_fallback`|`False`|no|bool|Prevent falling back to instance groups set on the organization|
+|`allow_deletes_while_in_use`|`False`|no|bool|Allow hosts of this inventory to be deleted while jobs are running against it|
 |`state`|`present`|no|str|Desired state of the resource.|
 
 ### Standard Inventory Data Structure
