@@ -4,7 +4,7 @@ __metaclass__ = type
 
 import pytest
 
-from awx.main.models import WorkflowJobTemplate, WorkflowJob, NotificationTemplate
+from awx.main.models import WorkflowJobTemplate, WorkflowJobTemplateNode, WorkflowJob, JobTemplate, NotificationTemplate
 
 
 @pytest.mark.django_db
@@ -174,3 +174,104 @@ def test_delete_with_spec(run_module, admin_user, organization, survey_spec):
     assert result.get('changed', True), result
 
     assert WorkflowJobTemplate.objects.filter(name='foo-workflow', organization=organization).count() == 0
+
+
+@pytest.fixture
+def node_job_template(project, inventory):
+    return JobTemplate.objects.create(project=project, inventory=inventory, playbook='helloworld.yml', name='foo-jt')
+
+
+def conditional_workflow_nodes(condition_nodes):
+    return [
+        {
+            'identifier': 'node-a',
+            'unified_job_template': {'name': 'foo-jt', 'type': 'job_template'},
+            'max_retries': 2,
+            'related': {'condition_nodes': condition_nodes},
+        },
+        {
+            'identifier': 'node-b',
+            'unified_job_template': {'name': 'foo-jt', 'type': 'job_template'},
+            'related': {},
+        },
+    ]
+
+
+def run_conditional_workflow(run_module, admin_user, organization, condition_nodes):
+    result = run_module(
+        'workflow_job_template',
+        {
+            'name': 'foo-workflow',
+            'organization': organization.name,
+            'workflow_nodes': conditional_workflow_nodes(condition_nodes),
+            'state': 'present',
+        },
+        admin_user,
+    )
+    assert not result.get('failed', False), result.get('msg', result)
+    return result
+
+
+@pytest.mark.django_db
+def test_workflow_nodes_max_retries_and_condition_nodes(run_module, admin_user, organization, node_job_template):
+    run_conditional_workflow(
+        run_module,
+        admin_user,
+        organization,
+        [{'identifier': 'node-b', 'trigger': 'always', 'artifact_key': 'deploy_ok', 'operator': 'eq', 'expected_value': True}],
+    )
+
+    wfjt = WorkflowJobTemplate.objects.get(name='foo-workflow')
+    node_a = WorkflowJobTemplateNode.objects.get(workflow_job_template=wfjt, identifier='node-a')
+    node_b = WorkflowJobTemplateNode.objects.get(workflow_job_template=wfjt, identifier='node-b')
+
+    assert node_a.max_retries == 2
+
+    link = node_a.condition_links_from.get()
+    assert link.to_node_id == node_b.id
+    assert link.trigger == 'always'
+    assert link.artifact_key == 'deploy_ok'
+    assert link.operator == 'eq'
+    # non string values are JSON encoded, the same way the API stores them
+    assert link.expected_value == 'true'
+
+
+@pytest.mark.django_db
+def test_workflow_nodes_condition_nodes_are_updated(run_module, admin_user, organization, node_job_template):
+    run_conditional_workflow(
+        run_module,
+        admin_user,
+        organization,
+        [{'identifier': 'node-b', 'artifact_key': 'deploy_ok', 'expected_value': 'yes'}],
+    )
+
+    result = run_conditional_workflow(
+        run_module,
+        admin_user,
+        organization,
+        [{'identifier': 'node-b', 'trigger': 'failure', 'artifact_key': 'deploy_ok', 'operator': 'ne', 'expected_value': 'no'}],
+    )
+    assert result.get('changed', False), result
+
+    wfjt = WorkflowJobTemplate.objects.get(name='foo-workflow')
+    node_a = WorkflowJobTemplateNode.objects.get(workflow_job_template=wfjt, identifier='node-a')
+    link = node_a.condition_links_from.get()
+    assert link.trigger == 'failure'
+    assert link.operator == 'ne'
+    assert link.expected_value == 'no'
+
+
+@pytest.mark.django_db
+def test_workflow_nodes_condition_nodes_are_removed(run_module, admin_user, organization, node_job_template):
+    run_conditional_workflow(
+        run_module,
+        admin_user,
+        organization,
+        [{'identifier': 'node-b', 'artifact_key': 'deploy_ok', 'expected_value': 'yes'}],
+    )
+
+    run_conditional_workflow(run_module, admin_user, organization, [])
+
+    wfjt = WorkflowJobTemplate.objects.get(name='foo-workflow')
+    node_a = WorkflowJobTemplateNode.objects.get(workflow_job_template=wfjt, identifier='node-a')
+    assert node_a.condition_links_from.count() == 0

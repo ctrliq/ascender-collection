@@ -225,6 +225,18 @@ argument_specs:
         #         type: list
         #         elements: str
         #         description: Nodes that will run after this node completes.
+        #       condition_nodes:
+        #         default: None
+        #         required: false
+        #         type: list
+        #         elements: dict
+        #         description: Nodes that will run after this node when an upstream artifact matches a condition. Each entry takes identifier, artifact_key,
+        #           expected_value, and optionally trigger and operator.
+        #       max_retries:
+        #         default: None
+        #         required: false
+        #         type: int
+        #         description: Maximum number of times this node's job is automatically retried after failing before its failure paths are followed.
         #       verbosity:
         #         default: None
         #         required: false

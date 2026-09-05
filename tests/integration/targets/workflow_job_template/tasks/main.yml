@@ -16,6 +16,7 @@
     lab1: "AWX-Collection-tests-job_template-lab1-{{ test_id }}"
     wfjt_name: "AWX-Collection-tests-workflow_job_template-wfjt-{{ test_id }}"
     webhook_wfjt_name: "AWX-Collection-tests-workflow_job_template-webhook-wfjt-{{ test_id }}"
+    conditional_wfjt_name: "AWX-Collection-tests-workflow_job_template-conditional-wfjt-{{ test_id }}"
     email_not: "AWX-Collection-tests-job_template-email-not-{{ test_id }}"
     webhook_notification: "AWX-Collection-tests-notification_template-wehbook-not-{{ test_id }}"
     project_inv: "AWX-Collection-tests-inventory_source-inv-project-{{ test_id }}"
@@ -863,6 +864,130 @@
         that:
           - result is failed
 
+    - name: Create a workflow with node retries and a conditional link
+      ctrliq.ascender.workflow_job_template:
+        name: "{{ conditional_wfjt_name }}"
+        organization: Default
+        workflow_nodes:
+          - identifier: cond101
+            max_retries: 2
+            unified_job_template:
+              organization:
+                name: Default
+              name: "{{ jt1_name }}"
+              type: job_template
+            related:
+              condition_nodes:
+                - identifier: cond201
+                  trigger: always
+                  artifact_key: deploy_ok
+                  operator: eq
+                  expected_value: true
+          - identifier: cond201
+            unified_job_template:
+              organization:
+                name: Default
+              name: "{{ jt1_name }}"
+              type: job_template
+            related: {}
+      register: result
+
+    - assert:
+        that:
+          - "result is changed"
+
+    - name: Read back the node carrying the conditional link
+      set_fact:
+        cond_node: "{{ query('ctrliq.ascender.controller_api', 'workflow_job_template_nodes', query_params={'identifier': 'cond101'}) | first }}"
+
+    - assert:
+        that:
+          - cond_node.max_retries == 2
+          - cond_node.condition_edges | length == 1
+          - cond_node.condition_edges[0].trigger == 'always'
+          - cond_node.condition_edges[0].artifact_key == 'deploy_ok'
+          - cond_node.condition_edges[0].operator == 'eq'
+          # values that are not strings are JSON encoded, the way the API stores them
+          - cond_node.condition_edges[0].expected_value == 'true'
+
+    - name: Change the condition on the same link
+      ctrliq.ascender.workflow_job_template:
+        name: "{{ conditional_wfjt_name }}"
+        organization: Default
+        workflow_nodes:
+          - identifier: cond101
+            max_retries: 2
+            unified_job_template:
+              organization:
+                name: Default
+              name: "{{ jt1_name }}"
+              type: job_template
+            related:
+              condition_nodes:
+                - identifier: cond201
+                  trigger: failure
+                  artifact_key: deploy_ok
+                  operator: ne
+                  expected_value: "skipped"
+          - identifier: cond201
+            unified_job_template:
+              organization:
+                name: Default
+              name: "{{ jt1_name }}"
+              type: job_template
+            related: {}
+      register: result
+
+    - assert:
+        that:
+          - "result is changed"
+
+    - name: Read back the changed link
+      set_fact:
+        cond_node: "{{ query('ctrliq.ascender.controller_api', 'workflow_job_template_nodes', query_params={'identifier': 'cond101'}) | first }}"
+
+    - assert:
+        that:
+          - cond_node.condition_edges | length == 1
+          - cond_node.condition_edges[0].trigger == 'failure'
+          - cond_node.condition_edges[0].operator == 'ne'
+          - cond_node.condition_edges[0].expected_value == 'skipped'
+
+    - name: Drop the conditional link
+      ctrliq.ascender.workflow_job_template:
+        name: "{{ conditional_wfjt_name }}"
+        organization: Default
+        workflow_nodes:
+          - identifier: cond101
+            max_retries: 2
+            unified_job_template:
+              organization:
+                name: Default
+              name: "{{ jt1_name }}"
+              type: job_template
+            related:
+              condition_nodes: []
+          - identifier: cond201
+            unified_job_template:
+              organization:
+                name: Default
+              name: "{{ jt1_name }}"
+              type: job_template
+            related: {}
+      register: result
+
+    - assert:
+        that:
+          - "result is changed"
+
+    - name: Read back the node with no conditional links left
+      set_fact:
+        cond_node: "{{ query('ctrliq.ascender.controller_api', 'workflow_job_template_nodes', query_params={'identifier': 'cond101'}) | first }}"
+
+    - assert:
+        that:
+          - cond_node.condition_edges | length == 0
+
     - name: Create a workflow job template with a GitLab webhook but a GitHub credential
       workflow_job_template:
         name: "{{ webhook_wfjt_name }}"
@@ -901,6 +1026,7 @@
         - "copy_{{ wfjt_name }}"
         - "{{ wfjt_name }}"
         - "{{ webhook_wfjt_name }}"
+        - "{{ conditional_wfjt_name }}"
 
     - name: Delete the Job Template
       job_template:

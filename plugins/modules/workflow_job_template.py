@@ -264,6 +264,11 @@ options:
           description:
             - If enabled then the node will only run if all of the parent nodes have met the criteria to reach this node
           type: bool
+        max_retries:
+          description:
+            - Maximum number of times this node's job is automatically retried after failing before its failure paths are followed.
+            - Canceled jobs are never retried.
+          type: int
         identifier:
           description:
             - An identifier for this node that is unique within its workflow.
@@ -370,6 +375,48 @@ options:
                   description:
                     - Identifier of Node that will run after this node completes given this option.
                   type: str
+            condition_nodes:
+              description:
+                - Nodes that will run after this node when a specified condition is met.
+                - Each entry names the target node and the condition to evaluate.
+                - Conditions are evaluated against artifacts set by upstream nodes using C(set_stats).
+              type: list
+              elements: dict
+              suboptions:
+                identifier:
+                  description:
+                    - Identifier of the target node within the same workflow.
+                  type: str
+                  required: True
+                trigger:
+                  description:
+                    - When to evaluate the condition relative to this node's completion status.
+                  type: str
+                  choices:
+                    - success
+                    - failure
+                    - always
+                  default: success
+                artifact_key:
+                  description:
+                    - The key in the upstream artifacts (set via C(set_stats)) to evaluate.
+                  type: str
+                  required: True
+                operator:
+                  description:
+                    - The comparison operator to apply.
+                    - The controller only evaluates equality, so C(eq) matches when the artifact value equals C(expected_value),
+                      and C(ne) matches when it does not.
+                  type: str
+                  choices:
+                    - eq
+                    - ne
+                  default: eq
+                expected_value:
+                  description:
+                    - The value to compare the artifact against.
+                  type: raw
+                  required: True
             credentials:
               description:
                 - Credentials to be applied to job as launch-time prompts.
@@ -640,6 +687,7 @@ def create_workflow_nodes(module, response, workflow_nodes, workflow_id):
             'job_slice_count',
             'timeout',
             'all_parents_must_converge',
+            'max_retries',
         ):
             field_val = workflow_node.get(field_name)
             if field_val is not None:
@@ -762,6 +810,8 @@ def create_workflow_nodes_association(module, response, workflow_nodes, workflow
             # Get id's for association fields
             association_fields = {}
 
+            condition_nodes = workflow_node['related'].get('condition_nodes')
+
             for association in (
                 'always_nodes',
                 'success_nodes',
@@ -801,6 +851,26 @@ def create_workflow_nodes_association(module, response, workflow_nodes, workflow
                     auto_exit=False,
                     associations=association_fields,
                 )
+
+            if condition_nodes is not None:
+                # Conditional links carry per edge metadata, so they are handled apart from the
+                # plain associations above. Re-read the node so the condition_edges we compare
+                # against are the ones the controller has after the update.
+                current_node = module.get_one('workflow_job_template_nodes', **{'data': search_fields})
+                if current_node is None:
+                    module.fail_json(msg=f'Unable to find the workflow job template node: {search_fields}')
+
+                desired_conditions = []
+                for condition in condition_nodes:
+                    target_node = module.get_one(
+                        'workflow_job_template_nodes',
+                        **{'data': {'identifier': condition['identifier'], 'workflow_job_template': workflow_id}},
+                    )
+                    if target_node is None:
+                        module.fail_json(msg=f"Could not find condition_nodes entry with identifier {condition['identifier']}")
+                    desired_conditions.append(module.build_condition_node(target_node['id'], condition))
+
+                module.modify_condition_node_associations(current_node, desired_conditions)
 
 
 def destroy_workflow_nodes(module, response, workflow_id):

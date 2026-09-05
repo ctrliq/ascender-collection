@@ -735,6 +735,61 @@ class ControllerAPIModule(ControllerModule):
             else:
                 self.fail_json(msg=f"Failed to associate item {response['json'].get('detail', response['json'])}")
 
+    @staticmethod
+    def build_condition_node(target_id, condition):
+        """Build one conditional link out of a target node id and the condition asked for."""
+        expected_value = condition['expected_value']
+        return {
+            'id': target_id,
+            'trigger': condition.get('trigger') or 'success',
+            'artifact_key': condition['artifact_key'],
+            'operator': condition.get('operator') or 'eq',
+            # The API stores expected_value as text and JSON encodes anything that is not
+            # already a string, so encode it the same way here. That keeps what we send and
+            # what we compare against in the form the controller reports back.
+            'expected_value': expected_value if isinstance(expected_value, str) else dumps(expected_value),
+        }
+
+    def _disassociate_condition_node(self, condition_endpoint, target_id):
+        response = self.post_endpoint(condition_endpoint, **{'data': {'id': int(target_id), 'disassociate': True}})
+        if response['status_code'] == 204:
+            self.json_output['changed'] = True
+        else:
+            self.fail_json(msg=f"Failed to disassociate condition node {response['json'].get('detail', response['json'])}")
+
+    def modify_condition_node_associations(self, node, desired_conditions):
+        """Sync the conditional links leaving a workflow node.
+
+        Conditional links carry per edge metadata, so modify_associations cannot be used here.
+        The condition_nodes sub endpoint only lists the target nodes, which carry none of that
+        metadata, so the current state is read from the node's own condition_edges field, where
+        each entry is a {id, trigger, artifact_key, operator, expected_value} dict and id is the
+        target node. A link whose metadata changed is disassociated and associated again.
+        """
+        # if we got None instead of [] we are not modifying the conditional links
+        if desired_conditions is None:
+            return
+
+        condition_endpoint = f"{node['url']}condition_nodes/"
+        existing_by_id = {edge['id']: edge for edge in (node.get('condition_edges') or [])}
+        desired_by_id = {condition['id']: condition for condition in desired_conditions}
+
+        for target_id in set(existing_by_id) - set(desired_by_id):
+            self._disassociate_condition_node(condition_endpoint, target_id)
+
+        for target_id, condition in desired_by_id.items():
+            existing = existing_by_id.get(target_id)
+            if existing is not None:
+                if all(condition[field] == existing.get(field) for field in ('trigger', 'artifact_key', 'operator', 'expected_value')):
+                    continue
+                self._disassociate_condition_node(condition_endpoint, target_id)
+
+            response = self.post_endpoint(condition_endpoint, **{'data': condition})
+            if response['status_code'] in [200, 201, 204]:
+                self.json_output['changed'] = True
+            else:
+                self.fail_json(msg=f"Failed to associate condition node {response['json'].get('detail', response['json'])}")
+
     def copy_item(self, existing_item, copy_from_name_or_id, new_item_name, endpoint=None, item_type='unknown', copy_lookup_data=None):
 
         if existing_item is not None:
