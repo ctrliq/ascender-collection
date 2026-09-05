@@ -410,4 +410,18 @@ controller_workflows:
         type: organization
       name: Simple workflow schema
       type: workflow_job_template
+
+  # A workflow with no graph yet is a real thing: someone reserving the name before
+  # drawing it. The three shapes an empty node list can take must all be a no-op.
+  - name: Workflow with no nodes at all
+    organization:
+      name: Default
+  - name: Workflow with an empty node list
+    organization:
+      name: Default
+    simplified_workflow_nodes: []
+  - name: Workflow with a null node list
+    organization:
+      name: Default
+    simplified_workflow_nodes:
 ...
