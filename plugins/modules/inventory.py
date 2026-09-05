@@ -65,6 +65,11 @@ options:
       description:
         - Prevent falling back to instance groups set on the organization
       type: bool
+    allow_deletes_while_in_use:
+      description:
+        - Allow hosts of this inventory to be deleted while jobs are running against it.
+        - By default those deletions are rejected until the running jobs finish.
+      type: bool
     state:
       description:
         - Desired state of the resource.
@@ -146,6 +151,7 @@ def main():
         host_filter=dict(),
         instance_groups=dict(type="list", elements='str'),
         prevent_instance_group_fallback=dict(type='bool'),
+        allow_deletes_while_in_use=dict(type='bool'),
         state=dict(choices=['present', 'absent', 'exists'], default='present'),
         input_inventories=dict(type='list', elements='str'),
     )
@@ -164,6 +170,7 @@ def main():
     kind = module.params.get('kind')
     host_filter = module.params.get('host_filter')
     prevent_instance_group_fallback = module.params.get('prevent_instance_group_fallback')
+    allow_deletes_while_in_use = module.params.get('allow_deletes_while_in_use')
 
     # Attempt to look up the related items the user specified (these will fail the module if not found)
     org_id = module.resolve_name_to_id('organizations', organization)
@@ -198,6 +205,8 @@ def main():
         inventory_fields['host_filter'] = host_filter
     if prevent_instance_group_fallback is not None:
         inventory_fields['prevent_instance_group_fallback'] = prevent_instance_group_fallback
+    if allow_deletes_while_in_use is not None:
+        inventory_fields['allow_deletes_while_in_use'] = allow_deletes_while_in_use
     if description is not None:
         inventory_fields['description'] = description
     if variables is not None:

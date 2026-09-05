@@ -24,6 +24,13 @@ controller_inventories:
                                         | default(template_overrides_global.inventory.prevent_instance_group_fallback)
                                         | default(current_inventories_asset_value.prevent_instance_group_fallback) }}
 {% endif %}
+{% if template_overrides_resources.inventory[current_inventories_asset_value.name].allow_deletes_while_in_use is defined
+      or template_overrides_global.inventory.allow_deletes_while_in_use is defined
+      or current_inventories_asset_value.allow_deletes_while_in_use is defined %}
+    allow_deletes_while_in_use: {{ template_overrides_resources.inventory[current_inventories_asset_value.name].allow_deletes_while_in_use
+                                   | default(template_overrides_global.inventory.allow_deletes_while_in_use)
+                                   | default(current_inventories_asset_value.allow_deletes_while_in_use) }}
+{% endif %}
 {% if template_overrides_resources.inventory[current_inventories_asset_value.name].source_vars is defined
       or template_overrides_global_global.inventory.source_vars is defined
       or current_inventories_asset_value.source_vars is defined %}

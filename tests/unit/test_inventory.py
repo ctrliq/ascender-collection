@@ -58,3 +58,49 @@ def test_valid_smart_inventory_create(run_module, admin_user, organization):
     assert inv.host_filter == 'name=my_host'
     assert inv.kind == 'smart'
     assert inv.organization_id == organization.id
+
+
+@pytest.mark.django_db
+def test_inventory_allow_deletes_while_in_use(run_module, admin_user, organization):
+    result = run_module(
+        'inventory',
+        {'name': 'foo-inventory', 'organization': organization.name, 'allow_deletes_while_in_use': True, 'state': 'present'},
+        admin_user,
+    )
+    assert not result.get('failed', False), result.get('msg', result)
+    assert result.get('changed', False), result
+
+    inv = Inventory.objects.get(name='foo-inventory')
+    assert inv.allow_deletes_while_in_use is True
+
+    result = run_module(
+        'inventory',
+        {'name': 'foo-inventory', 'organization': organization.name, 'allow_deletes_while_in_use': False, 'state': 'present'},
+        admin_user,
+    )
+    assert not result.get('failed', False), result.get('msg', result)
+    assert result.get('changed', False), result
+
+    inv.refresh_from_db()
+    assert inv.allow_deletes_while_in_use is False
+
+
+@pytest.mark.django_db
+def test_inventory_allow_deletes_while_in_use_left_alone_when_omitted(run_module, admin_user, organization):
+    result = run_module(
+        'inventory',
+        {'name': 'foo-inventory', 'organization': organization.name, 'allow_deletes_while_in_use': True, 'state': 'present'},
+        admin_user,
+    )
+    assert not result.get('failed', False), result.get('msg', result)
+
+    result = run_module(
+        'inventory',
+        {'name': 'foo-inventory', 'organization': organization.name, 'description': 'changed', 'state': 'present'},
+        admin_user,
+    )
+    assert not result.get('failed', False), result.get('msg', result)
+
+    inv = Inventory.objects.get(name='foo-inventory')
+    assert inv.description == 'changed'
+    assert inv.allow_deletes_while_in_use is True

@@ -101,6 +101,42 @@
         that:
           - "result is not changed"
 
+    - name: Enable allow_deletes_while_in_use on the inventory
+      inventory:
+        name: "{{ inv_name1 }}"
+        organization: Default
+        allow_deletes_while_in_use: true
+        state: present
+      register: result
+
+    - assert:
+        that:
+          - "result is changed"
+
+    - name: Enable allow_deletes_while_in_use again
+      inventory:
+        name: "{{ inv_name1 }}"
+        organization: Default
+        allow_deletes_while_in_use: true
+        state: present
+      register: result
+
+    - assert:
+        that:
+          - "result is not changed"
+
+    - name: Disable allow_deletes_while_in_use on the inventory
+      inventory:
+        name: "{{ inv_name1 }}"
+        organization: Default
+        allow_deletes_while_in_use: false
+        state: present
+      register: result
+
+    - assert:
+        that:
+          - "result is changed"
+
     - name: Copy an inventory
       inventory:
         name: "copy_{{ inv_name1 }}"

@@ -51,6 +51,11 @@ argument_specs:
         #     required: false
         #     type: bool
         #     description: Prevent falling back to instance groups set on the organization
+        #   allow_deletes_while_in_use:
+        #     default: false
+        #     required: false
+        #     type: bool
+        #     description: Allow hosts of this inventory to be deleted while jobs are running against it
         #   state:
         #     default: "{{ controller_state | default('present') }}"
         #     required: false
