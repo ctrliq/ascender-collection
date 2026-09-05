@@ -110,6 +110,39 @@ controller_workflows:
     webhook_service: "{{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].description
                          | default(template_overrides_global.workflow_template.webhook_service)
                          | default(current_workflow_job_templates_asset_value.webhook_service) }}"
+{% if template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].job_tags is defined
+      or template_overrides_global.workflow_job_template.job_tags is defined
+      or current_workflow_job_templates_asset_value.job_tags %}
+    job_tags: "{{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].job_tags
+        | default(template_overrides_global.workflow_job_template.job_tags)
+        | default(current_workflow_job_templates_asset_value.job_tags) }}"
+{% endif %}
+{% if template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].skip_tags is defined
+      or template_overrides_global.workflow_job_template.skip_tags is defined
+      or current_workflow_job_templates_asset_value.skip_tags %}
+    skip_tags: "{{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].skip_tags
+        | default(template_overrides_global.workflow_job_template.skip_tags)
+        | default(current_workflow_job_templates_asset_value.skip_tags) }}"
+{% endif %}
+    ask_tags_on_launch: {{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].ask_tags_on_launch
+        | default(template_overrides_global.workflow_job_template.ask_tags_on_launch)
+        | default(current_workflow_job_templates_asset_value.ask_tags_on_launch | bool | lower) }}
+    ask_skip_tags_on_launch: {{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].ask_skip_tags_on_launch
+        | default(template_overrides_global.workflow_job_template.ask_skip_tags_on_launch)
+        | default(current_workflow_job_templates_asset_value.ask_skip_tags_on_launch | bool | lower) }}
+    ask_labels_on_launch: {{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].ask_labels_on_launch
+        | default(template_overrides_global.workflow_job_template.ask_labels_on_launch)
+        | default(current_workflow_job_templates_asset_value.ask_labels_on_launch | bool | lower) }}
+    ask_scm_branch_on_launch: {{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].ask_scm_branch_on_launch
+        | default(template_overrides_global.workflow_job_template.ask_scm_branch_on_launch)
+        | default(current_workflow_job_templates_asset_value.ask_scm_branch_on_launch | bool | lower) }}
+{% if template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].webhook_credential is defined
+      or template_overrides_global.workflow_job_template.webhook_credential is defined
+      or current_workflow_job_templates_asset_value.summary_fields.webhook_credential is defined %}
+    webhook_credential: "{{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].webhook_credential
+        | default(template_overrides_global.workflow_job_template.webhook_credential)
+        | default(current_workflow_job_templates_asset_value.summary_fields.webhook_credential.name) }}"
+{% endif %}
 {% if template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].extra_vars is defined
       or template_overrides_global.workflow_template.extra_vars is defined
       or (current_workflow_job_templates_asset_value.extra_vars and current_workflow_job_templates_asset_value.extra_vars | from_yaml | string is not match('None')) %}

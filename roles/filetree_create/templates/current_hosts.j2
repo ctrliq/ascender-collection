@@ -8,6 +8,9 @@ controller_hosts:
                      | default(template_overrides_global.host.description)
                      | default(host.description) }}"
     inventory: "{{ host.summary_fields.inventory.name | default('ToDo: The host \'' + host.name + '\' must have an associated inventory') }}"
+    enabled: {{ template_overrides_resources.host[host.name].enabled
+                | default(template_overrides_global.host.enabled)
+                | default(host.enabled | bool | lower) }}
 {% if template_overrides_resources.host[host.name].variables is defined
       or template_overrides_global.host.variables is defined
       or (host.variables and host.variables != '---' and host.variables != '') %}

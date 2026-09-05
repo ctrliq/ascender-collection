@@ -37,6 +37,15 @@ controller_templates:
     job_slice_count: {{ template_overrides_resources.job_template[current_job_templates_asset_value.name].job_slice_count
                   | default(template_overrides_global.job_template.job_slice_count)
                   | default(current_job_templates_asset_value.job_slice_count) }}
+{% set _job_template_instance_groups = query(controller_api_plugin, current_job_templates_asset_value.related.instance_groups,
+                     host=controller_hostname, oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs,
+                     return_all=true, max_objects=query_controller_api_max_objects) %}
+{% if _job_template_instance_groups | length > 0 %}
+    instance_groups:
+{%   for _instance_group in _job_template_instance_groups %}
+      - "{{ _instance_group.name }}"
+{%   endfor %}
+{% endif %}
     use_fact_cache: {{ template_overrides_resources.job_template[current_job_templates_asset_value.name].use_fact_cache
                   | default(template_overrides_global.job_template.use_fact_cache)
                   | default(current_job_templates_asset_value.use_fact_cache | bool | lower) }}
