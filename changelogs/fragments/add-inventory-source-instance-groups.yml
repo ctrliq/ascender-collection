@@ -1,0 +1,5 @@
+minor_changes:
+  - inventory_source - add ``instance_groups`` parameter, so an inventory source can be pinned to the instance groups it syncs on
+    (added to the API in Ascender 25.5.0). The association is ordered, the same way it is on inventories and job templates.
+  - inventory_sources role - accept ``instance_groups`` on each source and pass it to the module.
+  - filetree_create - export the instance groups of an inventory source, so they survive an export and import round trip.

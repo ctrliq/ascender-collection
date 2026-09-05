@@ -107,6 +107,11 @@ options:
       default: "present"
       choices: ["present", "absent", "exists"]
       type: str
+    instance_groups:
+      description:
+        - list of Instance Group names, IDs, or named URLs for this inventory source to run on.
+      type: list
+      elements: str
     notification_templates_started:
       description:
         - list of notifications to send on start
@@ -193,6 +198,7 @@ def main():
         update_cache_timeout=dict(type='int'),
         source_project=dict(),
         scm_branch=dict(type='str'),
+        instance_groups=dict(type="list", elements='str'),
         notification_templates_started=dict(type="list", elements='str'),
         notification_templates_success=dict(type="list", elements='str'),
         notification_templates_error=dict(type="list", elements='str'),
@@ -237,6 +243,12 @@ def main():
 
     # Attempt to look up associated field items the user specified.
     association_fields = {}
+
+    instance_group_names = module.params.get('instance_groups')
+    if instance_group_names is not None:
+        association_fields['instance_groups'] = []
+        for item in instance_group_names:
+            association_fields['instance_groups'].append(module.resolve_name_to_id('instance_groups', item))
 
     notifications_start = module.params.get('notification_templates_started')
     if notifications_start is not None:
