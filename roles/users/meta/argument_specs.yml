@@ -33,6 +33,10 @@ argument_specs:
         #     required: false
         #     type: bool
         #     description: Whether the user is a superuser
+        #   preferred_language:
+        #     required: false
+        #     type: str
+        #     description: Language the controller UI is shown in for this user, for example en-us.
         #   is_system_auditor:
         #     default: false
         #     required: false

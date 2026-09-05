@@ -32,6 +32,16 @@ argument_specs:
         #     required: false
         #     type: dict
         #     description: Any extra vars required to launch the job. ask_extra_vars needs to be set to True via controller_job_template module.
+        #   tags:
+        #     required: false
+        #     type: list
+        #     elements: str
+        #     description: Specific tags to use for the job, only used if prompt for tags is set.
+        #   skip_tags:
+        #     required: false
+        #     type: list
+        #     elements: str
+        #     description: Specific tags to skip for the job, only used if prompt for tags is set.
         #   wait:
         #     required: false
         #     type: bool

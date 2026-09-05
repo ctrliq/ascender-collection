@@ -20,6 +20,7 @@
           | default((false if controller_configuration_users_enforce_defaults else omit))) }}"
         update_secrets: "{{ __controller_user_accounts_item.update_secrets | default((false if controller_configuration_users_enforce_defaults else omit)) }}"
         organization: "{{ __controller_user_accounts_item.organization | default(omit) }}"
+        preferred_language: "{{ __controller_user_accounts_item.preferred_language | default(omit, true) }}"
         state: "{{ __controller_user_accounts_item.state | default(controller_state | default(omit, true)) }}"
 
         # Role Standard Options

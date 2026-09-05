@@ -206,6 +206,10 @@ argument_specs:
         #     required: false
         #     type: int
         #     description: The number of jobs to slice into at runtime. Will cause the Job Template to launch a workflow if value is greater than 1.
+        #   job_slice_pinned_hosts:
+        #     required: false
+        #     type: str
+        #     description: Comma separated list of host names to include in every slice of a sliced job.
         #   webhook_service:
         #     required: false
         #     type: str
@@ -214,6 +218,10 @@ argument_specs:
         #     required: false
         #     type: str
         #     description: Personal Access Token for posting back the status to the service API
+        #   webhook_key:
+        #     required: false
+        #     type: str
+        #     description: Shared secret the webhook service uses to sign its requests. The API never returns it, so supplying it always reports a change.
         #   scm_branch:
         #     required: false
         #     type: str

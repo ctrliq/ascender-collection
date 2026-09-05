@@ -94,6 +94,9 @@ This also speeds up the overall role.
 |`scm_delete_on_update`|""|no|bool|Remove the repository completely before updating.|
 |`scm_track_submodules`|""|no|bool|Track submodules latest commit on specified branch.|
 |`scm_update_on_launch`|""|no|bool|Before an update to the local repository before launching a job with this project.|
+|`webhook_service`|""|no|str|Service that webhook requests will be accepted from (github, gitlab)|
+|`webhook_ref_filter`|""|no|str|Git reference the webhook has to match before the project is synced, for example refs/heads/main.|
+|`webhook_key`|""|no|str|Shared secret the webhook service uses to sign its requests. The API never returns it, so supplying it always reports a change.|
 |`scm_update_cache_timeout`|""|no|str|Cache Timeout to cache prior project syncs for a certain number of seconds. Only valid if scm_update_on_launch is to True, otherwise ignored.|
 |`allow_override`|""|no|str|Allow changing the SCM branch or revision in a job template that uses this project.|
 |`timeout`|""|no|int|The amount of time (in seconds) to run before the SCM Update is canceled. A value of 0 means no timeout.|

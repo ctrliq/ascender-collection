@@ -96,6 +96,10 @@ argument_specs:
         #     required: false
         #     type: str
         #     description: Personal Access Token for posting back the status to the service API
+        #   webhook_key:
+        #     required: false
+        #     type: str
+        #     description: Shared secret the webhook service uses to sign its requests. The API never returns it, so supplying it always reports a change.
         #   scm_branch:
         #     required: false
         #     type: str
