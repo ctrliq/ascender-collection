@@ -1,0 +1,7 @@
+bugfixes:
+  - filetree_create - export a group's ``children``. Without them the export flattened a nested inventory, every group came
+    back but the hierarchy between them was gone.
+  - groups role - associate children in a second pass, once every group in the list exists. The role handles the list
+    asynchronously, so a group naming a child that the same run had not created yet failed with
+    ``Could not find groups with name <child>``, which is exactly the shape the export produces when a parent is listed
+    before its child.
