@@ -37,6 +37,13 @@ controller_templates:
     job_slice_count: {{ template_overrides_resources.job_template[current_job_templates_asset_value.name].job_slice_count
                   | default(template_overrides_global.job_template.job_slice_count)
                   | default(current_job_templates_asset_value.job_slice_count) }}
+{% if template_overrides_resources.job_template[current_job_templates_asset_value.name].job_slice_pinned_hosts is defined
+      or template_overrides_global.job_template.job_slice_pinned_hosts is defined
+      or current_job_templates_asset_value.job_slice_pinned_hosts %}
+    job_slice_pinned_hosts: "{{ template_overrides_resources.job_template[current_job_templates_asset_value.name].job_slice_pinned_hosts
+                                | default(template_overrides_global.job_template.job_slice_pinned_hosts)
+                                | default(current_job_templates_asset_value.job_slice_pinned_hosts) }}"
+{% endif %}
     use_fact_cache: {{ template_overrides_resources.job_template[current_job_templates_asset_value.name].use_fact_cache
                   | default(template_overrides_global.job_template.use_fact_cache)
                   | default(current_job_templates_asset_value.use_fact_cache | bool | lower) }}

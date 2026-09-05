@@ -124,8 +124,10 @@ This also speeds up the overall role.
 |`timeout`|""|no|int|Maximum time in seconds to wait for a job to finish (server-side).|
 |`instance_groups`|""|no|list|list of Instance Groups for this Job Template to run on.|
 |`job_slice_count`|""|no|int|The number of jobs to slice into at runtime. Will cause the Job Template to launch a workflow if value is greater than 1.|
+|`job_slice_pinned_hosts`|""|no|str|Comma separated list of host names to include in every slice of a sliced job.|
 |`webhook_service`|""|no|str|Service that webhook requests will be accepted from (github, gitlab)|
 |`webhook_credential`|""|no|str|Personal Access Token for posting back the status to the service API|
+|`webhook_key`|""|no|str|Shared secret the webhook service uses to sign its requests. The API never returns it, so supplying it always reports a change.|
 |`scm_branch`|""|no|str|Branch to use in job run. Project default used if blank. Only allowed if project allow_override field is set to true.|
 |`labels`|""|no|list|The labels applied to this job template. NOTE: Labels must be created with the [labels](https://github.com/redhat-cop/ctrliq.ascender/tree/devel/roles/labels) role first, an error will occur if the label supplied to this role does not exist.|
 |`notification_templates_started`|""|no|list|The notifications on started to use for this organization in a list.|

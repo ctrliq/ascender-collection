@@ -37,6 +37,20 @@ controller_projects:
     scm_update_on_launch: "{{ template_overrides_resources.project[current_projects_asset_value.name].scm_update_on_launch
                               | default(template_overrides_global.project.scm_update_on_launch)
                               | default(current_projects_asset_value.scm_update_on_launch) }}"
+{% if template_overrides_resources.project[current_projects_asset_value.name].webhook_service is defined
+      or template_overrides_global.project.webhook_service is defined
+      or current_projects_asset_value.webhook_service %}
+    webhook_service: "{{ template_overrides_resources.project[current_projects_asset_value.name].webhook_service
+                         | default(template_overrides_global.project.webhook_service)
+                         | default(current_projects_asset_value.webhook_service) }}"
+{% endif %}
+{% if template_overrides_resources.project[current_projects_asset_value.name].webhook_ref_filter is defined
+      or template_overrides_global.project.webhook_ref_filter is defined
+      or current_projects_asset_value.webhook_ref_filter %}
+    webhook_ref_filter: "{{ template_overrides_resources.project[current_projects_asset_value.name].webhook_ref_filter
+                            | default(template_overrides_global.project.webhook_ref_filter)
+                            | default(current_projects_asset_value.webhook_ref_filter) }}"
+{% endif %}
     scm_update_cache_timeout: "{{ template_overrides_resources.project[current_projects_asset_value.name].scm_update_cache_timeout
                                   | default(template_overrides_global.project.scm_update_cache_timeout)
                                   | default(current_projects_asset_value.scm_update_cache_timeout) }}"

@@ -1,0 +1,9 @@
+minor_changes:
+  - job_templates role - accept ``job_slice_pinned_hosts`` and ``webhook_key``.
+  - projects role - accept ``webhook_service``, ``webhook_ref_filter`` and ``webhook_key``. The role had no webhook support at all.
+  - users role - accept ``preferred_language``.
+  - workflow_job_templates role - accept ``webhook_key``.
+  - bulk_job_launch role - accept ``timeout``.
+  - workflow_launch role - accept ``tags`` and ``skip_tags``.
+  - filetree_create - export ``job_slice_pinned_hosts`` on job templates, ``webhook_service`` and ``webhook_ref_filter`` on projects,
+    and ``preferred_language`` on users. ``webhook_key`` is a secret the API never returns, so it cannot be exported.

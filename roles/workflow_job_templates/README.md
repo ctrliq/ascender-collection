@@ -109,6 +109,7 @@ This also speeds up the overall role.
 |`survey`|""|no|dict|JSON/YAML dict formatted survey definition. Alias of survey_spec|
 |`webhook_service`|""|no|str|Service that webhook requests will be accepted from (github, gitlab)|
 |`webhook_credential`|""|no|str|Personal Access Token for posting back the status to the service API|
+|`webhook_key`|""|no|str|Shared secret the webhook service uses to sign its requests. The API never returns it, so supplying it always reports a change.|
 
 ### Variables For Workflow Job Template Node
 

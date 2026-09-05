@@ -19,6 +19,13 @@ controller_user_accounts:
     superuser: "{{ template_overrides_resources.user[current_users_asset_value.username].is_superuser
                    | default(template_overrides_global.user.is_superuser)
                    | default(current_users_asset_value.is_superuser) }}"
+{% if template_overrides_resources.user[current_users_asset_value.username].preferred_language is defined
+      or template_overrides_global.user.preferred_language is defined
+      or current_users_asset_value.preferred_language %}
+    preferred_language: "{{ template_overrides_resources.user[current_users_asset_value.username].preferred_language
+                            | default(template_overrides_global.user.preferred_language)
+                            | default(current_users_asset_value.preferred_language) }}"
+{% endif %}
     update_secrets: false
 {% if last_user | default(true) | bool %}
 ...
