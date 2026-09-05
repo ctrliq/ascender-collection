@@ -71,6 +71,11 @@ argument_specs:
         #     required: false
         #     type: str
         #     description: Execution Environment to use for the source.
+        #   instance_groups:
+        #     required: false
+        #     type: list
+        #     elements: str
+        #     description: List of Instance Groups for this inventory source to run on.
         #   overwrite:
         #     required: false
         #     type: bool

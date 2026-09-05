@@ -38,6 +38,10 @@
                               | default(__controller_source_item.source_project
                               | default(('' if controller_configuration_inventory_sources_enforce_defaults else omit), true)) }}"
         scm_branch: "{{ __controller_source_item.scm_branch | default(('' if controller_configuration_inventory_sources_enforce_defaults else omit), true) }}"
+        instance_groups: "{{ __controller_source_item.instance_groups
+          | default((__controller_source_item.related.instance_groups | map(attribute='name')
+          | list if __controller_source_item.related.instance_groups is defined))
+          | default(([] if controller_configuration_inventory_sources_enforce_defaults else omit), true) }}"
         state: "{{ __controller_source_item.state | default(controller_state | default('present')) }}"
         notification_templates_started: "{{ __controller_source_item.notification_templates_started
           | default((__controller_source_item.related.notification_templates_started | map(attribute='name')

@@ -4,7 +4,7 @@ __metaclass__ = type
 
 import pytest
 
-from awx.main.models import Organization, Inventory, InventorySource, Project
+from awx.main.models import InstanceGroup, Organization, Inventory, InventorySource, Project
 
 
 @pytest.fixture
@@ -170,3 +170,31 @@ def test_scm_source_needs_project(run_module, admin_user, base_inventory):
     assert result.pop('failed', None), result
 
     assert 'Project required for scm type sources' in result.get('msg', '')
+
+
+@pytest.mark.django_db
+def test_inventory_source_instance_groups(run_module, admin_user, base_inventory):
+    ig1 = InstanceGroup.objects.create(name='test-ig-1')
+    ig2 = InstanceGroup.objects.create(name='test-ig-2')
+
+    result = run_module(
+        'inventory_source',
+        dict(name='Test ec2 Inventory Source', inventory=base_inventory.name, source='ec2', state='present', instance_groups=[ig1.name, ig2.name]),
+        admin_user,
+    )
+    assert not result.get('failed', False), result.get('msg', result)
+    assert result.get('changed', False), result
+
+    inv_src = InventorySource.objects.get(name='Test ec2 Inventory Source')
+    # the association is ordered, so compare the list and not a set
+    assert [ig.name for ig in inv_src.instance_groups.all()] == [ig1.name, ig2.name]
+
+    result = run_module(
+        'inventory_source',
+        dict(name='Test ec2 Inventory Source', inventory=base_inventory.name, source='ec2', state='present', instance_groups=[]),
+        admin_user,
+    )
+    assert not result.get('failed', False), result.get('msg', result)
+    assert result.get('changed', False), result
+
+    assert inv_src.instance_groups.count() == 0

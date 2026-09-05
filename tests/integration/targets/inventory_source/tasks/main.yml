@@ -9,6 +9,7 @@
     openstack_cred: "AWX-Collection-tests-inventory_source-cred-openstack-{{ test_id }}"
     openstack_inv: "AWX-Collection-tests-inventory_source-inv-openstack-{{ test_id }}"
     openstack_inv_source: "AWX-Collection-tests-inventory_source-inv-source-openstack-{{ test_id }}"
+    ig_name: "AWX-Collection-tests-inventory_source-ig-{{ test_id }}"
 
 - name: Add a credential
   credential:
@@ -112,6 +113,79 @@
 - assert:
     that:
       - "result is changed"
+
+- name: Create an instance group
+  instance_group:
+    name: "{{ ig_name }}"
+    state: present
+
+- name: Create an inventory source running on that instance group
+  inventory_source:
+    name: "{{ openstack_inv_source }}"
+    inventory: "{{ openstack_inv }}"
+    source: ec2
+    instance_groups:
+      - "{{ ig_name }}"
+    state: present
+  register: result
+
+- assert:
+    that:
+      - "result is changed"
+
+- name: Read back the instance groups of the source
+  set_fact:
+    source_igs: "{{ query('ctrliq.ascender.controller_api', 'inventory_sources/' + (result.id | string) + '/instance_groups') }}"
+
+- assert:
+    that:
+      - source_igs | map(attribute='name') | list == [ig_name]
+
+- name: Set the same instance group again
+  inventory_source:
+    name: "{{ openstack_inv_source }}"
+    inventory: "{{ openstack_inv }}"
+    source: ec2
+    instance_groups:
+      - "{{ ig_name }}"
+    state: present
+  register: result
+
+- assert:
+    that:
+      - "result is not changed"
+
+- name: Take the instance group away
+  inventory_source:
+    name: "{{ openstack_inv_source }}"
+    inventory: "{{ openstack_inv }}"
+    source: ec2
+    instance_groups: []
+    state: present
+  register: result
+
+- assert:
+    that:
+      - "result is changed"
+
+- name: Read back the instance groups of the source
+  set_fact:
+    source_igs: "{{ query('ctrliq.ascender.controller_api', 'inventory_sources/' + (result.id | string) + '/instance_groups') }}"
+
+- assert:
+    that:
+      - source_igs | length == 0
+
+- name: Delete the inventory source
+  inventory_source:
+    name: "{{ openstack_inv_source }}"
+    inventory: "{{ openstack_inv }}"
+    state: absent
+
+- name: Delete the instance group
+  instance_group:
+    name: "{{ ig_name }}"
+    state: absent
 
 - name: Delete the credential
   credential:
