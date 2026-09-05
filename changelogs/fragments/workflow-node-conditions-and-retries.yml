@@ -1,0 +1,6 @@
+minor_changes:
+  - workflow_job_template - handle ``max_retries`` and ``related.condition_nodes`` on the inline ``workflow_nodes``, so node retries and
+    conditional connectors can be described as code instead of only through the ``workflow_job_template_node`` module.
+  - workflow_job_templates role - pass ``max_retries`` and ``condition_nodes`` through to the node module.
+  - filetree_create - export a node's ``max_retries`` and its conditional links, so a workflow using them survives an export and import
+    round trip.

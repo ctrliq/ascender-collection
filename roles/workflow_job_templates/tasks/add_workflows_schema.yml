@@ -36,6 +36,7 @@
         workflow: "{{ __workflow_loop_item.name | mandatory }}" # Workflow job template name to associate with
         state: "{{ __workflow_loop_node_item.state | default(controller_state | default('present')) }}"
         all_parents_must_converge: "{{ __workflow_loop_node_item.all_parents_must_converge | default('false') }}"
+        max_retries: "{{ __workflow_loop_node_item.max_retries | default(omit) }}"
         organization: "{{ __workflow_loop_item.organization.name | default(__workflow_loop_item.organization | default(omit)) }}" # organization
 
         # Role Standard Options
@@ -90,6 +91,8 @@
           'defined') | map(attribute='identifier')) | list }}" # Nodes to advance on success (green links)
         failure_nodes: "{{ __workflow_loop_node_item.failure_nodes | default(__workflow_loop_node_item.related.failure_nodes | default([], true) | selectattr('identifier',
           'defined') | map(attribute='identifier')) | list }}" # Nodes to advance on failure (red links)
+        condition_nodes: "{{ __workflow_loop_node_item.condition_nodes | default(__workflow_loop_node_item.related.condition_nodes | default([], true))
+          | list }}" # Nodes to advance when an upstream artifact matches a condition
         state: "{{ __workflow_loop_node_item.state | default(controller_state | default('present')) }}"
         organization: "{{ __workflow_loop_item.organization.name | default(__workflow_loop_item.organization | default(omit)) }}" # organization
         controller_username: "{{ controller_username | default(omit, true) }}"
@@ -107,7 +110,7 @@
       # Execute only the nodes that define links to the following
       when: ((__workflow_loop_node_item.always_nodes is defined and __workflow_loop_node_item.always_nodes | length > 0) or (__workflow_loop_node_item.success_nodes is
         defined and __workflow_loop_node_item.success_nodes | length > 0) or (__workflow_loop_node_item.failure_nodes is defined and __workflow_loop_node_item.failure_nodes
-        | length > 0))
+        | length > 0) or (__workflow_loop_node_item.condition_nodes is defined and __workflow_loop_node_item.condition_nodes | length > 0))
       async: "{{ ansible_check_mode | ternary(0, 1000) }}"
       poll: 0
       register: __workflows_link_async

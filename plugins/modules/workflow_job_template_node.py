@@ -357,8 +357,6 @@ id:
 
 from ..module_utils.controller_api import ControllerAPIModule
 
-import json
-
 
 def main():
     # Any additional arguments that are not fields of the item can be added here
@@ -538,7 +536,6 @@ def main():
         # Get the created/updated node
         search_fields_cn = {'identifier': identifier, 'workflow_job_template': workflow_job_template_id}
         current_node = module.get_one('workflow_job_template_nodes', **{'data': search_fields_cn})
-        condition_endpoint = f"{current_node['url']}condition_nodes/"
 
         # Build desired condition list with resolved node IDs
         desired_conditions = []
@@ -549,78 +546,9 @@ def main():
             target_node = module.get_one('workflow_job_template_nodes', **{'data': cn_lookup})
             if target_node is None:
                 module.fail_json(msg=f"Could not find condition_nodes entry with identifier {cn['identifier']}")
-            desired_conditions.append({
-                'id': target_node['id'],
-                'trigger': cn.get('trigger', 'success'),
-                'artifact_key': cn['artifact_key'],
-                'operator': cn.get('operator', 'eq'),
-                # The API stores expected_value as text and JSON encodes anything that is not
-                # already a string, so encode it the same way here. That keeps what we send and
-                # what we compare against in the form the controller reports back.
-                'expected_value': cn['expected_value'] if isinstance(cn['expected_value'], str) else json.dumps(cn['expected_value']),
-            })
+            desired_conditions.append(module.build_condition_node(target_node['id'], cn))
 
-        # Get existing condition nodes. The condition_nodes sub-endpoint lists the target nodes,
-        # which carry none of the per-edge condition data, so read that data from the node itself:
-        # condition_edges holds one {id, trigger, artifact_key, operator, expected_value} entry per
-        # conditional link, where id is the target node.
-        existing_conditions = current_node.get('condition_edges') or []
-        existing_ids = {c['id'] for c in existing_conditions}
-        desired_ids = {c['id'] for c in desired_conditions}
-
-        # Disassociate removed condition nodes
-        for old_id in existing_ids - desired_ids:
-            response = module.post_endpoint(condition_endpoint, **{'data': {'id': int(old_id), 'disassociate': True}})
-            if response['status_code'] == 204:
-                module.json_output['changed'] = True
-            else:
-                module.fail_json(
-                    msg=f"Failed to disassociate condition node {response['json'].get('detail', response['json'])}"
-                )
-
-        # Associate new or update existing condition nodes
-        for dc in desired_conditions:
-            # Check if this condition node already exists with the same parameters
-            existing_match = None
-            for ec in existing_conditions:
-                if ec['id'] == dc['id']:
-                    existing_match = ec
-                    break
-
-            if existing_match is not None:
-                # Check if the condition parameters changed
-                changed = False
-                for field in ('trigger', 'artifact_key', 'operator', 'expected_value'):
-                    if dc[field] != existing_match.get(field):
-                        changed = True
-                        break
-                if changed:
-                    # Disassociate and re-associate with new parameters
-                    response = module.post_endpoint(
-                        condition_endpoint, **{'data': {'id': int(dc['id']), 'disassociate': True}}
-                    )
-                    if response['status_code'] == 204:
-                        module.json_output['changed'] = True
-                    else:
-                        module.fail_json(
-                            msg=f"Failed to disassociate condition node {response['json'].get('detail', response['json'])}"
-                        )
-                    response = module.post_endpoint(condition_endpoint, **{'data': dc})
-                    if response['status_code'] in [200, 201, 204]:
-                        module.json_output['changed'] = True
-                    else:
-                        module.fail_json(
-                            msg=f"Failed to associate condition node {response['json'].get('detail', response['json'])}"
-                        )
-            else:
-                # New association
-                response = module.post_endpoint(condition_endpoint, **{'data': dc})
-                if response['status_code'] in [200, 201, 204]:
-                    module.json_output['changed'] = True
-                else:
-                    module.fail_json(
-                        msg=f"Failed to associate condition node {response['json'].get('detail', response['json'])}"
-                    )
+        module.modify_condition_node_associations(current_node, desired_conditions)
 
         if not approval_node:
             module.exit_json(**module.json_output)

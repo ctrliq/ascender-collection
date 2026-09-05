@@ -53,6 +53,9 @@ controller_workflows:
 {% endif %}
         organization: "{{ current_workflow_job_templates_asset_value.summary_fields.organization.name | default(organization if organization != 'ORGANIZATIONLESS' else 'ToDo: The WF \'' + current_workflow_job_templates_asset_value.name + '\' must belong to an organization') }}"
         all_parents_must_converge: "{{ node.all_parents_must_converge }}"
+{% if node.max_retries is defined and node.max_retries %}
+        max_retries: {{ node.max_retries }}
+{% endif %}
 {% if node.extra_data is defined and node.extra_data | length > 0 %}
         extra_data:
 {%   set extra_data_contents = template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].extra_data
@@ -86,6 +89,16 @@ controller_workflows:
         failure_nodes:
 {% for failure in node.failure_nodes %}
           - "{{ query(controller_api_plugin, 'workflow_job_template_nodes/'+(failure | string), host=controller_hostname, oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs)[0].identifier }}"
+{% endfor %}
+{% endif %}
+{% if node.condition_edges is defined and node.condition_edges | length > 0 %}
+        condition_nodes:
+{% for edge in node.condition_edges %}
+          - identifier: "{{ query(controller_api_plugin, 'workflow_job_template_nodes/'+(edge.id | string), host=controller_hostname, oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs)[0].identifier }}"
+            trigger: "{{ edge.trigger }}"
+            artifact_key: {{ edge.artifact_key | to_json }}
+            operator: "{{ edge.operator }}"
+            expected_value: {{ edge.expected_value | to_json }}
 {% endfor %}
 {% endif %}
 {% endfor %}

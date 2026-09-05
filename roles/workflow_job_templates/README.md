@@ -130,6 +130,8 @@ This also speeds up the overall role.
 |`always_nodes`|""|no|list|Nodes that will run after this node completes.|
 |`failure_nodes`|""|no|list|Nodes that will run after this node completes.|
 |`success_nodes`|""|no|list|Nodes that will run after this node completes.|
+|`condition_nodes`|""|no|list|Nodes that will run after this node when an upstream artifact matches a condition. Each entry takes `identifier`, `artifact_key`, `expected_value`, and optionally `trigger` and `operator`.|
+|`max_retries`|""|no|int|Maximum number of times this node's job is automatically retried after failing before its failure paths are followed.|
 |`verbosity`|""|no|str|Verbosity applied as a prompt, if job template prompts for verbosity|
 |`state`|""|no|str|Desired state of the resource|
 |`credentials`|""|no|list|Credentials to be applied to job as launch-time prompts.|
