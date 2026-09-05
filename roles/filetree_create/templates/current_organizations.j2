@@ -6,6 +6,34 @@ controller_organizations:
     description: "{{ template_overrides_resources.organization[current_organization.name].description
                      | default(template_overrides_global.organization.description)
                      | default(current_organization.description) }}"
+    max_hosts: {{ template_overrides_resources.organization[current_organization.name].max_hosts
+                  | default(template_overrides_global.organization.max_hosts)
+                  | default(current_organization.max_hosts) }}
+{% if template_overrides_resources.organization[current_organization.name].default_environment is defined
+      or template_overrides_global.organization.default_environment is defined
+      or current_organization.summary_fields.default_environment is defined %}
+    default_environment: "{{ template_overrides_resources.organization[current_organization.name].default_environment
+                             | default(template_overrides_global.organization.default_environment)
+                             | default(current_organization.summary_fields.default_environment.name) }}"
+{% endif %}
+{% set _organization_instance_groups = query(controller_api_plugin, current_organization.related.instance_groups,
+                     host=controller_hostname, oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs,
+                     return_all=true, max_objects=query_controller_api_max_objects) %}
+{% if _organization_instance_groups | length > 0 %}
+    instance_groups:
+{%   for _instance_group in _organization_instance_groups %}
+      - "{{ _instance_group.name }}"
+{%   endfor %}
+{% endif %}
+{% set _galaxy_credentials = query(controller_api_plugin, current_organization.related.galaxy_credentials,
+                     host=controller_hostname, oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs,
+                     return_all=true, max_objects=query_controller_api_max_objects) %}
+{% if _galaxy_credentials | length > 0 %}
+    galaxy_credentials:
+{%   for _galaxy_credential in _galaxy_credentials %}
+      - "{{ _galaxy_credential.name }}"
+{%   endfor %}
+{% endif %}
 {% if query_notification_error | length > 0 %}
     notification_templates_error:
 {% for notification_error in query_notification_error %}

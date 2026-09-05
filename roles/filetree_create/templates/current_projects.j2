@@ -18,6 +18,24 @@ controller_projects:
     scm_url: "{{ template_overrides_resources.project[current_projects_asset_value.name].scm_url
                  | default(template_overrides_global.project.scm_url)
                  | default(current_projects_asset_value.scm_url) }}"
+    scm_track_submodules: {{ template_overrides_resources.project[current_projects_asset_value.name].scm_track_submodules
+                               | default(template_overrides_global.project.scm_track_submodules)
+                               | default(current_projects_asset_value.scm_track_submodules | bool | lower) }}
+{% if template_overrides_resources.project[current_projects_asset_value.name].signature_validation_credential is defined
+      or template_overrides_global.project.signature_validation_credential is defined
+      or current_projects_asset_value.summary_fields.signature_validation_credential is defined %}
+    signature_validation_credential: "{{ template_overrides_resources.project[current_projects_asset_value.name].signature_validation_credential
+                                           | default(template_overrides_global.project.signature_validation_credential)
+                                           | default(current_projects_asset_value.summary_fields.signature_validation_credential.name) }}"
+{% endif %}
+{# local_path only means something for manual projects; for an SCM project the
+   controller generates it, and exporting that generated value would pin the new
+   project to a directory that belongs to the old one #}
+{% if not current_projects_asset_value.scm_type and current_projects_asset_value.local_path %}
+    local_path: "{{ template_overrides_resources.project[current_projects_asset_value.name].local_path
+                      | default(template_overrides_global.project.local_path)
+                      | default(current_projects_asset_value.local_path) }}"
+{% endif %}
 {% if template_overrides_resources.project[current_projects_asset_value.name].scm_credential is defined
       or template_overrides_global.scm_credential is defined
       or current_projects_asset_value.summary_fields.credential is defined %}

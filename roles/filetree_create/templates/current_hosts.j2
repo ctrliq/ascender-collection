@@ -15,6 +15,9 @@ controller_hosts:
                      | default(template_overrides_global.host.instance_id)
                      | default(host.instance_id) }}"
 {% endif %}
+    enabled: {{ template_overrides_resources.host[host.name].enabled
+                | default(template_overrides_global.host.enabled)
+                | default(host.enabled | bool | lower) }}
 {% if template_overrides_resources.host[host.name].variables is defined
       or template_overrides_global.host.variables is defined
       or (host.variables and host.variables != '---' and host.variables != '') %}

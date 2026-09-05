@@ -1,0 +1,13 @@
+bugfixes:
+  - filetree_create - export the fields the templates were dropping, so a controller can be rebuilt from its own export.
+    Inventory sources lost ``host_filter``, ``execution_environment``, ``verbosity``, ``timeout``, ``overwrite_vars``,
+    ``update_cache_timeout``, ``scm_branch``, ``enabled_var`` and ``enabled_value``; instance groups lost
+    ``is_container_group``, ``credential``, ``pod_spec_override``, ``max_forks``, ``max_concurrent_jobs`` and
+    ``policy_instance_list``, so a container group came back as a plain one; organizations lost ``max_hosts``,
+    ``default_environment``, ``instance_groups`` and ``galaxy_credentials``; workflows lost ``job_tags``, ``skip_tags``,
+    ``webhook_credential`` and four ``ask_*_on_launch`` flags; projects lost ``scm_track_submodules`` and
+    ``signature_validation_credential``; job templates lost ``instance_groups``; a disabled host came back enabled; and a
+    notification template lost its description.
+minor_changes:
+  - filetree_create - export ``local_path`` for manual projects. It is left out for SCM projects, where the controller
+    generates the value and exporting it would pin the new project to the old project's directory.
