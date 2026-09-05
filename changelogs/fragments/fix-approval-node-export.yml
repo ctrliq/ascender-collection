@@ -1,0 +1,10 @@
+bugfixes:
+  - filetree_create - export approval nodes as ``approval_node`` again. The block was nested inside the ``job_type`` guard, and approval
+    nodes carry no job type, so it never ran. It also matched the node type against ``approval`` while the API reports
+    ``workflow_approval``, and the match is anchored, so even reachable it would not have fired. Approval nodes came out of the export as
+    if they pointed at a unified job template and lost their approval settings, which meant a workflow with an approval could not be
+    rebuilt from its own export.
+minor_changes:
+  - filetree_create - export the approval fields ``context_template``, ``required_approvals`` and ``on_timeout``.
+  - workflow_job_template - document the approval fields ``context_template``, ``required_approvals`` and ``on_timeout``, which the module
+    already sent to the controller.

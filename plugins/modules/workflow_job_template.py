@@ -332,6 +332,26 @@ options:
                 - Only Valid and used if referencing an Approval Node
               default: 0
               type: int
+            context_template:
+              description:
+                - Jinja2 template rendered with the artifacts of the upstream nodes when the approval is created.
+                - The result is shown to the approver as the context message.
+                - Only Valid and used if referencing an Approval Node
+              type: str
+            required_approvals:
+              description:
+                - Number of distinct users that must approve before the node is considered approved.
+                - A single denial always denies the node.
+                - Only Valid and used if referencing an Approval Node
+              type: int
+            on_timeout:
+              description:
+                - Whether the approval node is automatically approved or denied when the timeout expires.
+                - Only Valid and used if referencing an Approval Node
+              type: str
+              choices:
+                - approve
+                - deny
         related:
           description:
             - Related items to this workflow node.
