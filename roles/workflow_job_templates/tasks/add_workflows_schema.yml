@@ -46,7 +46,7 @@
         controller_host: "{{ controller_hostname | default(omit, true) }}"
         controller_config_file: "{{ controller_config_file | default(omit, true) }}"
         validate_certs: "{{ controller_validate_certs | default(omit) }}"
-      loop: "{{ __workflow_loop_item.simplified_workflow_nodes }}"
+      loop: "{{ __workflow_loop_item.simplified_workflow_nodes | default([], true) }}"
       loop_control:
         loop_var: __workflow_loop_node_item
         label: "{{ __workflow_loop_item.name }}/{{ __workflow_loop_node_item.identifier }}"
@@ -99,7 +99,7 @@
         controller_host: "{{ controller_hostname | default(omit, true) }}"
         controller_config_file: "{{ controller_config_file | default(omit, true) }}"
         validate_certs: "{{ controller_validate_certs | default(omit) }}"
-      loop: "{{ __workflow_loop_item.simplified_workflow_nodes }}"
+      loop: "{{ __workflow_loop_item.simplified_workflow_nodes | default([], true) }}"
       loop_control:
         loop_var: __workflow_loop_node_item
         label: "{{ __workflow_loop_node_item.identifier }}"

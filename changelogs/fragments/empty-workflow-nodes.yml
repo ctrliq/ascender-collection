@@ -1,0 +1,7 @@
+bugfixes:
+  - workflow_job_templates role - stop failing on a workflow with no nodes. A workflow whose node list is absent, empty or
+    null is a workflow with no graph yet, not an error, and the role died on it with ``The `loop` value must resolve to a
+    'list', not 'NoneType'``.
+  - filetree_create - leave ``simplified_workflow_nodes`` out of a workflow that has no nodes, instead of writing the key
+    with nothing under it. That is where the null the role choked on came from, so a workflow created as a placeholder
+    could not be re-applied from its own export.

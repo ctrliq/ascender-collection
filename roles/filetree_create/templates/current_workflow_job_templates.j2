@@ -8,11 +8,13 @@ controller_workflows:
                              | default(current_workflow_job_templates_asset_value.description) | regex_replace("'", "''")
     }}'
     organization: "{{ current_workflow_job_templates_asset_value.summary_fields.organization.name | default(organization if organization != 'ORGANIZATIONLESS' else 'ToDo: The WF \'' + current_workflow_job_templates_asset_value.name + '\' must belong to an organization') }}"
-    simplified_workflow_nodes:
-{% for node in query(controller_api_plugin, 'api/v2/workflow_job_template_nodes/',
+{% set _workflow_nodes = query(controller_api_plugin, 'api/v2/workflow_job_template_nodes/',
                      query_params={'workflow_job_template': current_workflow_job_templates_asset_value.id},
                      host=controller_hostname, oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs,
                      return_all=true, max_objects=query_controller_api_max_objects) %}
+{% if _workflow_nodes | length > 0 %}
+    simplified_workflow_nodes:
+{% for node in _workflow_nodes %}
       - identifier: "{{ node.identifier }}"
 {% if node.summary_fields.inventory is defined %}
         inventory: "{{ node.summary_fields.inventory.name }}"
@@ -89,6 +91,7 @@ controller_workflows:
 {% endfor %}
 {% endif %}
 {% endfor %}
+{% endif %}
     ask_variables_on_launch: "{{  template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].ask_variables_on_launch
                                  | default(template_overrides_global.workflow_template.ask_variables_on_launch)
                                  | default(current_workflow_job_templates_asset_value.ask_variables_on_launch) }}"

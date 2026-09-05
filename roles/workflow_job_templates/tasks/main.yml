@@ -115,7 +115,7 @@
       loop_control:
         loop_var: __workflow_loop_item
       when:
-        - __workflow_loop_item.simplified_workflow_nodes is defined
+        - __workflow_loop_item.simplified_workflow_nodes | default([], true) | length > 0
         - (__workflow_loop_item.state | default('present')) ==  "present"
 
   always:
