@@ -33,6 +33,10 @@ argument_specs:
         #     required: false
         #     type: bool
         #     description: Whether the host is enabled
+        #   instance_id:
+        #     required: false
+        #     type: str
+        #     description: The value used by the remote inventory source to uniquely identify the host.
         #   state:
         #     default: "{{ controller_state | default('present') }}"
         #     required: false

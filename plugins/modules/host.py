@@ -38,6 +38,10 @@ options:
       description:
         - Variables to use for the host.
       type: dict
+    instance_id:
+      description:
+        - The value used by the remote inventory source to uniquely identify the host.
+      type: str
     state:
       description:
         - Desired state of the resource.
@@ -80,6 +84,7 @@ def main():
         inventory=dict(required=True),
         enabled=dict(type='bool'),
         variables=dict(type='dict'),
+        instance_id=dict(type='str'),
         state=dict(choices=['present', 'absent', 'exists'], default='present'),
     )
 
@@ -94,6 +99,7 @@ def main():
     enabled = module.params.get('enabled')
     state = module.params.get('state')
     variables = module.params.get('variables')
+    instance_id = module.params.get('instance_id')
 
     # Attempt to look up the related items the user specified (these will fail the module if not found)
     inventory_id = module.resolve_name_to_id('inventories', inventory)
@@ -116,6 +122,8 @@ def main():
         host_fields['description'] = description
     if variables is not None:
         host_fields['variables'] = json.dumps(variables)
+    if instance_id is not None:
+        host_fields['instance_id'] = instance_id
 
     # If the state was present and we can let the module build or update the existing host, this will return on its own
     module.create_or_update_if_needed(host, host_fields, endpoint='hosts', item_type='host')

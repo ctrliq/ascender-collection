@@ -1,0 +1,5 @@
+minor_changes:
+  - host - add ``instance_id`` parameter, the value a remote inventory source uses to uniquely identify the host.
+    The API has always accepted it and ``bulk_host_create`` already exposed it, the ``host`` module did not.
+  - hosts role - accept ``instance_id`` on each host and pass it to the module.
+  - filetree_create - export a host's ``instance_id``, so it survives an export and import round trip.

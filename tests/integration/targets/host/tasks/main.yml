@@ -98,6 +98,56 @@
     that:
       - "result is changed"
 
+- name: Create a host with an instance id
+  host:
+    name: "{{ host_name }}"
+    inventory: "{{ inv_name }}"
+    instance_id: i-0abc123def456
+    state: present
+  register: result
+
+- assert:
+    that:
+      - "result is changed"
+
+- name: Read back the instance id
+  ansible.builtin.set_fact:
+    host_instance_id: "{{ lookup('ctrliq.ascender.controller_api', 'hosts/' ~ result.id ~ '/').instance_id }}"
+
+- assert:
+    that:
+      - host_instance_id == 'i-0abc123def456'
+
+- name: Set the same instance id again
+  host:
+    name: "{{ host_name }}"
+    inventory: "{{ inv_name }}"
+    instance_id: i-0abc123def456
+    state: present
+  register: result
+
+- assert:
+    that:
+      - "result is not changed"
+
+- name: Clear the instance id
+  host:
+    name: "{{ host_name }}"
+    inventory: "{{ inv_name }}"
+    instance_id: ""
+    state: present
+  register: result
+
+- assert:
+    that:
+      - "result is changed"
+
+- name: Delete the host again
+  host:
+    name: "{{ host_name }}"
+    inventory: "{{ inv_name }}"
+    state: absent
+
 - name: Check module fails with correct msg
   host:
     name: test-host

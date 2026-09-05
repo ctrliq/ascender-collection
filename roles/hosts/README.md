@@ -103,6 +103,7 @@ The role will strip the double space between the curly bracket in order to provi
 |`inventory`|""|yes|str|The inventory the host applies against.|
 |`enabled`||no|bool|If the host should be enabled.|
 |`variables`|{}|no|str|The variables applicable to the host.|
+|`instance_id`|""|no|str|The value used by the remote inventory source to uniquely identify the host.|
 |`state`|`present`|no|str|Desired state of the resource.|
 
 ### Standard Host Data Structure
