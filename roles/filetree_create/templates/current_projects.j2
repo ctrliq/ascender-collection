@@ -28,14 +28,6 @@ controller_projects:
                                            | default(template_overrides_global.project.signature_validation_credential)
                                            | default(current_projects_asset_value.summary_fields.signature_validation_credential.name) }}"
 {% endif %}
-{# local_path only means something for manual projects; for an SCM project the
-   controller generates it, and exporting that generated value would pin the new
-   project to a directory that belongs to the old one #}
-{% if not current_projects_asset_value.scm_type and current_projects_asset_value.local_path %}
-    local_path: "{{ template_overrides_resources.project[current_projects_asset_value.name].local_path
-                      | default(template_overrides_global.project.local_path)
-                      | default(current_projects_asset_value.local_path) }}"
-{% endif %}
 {% if template_overrides_resources.project[current_projects_asset_value.name].scm_credential is defined
       or template_overrides_global.scm_credential is defined
       or current_projects_asset_value.summary_fields.credential is defined %}
@@ -75,6 +67,14 @@ controller_projects:
     scm_refspec: "{{ template_overrides_resources.project[current_projects_asset_value.name].scm_refspec
                      | default(template_overrides_global.project.scm_refspec)
                      | default(current_projects_asset_value.scm_refspec) }}"
+{% endif %}
+{# local_path only means something for manual projects; for an SCM project the
+   controller generates it, and exporting that generated value would pin the new
+   project to a directory that belongs to the old one #}
+{% if not current_projects_asset_value.scm_type and current_projects_asset_value.local_path %}
+    local_path: "{{ template_overrides_resources.project[current_projects_asset_value.name].local_path
+                      | default(template_overrides_global.project.local_path)
+                      | default(current_projects_asset_value.local_path) }}"
 {% endif %}
 {% if is_aap and
       (template_overrides_resources.project[current_projects_asset_value.name].default_environment is defined
