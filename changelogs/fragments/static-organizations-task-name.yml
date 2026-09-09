@@ -1,5 +1,0 @@
-bugfixes:
-  - filetree_create - Removed the loop variable from the organizations output-directory task name. The
-    name referenced the task's own ``loop_var``, which is not in scope while the name is templated, so a
-    run with ``flatten_output`` enabled skipped the block but still reported "Encountered 2 template
-    errors" and printed a garbled task name.

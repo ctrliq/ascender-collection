@@ -1,6 +1,0 @@
-bugfixes:
-  - filetree_create - Exported the hosts and groups of an inventory that also has an inventory source.
-    Both queries returned an empty list for any such inventory, so hosts and groups created by hand were
-    missing from the export while the inventory itself was written out. The queries already exclude
-    source-created objects with ``not__description=imported``, and ``current_hosts.j2`` still skips a host
-    whose own ``has_inventory_sources`` is set, so only the static objects are exported.

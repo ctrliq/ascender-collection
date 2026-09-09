@@ -1,7 +1,0 @@
-bugfixes:
-  - >-
-    job_templates, workflow_job_templates, schedules roles - Preserved explicitly empty association lists.
-    ``labels: []``, ``credentials: []``, ``instance_groups: []`` and the ``notification_templates_*`` lists
-    were converted to ``omit`` by a ``default(..., true)`` that treats an empty list as unset, so there was
-    no way to clear an existing association from role data. An empty list now clears; omitting the key
-    still leaves the association unchanged.

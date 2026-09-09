@@ -1,5 +1,0 @@
-bugfixes:
-  - project - Stopped offering ``insights`` as an ``scm_type``. Ascender comments it out of the project
-    model's ``SCM_TYPE_CHOICES``, so the value passed the module's argument spec and was then refused by
-    the API. The remaining choices are ``manual``, ``git``, ``svn`` and ``archive``.
-  - projects role - Updated the documented ``scm_type`` choices to match.

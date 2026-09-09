@@ -1,9 +1,0 @@
-bugfixes:
-  - filetree_create - Exported ``policy_instance_minimum`` and ``policy_instance_percentage`` as numbers.
-    Both were quoted, so they came back as strings where the ``instance_group`` module takes integers,
-    and ``object_diff`` reported a difference where there was none.
-  - filetree_create - Stopped emitting an ``instances`` key for an instance group that has none, where it
-    wrote a null value, and an empty export now renders ``controller_instance_groups`` as ``[]`` rather
-    than null, which is what the instances export already does.
-  - filetree_create - Read the instance group credential name from ``summary_fields`` rather than fetching
-    it, which drops one API call per instance group that has a credential.

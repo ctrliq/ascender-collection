@@ -1,4 +1,0 @@
-minor_changes:
-  - dispatch role - Added ``controller_configuration_dispatcher_exclude_roles``, a list of role names the
-    dispatcher skips. Dropping one role previously meant restating the whole
-    ``controller_configuration_dispatcher_roles`` list, or skipping its tag from the command line.

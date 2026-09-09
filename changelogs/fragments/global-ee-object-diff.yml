@@ -1,6 +1,0 @@
-bugfixes:
-  - >-
-    filetree_create - Exported an ``organization`` key for a globally scoped execution environment. The
-    key was omitted when the environment had no organization, and ``controller_object_diff`` requires
-    ``name``, ``organization`` and ``image`` on every item, so comparing an export that contained a global
-    execution environment failed with "Key: 'organization' missing from item in compare_list".

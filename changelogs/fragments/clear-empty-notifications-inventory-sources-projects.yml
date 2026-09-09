@@ -1,6 +1,0 @@
-bugfixes:
-  - inventory_sources, projects roles - Preserved explicitly empty association lists. The
-    ``notification_templates_*`` lists, and ``instance_groups`` on ``inventory_sources``, were converted to
-    ``omit`` by a ``default(..., true)`` that treats an empty list as unset, so there was no way to clear
-    an existing association from role data. An empty list now clears; omitting the key still leaves the
-    association unchanged.

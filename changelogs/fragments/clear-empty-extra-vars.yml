@@ -1,5 +1,0 @@
-bugfixes:
-  - job_templates, workflow_job_templates, schedules roles - Preserved an explicitly empty ``extra_vars``
-    or ``extra_data``. Both were converted to ``omit`` by a ``default(..., true)`` that treats an empty
-    dict as unset, so there was no way to clear them from role data. ``{}`` now clears; omitting the key
-    still leaves the existing value unchanged.

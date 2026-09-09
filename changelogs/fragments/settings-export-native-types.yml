@@ -1,7 +1,0 @@
-bugfixes:
-  - filetree_create - Exported each setting with its own type instead of quoting everything. An integer
-    came out as ``"1800"``, a boolean as ``"false"`` and a null as the string ``"null"``, which the
-    ``settings`` module cannot turn back into null.
-  - filetree_create - Stopped rewriting setting values that merely contain ``True``, ``False`` or ``None``
-    as a substring. A blind ``replace()`` meant ``https://None.example.com/True/path`` was exported as
-    ``https://null.example.com/true/path``.

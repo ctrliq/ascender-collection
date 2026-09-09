@@ -1,7 +1,0 @@
-bugfixes:
-  - filetree_create - Stopped passing non-string values to ``from_yaml`` in the export templates. The API
-    returns ``variables``, ``source_vars``, ``extra_data`` and ``extra_vars`` as a dict or a list as often
-    as a string, and ``from_yaml`` on those emits "The from_yaml filter ignored non-string input",
-    deprecated and removed in ansible-core 2.23. All ten call sites, across the group, host, inventory,
-    inventory source, schedule, job template and workflow job template templates, now convert only when
-    the value is a string.

@@ -1,4 +1,0 @@
-bugfixes:
-  - >-
-    configure_controller playbook - Set ``gather_facts: false``. No role the playbook dispatches reads a
-    gathered fact, so the setup run on localhost was pure startup cost on every invocation.

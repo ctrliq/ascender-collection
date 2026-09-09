@@ -1,8 +1,0 @@
-bugfixes:
-  - object_diff role - Stopped listing source-imported hosts and groups for removal, and stopped skipping
-    the static ones. The inventory query excluded every inventory that had an inventory source, so hand
-    created hosts and groups in a mixed inventory were never compared, while the per-object query pulled
-    in imported ones. It now keeps those inventories and rejects imported objects individually.
-  - object_diff role - Fixed the smart inventory exclusion. ``not__kind`` was given twice in the same
-    query parameter dictionary, so only the second value, ``constructed``, ever applied and smart
-    inventories were compared as though they held their own hosts.

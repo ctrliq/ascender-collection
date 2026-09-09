@@ -1,5 +1,0 @@
-bugfixes:
-  - schedule - Corrected the examples that build an ``rrule`` from the lookup plugins. They passed the
-    result of ``query()``, which is a list, to a parameter that takes a string, and the rruleset example
-    used ``every`` and ``on_days``, which are not parameters of ``schedule_rruleset``. The rules take
-    ``interval`` and ``byweekday``, and both lookups now end in ``| first``.

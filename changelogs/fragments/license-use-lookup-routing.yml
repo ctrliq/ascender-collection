@@ -1,4 +1,0 @@
-bugfixes:
-  - license role - Added ``use_lookup`` to the condition that routes to the subscription tasks. Setting
-    ``controller_license.use_lookup`` on its own matched neither of the two existing clauses, so the role
-    ran no task and reported success without installing anything.

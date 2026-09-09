@@ -1,4 +1,0 @@
-minor_changes:
-  - object_diff role - Corrected the ``var`` on the notification templates entry of
-    ``controller_configuration_object_diff_tasks``. It named ``controller_notification_templates``, which
-    nothing sets, where every other role and the task file itself use ``controller_notifications``.

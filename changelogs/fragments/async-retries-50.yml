@@ -1,4 +1,0 @@
-minor_changes:
-  - roles - Raised the default ``controller_configuration_async_retries`` from 30 to 50 in every role that
-    waits on an async task, so a slow or loaded controller gets longer to answer before the role gives up.
-    ``project_update`` keeps its own default of 60, which was already higher.

@@ -1,9 +1,0 @@
-bugfixes:
-  - >-
-    inventory_source - Accepted ``ascender`` as a source and stopped offering three the platform rejects.
-    Ascender renamed the ``controller`` inventory source to ``ascender``, so using an Ascender controller
-    as an inventory source was impossible through this collection: ``source=ascender`` was refused by the
-    argument spec and ``source=controller`` was refused by the API. ``rhv`` and ``insights`` are no longer
-    offered either, both having been removed from the platform's source choices.
-  - >-
-    inventory_sources, inventory_source_update roles - Updated the documented source choices to match.

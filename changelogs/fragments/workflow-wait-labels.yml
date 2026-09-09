@@ -1,6 +1,0 @@
-minor_changes:
-  - workflow_job_templates role - Named and labelled the two async waits in the workflow schema. Both were
-    called ``Manage Workflows | Wait for finish the workflow creation`` and neither set a loop label, so a
-    run showed two identically named tasks with no way to tell node creation from link creation, or which
-    node each iteration was waiting on. They now name what they wait on and label each item, matching the
-    other roles.

@@ -1,6 +1,0 @@
-bugfixes:
-  - >-
-    configure_controller playbook - Added ``ignore_unknown_extensions: true`` to the ``include_vars`` task.
-    Listing ``extensions: [yml]`` does not filter the directory, it makes ``include_vars`` fail on anything
-    that does not match, so a ``README.md`` or a ``.gitignore`` beside the configuration files aborted the
-    run before any role was called.

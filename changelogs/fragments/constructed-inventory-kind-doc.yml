@@ -1,4 +1,0 @@
-bugfixes:
-  - inventories role - Documented ``constructed`` as a valid inventory ``kind``. The table listed only
-    ``''`` and ``smart`` while the ``inventory`` module has always accepted ``constructed``, and the same
-    table already documented ``input_inventories`` as the input for a constructed inventory.

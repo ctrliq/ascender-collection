@@ -1,6 +1,0 @@
-minor_changes:
-  - filetree_create - Export execution and hop instances to ``current_instances.yaml``, under the new
-    ``instances`` tag. Instances were the only resource with a role and a module but no export, so a
-    controller's execution and hop nodes could not round trip through configuration as code.
-  - filetree_read - Read ``controller_instances`` from the file tree, under the new ``instances`` tag,
-    so an exported instance list can be fed back to the ``instances`` role.

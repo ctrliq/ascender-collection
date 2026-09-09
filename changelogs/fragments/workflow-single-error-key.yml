@@ -1,6 +1,0 @@
-bugfixes:
-  - workflow_job_templates role - Collected async failures under one key. The workflow itself and its
-    node links filed errors under ``controller_workflow_errors`` while its nodes used
-    ``controller_workflows_errors``, so a caller reading
-    ``controller_configuration_role_errors.controller_workflows_errors`` saw the node failures and
-    missed the other two. Every failure from the role now lands under ``controller_workflows_errors``.

@@ -1,6 +1,0 @@
-bugfixes:
-  - inventory_source - Removing an inventory source no longer fails when its inventory is already gone.
-    ``state=absent`` now exits unchanged instead of failing with "The specified inventory was not found".
-  - workflow_job_template_node - Removing a workflow node no longer fails when its workflow job template
-    is already gone. ``state=absent`` now exits unchanged instead of failing with "The workflow was not
-    found on the controller instance server".
