@@ -163,8 +163,23 @@ jobs:
             ascender/requirements/requirements_git.txt
             ascender/requirements/requirements_dev.txt
 
+      # The runner image carries third party apt sources, Google Chrome and Microsoft,
+      # that none of the packages below come from. A transient hash sum mismatch on one
+      # of them makes apt-get update exit 100 and fails this step, which is worse than it
+      # sounds: the job dies before pytest runs, so the unit results are missing rather
+      # than red, and a genuinely broken test reads as an infrastructure blip. That is how
+      # the _COLLECTION_VERSION mismatch fixed in #304 reached main unnoticed.
+      #
+      # Keep ubuntu.sources, which is where these packages actually live, and drop the
+      # rest, so only an Ubuntu archive failure can fail the step. The Ubuntu sources moved
+      # into sources.list.d in deb822 format on noble, so this prunes by name rather than
+      # by directory, and skips the prune entirely if that file ever moves again: losing
+      # the hardening is better than deleting every source and failing the build.
       - name: Install system build dependencies
         run: |
+          if [ -f /etc/apt/sources.list.d/ubuntu.sources ]; then
+            sudo find /etc/apt/sources.list.d -type f ! -name ubuntu.sources -delete
+          fi
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
             libldap2-dev \
