@@ -66,7 +66,7 @@ This also speeds up the overall role.
 |`organization`|""|no|str|Name of the inventory source's inventory's organization.|
 |`wait`|""|no|bool|Wait for the job to complete.|
 |`interval`|`controller_configuration_inventory_source_update_async_delay`|no|int|The interval to request an update from controller.|
-|`timeout`|""|no|int|If waiting for the job to complete this will abort after this amount of seconds. A value of 0 waits without a limit.|
+|`timeout`|`900`|no|int|If waiting for the job to complete this will abort after this amount of seconds. A value of 0 waits without a limit.|
 
 ### Standard Inventory Source Update Data Structure
 

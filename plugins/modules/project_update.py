@@ -40,8 +40,11 @@ options:
       description:
         - If waiting for the project to update this will abort after this
           amount of seconds
-        - A value of 0 waits without a limit, the same as leaving it unset.
+        - Defaults to 900, which sits under the 1000 second budget the roles allow a dispatched module,
+          so a stuck update is reported with the field it was waiting on rather than killed without a message.
+        - A value of 0 waits without a limit.
       type: int
+      default: 900
 extends_documentation_fragment: ctrliq.ascender.auth
 '''
 
@@ -70,7 +73,7 @@ status:
     sample: pending
 '''
 
-from ..module_utils.controller_api import ControllerAPIModule
+from ..module_utils.controller_api import ControllerAPIModule, DEFAULT_WAIT_TIMEOUT
 
 
 def main():
@@ -80,7 +83,7 @@ def main():
         organization=dict(),
         wait=dict(default=True, type='bool'),
         interval=dict(default=2.0, type='float'),
-        timeout=dict(type='int'),
+        timeout=dict(type='int', default=DEFAULT_WAIT_TIMEOUT),
     )
 
     # Create a module for ourselves

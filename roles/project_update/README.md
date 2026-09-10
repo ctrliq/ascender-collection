@@ -65,7 +65,7 @@ This also speeds up the overall role.
 |`organization`|""|no|str|Organization the project exists in. Used for lookup only.|
 |`wait`|""|no|str|Wait for the project to complete.|
 |`interval`|`controller_configuration_project_update_async_delay`|no|str|The interval to request an update from controller.|
-|`timeout`|""|no|str|If waiting for the job to complete this will abort after this amount of seconds. A value of 0 waits without a limit.|
+|`timeout`|`900`|no|int|If waiting for the job to complete this will abort after this amount of seconds. A value of 0 waits without a limit.|
 |`update_project`|`False`|no|bool|If defined and true, the project update will be executed, otherwise it won't.|
 
 ### Standard Project Update Data Structure

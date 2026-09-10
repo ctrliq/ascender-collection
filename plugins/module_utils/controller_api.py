@@ -292,6 +292,15 @@ class ControllerModule(AnsibleModule):
             super().warn(warning)
 
 
+# Default client side wait budget, in seconds, for the modules that wait on an object whose runtime is bounded by
+# what it is doing rather than by what the user asked it to run: an SCM checkout and an inventory sync. It sits under
+# the 1000 second `async:` ceiling every role uses to dispatch its module, so the module reports the timeout itself,
+# with the field it was waiting on and the object's last status, instead of being killed by the async wrapper with
+# nothing to read. The job and workflow waits deliberately have no default: their runtime is whatever the user's
+# playbook does, so any number here would fail a long job that was going to succeed.
+DEFAULT_WAIT_TIMEOUT = 900
+
+
 class ControllerAPIModule(ControllerModule):
     _COLLECTION_VERSION = "25.6.1"
     _COLLECTION_TYPE = "ascender"

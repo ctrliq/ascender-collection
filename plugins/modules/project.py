@@ -90,8 +90,11 @@ options:
     timeout:
       description:
         - The amount of time (in seconds) to run before the SCM Update is canceled. A value of 0 means no timeout.
-        - If waiting for the project to update this will abort after this
-          amount of seconds, and 0 again means no limit.
+        - This is a field of the project itself, so it is only sent to the API when you set it. It doubles as the
+          budget for waiting on the update, and 0 again means no limit.
+        - When it is unset the project keeps whatever timeout it has and the wait falls back to 900 seconds, which
+          sits under the 1000 second budget the roles allow a dispatched module, so a stuck update is reported with
+          the field it was waiting on rather than killed without a message.
       type: int
       aliases:
         - job_timeout
@@ -223,7 +226,7 @@ id:
     sample: 42
 '''
 
-from ..module_utils.controller_api import ControllerAPIModule
+from ..module_utils.controller_api import ControllerAPIModule, DEFAULT_WAIT_TIMEOUT
 
 
 def wait_for_project_update(module, last_request):
@@ -233,6 +236,10 @@ def wait_for_project_update(module, last_request):
     update_project = module.params.get('update_project')
     wait = module.params.get('wait')
     timeout = module.params.get('timeout')
+    # timeout is a field of the project, listed in project_fields below, so it cannot carry an argument_spec
+    # default: that would write 900 onto every project this module touches and report each one as changed.
+    # Bound the wait at the call sites instead, leaving None to mean "the project keeps its own timeout".
+    wait_timeout = DEFAULT_WAIT_TIMEOUT if timeout is None else timeout
     interval = module.params.get('interval')
     scm_revision_original = last_request['scm_revision']
 
@@ -252,7 +259,7 @@ def wait_for_project_update(module, last_request):
                 url=f'/project_updates/{last_request["summary_fields"]["current_update"]["id"]}/',
                 object_name=module.get_item_name(last_request),
                 object_type='Project Update',
-                timeout=timeout,
+                timeout=wait_timeout,
                 interval=interval,
             )
 
@@ -269,7 +276,7 @@ def wait_for_project_update(module, last_request):
 
         # Invoke wait function
         result_final = module.wait_on_url(
-            url=result['json']['url'], object_name=module.get_item_name(last_request), object_type='Project Update', timeout=timeout, interval=interval
+            url=result['json']['url'], object_name=module.get_item_name(last_request), object_type='Project Update', timeout=wait_timeout, interval=interval
         )
 
         # Changed if the hash changed, or if it was already changed beforehand

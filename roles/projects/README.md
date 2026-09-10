@@ -99,7 +99,7 @@ This also speeds up the overall role.
 |`webhook_key`|""|no|str|Shared secret the webhook service uses to sign its requests. The API never returns it, so supplying it always reports a change.|
 |`scm_update_cache_timeout`|""|no|str|Cache Timeout to cache prior project syncs for a certain number of seconds. Only valid if scm_update_on_launch is to True, otherwise ignored.|
 |`allow_override`|""|no|str|Allow changing the SCM branch or revision in a job template that uses this project.|
-|`timeout`|""|no|int|The amount of time (in seconds) to run before the SCM Update is canceled. A value of 0 means no timeout.|
+|`timeout`|""|no|int|The amount of time (in seconds) to run before the SCM Update is canceled, and the budget for waiting on that update. A value of 0 means no timeout. Left unset, the project keeps its own timeout and the wait falls back to 900 seconds.|
 |`notification_templates_started`|""|no|list|The notifications on started to use for this organization in a list. Set to `[]` to remove all. Omitting this key leaves existing notifications unchanged.|
 |`notification_templates_success`|""|no|list|The notifications on success to use for this organization in a list. Set to `[]` to remove all. Omitting this key leaves existing notifications unchanged.|
 |`notification_templates_error`|""|no|list|The notifications on error to use for this organization in a list. Set to `[]` to remove all. Omitting this key leaves existing notifications unchanged.|

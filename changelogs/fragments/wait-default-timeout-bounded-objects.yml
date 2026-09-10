@@ -1,0 +1,14 @@
+minor_changes:
+  - >-
+    project_update, inventory_source_update - ``timeout`` now defaults to 900 seconds instead of waiting without
+    a limit. Every role dispatches its module under a hardcoded ``async: 1000``, so a wait that never returns was
+    killed by the async wrapper with nothing to read. 900 sits under that ceiling, so the module reports the
+    timeout itself, naming the field it was waiting on and the object's last status. An SCM checkout or an
+    inventory sync is bounded by what it is doing rather than by what the playbook asked it to run, which is why
+    these two take a default and the job and workflow waits deliberately do not: any number there would fail a
+    long job that was going to succeed. Set ``timeout: 0`` to wait without a limit as before.
+  - >-
+    project - The wait on a project update is bounded at 900 seconds when ``timeout`` is not set. ``timeout`` is
+    a field of the project itself, so it cannot carry an argument spec default without writing 900 onto every
+    project the module touches and reporting each one as changed. The bound is applied where the module waits
+    instead, so an unset ``timeout`` leaves the project's own timeout untouched.
