@@ -6,10 +6,10 @@
 
 - name: Generate names
   set_fact:
-    openstack_cred: "AWX-Collection-tests-inventory_source-cred-openstack-{{ test_id }}"
-    openstack_inv: "AWX-Collection-tests-inventory_source-inv-openstack-{{ test_id }}"
-    openstack_inv_source: "AWX-Collection-tests-inventory_source-inv-source-openstack-{{ test_id }}"
-    ig_name: "AWX-Collection-tests-inventory_source-ig-{{ test_id }}"
+    openstack_cred: "Ascender-Collection-tests-inventory_source-cred-openstack-{{ test_id }}"
+    openstack_inv: "Ascender-Collection-tests-inventory_source-inv-openstack-{{ test_id }}"
+    openstack_inv_source: "Ascender-Collection-tests-inventory_source-inv-source-openstack-{{ test_id }}"
+    ig_name: "Ascender-Collection-tests-inventory_source-ig-{{ test_id }}"
 
 - name: Add a credential
   credential:

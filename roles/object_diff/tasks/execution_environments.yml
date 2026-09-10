@@ -1,6 +1,6 @@
 ---
-- name: execution_environments | Block to be executed only when connected against an AAP instance (not Tower)
-  when: is_aap
+- name: execution_environments | Block to be executed only when the API is 4.0.0 or newer
+  when: is_controller_v4
   block:
     - name: execution_environments | Get the organization ID
       ansible.builtin.set_fact:

@@ -2,11 +2,11 @@
 - block:
     - name: generate random string for project
       set_fact:
-        org_name: "AWX-Collection-tests-organization-org-{{ test_id }}"
-        cred: "AWX-Collection-tests-job_template-cred-{{ test_id }}"
-        inv: "AWX-Collection-tests-job_template-inv-{{ test_id }}"
-        proj: "AWX-Collection-tests-job_template-proj-{{ test_id }}"
-        jt: "AWX-Collection-tests-job_template-jt-{{ test_id }}"
+        org_name: "Ascender-Collection-tests-organization-org-{{ test_id }}"
+        cred: "Ascender-Collection-tests-job_template-cred-{{ test_id }}"
+        inv: "Ascender-Collection-tests-job_template-inv-{{ test_id }}"
+        proj: "Ascender-Collection-tests-job_template-proj-{{ test_id }}"
+        jt: "Ascender-Collection-tests-job_template-jt-{{ test_id }}"
 
     - name: "Create a new organization"
       organization:

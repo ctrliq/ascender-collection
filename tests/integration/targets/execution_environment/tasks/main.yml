@@ -6,7 +6,7 @@
 
 - name: Generate names
   set_fact:
-    ee_name: "AWX-Collection-tests-ee-{{ test_id }}"
+    ee_name: "Ascender-Collection-tests-ee-{{ test_id }}"
 
 - block:
     - name: Add an EE

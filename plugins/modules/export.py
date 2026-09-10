@@ -147,7 +147,7 @@ def main():
     if not HAS_EXPORTABLE_RESOURCES:
         module.fail_json(msg="Your version of ascender-kit does not have import/export")
 
-    # The export process will never change the AWX system
+    # The export process will never change the Ascender system
     module.json_output['changed'] = False
 
     # The exporter code currently works like the following:

@@ -6,9 +6,9 @@
 
 - name: Generate names
   set_fact:
-    wfjt_name1: "AWX-Collection-tests-workflow_launch--wfjt1-{{ test_id }}"
-    wfjt_name2: "AWX-Collection-tests-workflow_launch--wfjt1-{{ test_id }}-2"
-    approval_node_name: "AWX-Collection-tests-workflow_launch_approval_node-{{ test_id }}"
+    wfjt_name1: "Ascender-Collection-tests-workflow_launch--wfjt1-{{ test_id }}"
+    wfjt_name2: "Ascender-Collection-tests-workflow_launch--wfjt1-{{ test_id }}-2"
+    approval_node_name: "Ascender-Collection-tests-workflow_launch_approval_node-{{ test_id }}"
 
 - block:
 

@@ -1,5 +1,5 @@
 ---
-- name: Playbook to configure ansible controller post installation
+- name: Playbook to configure Ascender post installation
   hosts: localhost
   connection: local
   # Nothing here reads a fact. The roles talk to the controller API over the

@@ -53,7 +53,7 @@ EXAMPLES = '''
     target_credential: new_cred
     source_credential: cyberark_lookup
     metadata:
-      object_query: "Safe=MY_SAFE;Object=awxuser"
+      object_query: "Safe=MY_SAFE;Object=ascender-user"
       object_query_format: "Exact"
     state: present
 '''

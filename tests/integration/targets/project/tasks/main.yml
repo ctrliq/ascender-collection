@@ -6,13 +6,13 @@
 
 - name: Generate names
   set_fact:
-    project_name1: "AWX-Collection-tests-project-project1-{{ test_id }}"
-    project_name2: "AWX-Collection-tests-project-project2-{{ test_id }}"
-    project_name3: "AWX-Collection-tests-project-project3-{{ test_id }}"
-    jt1: "AWX-Collection-tests-project-jt1-{{ test_id }}"
-    scm_cred_name: "AWX-Collection-tests-project-scm-cred-{{ test_id }}"
-    org_name: "AWX-Collection-tests-project-org-{{ test_id }}"
-    cred_name: "AWX-Collection-tests-project-cred-{{ test_id }}"
+    project_name1: "Ascender-Collection-tests-project-project1-{{ test_id }}"
+    project_name2: "Ascender-Collection-tests-project-project2-{{ test_id }}"
+    project_name3: "Ascender-Collection-tests-project-project3-{{ test_id }}"
+    jt1: "Ascender-Collection-tests-project-jt1-{{ test_id }}"
+    scm_cred_name: "Ascender-Collection-tests-project-scm-cred-{{ test_id }}"
+    org_name: "Ascender-Collection-tests-project-org-{{ test_id }}"
+    cred_name: "Ascender-Collection-tests-project-cred-{{ test_id }}"
 
 - block:
     - name: Create an SCM Credential

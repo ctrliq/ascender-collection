@@ -2,7 +2,7 @@
 
 ## Description
 
-An Ansible Role to add/update/remove notification templates on Ansible Controller.
+An Ansible Role to add/update/remove notification templates on Ascender.
 
 ## Requirements
 
@@ -17,11 +17,11 @@ Currently:
 |Variable Name|Default Value|Required|Description|Example|
 |:---|:---:|:---:|:---|:---|
 |`controller_state`|"present"|no|The state all objects will take unless overridden by object default|'absent'|
-|`controller_hostname`|""|yes|URL to the Ansible Controller Server.|127.0.0.1|
-|`controller_validate_certs`|`True`|no|Whether or not to validate the Ansible Controller Server's SSL certificate.||
-|`controller_username`|""|no|Admin User on the Ansible Controller Server. Either username / password or oauthtoken need to be specified.||
-|`controller_password`|""|no|Controller Admin User's password on the Ansible Controller Server. This should be stored in an Ansible Vault at vars/controller-secrets.yml or elsewhere and called from a parent playbook. Either username / password or oauthtoken need to be specified.||
-|`controller_oauthtoken`|""|no|Controller Admin User's token on the Ansible Controller Server. This should be stored in an Ansible Vault at or elsewhere and called from a parent playbook. Either username / password or oauthtoken need to be specified.||
+|`controller_hostname`|""|yes|URL to the Ascender Server.|127.0.0.1|
+|`controller_validate_certs`|`True`|no|Whether or not to validate the Ascender Server's SSL certificate.||
+|`controller_username`|""|no|Admin User on the Ascender Server. Either username / password or oauthtoken need to be specified.||
+|`controller_password`|""|no|Controller Admin User's password on the Ascender Server. This should be stored in an Ansible Vault at vars/controller-secrets.yml or elsewhere and called from a parent playbook. Either username / password or oauthtoken need to be specified.||
+|`controller_oauthtoken`|""|no|Controller Admin User's token on the Ascender Server. This should be stored in an Ansible Vault at or elsewhere and called from a parent playbook. Either username / password or oauthtoken need to be specified.||
 |`controller_request_timeout`|`10`|no|Specify the timeout in seconds Ansible should use in requests to the controller host.||
 |`controller_configuration_collect_logs`|`false`|no|Specify whether to collect async results and continue for all failed async tasks instead of failing on the first error. Collected results are available in the `controller_configuration_role_errors` variable.||
 |`controller_notifications`|`see below`|yes|Data structure describing your notification entries described below. Alias: notification_templates||
@@ -154,7 +154,7 @@ controller_notifications:
     messages:
       success:
         body: '{"fields": {"project": {"id": "11111"},"summary": "Lab {  { job.status
-          }} Ansible controller {  { job.name }}","description": "{  { job.status }} in {  {
+          }} Ascender {  { job.name }}","description": "{  { job.status }} in {  {
           job.name }} {  { job.id }} {  {url}}","issuetype": {"id": "1"}}}'
   - name: Email notification
     description: Send out emails for controller jobs
@@ -178,7 +178,7 @@ controller_notifications:
 
 ```yaml
 ---
-- name: Playbook to configure ansible controller post installation
+- name: Playbook to configure Ascender post installation
   hosts: localhost
   connection: local
   # Define following vars here, or in controller_configs/controller_auth.yml

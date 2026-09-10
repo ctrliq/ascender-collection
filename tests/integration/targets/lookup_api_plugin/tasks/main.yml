@@ -7,13 +7,13 @@
 - name: Generate usernames
   set_fact:
     usernames:
-      - "AWX-Collection-tests-api_lookup-user1-{{ test_id }}"
-      - "AWX-Collection-tests-api_lookup-user2-{{ test_id }}"
-      - "AWX-Collection-tests-api_lookup-user3-{{ test_id }}"
+      - "Ascender-Collection-tests-api_lookup-user1-{{ test_id }}"
+      - "Ascender-Collection-tests-api_lookup-user2-{{ test_id }}"
+      - "Ascender-Collection-tests-api_lookup-user3-{{ test_id }}"
     hosts:
-      - "AWX-Collection-tests-api_lookup-host1-{{ test_id }}"
-      - "AWX-Collection-tests-api_lookup-host2-{{ test_id }}"
-    group_name: "AWX-Collection-tests-api_lookup-group1-{{ test_id }}"
+      - "Ascender-Collection-tests-api_lookup-host1-{{ test_id }}"
+      - "Ascender-Collection-tests-api_lookup-host2-{{ test_id }}"
+    group_name: "Ascender-Collection-tests-api_lookup-group1-{{ test_id }}"
 
 - name: Get our collection package
   controller_meta:

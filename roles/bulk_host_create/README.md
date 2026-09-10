@@ -2,7 +2,7 @@
 
 ## Description
 
-An Ansible Role to create bulk hosts on Ansible Controller.
+An Ansible Role to create bulk hosts on Ascender.
 
 ## Requirements
 
@@ -16,11 +16,11 @@ Currently:
 
 |Variable Name|Default Value|Required|Description|Example|
 |:---|:---:|:---:|:---|:---|
-|`controller_hostname`|""|yes|URL to the Ansible Controller Server.|127.0.0.1|
-|`controller_validate_certs`|`True`|no|Whether or not to validate the Ansible Controller Server's SSL certificate.||
-|`controller_username`|""|no|Admin User on the Ansible Controller Server. Either username / password or oauthtoken need to be specified.||
-|`controller_password`|""|no|Controller Admin User's password on the Ansible Controller Server. This should be stored in an Ansible Vault at vars/controller-secrets.yml or elsewhere and called from a parent playbook. Either username / password or oauthtoken need to be specified.||
-|`controller_oauthtoken`|""|no|Controller Admin User's token on the Ansible Controller Server. This should be stored in an Ansible Vault at or elsewhere and called from a parent playbook. Either username / password or oauthtoken need to be specified.||
+|`controller_hostname`|""|yes|URL to the Ascender Server.|127.0.0.1|
+|`controller_validate_certs`|`True`|no|Whether or not to validate the Ascender Server's SSL certificate.||
+|`controller_username`|""|no|Admin User on the Ascender Server. Either username / password or oauthtoken need to be specified.||
+|`controller_password`|""|no|Controller Admin User's password on the Ascender Server. This should be stored in an Ansible Vault at vars/controller-secrets.yml or elsewhere and called from a parent playbook. Either username / password or oauthtoken need to be specified.||
+|`controller_oauthtoken`|""|no|Controller Admin User's token on the Ascender Server. This should be stored in an Ansible Vault at or elsewhere and called from a parent playbook. Either username / password or oauthtoken need to be specified.||
 |`controller_request_timeout`|`10`|no|Specify the timeout in seconds Ansible should use in requests to the controller host.||
 |`controller_configuration_collect_logs`|`false`|no|Specify whether to collect async results and continue for all failed async tasks instead of failing on the first error. Collected results are available in the `controller_configuration_role_errors` variable.||
 |`controller_configuration_bulk_hosts_secure_logging`|`see below`|yes|Data structure describing your organization or organizations Described below.||
@@ -119,7 +119,7 @@ controller_bulk_hosts:
 
 ```yaml
 ---
-- name: Playbook to configure ansible controller post installation
+- name: Playbook to configure Ascender post installation
   hosts: localhost
   connection: local
   # Define following vars here, or in controller_configs/controller_auth.yml

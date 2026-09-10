@@ -1,10 +1,10 @@
 # controller_configuration.filetree_create
 
-The role `filetree_create` is intended to be used as the first step to begin using the Configuration as Code on Ansible Tower or Ansible Automation Platform, when you already have a running instance of any of them. Obviously, you also could start to write your objects as code from scratch, but the idea behind the creation of that role is to simplify your lives and make that task a little bit easier.
+The role `filetree_create` is intended to be used as the first step to begin using the Configuration as Code on Ascender, when you already have a running instance of it. Obviously, you also could start to write your objects as code from scratch, but the idea behind the creation of that role is to simplify your lives and make that task a little bit easier.
 
 ## Requirements
 
-This role requires the [ctrliq.ascender](https://docs.ansible.com/ansible/latest/collections/awx/awx/index.html) or [ctrliq.ascender](https://console.redhat.com/ansible/automation-hub/repo/published/ansible/controller) ansible collection.
+This role requires the [ctrliq.ascender](https://galaxy.ansible.com/ui/repo/published/ctrliq/ascender/) collection.
 
 ## Role Variables
 
@@ -222,10 +222,10 @@ This example will export all object but some with modifications:
   connection: local
   gather_facts: false
   vars:
-    aap_username: "{{ vault_aap_username | default(lookup('env', 'CONTROLLER_USERNAME')) }}"
-    aap_oauthtoken : "{{ vault_aap_password | default(lookup('env', 'CONTROLLER_OAUTHTOKEN')) }}"
-    aap_hostname: "{{ vault_aap_hostname | default(lookup('env', 'CONTROLLER_HOST')) }}"
-    aap_validate_certs: "{{ vault_aap_validate_certs | default(lookup('env', 'CONTROLLER_VERIFY_SSL')) }}"
+    controller_username: "{{ vault_controller_username | default(lookup('env', 'CONTROLLER_USERNAME')) }}"
+    controller_oauthtoken: "{{ vault_controller_oauthtoken | default(lookup('env', 'CONTROLLER_OAUTHTOKEN')) }}"
+    controller_hostname: "{{ vault_controller_hostname | default(lookup('env', 'CONTROLLER_HOST')) }}"
+    controller_validate_certs: "{{ vault_controller_validate_certs | default(lookup('env', 'CONTROLLER_VERIFY_SSL')) }}"
 
     templates_overrides_resources:
       job_template:
@@ -236,7 +236,7 @@ This example will export all object but some with modifications:
       job_template:
         scm_branch: "main"
       project:
-        scm_branch: !unsafe  "{{ 'true' if AAP.environment == 'PROD' else 'false' }}"
+        scm_branch: !unsafe  "{{ 'true' if ascender.environment == 'PROD' else 'false' }}"
       schedules:
         enabled: false
 

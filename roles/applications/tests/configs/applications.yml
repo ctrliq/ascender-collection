@@ -10,8 +10,8 @@ controller_applications:
     client_type: confidential
     description: Another application
     redirect_uris:
-      - http://tower.com/api/v2/
-      - http://tower.com/api/v2/teams
+      - https://ascender.example.com/api/v2/
+      - https://ascender.example.com/api/v2/teams
   - name: controller_application-app3
     organization: Default
     authorization_grant_type: password

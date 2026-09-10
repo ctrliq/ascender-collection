@@ -2,7 +2,7 @@
 
 ## Description
 
-An Ansible Role to create/update/remove Credential Types on Ansible Controller.
+An Ansible Role to create/update/remove Credential Types on Ascender.
 
 ## Requirements
 
@@ -17,11 +17,11 @@ Currently:
 |Variable Name|Default Value|Required|Description|Example|
 |:---|:---:|:---:|:---|:---|
 |`controller_state`|"present"|no|The state all objects will take unless overridden by object default|'absent'|
-|`controller_hostname`|""|yes|URL to the Ansible Controller Server.|127.0.0.1|
-|`controller_validate_certs`|`True`|no|Whether or not to validate the Ansible Controller Server's SSL certificate.||
-|`controller_username`|""|no|Admin User on the Ansible Controller Server. Either username / password or oauthtoken need to be specified.||
-|`controller_password`|""|no|Controller Admin User's password on the Ansible Controller Server. This should be stored in an Ansible Vault at vars/controller-secrets.yml or elsewhere and called from a parent playbook. Either username / password or oauthtoken need to be specified.||
-|`controller_oauthtoken`|""|no|Controller Admin User's token on the Ansible Controller Server. This should be stored in an Ansible Vault at or elsewhere and called from a parent playbook. Either username / password or oauthtoken need to be specified.||
+|`controller_hostname`|""|yes|URL to the Ascender Server.|127.0.0.1|
+|`controller_validate_certs`|`True`|no|Whether or not to validate the Ascender Server's SSL certificate.||
+|`controller_username`|""|no|Admin User on the Ascender Server. Either username / password or oauthtoken need to be specified.||
+|`controller_password`|""|no|Controller Admin User's password on the Ascender Server. This should be stored in an Ansible Vault at vars/controller-secrets.yml or elsewhere and called from a parent playbook. Either username / password or oauthtoken need to be specified.||
+|`controller_oauthtoken`|""|no|Controller Admin User's token on the Ascender Server. This should be stored in an Ansible Vault at or elsewhere and called from a parent playbook. Either username / password or oauthtoken need to be specified.||
 |`controller_request_timeout`|`10`|no|Specify the timeout in seconds Ansible should use in requests to the controller host.||
 |`controller_configuration_collect_logs`|`false`|no|Specify whether to collect async results and continue for all failed async tasks instead of failing on the first error. Collected results are available in the `controller_configuration_role_errors` variable.||
 |`controller_credential_types`|`see below`|yes|Data structure describing your credential types Described below. Alias: credential_types||
@@ -80,8 +80,8 @@ This also speeds up the overall role.
 |`name`|""|yes|Name of Credential Type|
 |`new_name`|""|no|Setting this option will change the existing name (looked up via the name field).|
 |`description`|`False`|no|The description of the credential type to give more detail about it.|
-|`injectors`|""|no|Enter injectors using either JSON or YAML syntax. Refer to the Ansible controller documentation for example syntax. See below on proper formatting.|
-|`inputs`|""|no|Enter inputs using either JSON or YAML syntax. Refer to the Ansible controller documentation for example syntax.|
+|`injectors`|""|no|Enter injectors using either JSON or YAML syntax. Refer to the Ascender documentation for example syntax. See below on proper formatting.|
+|`inputs`|""|no|Enter inputs using either JSON or YAML syntax. Refer to the Ascender documentation for example syntax.|
 |`kind`|"cloud"|no|The type of credential type being added. Note that only cloud and net can be used for creating credential types.|
 |`state`|`present`|no|Desired state of the resource.|
 
@@ -113,7 +113,7 @@ The role will strip the double space between the curly bracket in order to provi
 
 ### Input and Injector Schema
 
-The following details the data format to use for inputs and injectors. These can be in either YAML or JSON For the most up to date information and more details see [Custom Credential Types - Ansible Controller Documentation](https://docs.ansible.com/automation-controller/4.4/html/userguide/credential_plugins.html)
+The following details the data format to use for inputs and injectors. These can be in either YAML or JSON For the most up to date information and more details see [Custom Credential Types - Ascender Documentation](https://docs.ansible.com/automation-controller/4.4/html/userguide/credential_plugins.html)
 
 #### Input Schema
 
@@ -225,7 +225,7 @@ controller_credential_types:
 ### Standard Role Usage
 
 ```yaml
-- name: Playbook to configure ansible controller post installation
+- name: Playbook to configure Ascender post installation
   hosts: localhost
   connection: local
   # Define following vars here, or in controller_configs/controller_auth.yml

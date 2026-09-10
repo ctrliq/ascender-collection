@@ -6,8 +6,8 @@
 
 - name: Generate names
   set_fact:
-    host_name: "AWX-Collection-tests-host-host-{{ test_id }}"
-    inv_name: "AWX-Collection-tests-host-inv-{{ test_id }}"
+    host_name: "Ascender-Collection-tests-host-host-{{ test_id }}"
+    inv_name: "Ascender-Collection-tests-host-inv-{{ test_id }}"
 
 - name: Create an Inventory
   inventory:

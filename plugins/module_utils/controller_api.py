@@ -495,7 +495,7 @@ class ControllerAPIModule(ControllerModule):
         # Extract the headers, this will be used in a couple of places
         headers = kwargs.get('headers', {})
 
-        # Authenticate to AWX (if we don't have a token and if not already done so)
+        # Authenticate to Ascender (if we don't have a token and if not already done so)
         if not self.oauth_token and not self.authenticated:
             # This method will set a cookie in the cookie jar for us and also an oauth_token
             self.authenticate(**kwargs)
@@ -660,8 +660,8 @@ class ControllerAPIModule(ControllerModule):
         #   the on_delete parameter will be called as a method passing in this object and the json from the response
         # This will return one of two things:
         #   1. None if the existing_item is not defined (so no delete needs to happen)
-        #   2. The response from AWX from calling the delete on the endpont. It's up to you to process the response and exit from the module
-        # Note: common error codes from the AWX API can cause the module to fail
+        #   2. The response from Ascender from calling the delete on the endpoint. It's up to you to process the response and exit from the module
+        # Note: common error codes from the Ascender API can cause the module to fail
         if existing_item:
             # If we have an item, we can try to delete it
             try:
@@ -846,8 +846,8 @@ class ControllerAPIModule(ControllerModule):
         #    the on_create parameter will be called as a method passing in this object and the json from the response
         # This will return one of two things:
         #    1. None if the existing_item is already defined (so no create needs to happen)
-        #    2. The response from AWX from calling the patch on the endpont. It's up to you to process the response and exit from the module
-        # Note: common error codes from the AWX API can cause the module to fail
+        #    2. The response from Ascender from calling the patch on the endpoint. It's up to you to process the response and exit from the module
+        # Note: common error codes from the Ascender API can cause the module to fail
         response = None
         if not endpoint:
             self.fail_json(msg=f"Unable to create new {item_type} due to missing endpoint")
@@ -967,8 +967,8 @@ class ControllerAPIModule(ControllerModule):
         #   the on_update parameter will be called as a method passing in this object and the json from the response
         # This will return one of two things:
         #    1. None if the existing_item does not need to be updated
-        #    2. The response from AWX from patching to the endpoint. It's up to you to process the response and exit from the module.
-        # Note: common error codes from the AWX API can cause the module to fail
+        #    2. The response from Ascender from patching to the endpoint. It's up to you to process the response and exit from the module.
+        # Note: common error codes from the Ascender API can cause the module to fail
         response = None
         if existing_item:
 

@@ -6,7 +6,7 @@
 
 - name: Generate names
   set_fact:
-    token_description: "AWX-Collection-tests-token-description-{{ test_id }}"
+    token_description: "Ascender-Collection-tests-token-description-{{ test_id }}"
 
 - name: Try to use a token as a dict which is missing the token parameter
   job_list:

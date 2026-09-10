@@ -6,18 +6,18 @@
 
 - name: generate random string for project
   set_fact:
-    org_name: "AWX-Collection-tests-organization-org-{{ test_id }}"
-    cred1: "AWX-Collection-tests-job_template-cred1-{{ test_id }}"
-    cred2: "AWX-Collection-tests-job_template-cred2-{{ test_id }}"
-    cred3: "AWX-Collection-tests-job_template-cred3-{{ test_id }}"
-    inv1: "AWX-Collection-tests-job_template-inv-{{ test_id }}"
-    proj1: "AWX-Collection-tests-job_template-proj-{{ test_id }}"
-    jt1: "AWX-Collection-tests-job_template-jt1-{{ test_id }}"
-    jt2: "AWX-Collection-tests-job_template-jt2-{{ test_id }}"
-    lab1: "AWX-Collection-tests-job_template-lab1-{{ test_id }}"
-    email_not: "AWX-Collection-tests-job_template-email-not-{{ test_id }}"
-    webhook_not: "AWX-Collection-tests-notification_template-wehbook-not-{{ test_id }}"
-    group_name1: "AWX-Collection-tests-instance_group-group1-{{ test_id }}"
+    org_name: "Ascender-Collection-tests-organization-org-{{ test_id }}"
+    cred1: "Ascender-Collection-tests-job_template-cred1-{{ test_id }}"
+    cred2: "Ascender-Collection-tests-job_template-cred2-{{ test_id }}"
+    cred3: "Ascender-Collection-tests-job_template-cred3-{{ test_id }}"
+    inv1: "Ascender-Collection-tests-job_template-inv-{{ test_id }}"
+    proj1: "Ascender-Collection-tests-job_template-proj-{{ test_id }}"
+    jt1: "Ascender-Collection-tests-job_template-jt1-{{ test_id }}"
+    jt2: "Ascender-Collection-tests-job_template-jt2-{{ test_id }}"
+    lab1: "Ascender-Collection-tests-job_template-lab1-{{ test_id }}"
+    email_not: "Ascender-Collection-tests-job_template-email-not-{{ test_id }}"
+    webhook_not: "Ascender-Collection-tests-notification_template-wehbook-not-{{ test_id }}"
+    group_name1: "Ascender-Collection-tests-instance_group-group1-{{ test_id }}"
 
 - name: "Create a new organization"
   organization:
@@ -85,7 +85,7 @@
     notification_configuration:
       username: user
       password: s3cr3t
-      sender: tower@example.com
+      sender: ascender@example.com
       recipients:
         - user1@example.com
       host: smtp.example.com

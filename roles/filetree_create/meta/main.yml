@@ -2,7 +2,7 @@
 galaxy_info:
   role_name: filetree_create
   author: Automation Iberia
-  description: AAP Configuration as Code extract from AAP
+  description: Ascender Configuration as Code extract from Ascender
   company: Automation Iberia
   license: GPL-3.0-or-later
   min_ansible_version: 2.16.0

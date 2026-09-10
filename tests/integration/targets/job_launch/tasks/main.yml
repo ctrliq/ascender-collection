@@ -6,9 +6,9 @@
 
 - name: Generate names
   set_fact:
-    jt_name1: "AWX-Collection-tests-job_launch-jt1-{{ test_id }}"
-    jt_name2: "AWX-Collection-tests-job_launch-jt2-{{ test_id }}"
-    proj_name: "AWX-Collection-tests-job_launch-project-{{ test_id }}"
+    jt_name1: "Ascender-Collection-tests-job_launch-jt1-{{ test_id }}"
+    jt_name2: "Ascender-Collection-tests-job_launch-jt2-{{ test_id }}"
+    proj_name: "Ascender-Collection-tests-job_launch-project-{{ test_id }}"
 
 - name: Launch a Job Template
   job_launch:

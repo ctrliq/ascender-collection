@@ -6,9 +6,9 @@
 
 - name: Generate names
   set_fact:
-    org_name1: "AWX-Collection-tests-export-organization-{{ test_id }}"
-    org_name2: "AWX-Collection-tests-export-organization2-{{ test_id }}"
-    inventory_name1: "AWX-Collection-tests-export-inv1-{{ test_id }}"
+    org_name1: "Ascender-Collection-tests-export-organization-{{ test_id }}"
+    org_name2: "Ascender-Collection-tests-export-organization2-{{ test_id }}"
+    inventory_name1: "Ascender-Collection-tests-export-inv1-{{ test_id }}"
 
 - block:
     - name: Create some organizations

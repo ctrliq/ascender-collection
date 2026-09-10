@@ -6,7 +6,7 @@
 
 - name: Generate names
   set_fact:
-    label_name: "AWX-Collection-tests-label-label-{{ test_id }}"
+    label_name: "Ascender-Collection-tests-label-label-{{ test_id }}"
 
 - name: Create a Label
   label:

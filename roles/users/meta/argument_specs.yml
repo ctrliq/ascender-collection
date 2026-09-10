@@ -1,7 +1,7 @@
 ---
 argument_specs:
   main:
-    short_description: An Ansible Role to create users on Ansible Controller.
+    short_description: An Ansible Role to create users on Ascender.
     options:
       controller_user_accounts:
         description: Data structure describing your users
@@ -107,28 +107,28 @@ argument_specs:
       controller_hostname:
         default: None
         required: false
-        description: URL to the Ansible Controller Server.
+        description: URL to the Ascender Server.
         type: str
       controller_validate_certs:
         default: true
         required: false
-        description: Whether or not to validate the Ansible Controller Server's SSL certificate.
+        description: Whether or not to validate the Ascender Server's SSL certificate.
         type: str
       controller_username:
         default: None
         required: false
-        description: Admin User on the Ansible Controller Server. Either username / password or oauthtoken need to be specified.
+        description: Admin User on the Ascender Server. Either username / password or oauthtoken need to be specified.
         type: str
       controller_password:
         default: None
         required: false
-        description: Controller Admin User's password on the Ansible Controller Server. This should be stored in an Ansible Vault at vars/controller-secrets.yml or
+        description: Controller Admin User's password on the Ascender Server. This should be stored in an Ansible Vault at vars/controller-secrets.yml or
           elsewhere and called from a parent playbook. Either username / password or oauthtoken need to be specified.
         type: str
       controller_oauthtoken:
         default: None
         required: false
-        description: Controller Admin User's token on the Ansible Controller Server. This should be stored in an Ansible Vault at or elsewhere and called from a parent
+        description: Controller Admin User's token on the Ascender Server. This should be stored in an Ansible Vault at or elsewhere and called from a parent
           playbook. Either username / password or oauthtoken need to be specified.
         type: str
 ...

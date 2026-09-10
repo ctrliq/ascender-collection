@@ -6,7 +6,7 @@
 
 - name: Generate a unique name
   set_fact:
-    bulk_inv_name: "AWX-Collection-tests-bulk_host_create-{{ test_id }}"
+    bulk_inv_name: "Ascender-Collection-tests-bulk_host_create-{{ test_id }}"
 
 - name: Get our collection package
   controller_meta:

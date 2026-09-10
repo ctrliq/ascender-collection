@@ -4,7 +4,7 @@ An ansible role which reads variables from a hierarchical and scalable directory
 
 ## Requirements
 
-This role requires the [ctrliq.ascender](https://docs.ansible.com/ansible/latest/collections/awx/awx/index.html) or [ctrliq.ascender](https://console.redhat.com/ansible/automation-hub/repo/published/ansible/controller) Ansible collection.
+This role requires the [ctrliq.ascender](https://galaxy.ansible.com/ui/repo/published/ctrliq/ascender/) collection.
 
 ## Role Variables
 
@@ -47,7 +47,7 @@ The following Variables set the organization where should be applied the configu
 
 - It accepts two data models as the roles in the ctrliq.ascender collection,a simple straightforward easy to maintain model, and another based on the controller api.
 - Variables should be stored in yaml files. It could be used vault to encrypt sensitive data when needed.
-- All variables should be taken from the awx or automation controller object roles from the ctrliq.ascender collection.
+- All variables should be taken from the Ascender object roles in the ctrliq.ascender collection.
 
 ```yaml
 ---
@@ -61,7 +61,7 @@ controller_templates:
     job_type: run
     allow_simultaneous: true
     credentials:
-      - "{{ orgs }} {{ env }} aap_vault_credentials"
+      - "{{ orgs }} {{ env }} ascender_vault_credentials"
     execution_environment: "Default execution environment"
 ...
 ```
@@ -273,7 +273,7 @@ orgs_vars/Organization1
 
 ## Role Tags
 
-The role is designed to be used with tags, each tags correspond to an AWX or Automation Controller object to be managed by ansible.
+The role is designed to be used with tags, each tags correspond to an Ascender object to be managed by ansible.
 
 ```bash
 [ansible@demo-ctr1-dev global]$  ansible-playbook config-controller-filetree.yml --list-tags

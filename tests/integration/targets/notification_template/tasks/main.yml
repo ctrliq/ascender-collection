@@ -6,12 +6,12 @@
 
 - name: Generate names
   set_fact:
-    slack_not: "AWX-Collection-tests-notification_template-slack-not-{{ test_id }}"
-    webhook_not: "AWX-Collection-tests-notification_template-wehbook-not-{{ test_id }}"
-    email_not: "AWX-Collection-tests-notification_template-email-not-{{ test_id }}"
-    twillo_not: "AWX-Collection-tests-notification_template-twillo-not-{{ test_id }}"
-    pd_not: "AWX-Collection-tests-notification_template-pd-not-{{ test_id }}"
-    irc_not: "AWX-Collection-tests-notification_template-irc-not-{{ test_id }}"
+    slack_not: "Ascender-Collection-tests-notification_template-slack-not-{{ test_id }}"
+    webhook_not: "Ascender-Collection-tests-notification_template-wehbook-not-{{ test_id }}"
+    email_not: "Ascender-Collection-tests-notification_template-email-not-{{ test_id }}"
+    twillo_not: "Ascender-Collection-tests-notification_template-twillo-not-{{ test_id }}"
+    pd_not: "Ascender-Collection-tests-notification_template-pd-not-{{ test_id }}"
+    irc_not: "Ascender-Collection-tests-notification_template-irc-not-{{ test_id }}"
 
 - name: Create Slack notification with custom messages
   notification_template:
@@ -151,7 +151,7 @@
     notification_configuration:
       username: user
       password: s3cr3t
-      sender: tower@example.com
+      sender: ascender@example.com
       recipients:
         - user1@example.com
       host: smtp.example.com
@@ -261,7 +261,7 @@
     organization: Default
     notification_type: irc
     notification_configuration:
-      nickname: tower
+      nickname: ascender
       password: s3cr3t
       targets:
         - user1

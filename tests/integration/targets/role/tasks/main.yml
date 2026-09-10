@@ -6,14 +6,14 @@
 
 - name: Generate names
   set_fact:
-    username: "AWX-Collection-tests-role-user-{{ test_id }}"
-    project_name: "AWX-Collection-tests-role-project-1-{{ test_id }}"
-    jt1: "AWX-Collection-tests-role-jt1-{{ test_id }}"
-    jt2: "AWX-Collection-tests-role-jt2-{{ test_id }}"
-    wfjt_name: "AWX-Collection-tests-role-project-wfjt-{{ test_id }}"
-    team_name: "AWX-Collection-tests-team-team-{{ test_id }}"
-    team2_name: "AWX-Collection-tests-team-team-{{ test_id }}2"
-    org2_name: "AWX-Collection-tests-organization-{{ test_id }}2"
+    username: "Ascender-Collection-tests-role-user-{{ test_id }}"
+    project_name: "Ascender-Collection-tests-role-project-1-{{ test_id }}"
+    jt1: "Ascender-Collection-tests-role-jt1-{{ test_id }}"
+    jt2: "Ascender-Collection-tests-role-jt2-{{ test_id }}"
+    wfjt_name: "Ascender-Collection-tests-role-project-wfjt-{{ test_id }}"
+    team_name: "Ascender-Collection-tests-team-team-{{ test_id }}"
+    team2_name: "Ascender-Collection-tests-team-team-{{ test_id }}2"
+    org2_name: "Ascender-Collection-tests-organization-{{ test_id }}2"
 
 - block:
     - name: Create a User

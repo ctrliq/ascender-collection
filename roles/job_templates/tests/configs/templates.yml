@@ -11,7 +11,7 @@ controller_templates:
     playbook: helloworld.yml
     verbosity: 2
     extra_vars:
-      target_hosts: infra-ansible-tower-01.example.com
+      target_hosts: infra-ascender-01.example.com
   - name: Demo Job Template
     project: Test Project
     job_type: run

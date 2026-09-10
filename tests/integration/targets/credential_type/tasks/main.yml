@@ -6,10 +6,10 @@
 
 - name: Generate names
   set_fact:
-    cred_type_name: "AWX-Collection-tests-credential_type-cred-type-{{ test_id }}"
+    cred_type_name: "Ascender-Collection-tests-credential_type-cred-type-{{ test_id }}"
 
 - block:
-    - name: Add Tower credential type
+    - name: Add Ascender credential type
       credential_type:
         description: Credential type for Test
         name: "{{ cred_type_name }}"
@@ -22,7 +22,7 @@
         that:
           - "result is changed"
 
-    - name: Add Tower credential type with exists
+    - name: Add Ascender credential type with exists
       credential_type:
         description: Credential type for Test
         name: "{{ cred_type_name }}"
@@ -50,7 +50,7 @@
         that:
           - "result is changed"
 
-    - name: Add Tower credential type with exists
+    - name: Add Ascender credential type with exists
       credential_type:
         description: Credential type for Test
         name: "{{ cred_type_name }}"
@@ -64,7 +64,7 @@
         that:
           - "result is changed"
 
-    - name: Rename Tower credential type
+    - name: Rename Ascender credential type
       credential_type:
         name: "{{ cred_type_name }}"
         new_name: "{{ cred_type_name }}a"
@@ -77,7 +77,7 @@
           - "result is changed"
 
   always:
-    - name: Remove a Tower credential type
+    - name: Remove an Ascender credential type
       credential_type:
         name: "{{ item }}"
         state: absent

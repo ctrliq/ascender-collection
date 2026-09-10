@@ -1,6 +1,6 @@
 # controller_configuration.object_diff
 
-An ansible role to manage the object diff of the AWX or Automation Controller configuration. This role leverage the controller_object_diff.py lookup plugin of the ctrliq.ascender, comparing two lists, one taken directly from the API and the other one from the git repository, and it could be used to delete objects in the AWX or Automation Controller that are not defined in the git repository list.
+An ansible role to manage the object diff of the Ascender configuration. This role leverage the controller_object_diff.py lookup plugin of the ctrliq.ascender, comparing two lists, one taken directly from the API and the other one from the git repository, and it could be used to delete objects in Ascender that are not defined in the git repository list.
 
 ## Requirements
 
@@ -22,7 +22,7 @@ The following Variables set the organization where should be applied the configu
 
 ## Role Tags
 
-The role is designed to be used with tags, each tags correspond to an AWX or Automation Controller object to be managed by ansible.
+The role is designed to be used with tags, each tags correspond to an Ascender object to be managed by ansible.
 
 > :warning: List of object type managed by this role: credentials, credential_types, groups, hosts, inventories, inventory_sources, job_templates, organizations, projects, teams, users, workflow_job_templates.
 
@@ -34,7 +34,7 @@ $ ansible-playbook object_diff.yml --list-tags
 
 ## IMPORTANT
 
-To correctly manage `roles`, they can only be defined by a super-admin organization, so all the roles in the Ansible Controller instance are managed by only one organization.
+To correctly manage `roles`, they can only be defined by a super-admin organization, so all the roles in the Ascender instance are managed by only one organization.
 
 ## Example Playbook
 

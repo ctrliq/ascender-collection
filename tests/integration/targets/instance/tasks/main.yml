@@ -6,9 +6,9 @@
 
 - name: Generate hostnames
   set_fact:
-    hostname1: "AWX-Collection-tests-instance1.{{ test_id }}.example.com"
-    hostname2: "AWX-Collection-tests-instance2.{{ test_id }}.example.com"
-    hostname3: "AWX-Collection-tests-instance3.{{ test_id }}.example.com"
+    hostname1: "Ascender-Collection-tests-instance1.{{ test_id }}.example.com"
+    hostname2: "Ascender-Collection-tests-instance2.{{ test_id }}.example.com"
+    hostname3: "Ascender-Collection-tests-instance3.{{ test_id }}.example.com"
   register: facts
 
 - name: Get the k8s setting

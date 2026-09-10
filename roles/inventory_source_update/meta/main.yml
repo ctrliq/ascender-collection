@@ -2,7 +2,7 @@
 galaxy_info:
   role_name: inventory_source_update
   author: Sean Sullivan
-  description: An Ansible Role to update inventory sources in Ansible Controller.
+  description: An Ansible Role to update inventory sources in Ascender.
   company: Red Hat
   license: GPL-3.0-or-later
   min_ansible_version: 2.16.0
@@ -12,8 +12,7 @@ galaxy_info:
         - all
   galaxy_tags:
     - controller
-    - aap
-    - awx
+    - ascender
     - inventory
     - inventories
 

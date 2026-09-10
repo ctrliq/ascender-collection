@@ -236,7 +236,7 @@ def main():
     compare_items = module.params.get("compare_items")
     set_absent = module.params.get("set_absent")
     with_present = module.params.get("with_present")
-    # The export process will never change the AWX system
+    # The export process will never change the Ascender system
     module.json_output["changed"] = False
 
     # The exporter code currently works like the following:

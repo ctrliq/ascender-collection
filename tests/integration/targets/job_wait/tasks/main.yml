@@ -6,8 +6,8 @@
 
 - name: Generate random string for template and project
   set_fact:
-    jt_name: "AWX-Collection-tests-job_wait-long_running-{{ test_id }}"
-    proj_name: "AWX-Collection-tests-job_wait-long_running-{{ test_id }}"
+    jt_name: "Ascender-Collection-tests-job_wait-long_running-{{ test_id }}"
+    proj_name: "Ascender-Collection-tests-job_wait-long_running-{{ test_id }}"
 
 - block:
     - name: Create a project
@@ -109,7 +109,7 @@
 
     - name: Generate names
       set_fact:
-        wfjt_name2: "AWX-Collection-tests-workflow_launch--wfjt1-{{ test_id1 }}"
+        wfjt_name2: "Ascender-Collection-tests-workflow_launch--wfjt1-{{ test_id1 }}"
 
     - name: Create our workflow
       workflow_job_template:

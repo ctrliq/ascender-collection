@@ -47,7 +47,7 @@
     settings:
       AWX_ISOLATION_SHOW_PATHS:
         'not': 'a valid'
-        'tower': 'setting'
+        'ascender': 'setting'
   register: result
   ignore_errors: true
 

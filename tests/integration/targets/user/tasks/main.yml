@@ -6,7 +6,7 @@
 
 - name: Generate names
   set_fact:
-    username: "AWX-Collection-tests-user-user-{{ test_id }}"
+    username: "Ascender-Collection-tests-user-user-{{ test_id }}"
 
 - name: Create a User
   user:
@@ -174,7 +174,7 @@
 - block:
     - name: Generate an org name
       set_fact:
-        org_name: "AWX-Collection-tests-organization-org-{{ test_id }}"
+        org_name: "Ascender-Collection-tests-organization-org-{{ test_id }}"
 
     - name: Make sure {{ org_name }} is not there
       organization:

@@ -228,7 +228,7 @@ class LookupModule(LookupBase):
         if not kwargs.get('rules', None):
             raise AnsibleError('You must include rules to be in the ruleset via the rules parameter')
 
-        # All frequencies can use a timezone but rrule can't support the format that AWX uses.
+        # All frequencies can use a timezone but rrule can't support the format that Ascender uses.
         # So we will do a string manip here if we need to
         timezone = 'America/New_York'
         if 'timezone' in kwargs:
@@ -334,7 +334,7 @@ class LookupModule(LookupBase):
                     generated_rule,
                 )
 
-            # AWX requires an interval. rrule will not add interval if it's set to 1
+            # Ascender requires an interval. rrule will not add interval if it's set to 1
             if rule.get('interval', 1) == 1:
                 generated_rule = f"{generated_rule};INTERVAL=1"
 

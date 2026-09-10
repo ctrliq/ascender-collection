@@ -2,7 +2,7 @@
 galaxy_info:
   role_name: bulk_host_create
   author: Sean Sullivan
-  description: An Ansible Role to create hosts in bulk  in Ansible Controller.
+  description: An Ansible Role to create hosts in bulk  in Ascender.
   company: Red Hat
   license: GPL-3.0-or-later
   min_ansible_version: 2.16.0
@@ -12,8 +12,7 @@ galaxy_info:
         - all
   galaxy_tags:
     - controller
-    - aap
-    - awx
+    - ascender
     - host
     - hosts
 

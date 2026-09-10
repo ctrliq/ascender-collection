@@ -5,7 +5,7 @@
     ansible_async_dir: "{{ controller_configuration_async_dir }}"
   no_log: "{{ controller_configuration_settings_secure_logging }}"
   block:
-    - name: Update Ansible Controller Settings from dictionary or list of dictionaries
+    - name: Update Ascender Settings from dictionary or list of dictionaries
       ctrliq.ascender.settings:
         settings: "{{ __controller_setting_item.settings | default(omit, true) }}"
         name: "{{ __controller_setting_item.name | default(omit, true) }}"

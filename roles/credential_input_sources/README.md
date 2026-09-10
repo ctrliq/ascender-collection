@@ -2,7 +2,7 @@
 
 ## Description
 
-An Ansible Role to create/update/remove credential input sources on Ansible Controller, the below example is for CyberArk as an input source, change accordingly to match your input source type.
+An Ansible Role to create/update/remove credential input sources on Ascender, the below example is for CyberArk as an input source, change accordingly to match your input source type.
 
 ## Requirements
 
@@ -17,11 +17,11 @@ Currently:
 |Variable Name|Default Value|Required|Description|Example|
 |:---|:---:|:---:|:---|:---|
 |`controller_state`|"present"|no|The state all objects will take unless overridden by object default|'absent'|
-|`controller_hostname`|""|yes|URL to the Ansible Controller Server.|127.0.0.1|
-|`controller_validate_certs`|`True`|no|Whether or not to validate the Ansible Controller Server's SSL certificate.||
-|`controller_username`|""|no|Admin User on the Ansible Controller Server. Either username / password or oauthtoken need to be specified.||
-|`controller_password`|""|no|Controller Admin User's password on the Ansible Controller Server. This should be stored in an Ansible Vault at vars/controller-secrets.yml or elsewhere and called from a parent playbook. Either username / password or oauthtoken need to be specified.||
-|`controller_oauthtoken`|""|no|Controller Admin User's token on the Ansible Controller Server. This should be stored in an Ansible Vault at or elsewhere and called from a parent playbook. Either username / password or oauthtoken need to be specified.||
+|`controller_hostname`|""|yes|URL to the Ascender Server.|127.0.0.1|
+|`controller_validate_certs`|`True`|no|Whether or not to validate the Ascender Server's SSL certificate.||
+|`controller_username`|""|no|Admin User on the Ascender Server. Either username / password or oauthtoken need to be specified.||
+|`controller_password`|""|no|Controller Admin User's password on the Ascender Server. This should be stored in an Ansible Vault at vars/controller-secrets.yml or elsewhere and called from a parent playbook. Either username / password or oauthtoken need to be specified.||
+|`controller_oauthtoken`|""|no|Controller Admin User's token on the Ascender Server. This should be stored in an Ansible Vault at or elsewhere and called from a parent playbook. Either username / password or oauthtoken need to be specified.||
 |`controller_request_timeout`|`10`|no|Specify the timeout in seconds Ansible should use in requests to the controller host.||
 |`controller_configuration_collect_logs`|`false`|no|Specify whether to collect async results and continue for all failed async tasks instead of failing on the first error. Collected results are available in the `controller_configuration_role_errors` variable.||
 |`controller_credential_input_sources`|`see below`|yes|Data structure describing your credential input sources Described below.||
@@ -98,7 +98,7 @@ For further details on fields see <https://docs.ansible.com/automation-controlle
         "target_credential": "gitlab",
         "input_field_name": "password",
         "metadata": {
-          "object_query": "Safe=MY_SAFE;Object=AWX-user",
+          "object_query": "Safe=MY_SAFE;Object=ascender-user",
           "object_query_format": "Exact"
         },
         "description": "Fill the gitlab credential from CyberArk"
@@ -139,7 +139,7 @@ controller_credential_input_sources:
     target_credential: gitlab
     input_field_name: password
     metadata:
-      object_query: "Safe=MY_SAFE;Object=AWX-user"
+      object_query: "Safe=MY_SAFE;Object=ascender-user"
       object_query_format: "Exact"
     description: Fill the gitlab credential from CyberArk
 ```
@@ -150,7 +150,7 @@ controller_credential_input_sources:
 
 ```yaml
 ---
-- name: Playbook to configure ansible controller post installation
+- name: Playbook to configure Ascender post installation
   hosts: localhost
   connection: local
   # Define following vars here, or in controller_configs/controller_auth.yml

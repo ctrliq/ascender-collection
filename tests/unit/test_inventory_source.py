@@ -108,7 +108,7 @@ def test_falsy_value(run_module, admin_user, base_inventory):
 # We want to let the API return issues with "this doesn't support that", etc.
 #
 # GUI OPTIONS:
-# - - - - - - - manual:	file:	scm:	ec2:	gce	azure_rm	vmware	sat	openstack	rhv	tower	custom
+# - - - - - - - manual:	file:	scm:	ec2:	gce	azure_rm	vmware	sat	openstack	rhv	ascender	custom
 # credential		?	?	o	o	r	r		r	r		r		r	r	o
 # source_project	?	?	r	-	-	-		-	-		-		-	-	-
 # source_path		?	?	r	-	-	-		-	-		-		-	-	-

@@ -9,20 +9,20 @@ Configuration as code is about how your software components interact with each o
 Now that some concepts are clear, let's summarize what the collection will do. Basically, the collection is compose by three ansible roles:
 
 - **filetree_read**: An ansible role which reads variables from a hierarchical and scalable directory structure which is grouped based on the configuration code life-cycle. It could be used to run the role filetree_read to load variables followed by dispatch role to apply the configuration.
-- **filetree_create**: The role filetree_create is intended to be used as the first step to begin using the Configuration as Code on Ansible Tower or Ansible Automation Controller, when you already have a running instance of any of them. Obviously, you also could start to write your objects as code from scratch, but the idea behind the creation of that role is to simplify your lives and make that task a little bit easier.
-- **object_diff**: An ansible role to manage the object diff of the AWX or Automation Controller configuration. This role leverage the controller_object_diff.py lookup plugin of the ctrliq.ascender, comparing two lists, one taken directly from the API and the other one from the git repository, and it could be used to delete objects in the AWX or Automation Controller that are not defined in the git repository list.
-- **dispatch**: An Ansible Role to run all roles on Ansible Controller.
+- **filetree_create**: The role filetree_create is intended to be used as the first step to begin using the Configuration as Code on Ascender, when you already have a running instance of it. Obviously, you also could start to write your objects as code from scratch, but the idea behind the creation of that role is to simplify your lives and make that task a little bit easier.
+- **object_diff**: An ansible role to manage the object diff of the Ascender configuration. This role leverage the controller_object_diff.py lookup plugin of the ctrliq.ascender, comparing two lists, one taken directly from the API and the other one from the git repository, and it could be used to delete objects in Ascender that are not defined in the git repository list.
+- **dispatch**: An Ansible Role to run all roles on Ascender.
 
 Automation Webhook can be used to link a Git repository and Ansible automation natively. Once a repo link is setup, Ansible catches events (commits: push, merge, jobs, etc) from the Git system (GitHub, GitHub Enterprise, GitLab) and uses them to automatically trigger automation jobs to update projects, inventories, and perform deployments, all without requiring yet another third-party tool such as Jenkins.
 
 The benefits of having to use and manage the configuration of one less tool is clear. With these new capabilities, there is no need for an additional CI tool such as Jenkins to monitor repos and launch automation jobs when changes occur. There is no need to sync job parameters, manage user access and monitor activity across systems. Less moving parts means there are less things that could break and less risk of credentials leaking or your CI system being exploited to deploy things to production.
 
-Utilizing the Automation Webhook capabilities in Ansible Tower / Controller, you can implement agentless GitOps workflows that go beyond just cloud-native systems and manage existing IT infrastructure or Configuration such as cloud services, networking gear or software configuring, which is the our case.
+Utilizing the Automation Webhook capabilities in Ascender, you can implement agentless GitOps workflows that go beyond just cloud-native systems and manage existing IT infrastructure or Configuration such as cloud services, networking gear or software configuring, which is the our case.
 
-## Automation Controller Workflow CasC
+## Ascender Workflow CasC
 
-![Automation Controller Workflow CasC](../../tests/automatetheautomation/pictures/AAP_CasC_Worflow.png)
-*Automation Controller Workflow CasC*
+![Ascender Workflow CasC](../../tests/automatetheautomation/pictures/AAP_CasC_Worflow.png)
+*Ascender Workflow CasC*
 
 The workflow will have the following steps:
 

@@ -122,9 +122,9 @@ While not strictly followed, the general flow of a test should be:
 ```
 - name: Generate names
   set_fact:
-    group_name1: "AWX-Collection-tests-instance_group-group1-{{ test_id }}"
-    group_name2: "AWX-Collection-tests-instance_group-group2-{{ test_id }}"
-    cred_name1: "AWX-Collection-tests-instance_group-cred1-{{ test_id }}"
+    group_name1: "Ascender-Collection-tests-instance_group-group1-{{ test_id }}"
+    group_name2: "Ascender-Collection-tests-instance_group-group2-{{ test_id }}"
+    cred_name1: "Ascender-Collection-tests-instance_group-cred1-{{ test_id }}"
 ```
 
 - **Non-creating tests (i.e. test for specific error conditions, etc), with assertion**

@@ -10,7 +10,7 @@
     approval_node_name: "{{ test_prefix }}-node-{{ test_id }}"
     wfjt_name: "{{ test_prefix }}-wfjt-{{ test_id }}"
   vars:
-    test_prefix: AWX-Collection-tests-workflow_approval
+    test_prefix: Ascender-Collection-tests-workflow_approval
 
 - block:
     - name: Create a new organization for test isolation

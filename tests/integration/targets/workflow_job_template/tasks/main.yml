@@ -6,28 +6,28 @@
 
 - name: Generate random names for test objects
   set_fact:
-    org_name: "AWX-Collection-tests-organization-org-{{ test_id }}"
-    scm_cred_name: "AWX-Collection-tests-workflow_job_template-scm-cred-{{ test_id }}"
-    demo_project_name: "AWX-Collection-tests-workflow_job_template-proj-{{ test_id }}"
-    demo_project_name_2: "AWX-Collection-tests-workflow_job_template-proj-{{ test_id }}_2"
-    jt1_name: "AWX-Collection-tests-workflow_job_template-jt1-{{ test_id }}"
-    jt2_name: "AWX-Collection-tests-workflow_job_template-jt2-{{ test_id }}"
-    approval_node_name: "AWX-Collection-tests-workflow_approval_node-{{ test_id }}"
-    lab1: "AWX-Collection-tests-job_template-lab1-{{ test_id }}"
-    wfjt_name: "AWX-Collection-tests-workflow_job_template-wfjt-{{ test_id }}"
-    webhook_wfjt_name: "AWX-Collection-tests-workflow_job_template-webhook-wfjt-{{ test_id }}"
-    conditional_wfjt_name: "AWX-Collection-tests-workflow_job_template-conditional-wfjt-{{ test_id }}"
-    email_not: "AWX-Collection-tests-job_template-email-not-{{ test_id }}"
-    webhook_notification: "AWX-Collection-tests-notification_template-wehbook-not-{{ test_id }}"
-    project_inv: "AWX-Collection-tests-inventory_source-inv-project-{{ test_id }}"
-    project_inv_source: "AWX-Collection-tests-inventory_source-inv-source-project-{{ test_id }}"
-    github_webhook_credential_name: "AWX-Collection-tests-credential-webhook-{{ test_id }}_github"
-    ee1: "AWX-Collection-tests-workflow_job_template-ee1-{{ test_id }}"
-    label1: "AWX-Collection-tests-workflow_job_template-l1-{{ test_id }}"
-    label2: "AWX-Collection-tests-workflow_job_template-l2-{{ test_id }}"
-    ig1: "AWX-Collection-tests-workflow_job_template-ig1-{{ test_id }}"
-    ig2: "AWX-Collection-tests-workflow_job_template-ig2-{{ test_id }}"
-    host1: "AWX-Collection-tests-workflow_job_template-h1-{{ test_id }}"
+    org_name: "Ascender-Collection-tests-organization-org-{{ test_id }}"
+    scm_cred_name: "Ascender-Collection-tests-workflow_job_template-scm-cred-{{ test_id }}"
+    demo_project_name: "Ascender-Collection-tests-workflow_job_template-proj-{{ test_id }}"
+    demo_project_name_2: "Ascender-Collection-tests-workflow_job_template-proj-{{ test_id }}_2"
+    jt1_name: "Ascender-Collection-tests-workflow_job_template-jt1-{{ test_id }}"
+    jt2_name: "Ascender-Collection-tests-workflow_job_template-jt2-{{ test_id }}"
+    approval_node_name: "Ascender-Collection-tests-workflow_approval_node-{{ test_id }}"
+    lab1: "Ascender-Collection-tests-job_template-lab1-{{ test_id }}"
+    wfjt_name: "Ascender-Collection-tests-workflow_job_template-wfjt-{{ test_id }}"
+    webhook_wfjt_name: "Ascender-Collection-tests-workflow_job_template-webhook-wfjt-{{ test_id }}"
+    conditional_wfjt_name: "Ascender-Collection-tests-workflow_job_template-conditional-wfjt-{{ test_id }}"
+    email_not: "Ascender-Collection-tests-job_template-email-not-{{ test_id }}"
+    webhook_notification: "Ascender-Collection-tests-notification_template-wehbook-not-{{ test_id }}"
+    project_inv: "Ascender-Collection-tests-inventory_source-inv-project-{{ test_id }}"
+    project_inv_source: "Ascender-Collection-tests-inventory_source-inv-source-project-{{ test_id }}"
+    github_webhook_credential_name: "Ascender-Collection-tests-credential-webhook-{{ test_id }}_github"
+    ee1: "Ascender-Collection-tests-workflow_job_template-ee1-{{ test_id }}"
+    label1: "Ascender-Collection-tests-workflow_job_template-l1-{{ test_id }}"
+    label2: "Ascender-Collection-tests-workflow_job_template-l2-{{ test_id }}"
+    ig1: "Ascender-Collection-tests-workflow_job_template-ig1-{{ test_id }}"
+    ig2: "Ascender-Collection-tests-workflow_job_template-ig2-{{ test_id }}"
+    host1: "Ascender-Collection-tests-workflow_job_template-h1-{{ test_id }}"
 
 - block:
     - name: "Create a new organization"
@@ -61,7 +61,7 @@
         notification_configuration:
           username: user
           password: s3cr3t
-          sender: tower@example.com
+          sender: ascender@example.com
           recipients:
             - user1@example.com
           host: smtp.example.com

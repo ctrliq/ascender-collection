@@ -76,7 +76,7 @@ controller_projects:
                       | default(template_overrides_global.project.local_path)
                       | default(current_projects_asset_value.local_path) }}"
 {% endif %}
-{% if is_aap and
+{% if is_controller_v4 and
       (template_overrides_resources.project[current_projects_asset_value.name].default_environment is defined
       or template_overrides_global.project.default_environment is defined
       or current_job_templates_asset_value.summary_fields.default_environment is defined) %}

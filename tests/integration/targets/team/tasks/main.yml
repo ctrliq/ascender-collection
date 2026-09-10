@@ -6,7 +6,7 @@
 
 - name: Generate names
   set_fact:
-    team_name: "AWX-Collection-tests-team-team-{{ test_id }}"
+    team_name: "Ascender-Collection-tests-team-team-{{ test_id }}"
 
 - name: Attempt to add a team to a non-existant Organization
   team:

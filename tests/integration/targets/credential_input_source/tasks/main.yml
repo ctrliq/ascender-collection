@@ -6,8 +6,8 @@
 
 - name: Generate names
   set_fact:
-    src_cred_name: "AWX-Collection-tests-credential_input_source-src_cred-{{ test_id }}"
-    target_cred_name: "AWX-Collection-tests-credential_input_source-target_cred-{{ test_id }}"
+    src_cred_name: "Ascender-Collection-tests-credential_input_source-src_cred-{{ test_id }}"
+    target_cred_name: "Ascender-Collection-tests-credential_input_source-target_cred-{{ test_id }}"
 
 - block:
     - name: Add credential Lookup
@@ -45,7 +45,7 @@
         target_credential: "{{ target_cred_result.id }}"
         source_credential: "{{ src_cred_result.id }}"
         metadata:
-          object_query: "Safe=MY_SAFE;Object=AWX-user"
+          object_query: "Safe=MY_SAFE;Object=ascender-user"
           object_query_format: "Exact"
         state: present
       register: result
@@ -60,7 +60,7 @@
         target_credential: "{{ target_cred_result.id }}"
         source_credential: "{{ src_cred_result.id }}"
         metadata:
-          object_query: "Safe=MY_SAFE;Object=AWX-user"
+          object_query: "Safe=MY_SAFE;Object=ascender-user"
           object_query_format: "Exact"
         state: exists
       register: result
@@ -75,7 +75,7 @@
         target_credential: "{{ target_cred_result.id }}"
         source_credential: "{{ src_cred_result.id }}"
         metadata:
-          object_query: "Safe=MY_SAFE;Object=AWX-user"
+          object_query: "Safe=MY_SAFE;Object=ascender-user"
           object_query_format: "Exact"
         state: absent
       register: result
@@ -90,7 +90,7 @@
         target_credential: "{{ target_cred_result.id }}"
         source_credential: "{{ src_cred_result.id }}"
         metadata:
-          object_query: "Safe=MY_SAFE;Object=AWX-user"
+          object_query: "Safe=MY_SAFE;Object=ascender-user"
           object_query_format: "Exact"
         state: exists
       register: result

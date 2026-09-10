@@ -2,7 +2,7 @@
 galaxy_info:
   role_name: license
   author: Red Hat CoP
-  description: A role to set the Ansible Controller License
+  description: A role to set the Ascender License
   company: Red Hat
   license: GPL-3.0-or-later
   min_ansible_version: 2.16.0
@@ -12,8 +12,7 @@ galaxy_info:
         - all
   galaxy_tags:
     - controller
-    - aap
-    - awx
+    - ascender
     - configuration
     - license
 

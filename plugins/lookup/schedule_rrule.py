@@ -223,7 +223,7 @@ class LookupModule(LookupBase):
 
         my_rule = rrule.rrule(**rrule_kwargs)
 
-        # All frequencies can use a timezone but rrule can't support the format that AWX uses.
+        # All frequencies can use a timezone but rrule can't support the format that Ascender uses.
         # So we will do a string manip here if we need to
         timezone = 'America/New_York'
         if 'timezone' in kwargs:
@@ -243,7 +243,7 @@ class LookupModule(LookupBase):
                 f"UNTIL={until_utc.strftime('%Y%m%dT%H%M%S')}Z",
                 return_rrule,
             )
-        # AWX requires an interval. rrule will not add interval if it's set to 1
+        # Ascender requires an interval. rrule will not add interval if it's set to 1
         if kwargs.get('every', 1) == 1:
             return_rrule = f"{return_rrule};INTERVAL=1"
 

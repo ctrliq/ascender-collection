@@ -2,7 +2,7 @@
 galaxy_info:
   role_name: roles
   author: Tom Page
-  description: An Ansible role to assign role based access controls on Ansible Controller objects to a given team.
+  description: An Ansible role to assign role based access controls on Ascender objects to a given team.
   company: Red Hat
   license: GPL-3.0-or-later
   min_ansible_version: 2.16.0
@@ -12,8 +12,7 @@ galaxy_info:
         - all
   galaxy_tags:
     - controller
-    - aap
-    - awx
+    - ascender
     - configuration
     - rbac
 

@@ -47,9 +47,9 @@
           ansible.builtin.debug:
             msg: "Using the 'controller_role' plugin from: {{ controller_role_plugin }}"
 
-- name: Check if the connection is to an Ansible Tower or to Automation Platform # noqa jinja[invalid]
+- name: Check whether the API is 4.0.0 or newer # noqa jinja[invalid]
   ansible.builtin.set_fact:
-    is_aap: "{{ lookup(controller_api_plugin, 'ping', host=controller_hostname, oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs).version is
+    is_controller_v4: "{{ lookup(controller_api_plugin, 'ping', host=controller_hostname, oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs).version is
       version('4.0.0', '>=') }}"
   no_log: "{{ controller_configuration_object_diff_secure_logging }}"
   tags:

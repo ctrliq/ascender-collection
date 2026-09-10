@@ -6,10 +6,10 @@
 
 - name: Generate names
   set_fact:
-    inv_name: "AWX-Collection-tests-ad_hoc_command-inventory-{{ test_id }}"
-    ssh_cred_name: "AWX-Collection-tests-ad_hoc_command-ssh-cred-{{ test_id }}"
-    org_name: "AWX-Collection-tests-ad_hoc_command-org-{{ test_id }}"
-    ee_name: "AWX-Collection-tests-ad_hoc_command-ee-{{ test_id }}"
+    inv_name: "Ascender-Collection-tests-ad_hoc_command-inventory-{{ test_id }}"
+    ssh_cred_name: "Ascender-Collection-tests-ad_hoc_command-ssh-cred-{{ test_id }}"
+    org_name: "Ascender-Collection-tests-ad_hoc_command-org-{{ test_id }}"
+    ee_name: "Ascender-Collection-tests-ad_hoc_command-ee-{{ test_id }}"
 
 - name: Create a New Organization
   organization:

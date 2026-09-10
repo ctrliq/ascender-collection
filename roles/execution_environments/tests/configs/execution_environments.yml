@@ -1,6 +1,6 @@
 ---
 controller_execution_environments:
-  - name: Tower env
+  - name: Ascender env
     organization: Default
     image: quay.io/ansible/awx-ee
     pull: always

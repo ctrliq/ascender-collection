@@ -1,0 +1,20 @@
+---
+minor_changes:
+  - roles - Renamed AWX, AAP and Ansible Tower to Ascender across role metadata, documentation and task
+    names. Every role now carries a single ``ascender`` galaxy tag in place of ``aap`` and ``awx``, and the
+    role descriptions and README variable tables name Ascender rather than Ansible Controller. Names the
+    API itself defines are unchanged, among them the ``Red Hat Ansible Automation Platform`` credential
+    type, the ``AWX_ISOLATION_*`` settings and the ``awx_*`` metrics that ``get_stats.yml`` reads.
+  - collect_async_status role - Documented the asynchronous and secure logging variables under the names
+    the role actually reads, ``controller_configuration_async_retries``,
+    ``controller_configuration_async_delay`` and ``controller_configuration_secure_logging``. The README
+    listed the upstream ``aap_configuration_*`` names, which the role has never looked at.
+  - filetree_create role - Documented the connection variables under the names this collection reads,
+    ``controller_hostname``, ``controller_username``, ``controller_oauthtoken`` and
+    ``controller_validate_certs``, in place of the upstream ``aap_*`` names.
+  - filetree_create, object_diff roles - Renamed the internal ``is_aap`` fact to ``is_controller_v4`` and
+    ``aap_version`` to ``controller_version``. Both are set by the roles themselves from the ping endpoint
+    and gate the same API version check as before.
+  - filetree_create, filetree_read roles - Pointed the Requirements section at the ctrliq.ascender
+    collection. Both READMEs linked to the awx.awx and ansible.controller pages under the
+    ctrliq.ascender name.

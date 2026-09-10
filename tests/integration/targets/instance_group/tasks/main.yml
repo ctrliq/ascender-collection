@@ -6,9 +6,9 @@
 
 - name: Generate names
   set_fact:
-    group_name1: "AWX-Collection-tests-instance_group-group1-{{ test_id }}"
-    group_name2: "AWX-Collection-tests-instance_group-group2-{{ test_id }}"
-    cred_name1: "AWX-Collection-tests-instance_group-cred1-{{ test_id }}"
+    group_name1: "Ascender-Collection-tests-instance_group-group1-{{ test_id }}"
+    group_name2: "Ascender-Collection-tests-instance_group-group2-{{ test_id }}"
+    cred_name1: "Ascender-Collection-tests-instance_group-cred1-{{ test_id }}"
 
 - block:
     - name: Create an OpenShift Credential
