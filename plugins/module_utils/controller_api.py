@@ -1145,8 +1145,27 @@ class ControllerAPIModule(ControllerModule):
         return result
 
     def wait_output(self, response):
-        for k in ('id', 'status', 'elapsed', 'started', 'finished'):
+        # id, status and elapsed describe the object whatever state it is in
+        for k in ('id', 'status', 'elapsed'):
             self.json_output[k] = response['json'].get(k)
+
+        # started and finished are reported only once the object has finished.
+        #
+        # Ansible's async_status reads a module's result back from its results file and decides whether the
+        # async task itself is done from these two names: no 'started' key means the module has exited, which
+        # is what every ordinary module's result looks like, and a 'started' key means the file is the async
+        # wrapper's own placeholder, whose 'finished' says whether the module is done yet. A wait that gave up
+        # on a running job used to write started=<timestamp>, finished=null, which async_status took as "still
+        # running", so collect_async_status polled a module that had already exited for every one of its
+        # retries before ignore_errors let the real failure through (#296). Leaving both keys out until the
+        # object has finished lets async_status mark the task done itself. The RETURN blocks only promise the
+        # two keys on success, so nothing documented changes.
+        if response['json'].get('finished'):
+            self.json_output['started'] = response['json'].get('started')
+            self.json_output['finished'] = response['json']['finished']
+        else:
+            self.json_output.pop('started', None)
+            self.json_output.pop('finished', None)
 
     def wait_on_workflow_node_url(self, url, object_name, object_type, timeout=None, interval=2, **kwargs):
         # Grab our start time to compare against for the timeout

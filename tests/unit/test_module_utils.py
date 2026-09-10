@@ -262,3 +262,40 @@ def test_multiple_lookup(run_module, admin_user):
     assert 'foo' in result['msg']
     assert 'returned 2 items, expected 1' in result['msg']
     assert 'query' in result
+
+
+def test_wait_output_leaves_started_and_finished_out_of_an_unfinished_job(collection_import, mocker):
+    """Ansible's async_status decides whether an async task is done from the ``started`` and ``finished`` keys
+    of the module's own result. A job that was still running used to be reported as started=<timestamp>,
+    finished=null, which async_status read as "still running", so collect_async_status polled a module that had
+    already exited for every one of its retries (#296). Neither key may appear until the job has finished.
+    """
+    controller_api = collection_import('plugins.module_utils.controller_api')
+    module = mocker.Mock()
+    module.json_output = {'started': 'stale', 'finished': 'stale'}
+
+    controller_api.ControllerAPIModule.wait_output(
+        module, {'json': {'id': 1347, 'status': 'running', 'elapsed': 0.203697, 'started': '2026-09-07T15:23:30.073389Z', 'finished': None}}
+    )
+
+    assert module.json_output == {'id': 1347, 'status': 'running', 'elapsed': 0.203697}
+
+
+def test_wait_output_reports_started_and_finished_once_the_job_has_finished(collection_import, mocker):
+    """On a finished job the two keys come back as the RETURN blocks document them, timestamps and all."""
+    controller_api = collection_import('plugins.module_utils.controller_api')
+    module = mocker.Mock()
+    module.json_output = {}
+
+    controller_api.ControllerAPIModule.wait_output(
+        module,
+        {'json': {'id': 1347, 'status': 'successful', 'elapsed': 19.484, 'started': '2026-09-07T15:23:30.073389Z', 'finished': '2026-09-07T15:23:49.557738Z'}},
+    )
+
+    assert module.json_output == {
+        'id': 1347,
+        'status': 'successful',
+        'elapsed': 19.484,
+        'started': '2026-09-07T15:23:30.073389Z',
+        'finished': '2026-09-07T15:23:49.557738Z',
+    }

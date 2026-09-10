@@ -1,0 +1,11 @@
+bugfixes:
+  - >-
+    project, project_update, job_launch, job_wait, ad_hoc_command, ad_hoc_command_wait, inventory_source_update,
+    workflow_launch, bulk_job_launch, workflow_node_wait, workflow_approval - A module that gives up on a job
+    before it has finished no longer returns ``started`` and ``finished`` for that job. Ansible's ``async_status``
+    reads those two names out of every module result to decide whether the async task itself is done, so a
+    ``started`` timestamp beside a null ``finished`` made ``collect_async_status`` keep polling a module that had
+    already exited, for every one of its retries, before ``ignore_errors`` let the real failure message through.
+    Every role that dispatches its module asynchronously was affected, and a failure took the whole retry budget
+    to surface, eleven minutes at 300 retries. Both keys are still returned once the job has finished, which is
+    the only case the modules document.
