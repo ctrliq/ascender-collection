@@ -2,7 +2,7 @@
 
 ## Description
 
-An Ansible Role to add/update/remove users to on Ansible Controller.
+An Ansible Role to add/update/remove users on Ansible Controller.
 
 ## Requirements
 

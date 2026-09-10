@@ -1,0 +1,6 @@
+bugfixes:
+  - bulk_host_create role - Corrected the ``short_description`` in the argument spec, which described the
+    role as running a list of ad hoc commands. That text belongs to the ``ad_hoc_command`` role and was
+    copied from it, so the rendered role documentation named the wrong operation entirely.
+  - users role - Corrected the README description, which read "add/update/remove users to on" and now
+    matches the wording the ``hosts`` and ``notification_templates`` roles already use.
