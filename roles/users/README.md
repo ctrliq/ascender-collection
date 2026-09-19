@@ -86,6 +86,7 @@ This also speeds up the overall role.
 |`last_name`|""|no|str|The last name of the user|
 |`is_superuser`|false|no|bool|Whether the user is a superuser|
 |`preferred_language`|""|no|str|Language the controller UI is shown in for this user, for example en-us.|
+|`preferred_theme`|""|no|str|Theme the controller UI is shown in for this user, for example light or dark.|
 |`is_system_auditor`|false|no|bool|Whether the user is an auditor|
 |`organization`|""|no|str|The name of the organization the user belongs to.<br />Added in ctrliq.ascender >= 20.0.0 DOES NOT exist in ctrliq.ascender yet.|
 |`state`|`present`|no|str|Desired state of the resource.|
