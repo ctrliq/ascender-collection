@@ -37,6 +37,12 @@ options:
       description:
         - The preferred language for the user, used by the UI.
       type: str
+    preferred_theme:
+      description:
+        - The id of the UI theme the user prefers, for example C(light) or C(dark).
+        - A theme id is the name of a stylesheet the UI ships, or C(custom) for the one an administrator uploads.
+        - An empty string clears the preference, and the UI falls back to the installation default.
+      type: str
     organization:
       description:
         - The user will be created as a member of that organization name, ID, or named URL (needed for organization admins to create new organization users).
@@ -135,6 +141,7 @@ def main():
         last_name=dict(),
         email=dict(),
         preferred_language=dict(),
+        preferred_theme=dict(),
         is_superuser=dict(type='bool', aliases=['superuser']),
         is_system_auditor=dict(type='bool', aliases=['auditor']),
         password=dict(no_log=True),
@@ -153,6 +160,7 @@ def main():
     last_name = module.params.get('last_name')
     email = module.params.get('email')
     preferred_language = module.params.get('preferred_language')
+    preferred_theme = module.params.get('preferred_theme')
     is_superuser = module.params.get('is_superuser')
     is_system_auditor = module.params.get('is_system_auditor')
     password = module.params.get('password')
@@ -180,6 +188,8 @@ def main():
         new_fields['email'] = email
     if preferred_language is not None:
         new_fields['preferred_language'] = preferred_language
+    if preferred_theme is not None:
+        new_fields['preferred_theme'] = preferred_theme
     if is_superuser is not None:
         new_fields['is_superuser'] = is_superuser
     if is_system_auditor is not None:

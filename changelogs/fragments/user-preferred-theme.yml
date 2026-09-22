@@ -1,0 +1,7 @@
+minor_changes:
+  - The ``user`` module and the ``users`` role take a ``preferred_theme``, the id
+    of the UI theme a user is shown, alongside the ``preferred_language`` they
+    already took. The platform has stored a theme per user since the custom theme
+    landed, so until now an account's language could be automated and its theme
+    could not. ``filetree_create`` exports the field as well, so a round trip
+    through a file tree keeps it.

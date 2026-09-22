@@ -26,6 +26,13 @@ controller_user_accounts:
                             | default(template_overrides_global.user.preferred_language)
                             | default(current_users_asset_value.preferred_language) }}"
 {% endif %}
+{% if template_overrides_resources.user[current_users_asset_value.username].preferred_theme is defined
+      or template_overrides_global.user.preferred_theme is defined
+      or current_users_asset_value.preferred_theme %}
+    preferred_theme: "{{ template_overrides_resources.user[current_users_asset_value.username].preferred_theme
+                         | default(template_overrides_global.user.preferred_theme)
+                         | default(current_users_asset_value.preferred_theme) }}"
+{% endif %}
     update_secrets: false
 {% if last_user | default(true) | bool %}
 ...
