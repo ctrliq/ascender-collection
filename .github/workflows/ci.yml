@@ -212,7 +212,13 @@ jobs:
           AWX_TEST_DATABASE_USER: awx
           AWX_TEST_DATABASE_PASSWORD: awxpass
         run: |
-          sudo install -d -o "$USER" -g "$USER" -m 0755 /var/log/tower
+          # LOG_ROOT, which the ascender checkout writes its file handlers into.
+          # Django opens them in django.setup(), before any test runs, so a missing
+          # directory is not a failing test: the job dies on "Unable to configure
+          # handler 'ascender_warnings'" and reports no results at all.
+          #
+          # It was /var/log/tower until ctrliq/ascender#997 moved LOG_ROOT.
+          sudo install -d -o "$USER" -g "$USER" -m 0755 /var/log/ascender
           pytest tests/unit/ -v --nomigrations --reuse-db
 
   changelog:
