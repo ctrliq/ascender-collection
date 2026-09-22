@@ -1,0 +1,2 @@
+minor_changes:
+  - job_template - added notification_templates_changed option (in alignment with feat: https://github.com/ctrliq/ascender/pull/696)

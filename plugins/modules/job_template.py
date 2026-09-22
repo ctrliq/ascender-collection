@@ -291,6 +291,11 @@ options:
         - list of notifications to send on error
       type: list
       elements: str
+    notification_templates_changed:
+      description:
+        - list of notifications to send on changes
+      type: list
+      elements: str
     prevent_instance_group_fallback:
       description:
         - Prevent falling back to instance groups set on the associated inventory or organization
@@ -414,6 +419,7 @@ def main():
         notification_templates_started=dict(type="list", elements='str'),
         notification_templates_success=dict(type="list", elements='str'),
         notification_templates_error=dict(type="list", elements='str'),
+        notification_templates_changed=dict(type="list", elements='str'),
         prevent_instance_group_fallback=dict(type="bool"),
         state=dict(choices=['present', 'absent', 'exists'], default='present'),
     )
@@ -584,6 +590,12 @@ def main():
         association_fields['notification_templates_error'] = []
         for item in notifications_error:
             association_fields['notification_templates_error'].append(module.resolve_name_to_id('notification_templates', item))
+
+    notifications_changed = module.params.get('notification_templates_changed')
+    if notifications_changed is not None:
+        association_fields['notification_templates_changed'] = []
+        for item in notifications_changed:
+            association_fields['notification_templates_changed'].append(module.resolve_name_to_id('notification_templates', item))
 
     instance_group_names = module.params.get('instance_groups')
     if instance_group_names is not None:
