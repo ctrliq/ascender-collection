@@ -1,0 +1,8 @@
+bugfixes:
+  - filetree_read role - stopped the task name interpolating its own loop
+    variable, which made ansible-core 2.19 and later warn ``Encountered 1
+    template error. error 1 - '__task_filetree_read' is undefined`` on every
+    run of the role. The banner is rendered once before any loop item exists,
+    so the variable could not resolve there. The per-item detail is kept with
+    ``loop_control.label``, which also shortens it from the whole dictionary
+    to the object name.
