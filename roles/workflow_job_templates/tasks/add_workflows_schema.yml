@@ -92,6 +92,37 @@
       vars:
         __workflow_links_only_remove: true
 
+    # A node that is on the controller but no longer in the file keeps its outgoing links and
+    # has lost the incoming one, so it would run as soon as the workflow starts. It goes between
+    # the two link passes: its old links could otherwise make a new link look like a cycle.
+    - name: add_workflows_schema | Remove the Workflow Nodes that are not in simplified_workflow_nodes
+      ctrliq.ascender.workflow_job_template_node:
+        identifier: "{{ __workflow_prune_node_item }}"
+        workflow: "{{ __workflow_loop_item.name | mandatory }}"
+        organization: "{{ __workflow_loop_item.organization.name | default(__workflow_loop_item.organization | default(omit)) }}"
+        state: absent
+        controller_username: "{{ controller_username | default(omit, true) }}"
+        controller_password: "{{ controller_password | default(omit, true) }}"
+        controller_oauthtoken: "{{ controller_oauthtoken | default(omit, true) }}"
+        request_timeout: "{{ controller_request_timeout | default(omit, true) }}"
+        controller_host: "{{ controller_hostname | default(omit, true) }}"
+        controller_config_file: "{{ controller_config_file | default(omit, true) }}"
+        validate_certs: "{{ controller_validate_certs | default(omit) }}"
+      loop: "{{ __workflow_current_node_identifiers | difference(__workflow_loop_item.simplified_workflow_nodes | map(attribute='identifier')) }}"
+      loop_control:
+        loop_var: __workflow_prune_node_item
+        label: "{{ __workflow_loop_item.name }}/{{ __workflow_prune_node_item }}"
+      when: __workflow_loop_item.prune_nodes | default(controller_configuration_workflow_job_templates_prune_nodes) | bool
+      vars:
+        __workflow_organization: "{{ __workflow_loop_item.organization.name | default(__workflow_loop_item.organization | default(none)) }}"
+        __workflow_current_node_identifiers: "{{ query('ctrliq.ascender.controller_api', 'workflow_job_template_nodes',
+          query_params={'workflow_job_template__name': __workflow_loop_item.name}
+          | combine({'workflow_job_template__organization__name': __workflow_organization} if __workflow_organization else {}),
+          return_all=true, max_objects=query_controller_api_max_objects | default(10000),
+          host=controller_hostname | default(none), username=controller_username | default(none), password=controller_password | default(none),
+          oauth_token=controller_oauthtoken | default(none), verify_ssl=controller_validate_certs | default(none),
+          request_timeout=controller_request_timeout | default(none)) | map(attribute='identifier') | list }}"
+
     - name: add_workflows_schema | Create links between Workflow Nodes
       ansible.builtin.include_tasks: add_workflows_links.yml
       vars:

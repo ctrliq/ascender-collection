@@ -14,4 +14,7 @@ controller_configuration_workflow_job_templates_loop_delay: "{{ controller_confi
   | default(controller_configuration_loop_delay | default(0)) }}"
 controller_configuration_async_dir:
 controller_configuration_workflows_enforce_defaults: "{{ controller_configuration_enforce_defaults | default(false) }}"
+# Remove the nodes of a workflow that are on the controller but not in its simplified_workflow_nodes.
+# A single workflow can set prune_nodes to override this.
+controller_configuration_workflow_job_templates_prune_nodes: true
 ...
