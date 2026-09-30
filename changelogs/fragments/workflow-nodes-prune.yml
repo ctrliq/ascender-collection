@@ -1,0 +1,2 @@
+breaking_changes:
+  - workflow_job_templates role - a node that is on the controller but not in simplified_workflow_nodes is now removed. It used to stay behind without the link that led to it, which made it a root node that runs as soon as the workflow starts. Set prune_nodes to false on a workflow, or controller_configuration_workflow_job_templates_prune_nodes to false, to keep the old behaviour.
