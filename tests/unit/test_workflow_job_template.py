@@ -292,3 +292,48 @@ def test_workflow_allow_overwrite_flow_vars_on_relaunch(run_module, admin_user, 
     result = run_module('workflow_job_template', dict(module_args, allow_overwrite_flow_vars_on_relaunch=False), admin_user)
     assert result['changed']
     assert not WorkflowJobTemplate.objects.get(name='foo-workflow').allow_overwrite_flow_vars_on_relaunch
+
+
+def linked_workflow_nodes(edge_type):
+    return [
+        {'identifier': 'node-a', 'unified_job_template': {'name': 'foo-jt', 'type': 'job_template'}, 'related': {edge_type: [{'identifier': 'node-b'}]}},
+        {'identifier': 'node-b', 'unified_job_template': {'name': 'foo-jt', 'type': 'job_template'}, 'related': {}},
+    ]
+
+
+@pytest.mark.django_db
+def test_workflow_nodes_edge_moves_to_another_type(run_module, admin_user, organization, node_job_template):
+    for edge_type in ('success_nodes', 'always_nodes'):
+        result = run_module(
+            'workflow_job_template',
+            {'name': 'foo-workflow', 'organization': organization.name, 'workflow_nodes': linked_workflow_nodes(edge_type)},
+            admin_user,
+        )
+        assert not result.get('failed', False), result.get('msg', result)
+
+    wfjt = WorkflowJobTemplate.objects.get(name='foo-workflow')
+    node_a = WorkflowJobTemplateNode.objects.get(workflow_job_template=wfjt, identifier='node-a')
+    assert node_a.success_nodes.count() == 0
+    assert list(node_a.always_nodes.values_list('identifier', flat=True)) == ['node-b']
+
+
+@pytest.mark.django_db
+def test_workflow_nodes_graph_changes_direction(run_module, admin_user, organization, node_job_template):
+    def chain(first, second, third):
+        return [
+            {'identifier': first, 'unified_job_template': {'name': 'foo-jt', 'type': 'job_template'}, 'related': {'success_nodes': [{'identifier': second}]}},
+            {'identifier': second, 'unified_job_template': {'name': 'foo-jt', 'type': 'job_template'}, 'related': {'success_nodes': [{'identifier': third}]}},
+            {'identifier': third, 'unified_job_template': {'name': 'foo-jt', 'type': 'job_template'}, 'related': {}},
+        ]
+
+    # a -> b -> c turned into c -> b -> a. Synced node by node, the new link from c is checked
+    # while b still links to c, and the controller refuses it as a cycle.
+    for workflow_nodes in (chain('a', 'b', 'c'), chain('c', 'b', 'a')):
+        result = run_module('workflow_job_template', {'name': 'foo-workflow', 'organization': organization.name, 'workflow_nodes': workflow_nodes}, admin_user)
+        assert not result.get('failed', False), result.get('msg', result)
+
+    wfjt = WorkflowJobTemplate.objects.get(name='foo-workflow')
+    nodes = {node.identifier: node for node in WorkflowJobTemplateNode.objects.filter(workflow_job_template=wfjt)}
+    assert list(nodes['c'].success_nodes.values_list('identifier', flat=True)) == ['b']
+    assert list(nodes['b'].success_nodes.values_list('identifier', flat=True)) == ['a']
+    assert nodes['a'].success_nodes.count() == 0

@@ -1,0 +1,7 @@
+bugfixes:
+  - workflow_job_template_node - moving a link between two nodes from one type to another, for example from success_nodes to always_nodes, failed with "Relationship not allowed". Every link that has to go is now removed before any new one is added.
+  - workflow_job_template - the same fix for links given under related in workflow_nodes. A link type that related leaves out is now treated as having no links.
+  - workflow_job_templates role - a node in simplified_workflow_nodes that was left with no links kept the ones it had on the controller, so turning two sequential nodes into parallel ones left the old link in place. Every node is now synced.
+  - workflow_job_templates role and workflow_job_template - a new version of a graph that turned links around, for example from a to b into b to a, failed with "Cycle detected", because the new link was checked while the old one was still there and left the workflow half linked. Links are now synced in two passes over all the nodes, the first taking out the links that are gone and the second adding the new ones.
+minor_changes:
+  - workflow_job_template_node - add the only_remove_links option, which takes out the links that are not in the lists given and adds none. The workflow_job_templates role runs it over every node before linking them.
