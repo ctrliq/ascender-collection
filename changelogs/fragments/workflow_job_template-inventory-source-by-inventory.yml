@@ -1,0 +1,7 @@
+bugfixes:
+  - workflow_job_template - an ``inventory_source`` node in ``workflow_nodes`` can name its
+    inventory with ``unified_job_template.inventory.name``, and the source is then looked up
+    within that inventory. Source names are unique only within an inventory, so the lookup by
+    name and the source's own organization picked an arbitrary source when two inventories had
+    one with the same name, and found none after the inventory moved to another organization
+    (https://github.com/ctrliq/ascender-collection/pull/324).
