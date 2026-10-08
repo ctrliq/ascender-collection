@@ -118,8 +118,10 @@
       loop: "{{ workflow_job_templates if workflow_job_templates is defined else controller_workflows }}"
       loop_control:
         loop_var: __workflow_loop_item
+      # An empty simplified_workflow_nodes still goes in, so prune_nodes can empty the workflow.
+      # Leaving the key out, or setting it to null, keeps the nodes as they are.
       when:
-        - __workflow_loop_item.simplified_workflow_nodes | default([], true) | length > 0
+        - __workflow_loop_item.simplified_workflow_nodes | default(none) is not none
         - (__workflow_loop_item.state | default('present')) ==  "present"
 
   always:
