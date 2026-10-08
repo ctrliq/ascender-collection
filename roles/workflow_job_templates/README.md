@@ -191,7 +191,7 @@ A simple straightforward easy to maintain model using the var simplified_workflo
 The links written under each node are the links it ends up with. Changing a link from one type to another, moving it to a different node, or taking it out of the file is applied on the next run, including for nodes that are left with no links at all.
 However this is, not compatible with the schema option on the controller_workflow_job_template module and will result in errors.
 Uses the variable 'simplified_workflow_nodes' to describe nodes as shown below.
-A node that is on the controller but not in the list is removed on the next run. Left behind, it would have lost the link that led to it and run as soon as the workflow starts. Set `prune_nodes: false` on a workflow, or `controller_configuration_workflow_job_templates_prune_nodes: false` for all of them, to keep those nodes.
+A node that is on the controller but not in the list is removed on the next run. Left behind, it would have lost the link that led to it and run as soon as the workflow starts. An empty list removes every node of the workflow, while leaving simplified_workflow_nodes out keeps the nodes as they are. Set `prune_nodes: false` on a workflow, or `controller_configuration_workflow_job_templates_prune_nodes: false` for all of them, to keep those nodes.
 
 #### Simplified Workflow Node Data structure model
 
