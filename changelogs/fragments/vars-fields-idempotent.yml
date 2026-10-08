@@ -1,0 +1,7 @@
+bugfixes:
+  - group, host, inventory, job_template, workflow_job_template - compare ``variables`` and ``extra_vars`` structurally
+    against what the API returns; previously a dict was compared with the stored YAML or JSON text, so any object that
+    set one reported a change, and issued a PATCH, on every run.
+  - group, host, inventory, job_template, workflow_job_template - send ``variables`` and ``extra_vars`` as YAML rather
+    than JSON, and an empty dict as an empty string, so the stored value reads as YAML in the UI and in exports and
+    ``{}`` clears the field.
