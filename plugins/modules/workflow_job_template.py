@@ -837,7 +837,8 @@ def create_workflow_nodes_association(module, response, workflow_nodes, workflow
             # related describes every link leaving the node, so a link type it leaves out has none
             edge_fields = {edge_type: [] for edge_type in module.workflow_node_edge_types}
 
-            condition_nodes = workflow_node['related'].get('condition_nodes')
+            # the same goes for conditional links, so an omitted condition_nodes clears them
+            condition_nodes = workflow_node['related'].get('condition_nodes') or []
 
             for association in (
                 'always_nodes',
@@ -889,17 +890,15 @@ def create_workflow_nodes_association(module, response, workflow_nodes, workflow
             if current_node is None:
                 module.fail_json(msg=f'Unable to find the workflow job template node: {search_fields}')
 
-            desired_conditions = None
-            if condition_nodes is not None:
-                desired_conditions = []
-                for condition in condition_nodes:
-                    target_node = module.get_one(
-                        'workflow_job_template_nodes',
-                        **{'data': {'identifier': condition['identifier'], 'workflow_job_template': workflow_id}},
-                    )
-                    if target_node is None:
-                        module.fail_json(msg=f"Could not find condition_nodes entry with identifier {condition['identifier']}")
-                    desired_conditions.append(module.build_condition_node(target_node['id'], condition))
+            desired_conditions = []
+            for condition in condition_nodes:
+                target_node = module.get_one(
+                    'workflow_job_template_nodes',
+                    **{'data': {'identifier': condition['identifier'], 'workflow_job_template': workflow_id}},
+                )
+                if target_node is None:
+                    module.fail_json(msg=f"Could not find condition_nodes entry with identifier {condition['identifier']}")
+                desired_conditions.append(module.build_condition_node(target_node['id'], condition))
 
             module.modify_workflow_node_edges(current_node, edge_fields, desired_conditions, add_links=add_links)
 

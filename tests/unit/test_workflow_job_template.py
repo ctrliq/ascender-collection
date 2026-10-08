@@ -294,6 +294,28 @@ def test_workflow_allow_overwrite_flow_vars_on_relaunch(run_module, admin_user, 
     assert not WorkflowJobTemplate.objects.get(name='foo-workflow').allow_overwrite_flow_vars_on_relaunch
 
 
+@pytest.mark.django_db
+def test_workflow_nodes_condition_link_moves_to_success(run_module, admin_user, organization, node_job_template):
+    run_conditional_workflow(
+        run_module,
+        admin_user,
+        organization,
+        [{'identifier': 'node-b', 'artifact_key': 'deploy_ok', 'expected_value': 'yes'}],
+    )
+
+    # related lists every link leaving the node, so leaving condition_nodes out drops the
+    # conditional link, and the success link to the same node is not refused
+    nodes = conditional_workflow_nodes([])
+    nodes[0]['related'] = {'success_nodes': [{'identifier': 'node-b'}]}
+    result = run_module('workflow_job_template', {'name': 'foo-workflow', 'organization': organization.name, 'workflow_nodes': nodes}, admin_user)
+    assert not result.get('failed', False), result.get('msg', result)
+
+    wfjt = WorkflowJobTemplate.objects.get(name='foo-workflow')
+    node_a = WorkflowJobTemplateNode.objects.get(workflow_job_template=wfjt, identifier='node-a')
+    assert node_a.condition_links_from.count() == 0
+    assert list(node_a.success_nodes.values_list('identifier', flat=True)) == ['node-b']
+
+
 def linked_workflow_nodes(edge_type):
     return [
         {'identifier': 'node-a', 'unified_job_template': {'name': 'foo-jt', 'type': 'job_template'}, 'related': {edge_type: [{'identifier': 'node-b'}]}},
