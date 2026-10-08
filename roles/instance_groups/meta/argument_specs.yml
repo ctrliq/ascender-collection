@@ -28,7 +28,7 @@ argument_specs:
         #   mesh_node:
         #     required: false
         #     type: str
-        #     description: Hostname of the hop node that runs this container group's pods. Only for a container group without a credential.
+        #     description: Hostname, ID, or named URL of the hop node that runs this container group's pods. Only for a container group without a credential.
         #   policy_instance_percentage:
         #     required: false
         #     type: int
