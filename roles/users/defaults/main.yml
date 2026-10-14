@@ -1,9 +1,11 @@
 ---
 # list of dicts describing Controller users
 controller_user_accounts: []
-# if you're too lazy to give your users a password, this is the default they will get
-# set this variable to something false and there won't be a default password
-controller_user_default_password: change_me
+# Password for any entry in controller_user_accounts that does not set one of its own.
+# Unset by default: a shipped literal would be the same password on every installation, and
+# ctrliq.ascender.user defaults update_secrets to true, so a value set here is re-applied to
+# accounts that already exist on every run.
+# controller_user_default_password:
 
 controller_configuration_users_secure_logging: "{{ controller_configuration_secure_logging | default('true') }}"
 controller_configuration_users_async_retries: "{{ controller_configuration_async_retries | default(50) }}"
