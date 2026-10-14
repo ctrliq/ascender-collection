@@ -3,7 +3,7 @@ argument_specs:
   main:
     short_description: An Ansible Role to create job templates on Ascender.
     options:
-      controller_job_templates:
+      controller_templates:
         description: Data structure describing your job_templates
         type: list
         elements: dict
@@ -262,7 +262,7 @@ argument_specs:
         required: false
         description: This variable sets the number of retries to attempt for the role.
       controller_configuration_async_retries:
-        default: 30
+        default: 50
         required: false
         description: This variable sets number of retries across all roles as a default.
       controller_configuration_job_templates_async_delay:

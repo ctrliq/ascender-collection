@@ -33,6 +33,7 @@ The following Variables set the organization where should be applied the configu
 |`filetree_controller_inventories`|String/List(String)|{{ dir_orgs_vars }}/{{ orgs }}/env/common/controller_inventories.d/|no|Directory path to load controller object variables|
 |`filetree_controller_inventory_sources`|String/List(String)|{{ dir_orgs_vars }}/{{ orgs }}/env/{{ env }}/controller_inventory_sources.d/|no|Directory path to load controller object variables|
 |`filetree_controller_instance_groups`|String/List(String)|{{ dir_orgs_vars }}/{{ orgs }}/env/{{ env }}/controller_instance_groups.d/|no|Directory path to load controller object variables|
+|`filetree_controller_instances`|String/List(String)|{{ dir_orgs_vars }}/{{ orgs }}/env/{{ env }}/controller_instances.d/|no|Directory path to load controller object variables|
 |`filetree_controller_hosts`|String/List(String)|{{ dir_orgs_vars }}/{{ orgs }}/env/{{ env }}/controller_hosts.d/|no|Directory path to load controller object variables|
 |`filetree_controller_groups`|String/List(String)|{{ dir_orgs_vars }}/{{ orgs }}/env/common/controller_groups.d/|no|Directory path to load controller object variables|
 |`filetree_controller_templates`|String/List(String)|{{ dir_orgs_vars }}/{{ orgs }}/env/common/controller_job_templates.d/|no|Directory path to load controller object variables|
@@ -42,6 +43,7 @@ The following Variables set the organization where should be applied the configu
 |`filetree_controller_include`|String/List(String)|omit|no|patterns for find to include only matching|
 |`filetree_controller_exclude`|String/List(String)|omit|no|patterns for find to exclude matching|
 |`filetree_controller_regex`|bool|false|no|switch to allow find to use_regex in combination with include/exclude default matches find default|
+|`controller_configuration_filetree_read_secure_logging`|bool|`{{ controller_configuration_secure_logging \| default(true) }}`|no|Whether or not to hide the contents of the files read from the log. Defaults to true, as they can hold credentials.|
 
 ### Data Structure
 
