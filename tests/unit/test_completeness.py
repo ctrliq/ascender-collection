@@ -66,8 +66,9 @@ no_api_parameter_ok = {
     'job_template': ['survey_spec', 'organization'],
     'inventory_source': ['organization'],
     # Organization is how we are looking up job templates, Approval node is for workflow_approval_templates,
-    # lookup_organization is for specifiying the organization for the unified job template lookup
-    'workflow_job_template_node': ['organization', 'approval_node', 'lookup_organization'],
+    # lookup_organization is for specifiying the organization for the unified job template lookup,
+    # only_remove_links is how the role takes stale links out of every node before adding new ones
+    'workflow_job_template_node': ['organization', 'approval_node', 'lookup_organization', 'only_remove_links'],
     # Survey is how we handle associations
     'workflow_job_template': ['survey_spec', 'destroy_current_nodes'],
     # organization is how we lookup unified job templates
