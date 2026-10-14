@@ -47,7 +47,7 @@ argument_specs:
         #     type: bool
         #     description: Wait for the job to complete.
         #   interval:
-        #     default: "{{ controller_configuration_workflow_launch_async_delay }}"
+        #     default: 2
         #     required: false
         #     type: float
         #     description: The interval to request an update from controller.
@@ -55,24 +55,6 @@ argument_specs:
         #     required: false
         #     type: int
         #     description: If waiting for the update to complete this will abort after this amount of seconds.
-
-      # Async variables
-      controller_configuration_workflow_launch_async_retries:
-        default: "{{ controller_configuration_async_retries | default(50) }}"
-        required: false
-        description: This variable sets the number of retries to attempt for the role.
-      controller_configuration_async_retries:
-        default: 30
-        required: false
-        description: This variable sets number of retries across all roles as a default.
-      controller_configuration_workflow_launch_async_delay:
-        default: "{{ controller_configuration_async_delay | default(1) }}"
-        required: false
-        description: This variable sets delay between retries for the role.
-      controller_configuration_async_delay:
-        default: 1
-        required: false
-        description: This variable sets delay between retries across all roles as a default.
 
       # No_log variables
       controller_configuration_workflow_launch_secure_logging:

@@ -96,6 +96,11 @@ argument_specs:
         default: "{{ dir_orgs_vars }}/{{ orgs }}/env/{{ env }}/controller_instance_groups.d/"
         required: false
         description: Directory path to load controller object variables
+      filetree_controller_instances:
+        type: raw
+        default: "{{ dir_orgs_vars }}/{{ orgs }}/env/{{ env }}/controller_instances.d/"
+        required: false
+        description: Directory path to load controller object variables
       filetree_controller_hosts:
         type: raw
         default: "{{ dir_orgs_vars }}/{{ orgs }}/env/{{ env }}/controller_hosts.d/"
@@ -144,7 +149,7 @@ argument_specs:
 
       # Async variables
       controller_configuration_async_retries:
-        default: 30
+        default: 50
         required: false
         description: This variable sets number of retries across all roles as a default.
       controller_configuration_async_delay:
@@ -153,8 +158,8 @@ argument_specs:
         description: This variable sets delay between retries across all roles as a default.
 
       # No_log variables
-      controller_configuration_filetree_create_secure_logging:
-        default: "{{ controller_configuration_secure_logging | default(false) }}"
+      controller_configuration_filetree_read_secure_logging:
+        default: "{{ controller_configuration_secure_logging | default(true) }}"
         required: false
         type: bool
         description: Whether or not to include the sensitive tasks from this role in the log. Set this value to `true` if you will be providing your sensitive values

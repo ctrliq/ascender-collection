@@ -20,7 +20,6 @@ Each role has its own variables, for information on those please see each role w
 controller_configuration_dispatcher_roles:
   - {role: settings, var: controller_settings, tags: settings}
   - {role: instances, var: controller_instances, tags: instances}
-  - {role: instance_groups, var: controller_instance_groups, tags: instance_groups}
   - {role: organizations, var: controller_organizations, tags: organizations}
   - {role: labels, var: controller_labels, tags: labels}
   - {role: users, var: controller_user_accounts, tags: users}
@@ -28,6 +27,7 @@ controller_configuration_dispatcher_roles:
   - {role: credential_types, var: controller_credential_types, tags: credential_types}
   - {role: credentials, var: controller_credentials, tags: credentials}
   - {role: credential_input_sources, var: controller_credential_input_sources, tags: credential_input_sources}
+  - {role: instance_groups, var: controller_instance_groups, tags: instance_groups}
   - {role: execution_environments, var: controller_execution_environments, tags: execution_environments}
   - {role: notification_templates, var: controller_notifications, tags: notification_templates}
   - {role: organizations, var: controller_organizations, tags: organizations} # Rerunning with additional dependant values set to be added to the org

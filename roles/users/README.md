@@ -46,13 +46,13 @@ Enabling this will enforce configurtion without specifying every option in the c
 ### Secure Logging Variables
 
 The following Variables compliment each other.
-If Both variables are not set, secure logging defaults to false.
-The role defaults to False as normally the add user task does not include sensitive information.
-`controller_configuration_user_secure_logging` defaults to the value of `controller_configuration_secure_logging` if it is not explicitly called. This allows for secure logging to be toggled for the entire suite of configuration roles with a single variable, or for the user to selectively use it.
+If Both variables are not set, secure logging defaults to true.
+The role defaults to True as the add user task sends passwords.
+`controller_configuration_users_secure_logging` defaults to the value of `controller_configuration_secure_logging` if it is not explicitly called. This allows for secure logging to be toggled for the entire suite of configuration roles with a single variable, or for the user to selectively use it.
 
 |Variable Name|Default Value|Required|Description|
 |:---:|:---:|:---:|:---:|
-|`controller_configuration_user_secure_logging`|`False`|no|Whether or not to include the sensitive user role tasks in the log. Set this value to `True` if you will be providing your sensitive values from elsewhere.|
+|`controller_configuration_users_secure_logging`|`True`|no|Whether or not to include the sensitive user role tasks in the log. Set this value to `True` if you will be providing your sensitive values from elsewhere.|
 |`controller_configuration_secure_logging`|`False`|no|This variable enables secure logging as well, but is shared across multiple roles, see above.|
 
 ### Asynchronous Retry Variables
