@@ -810,7 +810,7 @@ def create_workflow_nodes(module, response, workflow_nodes, workflow_id):
             )
 
 
-def create_workflow_nodes_association(module, response, workflow_nodes, workflow_id):
+def create_workflow_nodes_association(module, response, workflow_nodes, workflow_id, add_links=True):
     for workflow_node in workflow_nodes:
         workflow_node_fields = {}
         search_fields = {}
@@ -834,8 +834,11 @@ def create_workflow_nodes_association(module, response, workflow_nodes, workflow
         if 'related' in workflow_node:
             # Get id's for association fields
             association_fields = {}
+            # related describes every link leaving the node, so a link type it leaves out has none
+            edge_fields = {edge_type: [] for edge_type in module.workflow_node_edge_types}
 
-            condition_nodes = workflow_node['related'].get('condition_nodes')
+            # the same goes for conditional links, so an omitted condition_nodes clears them
+            condition_nodes = workflow_node['related'].get('condition_nodes') or []
 
             for association in (
                 'always_nodes',
@@ -865,9 +868,12 @@ def create_workflow_nodes_association(module, response, workflow_nodes, workflow
                         if sub_obj is None:
                             module.fail_json(msg=f'Could not find {association} entry with name {sub_name}')
                         id_list.append(sub_obj['id'])
-                    association_fields[association] = id_list
+                    if association in prompt_lookup:
+                        association_fields[association] = id_list
+                    else:
+                        edge_fields[association] = id_list
 
-            if association_fields:
+            if association_fields and add_links:
                 module.create_or_update_if_needed(
                     existing_item,
                     workflow_node_fields,
@@ -877,25 +883,24 @@ def create_workflow_nodes_association(module, response, workflow_nodes, workflow
                     associations=association_fields,
                 )
 
-            if condition_nodes is not None:
-                # Conditional links carry per edge metadata, so they are handled apart from the
-                # plain associations above. Re-read the node so the condition_edges we compare
-                # against are the ones the controller has after the update.
-                current_node = module.get_one('workflow_job_template_nodes', **{'data': search_fields})
-                if current_node is None:
-                    module.fail_json(msg=f'Unable to find the workflow job template node: {search_fields}')
+            # Links to other nodes are synced apart from the plain associations, see
+            # modify_workflow_node_edges. Re-read the node so the condition_edges we compare
+            # against are the ones the controller has after the update.
+            current_node = module.get_one('workflow_job_template_nodes', **{'data': search_fields})
+            if current_node is None:
+                module.fail_json(msg=f'Unable to find the workflow job template node: {search_fields}')
 
-                desired_conditions = []
-                for condition in condition_nodes:
-                    target_node = module.get_one(
-                        'workflow_job_template_nodes',
-                        **{'data': {'identifier': condition['identifier'], 'workflow_job_template': workflow_id}},
-                    )
-                    if target_node is None:
-                        module.fail_json(msg=f"Could not find condition_nodes entry with identifier {condition['identifier']}")
-                    desired_conditions.append(module.build_condition_node(target_node['id'], condition))
+            desired_conditions = []
+            for condition in condition_nodes:
+                target_node = module.get_one(
+                    'workflow_job_template_nodes',
+                    **{'data': {'identifier': condition['identifier'], 'workflow_job_template': workflow_id}},
+                )
+                if target_node is None:
+                    module.fail_json(msg=f"Could not find condition_nodes entry with identifier {condition['identifier']}")
+                desired_conditions.append(module.build_condition_node(target_node['id'], condition))
 
-                module.modify_condition_node_associations(current_node, desired_conditions)
+            module.modify_workflow_node_edges(current_node, edge_fields, desired_conditions, add_links=add_links)
 
 
 def destroy_workflow_nodes(module, response, workflow_id):
@@ -1117,7 +1122,9 @@ def main():
     if workflow_nodes:
         # Create Schema Nodes
         create_workflow_nodes(module, response, workflow_nodes, workflow_job_template_id)
-        # Create Schema Associations
+        # Create Schema Associations. The stale links of every node go first, so a graph that
+        # changes direction does not trip the controller's cycle check, see modify_workflow_node_edges
+        create_workflow_nodes_association(module, response, workflow_nodes, workflow_job_template_id, add_links=False)
         create_workflow_nodes_association(module, response, workflow_nodes, workflow_job_template_id)
         module.json_output['node_creation_data'] = response
 

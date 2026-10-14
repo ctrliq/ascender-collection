@@ -136,6 +136,8 @@ options:
       description:
         - Nodes that will run after this node completes.
         - List of node identifiers.
+        - The list is the full set of these links, so a node left out is unlinked and an empty list removes them all.
+          The same goes for O(success_nodes), O(failure_nodes) and O(condition_nodes). Leave the option out to keep the links as they are.
       type: list
       elements: str
     success_nodes:
@@ -191,6 +193,13 @@ options:
             - The value to compare the artifact against.
           type: raw
           required: True
+    only_remove_links:
+      description:
+        - Only take out the links that are not in O(success_nodes), O(failure_nodes), O(always_nodes) and O(condition_nodes), and add none.
+        - Run it over every node of a workflow before linking them for real. When the graph changes direction, adding
+          the new link from one node while another node still holds the old link the other way round makes the controller refuse it as a cycle.
+      type: bool
+      default: False
     credentials:
       description:
         - Credential names, IDs, or named URLs to be applied to job as launch-time prompts.
@@ -391,6 +400,7 @@ def main():
                 expected_value=dict(type='raw', required=True),
             ),
         ),
+        only_remove_links=dict(type='bool', default=False),
         credentials=dict(type='list', elements='str'),
         execution_environment=dict(type='str'),
         forks=dict(type='int'),
@@ -490,6 +500,7 @@ def main():
             new_fields[field_name] = field_val
 
     association_fields = {}
+    edge_fields = {}
     for association in ('always_nodes', 'success_nodes', 'failure_nodes', 'credentials', 'instance_groups', 'labels'):
         name_list = module.params.get(association)
         if name_list is None:
@@ -507,7 +518,10 @@ def main():
             if sub_obj is None:
                 module.fail_json(msg=f'Could not find {association} entry with name {sub_name}')
             id_list.append(sub_obj['id'])
-        association_fields[association] = id_list
+        if association in module.workflow_node_edge_types:
+            edge_fields[association] = id_list
+        else:
+            association_fields[association] = id_list
 
     execution_environment = module.params.get('execution_environment')
     if execution_environment is not None:
@@ -523,8 +537,9 @@ def main():
     # In the case of a new object, the utils need to know it is a node
     new_fields['type'] = 'workflow_job_template_node'
 
-    # Handle condition_nodes association (requires per-edge metadata, can't use modify_associations)
+    # Links to other nodes are synced apart from the plain associations, see modify_workflow_node_edges
     condition_nodes = module.params.get('condition_nodes')
+    manage_edges = bool(edge_fields) or condition_nodes is not None
 
     # If the state was present and we can let the module build or update the existing item, this will return on its own
     module.create_or_update_if_needed(
@@ -532,27 +547,31 @@ def main():
         new_fields,
         endpoint='workflow_job_template_nodes',
         item_type='workflow_job_template_node',
-        auto_exit=not approval_node and condition_nodes is None,
+        auto_exit=not approval_node and not manage_edges,
         associations=association_fields,
     )
 
-    if condition_nodes is not None:
+    if manage_edges:
         # Get the created/updated node
         search_fields_cn = {'identifier': identifier, 'workflow_job_template': workflow_job_template_id}
         current_node = module.get_one('workflow_job_template_nodes', **{'data': search_fields_cn})
+        if current_node is None:
+            module.fail_json(msg=f'Unable to find the workflow job template node: {search_fields_cn}')
 
         # Build desired condition list with resolved node IDs
-        desired_conditions = []
-        for cn in condition_nodes:
-            cn_lookup = {'identifier': cn['identifier']}
-            if workflow_job_template_id:
-                cn_lookup['workflow_job_template'] = workflow_job_template_id
-            target_node = module.get_one('workflow_job_template_nodes', **{'data': cn_lookup})
-            if target_node is None:
-                module.fail_json(msg=f"Could not find condition_nodes entry with identifier {cn['identifier']}")
-            desired_conditions.append(module.build_condition_node(target_node['id'], cn))
+        desired_conditions = None
+        if condition_nodes is not None:
+            desired_conditions = []
+            for cn in condition_nodes:
+                cn_lookup = {'identifier': cn['identifier']}
+                if workflow_job_template_id:
+                    cn_lookup['workflow_job_template'] = workflow_job_template_id
+                target_node = module.get_one('workflow_job_template_nodes', **{'data': cn_lookup})
+                if target_node is None:
+                    module.fail_json(msg=f"Could not find condition_nodes entry with identifier {cn['identifier']}")
+                desired_conditions.append(module.build_condition_node(target_node['id'], cn))
 
-        module.modify_condition_node_associations(current_node, desired_conditions)
+        module.modify_workflow_node_edges(current_node, edge_fields, desired_conditions, add_links=not module.params.get('only_remove_links'))
 
         if not approval_node:
             module.exit_json(**module.json_output)

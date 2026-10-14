@@ -69,6 +69,8 @@ class ControllerModule(AnsibleModule):
     )
     # Associations of these types are ordered and have special consideration in the modified associations function
     ordered_associations = ['instance_groups', 'galaxy_credentials', 'input_inventories']
+    # The plain link types between workflow nodes, synced together by modify_workflow_node_edges
+    workflow_node_edge_types = ('success_nodes', 'failure_nodes', 'always_nodes')
     short_params = {
         'host': 'controller_host',
         'username': 'controller_username',
@@ -759,45 +761,68 @@ class ControllerAPIModule(ControllerModule):
             'expected_value': expected_value if isinstance(expected_value, str) else dumps(expected_value),
         }
 
-    def _disassociate_condition_node(self, condition_endpoint, target_id):
-        response = self.post_endpoint(condition_endpoint, **{'data': {'id': int(target_id), 'disassociate': True}})
-        if response['status_code'] == 204:
-            self.json_output['changed'] = True
-        else:
-            self.fail_json(msg=f"Failed to disassociate condition node {response['json'].get('detail', response['json'])}")
+    def modify_workflow_node_edges(self, node, desired_edges, desired_conditions=None, add_links=True):
+        """Sync the links leaving a workflow node.
 
-    def modify_condition_node_associations(self, node, desired_conditions):
-        """Sync the conditional links leaving a workflow node.
+        desired_edges maps success_nodes, failure_nodes and always_nodes to the ids of the target
+        nodes wanted under each. A type that is left out, or given as None, is not touched, the
+        same as None in modify_associations. desired_conditions is a list built with
+        build_condition_node, or None to leave the conditional links alone.
 
-        Conditional links carry per edge metadata, so modify_associations cannot be used here.
-        The condition_nodes sub endpoint only lists the target nodes, which carry none of that
-        metadata, so the current state is read from the node's own condition_edges field, where
-        each entry is a {id, trigger, artifact_key, operator, expected_value} dict and id is the
-        target node. A link whose metadata changed is disassociated and associated again.
+        The controller refuses to link the same two nodes under more than one type at a time and
+        answers "Relationship not allowed". So every link that has to go is removed before any new
+        one is added, across all the types. Syncing one type after another instead fails whenever
+        a link moves to a type that is synced before the one it leaves, success_nodes to
+        always_nodes being the usual case.
+
+        Conditional links carry per edge metadata. The condition_nodes sub endpoint only lists the
+        target nodes, so their current state is read from the node's own condition_edges field,
+        where each entry is a {id, trigger, artifact_key, operator, expected_value} dict and id is
+        the target node. A link whose metadata changed is removed and added again.
+
+        With add_links set to False only the removals are made. Syncing one node at a time can
+        still trip the controller's cycle check when the graph changes direction: the new link
+        a to b is refused while the old link b to a, which belongs to another node, is still
+        there. Taking the stale links out of every node first, and adding the new ones in a
+        second pass, avoids that, because a subset of the links of the graph the caller wants
+        can never form a cycle.
         """
-        # if we got None instead of [] we are not modifying the conditional links
-        if desired_conditions is None:
-            return
+        removals = []
+        additions = []
 
-        condition_endpoint = f"{node['url']}condition_nodes/"
-        existing_by_id = {edge['id']: edge for edge in (node.get('condition_edges') or [])}
-        desired_by_id = {condition['id']: condition for condition in desired_conditions}
+        for edge_type in self.workflow_node_edge_types:
+            wanted = desired_edges.get(edge_type)
+            if wanted is None:
+                continue
+            endpoint = f"{node['url']}{edge_type}/"
+            existing = [item['id'] for item in self.get_all_endpoint(endpoint)['json']['results']]
+            removals.extend((endpoint, {'id': int(target_id), 'disassociate': True}) for target_id in existing if target_id not in wanted)
+            additions.extend((endpoint, {'id': int(target_id)}) for target_id in dict.fromkeys(wanted) if target_id not in existing)
 
-        for target_id in set(existing_by_id) - set(desired_by_id):
-            self._disassociate_condition_node(condition_endpoint, target_id)
+        if desired_conditions is not None:
+            endpoint = f"{node['url']}condition_nodes/"
+            existing_by_id = {edge['id']: edge for edge in (node.get('condition_edges') or [])}
+            desired_by_id = {condition['id']: condition for condition in desired_conditions}
 
-        for target_id, condition in desired_by_id.items():
-            existing = existing_by_id.get(target_id)
-            if existing is not None:
-                if all(condition[field] == existing.get(field) for field in ('trigger', 'artifact_key', 'operator', 'expected_value')):
-                    continue
-                self._disassociate_condition_node(condition_endpoint, target_id)
+            def same_condition(a, b):
+                return all(a[field] == b.get(field) for field in ('trigger', 'artifact_key', 'operator', 'expected_value'))
 
-            response = self.post_endpoint(condition_endpoint, **{'data': condition})
+            for target_id, existing in existing_by_id.items():
+                condition = desired_by_id.get(target_id)
+                if condition is None or not same_condition(condition, existing):
+                    removals.append((endpoint, {'id': int(target_id), 'disassociate': True}))
+            for target_id, condition in desired_by_id.items():
+                existing = existing_by_id.get(target_id)
+                if existing is None or not same_condition(condition, existing):
+                    additions.append((endpoint, condition))
+
+        for endpoint, data in removals + (additions if add_links else []):
+            response = self.post_endpoint(endpoint, **{'data': data})
             if response['status_code'] in [200, 201, 204]:
                 self.json_output['changed'] = True
             else:
-                self.fail_json(msg=f"Failed to associate condition node {response['json'].get('detail', response['json'])}")
+                action = 'disassociate' if data.get('disassociate') else 'associate'
+                self.fail_json(msg=f"Failed to {action} workflow node link {endpoint}: {response['json'].get('detail', response['json'])}")
 
     def copy_item(self, existing_item, copy_from_name_or_id, new_item_name, endpoint=None, item_type='unknown', copy_lookup_data=None):
 

@@ -42,6 +42,12 @@ Enabling this will enforce configurtion without specifying every option in the c
 |`controller_configuration_workflows_enforce_defaults`|`False`|no|Whether or not to enforce default option values on only the applications role|
 |`controller_configuration_enforce_defaults`|`False`|no|This variable enables enforced default values as well, but is shared across multiple roles, see above.|
 
+### Pruning workflow nodes
+
+|Variable Name|Default Value|Required|Description|
+|:---:|:---:|:---:|:---:|
+|`controller_configuration_workflow_job_templates_prune_nodes`|`True`|no|Remove the nodes of a workflow that are on the controller but not in its simplified_workflow_nodes. A workflow can set `prune_nodes` to override it.|
+
 ### Secure Logging Variables
 
 The following Variables compliment each other.
@@ -104,7 +110,8 @@ This also speeds up the overall role.
 |`scm_branch`|""|no|str|SCM branch applied as a prompt, assuming job template prompts for SCM branch|
 |`state`|`present`|no|str|Desired state of the resource.|
 |`workflow_nodes`|""|no|dict|A json list of nodes and their corresponding options. The sub-options are in the module doc.|
-|`destroy_current_nodes`|""|no|dict|Set in order to destroy current schema on the workflow, used in cases where drastic changes to schema are happening.|
+|`prune_nodes`|`controller_configuration_workflow_job_templates_prune_nodes`|no|bool|Remove the nodes that are on the controller but not in simplified_workflow_nodes.|
+|`destroy_current_nodes`|""|no|dict|Set in order to destroy current schema on the workflow, used in cases where drastic changes to schema are happening. Not needed to change links or remove nodes in simplified_workflow_nodes, which are synced on every run. It deletes every node before creating them again, so a run that fails halfway leaves the workflow with no links, every node a root node.|
 |`survey_enabled`|""|no|bool|Enable a survey on the job template.|
 |`survey_spec`|""|no|dict|JSON/YAML dict formatted survey definition.|
 |`survey`|""|no|dict|JSON/YAML dict formatted survey definition. Alias of survey_spec|
@@ -181,8 +188,10 @@ This role accepts two data models.
 #### Simplified Workflow nodes
 
 A simple straightforward easy to maintain model using the var simplified_workflow_nodes.
+The links written under each node are the links it ends up with. Changing a link from one type to another, moving it to a different node, or taking it out of the file is applied on the next run, including for nodes that are left with no links at all.
 However this is, not compatible with the schema option on the controller_workflow_job_template module and will result in errors.
 Uses the variable 'simplified_workflow_nodes' to describe nodes as shown below.
+A node that is on the controller but not in the list is removed on the next run. Left behind, it would have lost the link that led to it and run as soon as the workflow starts. An empty list removes every node of the workflow, while leaving simplified_workflow_nodes out keeps the nodes as they are. Set `prune_nodes: false` on a workflow, or `controller_configuration_workflow_job_templates_prune_nodes: false` for all of them, to keep those nodes.
 
 #### Simplified Workflow Node Data structure model
 
