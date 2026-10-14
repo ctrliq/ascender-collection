@@ -58,6 +58,11 @@ argument_specs:
         #     type: list
         #     elements: str
         #     description: The notifications for approval to use for this organization in a list.
+        #   notification_templates_changed:
+        #     required: false
+        #     type: list
+        #     elements: str
+        #     description: The notifications to send when a job of this organization reports changes, in a list.
         #   state:
         #     default: "{{ controller_state | default('present') }}"
         #     required: false

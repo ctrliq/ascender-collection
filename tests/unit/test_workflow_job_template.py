@@ -275,3 +275,20 @@ def test_workflow_nodes_condition_nodes_are_removed(run_module, admin_user, orga
     wfjt = WorkflowJobTemplate.objects.get(name='foo-workflow')
     node_a = WorkflowJobTemplateNode.objects.get(workflow_job_template=wfjt, identifier='node-a')
     assert node_a.condition_links_from.count() == 0
+
+
+@pytest.mark.django_db
+def test_workflow_allow_overwrite_flow_vars_on_relaunch(run_module, admin_user, organization):
+    module_args = {'name': 'foo-workflow', 'organization': organization.name, 'allow_overwrite_flow_vars_on_relaunch': True}
+    result = run_module('workflow_job_template', dict(module_args), admin_user)
+    assert not result.get('failed', False), result.get('msg', result)
+    assert result['changed']
+    assert WorkflowJobTemplate.objects.get(name='foo-workflow').allow_overwrite_flow_vars_on_relaunch
+
+    result = run_module('workflow_job_template', dict(module_args), admin_user)
+    assert not result.get('failed', False), result.get('msg', result)
+    assert not result['changed']
+
+    result = run_module('workflow_job_template', dict(module_args, allow_overwrite_flow_vars_on_relaunch=False), admin_user)
+    assert result['changed']
+    assert not WorkflowJobTemplate.objects.get(name='foo-workflow').allow_overwrite_flow_vars_on_relaunch

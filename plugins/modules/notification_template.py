@@ -44,6 +44,7 @@ options:
         - 'email'
         - 'grafana'
         - 'irc'
+        - 'matrix'
         - 'mattermost'
         - 'pagerduty'
         - 'rocketchat'
@@ -79,6 +80,11 @@ options:
         - server (the IRC server address)
         - nickname (the IRC nickname)
         - targets (the destination channels or users)
+        - homeserver_url (the Matrix homeserver, starting with http:// or https://)
+        - access_token (the Matrix access token of the account that sends)
+        - rooms (the Matrix room IDs or aliases to post to)
+        - use_html (send a Matrix HTML formatted body next to the plain text one)
+        - disable_ssl_verification (skip the TLS certificate check of the Matrix homeserver)
       type: dict
     messages:
       description:
@@ -181,6 +187,19 @@ EXAMPLES = '''
     state: present
     controller_config_file: "~/controller.cfg"
 
+- name: Add Matrix notification
+  ctrliq.ascender.notification_template:
+    name: matrix notification
+    notification_type: matrix
+    notification_configuration:
+      homeserver_url: https://matrix.example.com
+      access_token: a_token
+      rooms:
+        - "#automation:example.com"
+      use_html: true
+    state: present
+    controller_config_file: "~/controller.cfg"
+
 - name: Delete notification
   ctrliq.ascender.notification_template:
     name: old notification
@@ -213,7 +232,7 @@ def main():
         copy_from=dict(),
         description=dict(),
         organization=dict(),
-        notification_type=dict(choices=['email', 'grafana', 'irc', 'mattermost', 'pagerduty', 'rocketchat', 'slack', 'twilio', 'webhook']),
+        notification_type=dict(choices=['email', 'grafana', 'irc', 'matrix', 'mattermost', 'pagerduty', 'rocketchat', 'slack', 'twilio', 'webhook']),
         notification_configuration=dict(type='dict'),
         messages=dict(type='dict'),
         state=dict(choices=['present', 'absent', 'exists'], default='present'),

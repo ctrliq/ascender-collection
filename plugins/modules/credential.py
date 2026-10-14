@@ -46,7 +46,7 @@ options:
         - Choices include Amazon Web Services, Ansible Galaxy/Automation Hub API Token, Centrify Vault Credential Provider Lookup,
           Container Registry, CyberArk Central Credential Provider Lookup, CyberArk Conjur Secret Lookup, Google Compute Engine,
           GitHub Personal Access Token, GitLab Personal Access Token, GPG Public Key, HashiCorp Vault Secret Lookup, HashiCorp Vault Signed SSH,
-          Insights, Machine, Microsoft Azure Key Vault, Microsoft Azure Resource Manager, Network, OpenShift or Kubernetes API
+          Machine, Microsoft Azure Key Vault, Microsoft Azure Resource Manager, Network, OpenShift or Kubernetes API
           Bearer Token, OpenStack, Red Hat Ansible Automation Platform, Red Hat Satellite 6, Red Hat Virtualization, Source Control,
           Thycotic DevOps Secrets Vault, Thycotic Secret Server, Vault, VMware vCenter, or a custom credential type
       required: True

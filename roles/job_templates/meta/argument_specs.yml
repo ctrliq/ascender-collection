@@ -173,6 +173,10 @@ argument_specs:
         #     required: false
         #     type: bool
         #     description: Prevent falling back to instance groups set on the associated inventory or organization.
+        #   prevent_relaunch:
+        #     required: false
+        #     type: bool
+        #     description: Refuse to relaunch the jobs this template launched, for anyone. The template itself can still be launched.
         #   survey_enabled:
         #     required: false
         #     type: bool
@@ -250,6 +254,11 @@ argument_specs:
         #     type: list
         #     elements: str
         #     description: The notifications on error to use for this organization in a list.
+        #   notification_templates_changed:
+        #     required: false
+        #     type: list
+        #     elements: str
+        #     description: The notifications to send when a job of this template reports changes, in a list.
         #   state:
         #     default: "{{ controller_state | default('present') }}"
         #     required: false

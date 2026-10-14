@@ -32,7 +32,7 @@ options:
           The type of credential type being added. Note that only cloud and
           net can be used for creating credential types. Refer to the Ansible
           for more information.
-      choices: [ 'ssh', 'vault', 'net', 'scm', 'cloud', 'insights' ]
+      choices: [ 'ssh', 'vault', 'net', 'scm', 'cloud' ]
       type: str
     inputs:
       description:
@@ -80,7 +80,7 @@ id:
 
 from ..module_utils.controller_api import ControllerAPIModule
 
-KIND_CHOICES = {'ssh': 'Machine', 'vault': 'Ansible Vault', 'net': 'Network', 'scm': 'Source Control', 'cloud': 'Lots of others', 'insights': 'Insights'}
+KIND_CHOICES = {'ssh': 'Machine', 'vault': 'Ansible Vault', 'net': 'Network', 'scm': 'Source Control', 'cloud': 'Lots of others'}
 
 
 def main():

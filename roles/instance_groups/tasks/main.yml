@@ -8,9 +8,12 @@
       ctrliq.ascender.instance_group:
         name: "{{ __controller_instance_group_item.name | mandatory }}"
         new_name: "{{ __controller_instance_group_item.new_name | default(omit, true) }}"
-        credential: "{{ __controller_instance_group_item.credential | default(('' if controller_configuration_instance_groups_enforce_defaults else omit), true) }}"
+        credential: "{{ __controller_instance_group_item.credential if __controller_instance_group_item.credential is defined else ('' if
+          controller_configuration_instance_groups_enforce_defaults else omit) }}"
         is_container_group: "{{ __controller_instance_group_item.is_container_group | default((false if controller_configuration_instance_groups_enforce_defaults else
           omit), true) }}"
+        mesh_node: "{{ __controller_instance_group_item.mesh_node if __controller_instance_group_item.mesh_node is defined else ('' if
+          controller_configuration_instance_groups_enforce_defaults else omit) }}"
         policy_instance_percentage: "{{ __controller_instance_group_item.policy_instance_percentage | default(0, true) if __controller_instance_group_item.policy_instance_percentage
           is defined or controller_configuration_instance_groups_enforce_defaults else omit }}"
         policy_instance_minimum: "{{ __controller_instance_group_item.policy_instance_minimum | default(0, true) if __controller_instance_group_item.policy_instance_minimum

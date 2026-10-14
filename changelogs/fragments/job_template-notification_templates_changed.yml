@@ -1,2 +1,2 @@
 minor_changes:
-  - job_template - added notification_templates_changed option (in alignment with feat: https://github.com/ctrliq/ascender/pull/696)
+  - The job_template module takes notification_templates_changed, the notifications sent when a job reports changes, in line with https://github.com/ctrliq/ascender/pull/696

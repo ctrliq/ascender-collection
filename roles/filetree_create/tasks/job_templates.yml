@@ -55,6 +55,9 @@
           oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs, return_all=true, max_objects=query_controller_api_max_objects) }}"
         query_notification_success: "{{ query(controller_api_plugin, current_job_templates_asset_value.related.notification_templates_success, host=controller_hostname,
           oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs, return_all=true, max_objects=query_controller_api_max_objects) }}"
+        query_notification_changed: "{{ query(controller_api_plugin, current_job_templates_asset_value.related.notification_templates_changed, host=controller_hostname,
+          oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs, return_all=true, max_objects=query_controller_api_max_objects)
+          if current_job_templates_asset_value.related.notification_templates_changed is defined else [] }}"
         last_job_template: "{{ current_job_template_index == ((job_templates_lookvar | length) - 1) }}"
       loop: "{{ job_templates_lookvar }}"
       loop_control:
@@ -105,6 +108,9 @@
           oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs, return_all=true, max_objects=query_controller_api_max_objects) }}"
         query_notification_success: "{{ query(controller_api_plugin, current_job_templates_asset_value.related.notification_templates_success, host=controller_hostname,
           oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs, return_all=true, max_objects=query_controller_api_max_objects) }}"
+        query_notification_changed: "{{ query(controller_api_plugin, current_job_templates_asset_value.related.notification_templates_changed, host=controller_hostname,
+          oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs, return_all=true, max_objects=query_controller_api_max_objects)
+          if current_job_templates_asset_value.related.notification_templates_changed is defined else [] }}"
       loop: "{{ job_templates_lookvar }}"
       loop_control:
         loop_var: current_job_templates_asset_value

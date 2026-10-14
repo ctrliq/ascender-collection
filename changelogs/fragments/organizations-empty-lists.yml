@@ -1,0 +1,8 @@
+---
+bugfixes:
+  - The organizations role empties a list when given an empty one, for ``instance_groups``, ``galaxy_credentials`` or any of the
+    ``notification_templates_*`` lists. Each value ended in
+    ``default(..., true)``, which also fires on a falsy value, so ``[]`` turned into ``omit`` and the
+    module was never told to change anything unless
+    ``controller_configuration_organizations_enforce_defaults`` was on. This is the same fix ctrliq/ascender-collection#279 made on
+    the groups, instances, instance_groups and inventories roles, which left organizations out.

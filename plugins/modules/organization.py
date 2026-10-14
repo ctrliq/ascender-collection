@@ -64,6 +64,11 @@ options:
         - list of notifications to send on workflow approval
       type: list
       elements: str
+    notification_templates_changed:
+      description:
+        - list of notifications to send when a job of the organization reports changes
+      type: list
+      elements: str
     galaxy_credentials:
       description:
         - list of Ansible Galaxy credential names, IDs, or named URLs to associate to the organization
@@ -120,6 +125,7 @@ def main():
         notification_templates_success=dict(type="list", elements='str'),
         notification_templates_error=dict(type="list", elements='str'),
         notification_templates_approvals=dict(type="list", elements='str'),
+        notification_templates_changed=dict(type="list", elements='str'),
         galaxy_credentials=dict(type="list", elements='str'),
         state=dict(choices=['present', 'absent', 'exists'], default='present'),
     )
@@ -173,6 +179,12 @@ def main():
         association_fields['notification_templates_approvals'] = []
         for item in notifications_approval:
             association_fields['notification_templates_approvals'].append(module.resolve_name_to_id('notification_templates', item))
+
+    notifications_changed = module.params.get('notification_templates_changed')
+    if notifications_changed is not None:
+        association_fields['notification_templates_changed'] = []
+        for item in notifications_changed:
+            association_fields['notification_templates_changed'].append(module.resolve_name_to_id('notification_templates', item))
 
     galaxy_credentials = module.params.get('galaxy_credentials')
     if galaxy_credentials is not None:

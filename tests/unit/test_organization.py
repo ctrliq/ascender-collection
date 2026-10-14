@@ -91,3 +91,19 @@ def test_galaxy_credential_order(run_module, admin_user):
         cred_order_in_org.append(a_cred.id)
 
     assert cred_order_in_org == cred_ids
+
+
+@pytest.mark.django_db
+def test_organization_notification_templates_changed(run_module, admin_user, notification_template):
+    result = run_module('organization', dict(name='foo-org', notification_templates_changed=[notification_template.name]), admin_user)
+    assert not result.get('failed', False), result.get('msg', result)
+    assert result['changed']
+    org = Organization.objects.get(name='foo-org')
+    assert list(org.notification_templates_changed.values_list('id', flat=True)) == [notification_template.id]
+
+    result = run_module('organization', dict(name='foo-org', notification_templates_changed=[notification_template.name]), admin_user)
+    assert not result['changed']
+
+    result = run_module('organization', dict(name='foo-org', notification_templates_changed=[]), admin_user)
+    assert result['changed']
+    assert not org.notification_templates_changed.exists()

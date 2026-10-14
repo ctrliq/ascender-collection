@@ -88,6 +88,10 @@ argument_specs:
         #     required: false
         #     type: bool
         #     description: Allow simultaneous runs of the job template.
+        #   allow_overwrite_flow_vars_on_relaunch:
+        #     required: false
+        #     type: bool
+        #     description: Let a relaunch from failed nodes be given variables that overwrite the ones carried over from the original run.
         #   webhook_service:
         #     required: false
         #     type: str

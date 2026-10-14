@@ -88,6 +88,7 @@ This also speeds up the overall role.
 |`ask_variables_on_launch`|""|no|bool|Prompt user for extra_vars on launch.|
 |`extra_vars`|""|no|dict|Specify extra_vars for the template. Set to `{}` to clear them. Omitting this key leaves the existing variables unchanged.|
 |`allow_simultaneous`|""|no|bool|Allow simultaneous runs of the workflow job template.|
+|`allow_overwrite_flow_vars_on_relaunch`|""|no|bool|Let a relaunch from failed nodes be given variables that overwrite the ones carried over from the original run.|
 |`inventory`|""|no|str|Inventory applied as a prompt, assuming job template prompts for inventory|
 |`limit`|""|no|str|Limit applied as a prompt, assuming job template prompts for limit|
 |`labels`|""|no|str|The labels applied to this job template. Set to `[]` to remove all labels. Omitting this key leaves existing labels unchanged. NOTE: Labels must be created with the [labels](https://github.com/redhat-cop/ctrliq.ascender/tree/devel/roles/labels) role first, an error will occur if the label supplied to this role does not exist.|

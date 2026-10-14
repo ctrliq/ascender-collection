@@ -57,6 +57,11 @@ options:
       description:
         - Allow simultaneous runs of the workflow job template.
       type: bool
+    allow_overwrite_flow_vars_on_relaunch:
+      description:
+        - Let a relaunch from failed nodes be given variables that overwrite the ones carried over from the original run.
+        - Without it a relaunch from failed nodes reuses the variables the run had, and refuses new ones.
+      type: bool
     ask_variables_on_launch:
       description:
         - Prompt user for C(extra_vars) on launch.
@@ -923,6 +928,7 @@ def main():
         survey_spec=dict(type='dict', aliases=['survey']),
         survey_enabled=dict(type='bool'),
         allow_simultaneous=dict(type='bool'),
+        allow_overwrite_flow_vars_on_relaunch=dict(type='bool'),
         ask_variables_on_launch=dict(type='bool'),
         ask_labels_on_launch=dict(type='bool', aliases=['ask_labels']),
         ask_tags_on_launch=dict(type='bool', aliases=['ask_tags']),
@@ -1009,6 +1015,7 @@ def main():
         'description',
         'survey_enabled',
         'allow_simultaneous',
+        'allow_overwrite_flow_vars_on_relaunch',
         'limit',
         'scm_branch',
         'extra_vars',

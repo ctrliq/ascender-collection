@@ -116,6 +116,7 @@ This also speeds up the overall role.
 |`ask_labels_on_launch`|""|no|bool|Prompt user for labels on launch.|
 |`ask_timeout_on_launch`|""|no|bool|Prompt user for timeout on launch.|
 |`prevent_instance_group_fallback`|""|no|bool|Prevent falling back to instance groups set on the associated inventory or organization.|
+|`prevent_relaunch`|""|no|bool|Refuse to relaunch the jobs this template launched, for anyone. The template itself can still be launched.|
 |`survey_enabled`|""|no|bool|Enable a survey on the job template.|
 |`survey_spec`|""|no|dict|JSON/YAML dict formatted survey definition.|
 |`survey`|""|no|dict|JSON/YAML dict formatted survey definition. Alias of survey_spec|
@@ -133,6 +134,7 @@ This also speeds up the overall role.
 |`notification_templates_started`|""|no|list|The notifications on started to use for this organization in a list. Set to `[]` to remove all. Omitting this key leaves existing notifications unchanged.|
 |`notification_templates_success`|""|no|list|The notifications on success to use for this organization in a list. Set to `[]` to remove all. Omitting this key leaves existing notifications unchanged.|
 |`notification_templates_error`|""|no|list|The notifications on error to use for this organization in a list. Set to `[]` to remove all. Omitting this key leaves existing notifications unchanged.|
+|`notification_templates_changed`|""|no|list|The notifications to send when a job of this template reports changes, in a list. Set to `[]` to remove all. Omitting this key leaves existing notifications unchanged.|
 |`state`|`present`|no|str|Desired state of the resource.|
 
 ### Surveys

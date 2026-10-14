@@ -211,6 +211,12 @@ controller_templates:
       - "{{ notification_success.name }}"
 {% endfor %}
 {% endif %}
+{% if query_notification_changed | length > 0 %}
+    notification_templates_changed:
+{% for notification_changed in query_notification_changed %}
+      - "{{ notification_changed.name }}"
+{% endfor %}
+{% endif %}
     survey_enabled: {{ template_overrides_resources.job_template[current_job_templates_asset_value.name].survey_enabled
                        | default(template_overrides_global.job_template.survey_enabled)
                        | default(current_job_templates_asset_value.survey_enabled | bool | lower) }}
@@ -284,6 +290,13 @@ controller_templates:
     prevent_instance_group_fallback: {{ template_overrides_resources.job_template[current_job_templates_asset_value.name].prevent_instance_group_fallback
                                         | default(template_overrides_global.job_template.prevent_instance_group_fallback)
                                         | default(current_job_templates_asset_value.prevent_instance_group_fallback | bool | lower) }}
+{% endif %}
+{% if template_overrides_resources.job_template[current_job_templates_asset_value.name].prevent_relaunch is defined
+      or template_overrides_global.job_template.prevent_relaunch is defined
+      or current_job_templates_asset_value.prevent_relaunch is defined %}
+    prevent_relaunch: {{ template_overrides_resources.job_template[current_job_templates_asset_value.name].prevent_relaunch
+                         | default(template_overrides_global.job_template.prevent_relaunch)
+                         | default(current_job_templates_asset_value.prevent_relaunch | bool | lower) }}
 {% endif %}
 {% if last_job_template | default(true) | bool %}
 ...

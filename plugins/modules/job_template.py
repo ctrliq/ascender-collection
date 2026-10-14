@@ -300,6 +300,11 @@ options:
       description:
         - Prevent falling back to instance groups set on the associated inventory or organization
       type: bool
+    prevent_relaunch:
+      description:
+        - Refuse to relaunch the jobs this template launched, for anyone. The template itself can still be launched.
+        - It is checked at relaunch time, so turning it off makes the earlier jobs relaunchable again.
+      type: bool
 
 extends_documentation_fragment: ctrliq.ascender.auth
 
@@ -421,6 +426,7 @@ def main():
         notification_templates_error=dict(type="list", elements='str'),
         notification_templates_changed=dict(type="list", elements='str'),
         prevent_instance_group_fallback=dict(type="bool"),
+        prevent_relaunch=dict(type="bool"),
         state=dict(choices=['present', 'absent', 'exists'], default='present'),
     )
 
@@ -512,6 +518,7 @@ def main():
         'webhook_service',
         'webhook_key',
         'prevent_instance_group_fallback',
+        'prevent_relaunch',
     ):
         field_val = module.params.get(field_name)
         if field_val is not None:

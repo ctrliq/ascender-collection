@@ -33,6 +33,9 @@
           verify_ssl=controller_validate_certs, return_all=true, max_objects=query_controller_api_max_objects) }}"
         query_notification_approvals: "{{ query(controller_api_plugin, current_organization.related.notification_templates_approvals, host=controller_hostname, oauth_token=controller_oauthtoken,
           verify_ssl=controller_validate_certs, return_all=true, max_objects=query_controller_api_max_objects) }}"
+        query_notification_changed: "{{ query(controller_api_plugin, current_organization.related.notification_templates_changed, host=controller_hostname, oauth_token=controller_oauthtoken,
+          verify_ssl=controller_validate_certs, return_all=true, max_objects=query_controller_api_max_objects)
+          if current_organization.related.notification_templates_changed is defined else [] }}"
         last_organization: "{{ current_organization_index == ((orgs_lookvar | length) - 1) }}"
       loop: "{{ orgs_lookvar }}"
       loop_control:
@@ -81,6 +84,9 @@
           verify_ssl=controller_validate_certs, return_all=true, max_objects=query_controller_api_max_objects) }}"
         query_notification_approvals: "{{ query(controller_api_plugin, current_organization.related.notification_templates_approvals, host=controller_hostname, oauth_token=controller_oauthtoken,
           verify_ssl=controller_validate_certs, return_all=true, max_objects=query_controller_api_max_objects) }}"
+        query_notification_changed: "{{ query(controller_api_plugin, current_organization.related.notification_templates_changed, host=controller_hostname, oauth_token=controller_oauthtoken,
+          verify_ssl=controller_validate_certs, return_all=true, max_objects=query_controller_api_max_objects)
+          if current_organization.related.notification_templates_changed is defined else [] }}"
       loop: "{{ orgs_lookvar }}"
       loop_control:
         loop_var: current_organization

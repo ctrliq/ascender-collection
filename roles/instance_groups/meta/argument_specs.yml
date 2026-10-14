@@ -25,6 +25,10 @@ argument_specs:
         #     required: false
         #     type: bool
         #     description: Signifies that this InstanceGroup should act as a ContainerGroup. If no credential is specified, the underlying Pod's ServiceAccount will be used.
+        #   mesh_node:
+        #     required: false
+        #     type: str
+        #     description: Hostname, ID, or named URL of the hop node that runs this container group's pods. Only for a container group without a credential.
         #   policy_instance_percentage:
         #     required: false
         #     type: int

@@ -34,7 +34,6 @@ argument_specs:
         #       - 'net'
         #       - 'scm'
         #       - 'cloud'
-        #       - 'insights'
         #     description: The type of credential type being added. Note that only cloud and net can be used for creating credential types.
         #   state:
         #     default: "{{ controller_state | default('present') }}"

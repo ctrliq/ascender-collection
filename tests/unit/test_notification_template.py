@@ -156,3 +156,25 @@ def test_build_notification_message_undefined(run_module, admin_user, organizati
 
     body = job.build_notification_message(nt, 'running')
     assert body[1] == '{"started_by": "My Placeholder"}'
+
+
+@pytest.mark.django_db
+def test_create_matrix_notification_template(run_module, admin_user, organization):
+    nt_config = {
+        'homeserver_url': 'https://matrix.example.com',
+        'access_token': 'a_token',
+        'rooms': ['#automation:example.com'],
+        'use_html': True,
+        'disable_ssl_verification': False,
+    }
+    result = run_module(
+        'notification_template',
+        dict(name='foo-matrix', organization=organization.name, notification_type='matrix', notification_configuration=nt_config),
+        admin_user,
+    )
+    assert not result.get('failed', False), result.get('msg', result)
+    assert result['changed']
+
+    nt = NotificationTemplate.objects.get(id=result['id'])
+    assert nt.notification_type == 'matrix'
+    compare_with_encrypted(nt.notification_configuration, nt_config)

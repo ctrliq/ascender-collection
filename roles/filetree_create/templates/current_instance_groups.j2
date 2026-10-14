@@ -16,6 +16,9 @@ controller_instance_groups: {{ [] if current_instance_groups_asset_value | lengt
 {% if ig.summary_fields.credential is defined and ig.summary_fields.credential.name is defined %}
     credential: "{{ ig.summary_fields.credential.name }}"
 {% endif %}
+{% if ig.summary_fields.mesh_node is defined and ig.summary_fields.mesh_node.hostname is defined %}
+    mesh_node: "{{ ig.summary_fields.mesh_node.hostname }}"
+{% endif %}
 {% if ig.pod_spec_override %}
     pod_spec_override: !unsafe {{ ig.pod_spec_override | to_json }}
 {% endif %}

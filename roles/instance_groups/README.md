@@ -81,6 +81,7 @@ This also speeds up the overall role.
 |`new_name`|""|str|no|Setting this option will change the existing name (looked up via the name field).|
 |`credential`|""|no|str|Credential to authenticate with Kubernetes or OpenShift. Must be of type "Kubernetes/OpenShift API Bearer Token". Will make instance part of a Container Group.|
 |`is_container_group`|False|no|bool|Signifies that this InstanceGroup should act as a ContainerGroup. If no credential is specified, the underlying Pod's ServiceAccount will be used.|
+|`mesh_node`|""|no|str|Hostname, ID, or named URL of the hop node of the receptor mesh that runs this container group's pods, on the cluster that node lives in. Only for a container group, and not together with `credential`. Set to `''` to run the pods on the cluster Ascender runs on.|
 |`policy_instance_percentage`|""|no|int|Minimum percentage of all instances that will be automatically assigned to this group when new instances come online.|
 |`policy_instance_minimum`|""|no|int|Static minimum number of Instances that will be automatically assign to this group when new instances come online.|
 |`policy_instance_list`|""|no|list|List of exact-match Instances that will be assigned to this group. Set to `[]` to remove all. Omitting this key leaves the existing list unchanged.|

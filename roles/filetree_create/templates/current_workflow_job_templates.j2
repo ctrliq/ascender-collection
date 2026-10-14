@@ -120,6 +120,13 @@ controller_workflows:
     allow_simultaneous: "{{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].allow_simultaneous
                             | default(template_overrides_global.workflow_template.allow_simultaneous)
                             | default(current_workflow_job_templates_asset_value.allow_simultaneous) }}"
+{% if template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].allow_overwrite_flow_vars_on_relaunch is defined
+      or template_overrides_global.workflow_template.allow_overwrite_flow_vars_on_relaunch is defined
+      or current_workflow_job_templates_asset_value.allow_overwrite_flow_vars_on_relaunch is defined %}
+    allow_overwrite_flow_vars_on_relaunch: {{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].allow_overwrite_flow_vars_on_relaunch
+                                              | default(template_overrides_global.workflow_template.allow_overwrite_flow_vars_on_relaunch)
+                                              | default(current_workflow_job_templates_asset_value.allow_overwrite_flow_vars_on_relaunch | bool | lower) }}
+{% endif %}
     scm_branch: "{{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].scm_branch
                     | default(template_overrides_global.workflow_template.scm_branch)
                     | default(current_workflow_job_templates_asset_value.scm_branch) }}"

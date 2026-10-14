@@ -87,13 +87,14 @@ This role accepts two data models. A simple straightforward easy to maintain mod
 |`new_name`|""|no|str|New name of Organization|
 |`description`|`False`|no|str|Description of  of Organization.|
 |`max_hosts`|""|no|int|The max hosts allowed in this organization.|
-|`instance_groups`|""|no|list|list of Instance Groups for this Organization to run on.|
-|`galaxy_credentials`|""|no|list|The credentials to use with private automationhub.|
+|`instance_groups`|""|no|list|list of Instance Groups for this Organization to run on. Set to `[]` to remove all. Omitting this key leaves the existing list unchanged.|
+|`galaxy_credentials`|""|no|list|The credentials to use with private automationhub. Set to `[]` to remove all. Omitting this key leaves the existing list unchanged.|
 |`default_environment`|""|no|str|Default Execution Environment to use for jobs owned by the Organization.|
-|`notification_templates_started`|""|no|list|The notifications on started to use for this organization in a list.|
-|`notification_templates_success`|""|no|list|The notifications on success to use for this organization in a list.|
-|`notification_templates_error`|""|no|list|The notifications on error to use for this organization in a list.|
-|`notification_templates_approvals`|""|no|list|The notifications for approval to use for this organization in a list.|
+|`notification_templates_started`|""|no|list|The notifications on started to use for this organization in a list. Set to `[]` to remove all. Omitting this key leaves existing notifications unchanged.|
+|`notification_templates_success`|""|no|list|The notifications on success to use for this organization in a list. Set to `[]` to remove all. Omitting this key leaves existing notifications unchanged.|
+|`notification_templates_error`|""|no|list|The notifications on error to use for this organization in a list. Set to `[]` to remove all. Omitting this key leaves existing notifications unchanged.|
+|`notification_templates_approvals`|""|no|list|The notifications for approval to use for this organization in a list. Set to `[]` to remove all. Omitting this key leaves existing notifications unchanged.|
+|`notification_templates_changed`|""|no|list|The notifications to send when a job of this organization reports changes, in a list. Set to `[]` to remove all. Omitting this key leaves existing notifications unchanged.|
 |`state`|`present`|no|str|Desired state of the resource.|
 
 ### Standard Organization Data Structure model

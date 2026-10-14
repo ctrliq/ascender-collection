@@ -37,15 +37,15 @@
     that:
       - "result is changed"
 
-- name: Set the value of AWX_ISOLATION_SHOW_PATHS to a baseline
+- name: Set the value of ASCENDER_ISOLATION_SHOW_PATHS to a baseline
   settings:
-    name: AWX_ISOLATION_SHOW_PATHS
+    name: ASCENDER_ISOLATION_SHOW_PATHS
     value: '["/var/lib/awx/projects/"]'
 
-- name: Set the value of AWX_ISOLATION_SHOW_PATHS to get an error back from the controller
+- name: Set the value of ASCENDER_ISOLATION_SHOW_PATHS to get an error back from the controller
   settings:
     settings:
-      AWX_ISOLATION_SHOW_PATHS:
+      ASCENDER_ISOLATION_SHOW_PATHS:
         'not': 'a valid'
         'ascender': 'setting'
   register: result
@@ -55,9 +55,9 @@
     that:
       - "result is failed"
 
-- name: Set the value of AWX_ISOLATION_SHOW_PATHS
+- name: Set the value of ASCENDER_ISOLATION_SHOW_PATHS
   settings:
-    name: AWX_ISOLATION_SHOW_PATHS
+    name: ASCENDER_ISOLATION_SHOW_PATHS
     value: '["/var/lib/awx/projects/", "/tmp"]'
   register: result
 
@@ -65,9 +65,9 @@
     that:
       - "result is changed"
 
-- name: Attempt to set the value of AWX_ISOLATION_BASE_PATH to what it already is
+- name: Attempt to set the value of ASCENDER_ISOLATION_BASE_PATH to what it already is
   settings:
-    name: AWX_ISOLATION_BASE_PATH
+    name: ASCENDER_ISOLATION_BASE_PATH
     value: /tmp
   register: result
 
@@ -80,7 +80,7 @@
 
 - name: Apply a single setting via settings
   settings:
-    name: AWX_ISOLATION_SHOW_PATHS
+    name: ASCENDER_ISOLATION_SHOW_PATHS
     value: '["/var/lib/awx/projects/", "/var/tmp"]'
   register: result
 
@@ -91,8 +91,8 @@
 - name: Apply multiple setting via settings with no change
   settings:
     settings:
-      AWX_ISOLATION_BASE_PATH: /tmp
-      AWX_ISOLATION_SHOW_PATHS: ["/var/lib/awx/projects/", "/var/tmp"]
+      ASCENDER_ISOLATION_BASE_PATH: /tmp
+      ASCENDER_ISOLATION_SHOW_PATHS: ["/var/lib/awx/projects/", "/var/tmp"]
   register: result
 
 - debug:
@@ -105,8 +105,8 @@
 - name: Apply multiple setting via settings with change
   settings:
     settings:
-      AWX_ISOLATION_BASE_PATH: /tmp
-      AWX_ISOLATION_SHOW_PATHS: []
+      ASCENDER_ISOLATION_BASE_PATH: /tmp
+      ASCENDER_ISOLATION_SHOW_PATHS: []
   register: result
 
 - assert:
@@ -115,7 +115,7 @@
 
 - name: Handle an omit value
   settings:
-    name: AWX_ISOLATION_BASE_PATH
+    name: ASCENDER_ISOLATION_BASE_PATH
     value: '{{ junk_var | default(omit) }}'
   register: result
   ignore_errors: true

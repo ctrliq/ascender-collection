@@ -1,0 +1,30 @@
+---
+minor_changes:
+  - The ``workflow_job_template`` module and the ``workflow_job_templates`` role take
+    ``allow_overwrite_flow_vars_on_relaunch``, which lets a relaunch from failed nodes
+    be given variables that replace the ones carried over from the original run
+    (ctrliq/ascender#1050). ``filetree_create`` exports it.
+  - The ``instance_group`` module and the ``instance_groups`` role take ``mesh_node``,
+    the hostname of the hop node that runs a container group's pods on the cluster it
+    lives in (ctrliq/ascender#1058). An empty string takes it off again.
+    ``filetree_create`` exports it.
+  - The ``job_template`` module and the ``job_templates`` role take ``prevent_relaunch``,
+    which stops anyone relaunching the jobs a template launched (ctrliq/ascender#1067).
+    ``filetree_create`` exports it.
+  - The ``notification_template`` module accepts ``matrix`` as a ``notification_type``
+    and documents the configuration keys it takes (ctrliq/ascender#1052).
+  - The ``organization`` module takes ``notification_templates_changed``, the
+    notifications sent when a job reports changes (ctrliq/ascender#696). The
+    ``job_template`` module already took it, and now the ``job_templates`` and
+    ``organizations`` roles pass it through and ``filetree_create`` exports it for
+    both, so a round trip through a file tree keeps those notifications.
+removed_features:
+  - The ``credential_type`` module no longer offers ``insights`` as a ``kind``. Ascender
+    removed that kind in ctrliq/ascender#932 and refuses it, so it could only fail.
+    The ``credential`` module docs stop listing Insights as a built in credential type,
+    which had been gone for longer.
+trivial:
+  - The settings role test config and the settings integration target use the
+    ``ASCENDER_URL_BASE``, ``ASCENDER_TASK_ENV`` and ``ASCENDER_ISOLATION_*`` names the
+    platform registers since ctrliq/ascender#940 and ctrliq/ascender#984, in place of the ``TOWER_`` and
+    ``AWX_`` ones it renamed.
