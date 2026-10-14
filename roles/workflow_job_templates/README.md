@@ -89,11 +89,11 @@ This also speeds up the overall role.
 |`extra_vars`|""|no|dict|Specify extra_vars for the template. Set to `{}` to clear them. Omitting this key leaves the existing variables unchanged.|
 |`allow_simultaneous`|""|no|bool|Allow simultaneous runs of the workflow job template.|
 |`inventory`|""|no|str|Inventory applied as a prompt, assuming job template prompts for inventory|
-|`limit`|""|no|str|Limit applied as a prompt, assuming job template prompts for limit|
+|`limit`|""|no|str|Limit applied as a prompt, assuming job template prompts for limit. Set to `''` to clear. Omitting this key leaves the existing limit unchanged.|
 |`labels`|""|no|str|The labels applied to this job template. Set to `[]` to remove all labels. Omitting this key leaves existing labels unchanged. NOTE: Labels must be created with the [labels](https://github.com/redhat-cop/ctrliq.ascender/tree/devel/roles/labels) role first, an error will occur if the label supplied to this role does not exist.|
 |`ask_labels_on_launch`|""|no|bool|Prompt user for labels on launch.|
-|`job_tags`|""|no|str|Comma separated list of the tags to use for the workflow job template.|
-|`skip_tags`|""|no|str|Comma separated list of the tags to skip for the workflow job template.|
+|`job_tags`|""|no|str|Comma separated list of the tags to use for the workflow job template. Set to `''` to clear. Omitting this key leaves existing job tags unchanged.|
+|`skip_tags`|""|no|str|Comma separated list of the tags to skip for the workflow job template. Set to `''` to clear. Omitting this key leaves existing skip tags unchanged.|
 |`ask_tags_on_launch`|""|no|bool|Prompt user for job tags on launch.|
 |`ask_skip_tags_on_launch`|""|no|bool|Prompt user for job tags to skip on launch.|
 |`notification_templates_approvals`|""|no|list|The notifications on approval to use for this organization in a list. Set to `[]` to remove all. Omitting this key leaves existing notifications unchanged.|
