@@ -181,6 +181,7 @@ This role accepts two data models.
 #### Simplified Workflow nodes
 
 A simple straightforward easy to maintain model using the var simplified_workflow_nodes.
+The links written under each node are the links it ends up with. Changing a link from one type to another, moving it to a different node, or taking it out of the file is applied on the next run, including for nodes that are left with no links at all.
 However this is, not compatible with the schema option on the controller_workflow_job_template module and will result in errors.
 Uses the variable 'simplified_workflow_nodes' to describe nodes as shown below.
 
