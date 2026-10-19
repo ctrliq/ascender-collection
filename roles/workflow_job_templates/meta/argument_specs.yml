@@ -303,6 +303,14 @@ argument_specs:
         #         type: str
         #         description: Tags to skip, applied as a prompt, if job template prompts for job tags
 
+      controller_configuration_workflow_job_templates_prune_nodes:
+        default: true
+        required: false
+        type: bool
+        description:
+          - Remove the nodes of a workflow that are on the controller but not in its simplified_workflow_nodes.
+          - A single workflow can set prune_nodes to override this.
+
       # Async variables
       controller_configuration_workflow_job_templates_async_retries:
         default: "{{ controller_configuration_async_retries | default(50) }}"
