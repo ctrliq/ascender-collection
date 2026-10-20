@@ -143,13 +143,13 @@ controller_templates:
 {% set __jt_extra_vars = (__jt_extra_vars if __jt_extra_vars is mapping or (__jt_extra_vars | type_debug) == 'list' else (__jt_extra_vars | from_yaml)) %}
 {% if template_overrides_resources.job_template[current_job_templates_asset_value.name].extra_vars is defined
       or template_overrides_global.job_template.extra_vars is defined
-      or (current_job_templates_asset_value.extra_vars and (__jt_extra_vars | string) is not match('None')) %}
+      or (current_job_templates_asset_value.extra_vars and __jt_extra_vars is not none) %}
     extra_vars:
 {% set extra_vars_contents = __jt_extra_vars -%}
-{%   for extra_vars_item in (extra_vars_contents | dict2items) if ((extra_vars_item.value | string | length) > 0 and (extra_vars_item.value | string) is not match('None')) %}
+{%   for extra_vars_item in (extra_vars_contents | dict2items) if ((extra_vars_item.value | string | length) > 0 and extra_vars_item.value is not none) %}
 {%     if extra_vars_item.value | type_debug is match('list') %}
       {{ extra_vars_item.key }}:
-{%       for current_list_item in extra_vars_item.value if ((extra_vars_item.value | string | length) > 0 and (extra_vars_item.value | string) is not match('None')) %}
+{%       for current_list_item in extra_vars_item.value if ((extra_vars_item.value | string | length) > 0 and extra_vars_item.value is not none) %}
         - {{ (current_list_item | regex_replace("\n", "\\\\n") | regex_replace('"', '\\"')) | regex_replace('(^[^{]*){([{%])(.*)', '!unsafe "\\g<1>{\\g<2>\\g<3>"', multiline=True) }}
 {%       endfor %}
 {%     else %}
@@ -234,7 +234,7 @@ controller_templates:
       spec:
 {%   for survey_item in spec_item.spec %}
 {%     set _var = namespace(first_survey_item = true) %}
-{%     for survey_item_content in (survey_item | dict2items) if ((survey_item_content.value | string | length) > 0 and (survey_item_content.value | string) is not match('None')) %}
+{%     for survey_item_content in (survey_item | dict2items) if ((survey_item_content.value | string | length) > 0 and survey_item_content.value is not none) %}
 {%       if survey_item_content.key | regex_search('question_description|default') %}
 {%         if survey_item_content.value is number %}
 {%           set current_content = survey_item_content.key + ': ' + survey_item_content.value | string %}
@@ -253,7 +253,7 @@ controller_templates:
 {%         else %}
 {%           if survey_item_content.key is match('choices') and survey_item_content.value[0] is defined %}
           {{ survey_item_content.key }}:
-{%             for choice in survey_item_content.value if ((survey_item_content.value | string | length) > 0 and (survey_item_content.value | string) is not match('None')) %}
+{%             for choice in survey_item_content.value if ((survey_item_content.value | string | length) > 0 and survey_item_content.value is not none) %}
 {%                 if choice is number %}
             - {{ choice }}
 {%                 else %}

@@ -1,0 +1,4 @@
+bugfixes:
+  - filetree_create - ``extra_vars``, workflow node ``extra_data`` and survey fields whose value starts
+    with ``None`` (for example ``None of these`` or ``Nonesuch``) are exported again. The templates
+    skipped any value whose text matched ``None`` at the start; they now skip only null values.
