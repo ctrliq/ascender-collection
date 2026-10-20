@@ -77,8 +77,8 @@ This also speeds up the overall role.
 
 |Variable Name|Default Value|Required|Type|Description|
 |:---:|:---:|:---:|:---:|:---:|
-|`users`|""|no|list|The users for which the role applies|
-|`teams`|""|no|list|The teams for which the role applies|
+|`users`|""|one of `users`/`teams`|list|The users for which the role applies|
+|`teams`|""|one of `users`/`teams`|list|The teams for which the role applies|
 |`roles`|""|no|str (see note below)|The roles which are applied to one of {`target_teams`, `inventories`, `job_templates`} for either `users` or `teams`|
 |`role`|""|no|str (see note below)|The role which is applied to one of {`target_teams`, `inventories`, `job_templates`} for either `users` or `teams`|
 |`target_teams`|""|no|list|The teams the role applies against|

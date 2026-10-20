@@ -41,7 +41,24 @@
         __roles_difference: "{{ query(controller_role_plugin, api_list=__full_controller_api_roles, compare_list=controller_roles, with_present=include_present_state,
           set_absent=true) | flatten }}"
 
+    # Removals come back keyed by a singular user or team, which the roles role does not read, so they can't be applied yet.
+    - name: roles | Set aside the role entries that name no users or teams
+      ansible.builtin.set_fact:
+        __roles_without_grantee: "{{ __roles_difference | rejectattr('users', 'defined') | rejectattr('teams', 'defined') | list }}"
+
     - name: roles | Sets differences between Roles what is on the Controller versus CasC on SCM
       ansible.builtin.set_fact:
-        controller_roles: "{{ __roles_difference }}"
+        controller_roles: "{{ __roles_difference | reject('in', __roles_without_grantee) | list }}"
+
+    - name: roles | Report how many role entries object_diff can't apply
+      when: __roles_without_grantee | length > 0
+      ansible.builtin.debug:
+        msg: "object_diff found {{ __roles_without_grantee | length }} role entr(ies) with no users or teams key, which the roles role can't apply; they are left
+          in place. See the object_diff role README."
+
+    - name: roles | List the role entries object_diff can't apply
+      when: __roles_without_grantee | length > 0
+      ansible.builtin.debug:
+        var: __roles_without_grantee
+      no_log: "{{ controller_configuration_object_diff_secure_logging }}"
 ...

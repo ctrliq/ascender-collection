@@ -23,4 +23,15 @@ valid_tags:
   - applications
   - labels
   - schedules
+
+# Resource types the roles role can name; a role on any other type is left out of the role exports.
+filetree_create_role_resource_types:
+  - organization
+  - team
+  - job_template
+  - inventory
+  - workflow_job_template
+  - project
+  - credential
+  - instance_group
 ...
