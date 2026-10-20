@@ -167,7 +167,6 @@ id:
 '''
 
 from ..module_utils.controller_api import ControllerAPIModule
-from json import dumps
 
 
 def main():
@@ -318,10 +317,6 @@ def main():
         field_val = module.params.get(field_name)
         if field_val is not None:
             inventory_source_fields[field_name] = field_val
-
-    # Attempt to JSON encode source vars
-    if inventory_source_fields.get('source_vars', None):
-        inventory_source_fields['source_vars'] = dumps(inventory_source_fields['source_vars'])
 
     # Sanity check on arguments
     if state == 'present' and not inventory_source_object and not inventory_source_fields.get('source'):
