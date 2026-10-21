@@ -104,9 +104,9 @@ The role will strip the double space between the curly bracket in order to provi
 |`organization`|""|yes|str|Organization this inventory belongs to.|
 |`instance_groups`|""|no|list|List of Instance Groups for this Inventory to run on. Set to `[]` to remove all. Omitting this key leaves existing instance groups unchanged.|
 |`input_inventories`|""|no|list|List of Inventories to use as input for Constructed Inventory. Set to `[]` to remove all. Omitting this key leaves existing input inventories unchanged.|
-|`variables`|`{}`|no|dict|Variables for the inventory.|
-|`kind`|""|no|str|The kind of inventory. Choices are '', 'smart' and 'constructed'|
-|`host_filter`|""|no|str|The host filter field, useful only when 'kind=smart'|
+|`variables`|`{}`|no|dict|Variables for the inventory. Set to `{}` to clear. Omitting this key leaves existing variables unchanged.|
+|`kind`|""|no|str|The kind of inventory. Choices are '', 'smart' and 'constructed'. Set to `''` for a standard inventory. Omitting this key leaves the existing kind unchanged.|
+|`host_filter`|""|no|str|The host filter field, useful only when 'kind=smart'. Set to `''` to clear. Omitting this key leaves the existing host filter unchanged.|
 |`prevent_instance_group_fallback`|`False`|no|bool|Prevent falling back to instance groups set on the organization|
 |`allow_deletes_while_in_use`|`False`|no|bool|Allow hosts of this inventory to be deleted while jobs are running against it|
 |`state`|`present`|no|str|Desired state of the resource.|

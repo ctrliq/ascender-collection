@@ -1,0 +1,6 @@
+bugfixes:
+  - inventories - send a declared empty ``kind``, ``host_filter`` or ``variables`` instead of treating it as undeclared,
+    so a standard inventory (``kind`` of ``''``) can be declared and ``host_filter`` and ``variables`` can be cleared.
+    Omitting the key still leaves the field unchanged (https://github.com/ctrliq/ascender-collection/issues/328).
+  - job_templates, schedules, workflow_job_templates - send a declared empty ``limit``, ``job_tags`` or ``skip_tags``
+    instead of dropping it, so ``''`` clears the field. Omitting the key still leaves the field unchanged.
