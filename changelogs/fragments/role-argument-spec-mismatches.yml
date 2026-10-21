@@ -1,0 +1,17 @@
+bugfixes:
+  - filetree_read - document ``controller_configuration_filetree_read_secure_logging``, the variable the role reads,
+    with its real default of ``true``, in place of ``controller_configuration_filetree_create_secure_logging``, which
+    it never read; also document ``filetree_controller_instances`` (https://github.com/ctrliq/ascender-collection/issues/326).
+  - job_templates - document the input list as ``controller_templates``, the variable the role reads, not
+    ``controller_job_templates``.
+  - workflow_launch - drop the async retry and delay variables from the argument spec; the role launches
+    synchronously and never read them.
+  - bulk_host_create - document ``controller_configuration_bulk_hosts_async_retries`` and
+    ``controller_configuration_bulk_hosts_async_delay``, which the role reads.
+  - credentials, object_diff, project_update, dispatch - correct argument spec defaults that disagreed with
+    ``defaults/main.yml`` (credentials and object_diff secure logging, project_update async retries and delay, the
+    dispatcher's role order); the role defaults are unchanged.
+  - multiple roles - document ``controller_configuration_async_retries`` with the fallback of 50 the roles use
+    (60 for project_update), not 30.
+  - ad_hoc_command_cancel, bulk_job_launch, collect_async_status, hosts, users - correct README variable names and
+    defaults that did not match the role.

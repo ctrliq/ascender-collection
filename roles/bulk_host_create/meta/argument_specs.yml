@@ -9,6 +9,22 @@ argument_specs:
         elements: dict
 
       # Async variables
+      controller_configuration_bulk_hosts_async_retries:
+        default: "{{ controller_configuration_async_retries | default(50) }}"
+        required: false
+        description: This variable sets the number of retries to attempt for the role.
+      controller_configuration_async_retries:
+        default: 50
+        required: false
+        description: This variable sets number of retries across all roles as a default.
+      controller_configuration_bulk_hosts_async_delay:
+        default: "{{ controller_configuration_async_delay | default(1) }}"
+        required: false
+        description: This variable sets delay between retries for the role.
+      controller_configuration_async_delay:
+        default: 1
+        required: false
+        description: This variable sets delay between retries across all roles as a default.
       controller_configuration_async_dir:
         default:
         required: false
