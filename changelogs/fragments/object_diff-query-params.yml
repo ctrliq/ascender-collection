@@ -3,4 +3,5 @@ minor_changes:
     parameters merged into the list each task fetches before diffing. The diff covered a whole
     organization, so pruning required declaring every object in it; a filter such as ``labels__name``
     narrows it to the objects the declaration is responsible for. Defaults to an empty dict, so behavior
-    is unchanged when unset.
+    is unchanged when unset. The extras can only narrow; the role's own scope parameters always win,
+    and the role fails if the extras use one of them.
