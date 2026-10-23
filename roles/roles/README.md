@@ -81,16 +81,18 @@ This also speeds up the overall role.
 |`teams`|""|one of `users`/`teams`|list|The teams for which the role applies|
 |`roles`|""|no|str (see note below)|The roles which are applied to one of {`target_teams`, `inventories`, `job_templates`} for either `users` or `teams`|
 |`role`|""|no|str (see note below)|The role which is applied to one of {`target_teams`, `inventories`, `job_templates`} for either `users` or `teams`|
-|`target_teams`|""|no|list|The teams the role applies against|
-|`inventories`|""|no|list|The inventories the role applies against|
-|`job_templates`|""|no|list|The job templates the role applies against|
-|`workflows`|""|no|list|The workflows the role applies against|
-|`credentials`|""|no|list|The credentials the role applies against|
-|`organizations`|""|no|list|The organizations the role applies against|
+|`target_teams`|""|one resource key|list|The teams the role applies against|
+|`inventories`|""|one resource key|list|The inventories the role applies against|
+|`job_templates`|""|one resource key|list|The job templates the role applies against|
+|`workflows`|""|one resource key|list|The workflows the role applies against|
+|`credentials`|""|one resource key|list|The credentials the role applies against|
+|`organizations`|""|one resource key|list|The organizations the role applies against|
 |`lookup_organization`|""|no|str|Organization the inventories, job templates, projects, or workflows the items exists in. Used to help lookup the object, for organization roles see organizations. If not provided, will lookup by name only, which does not work with duplicates.|
-|`projects`|""|no|list|The projects the role applies against|
-|`instance_groups`|""|no|list|The instance groups the role applies against|
+|`projects`|""|one resource key|list|The projects the role applies against|
+|`instance_groups`|""|one resource key|list|The instance groups the role applies against|
 |`state`|`present`|no|str|Desired state of the resource.|
+
+Every `controller_roles` entry must name at least one user or team in `users` or `teams`, and at least one object in a resource key: `target_teams`, `inventories`, `job_templates`, `workflows`, `credentials`, `organizations`, `projects` or `instance_groups`. Only these plural keys are read; singular keys such as `user`, `credential` or `job_template` are ignored, so an entry that uses only them fails.
 
 #### Role
 

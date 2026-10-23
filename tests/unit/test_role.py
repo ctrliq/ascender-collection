@@ -105,3 +105,14 @@ def test_teams_only_with_empty_users_grants(run_module, admin_user, organization
     result = run_module('role', {'users': [], 'teams': [team.name], 'projects': [project.name], 'role': 'admin', 'state': 'present'}, admin_user)
     assert not result.get('failed', False), result.get('msg', result)
     assert team.member_role in project.admin_role.parents.all()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('resources', ({}, {'credentials': []}, {k: [] for k in (
+    'credentials', 'inventories', 'instance_groups', 'job_templates', 'organizations', 'projects', 'target_teams', 'workflows')}))
+def test_no_resource_fails(run_module, admin_user, resources):
+    """A role with a grantee but no resource grants nothing, so it fails rather than reporting ok; [] is what the roles role sends."""
+    rando = User.objects.create(username='rando')
+    result = run_module('role', dict(resources, users=[rando.username], role='use', state='present'), admin_user)
+    assert result.get('failed', False), result
+    assert 'one of credentials, inventories, instance_groups, job_templates, organizations, projects, target_teams, workflows is required' in result['msg']

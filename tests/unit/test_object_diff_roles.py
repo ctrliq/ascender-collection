@@ -23,6 +23,8 @@ DIFFERENCE = [
     {'role': 'admin', 'job_template': 'JT1', 'user': 'jdoe', 'state': 'absent'},
     # a declared entry, returned when include_present_state is set
     {'role': 'use', 'inventories': ['Inv1'], 'teams': ['T1'], 'state': 'present'},
+    # a declared entry written with a singular resource key, so it names no resource the roles role reads
+    {'role': 'use', 'credential': 'C1', 'users': ['jdoe'], 'state': 'present'},
     {'role': 'member', 'target_team': 'T2', 'state': 'absent'},
     # a declared entry written with the singular key, which the roles role can't apply either
     {'role': 'admin', 'organizations': ['O1'], 'user': 'jsmith', 'state': 'present'},
@@ -62,11 +64,13 @@ def run_role_tasks(difference, secure_logging=False):
     return facts, reports
 
 
-def test_only_entries_with_a_grantee_reach_the_roles_role_in_order():
-    """Entries without users or teams are set aside; the rest keep the lookup's order."""
+def test_only_entries_with_a_grantee_and_a_resource_reach_the_roles_role_in_order():
+    """Entries without users or teams, or without a resource key, are set aside; both lists keep the lookup's order."""
     facts = run_role_tasks(DIFFERENCE)[0]
-    assert facts['controller_roles'] == [DIFFERENCE[1], DIFFERENCE[4]]
-    assert facts['__roles_without_grantee'] == [DIFFERENCE[0], DIFFERENCE[2], DIFFERENCE[3]]
+    assert facts['controller_roles'] == [DIFFERENCE[1], DIFFERENCE[5]]
+    assert facts['__roles_without_grantee'] == [DIFFERENCE[0], DIFFERENCE[3], DIFFERENCE[4]]
+    assert facts['__roles_without_resource'] == [DIFFERENCE[2]]
+    assert facts['__roles_unapplied'] == [DIFFERENCE[0], DIFFERENCE[2], DIFFERENCE[3], DIFFERENCE[4]]
 
 
 @pytest.mark.parametrize('secure_logging', (False, True))
@@ -74,13 +78,13 @@ def test_entries_it_cant_apply_are_counted_openly_and_listed_unless_secure_loggi
     """The count is always shown; the entries, which name users, are hidden under secure logging."""
     (kind, msg, msg_hidden), (list_kind, var, list_hidden) = run_role_tasks(DIFFERENCE, secure_logging)[1]
     assert kind == 'msg' and not msg_hidden
-    assert ' 3 ' in msg, msg
-    assert list_kind == 'var' and var == '__roles_without_grantee'
+    assert ' 4 ' in msg, msg
+    assert list_kind == 'var' and var == '__roles_unapplied'
     assert list_hidden is secure_logging
 
 
-@pytest.mark.parametrize('difference', ([], [DIFFERENCE[1], DIFFERENCE[4]]))
-def test_nothing_is_reported_when_every_entry_names_a_grantee(difference):
+@pytest.mark.parametrize('difference', ([], [DIFFERENCE[1], DIFFERENCE[5]]))
+def test_nothing_is_reported_when_every_entry_names_a_grantee_and_a_resource(difference):
     facts, reports = run_role_tasks(difference)
     assert facts['controller_roles'] == difference
     assert reports == []

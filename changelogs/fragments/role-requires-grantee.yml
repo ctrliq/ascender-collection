@@ -1,11 +1,16 @@
 breaking_changes:
   - role - fail when neither ``users`` nor ``teams`` has an entry. It used to grant nothing and report ``ok``. A ``roles``
     entry that names its grantee with keys the role does not read, such as singular ``user``/``team``, now errors.
+  - role - fail when no resource option (``credentials``, ``inventories``, ``instance_groups``, ``job_templates``,
+    ``organizations``, ``projects``, ``target_teams`` or ``workflows``) has an entry. It used to grant nothing and report
+    ``ok``. A ``roles`` entry that names its resource with a singular key such as ``credential`` or ``job_template`` now
+    errors.
 bugfixes:
   - filetree_create - export user and team roles with the ``users``, ``teams`` and ``workflows`` keys the ``roles`` role
     reads, and the ``Ad Hoc`` role as ``adhoc``; the exported ``user``, ``team`` and ``workflow_job_templates`` keys were
     ignored, so applying an export granted nothing, or failed on an Ad Hoc role. A role on a resource type the ``roles``
     role can't name is left out of the export instead of producing an invalid entry.
-  - object_diff - role entries with no ``users`` or ``teams`` key, which the ``roles`` role can't apply, are counted, listed
-    unless secure logging is on, and left in place instead of being passed on, so a drop run continues to the other object
-    types. They include every role removal it computes, and declared entries written with a singular ``user`` or ``team``.
+  - object_diff - role entries with no ``users`` or ``teams`` key, or no resource key, which the ``roles`` role can't apply,
+    are counted, listed unless secure logging is on, and left in place instead of being passed on, so a drop run continues
+    to the other object types. They include every role removal it computes, and declared entries written with a singular
+    ``user``, ``team`` or resource key.
