@@ -11,15 +11,19 @@ short_description: grant or revoke an Ascender role.
 description:
     - Roles are used for access control, this module is for managing user access to server resources.
     - Grant or revoke Ascender roles to users. See U(https://ascender-automation.org) for an overview.
+    - One of C(credentials), C(inventories), C(instance_groups), C(job_templates), C(organizations), C(projects), C(target_teams) or C(workflows) is required,
+      with at least one entry.
 options:
     users:
       description:
         - User names, IDs, or named URLs that receive the permissions specified by the role.
+        - One of C(users) or C(teams) is required, with at least one entry.
       type: list
       elements: str
     teams:
       description:
         - Team names, IDs, or named URLs that receive the permissions specified by the role.
+        - One of C(users) or C(teams) is required, with at least one entry.
       type: list
       elements: str
     role:
@@ -162,6 +166,16 @@ def main():
     )
 
     module = ControllerAPIModule(argument_spec=argument_spec)
+
+    # Without a user or team there is nothing to grant or revoke, and the module would report ok.
+    # An empty list counts too: the roles role sends [] when enforcing defaults.
+    if not module.params.get('users') and not module.params.get('teams'):
+        module.fail_json(msg='one of users or teams is required, and it cannot be empty')
+
+    # Without a resource there is nothing to grant or revoke either; an empty list counts too, as above.
+    resource_params = ('credentials', 'inventories', 'instance_groups', 'job_templates', 'organizations', 'projects', 'target_teams', 'workflows')
+    if not any(module.params.get(param) for param in resource_params):
+        module.fail_json(msg=f"one of {', '.join(resource_params)} is required, and it cannot be empty")
 
     role_type = module.params.pop('role')
     role_field = role_type + '_role'
