@@ -179,12 +179,14 @@ def test_long_names_are_shortened_to_fit_the_filesystem(export):
     assert len(files) == 2, files
     for f in files:
         for part in f.split('/'):
-            assert len(part.encode('utf-8')) <= 255, part
+            # 235 leaves room for the 20-byte ".ansible_tmpXXXXXXXX" prefix of the temporary file
+            # Ansible writes beside the destination when it cannot rename across filesystems.
+            assert len(part.encode('utf-8')) <= 235, part
 
 
-def test_names_up_to_230_bytes_keep_their_main_layout(export):
-    # Names that exported on main keep their paths up to 230 bytes; longer ones are shortened.
-    org, label = 'O' * 220, 'l' * 220
+def test_names_up_to_210_bytes_keep_their_main_layout(export):
+    # Names up to 210 bytes keep the paths they had on main; longer ones are shortened.
+    org, label = 'O' * 210, 'l' * 210
     api = {'api/v2/organizations/': [_org(1, org), _org(2, 'P' * 240)],
            'api/v2/labels/': [_label(7, label, org), _label(8, 'm' * 240, org)]}
     out, proc = export(api, ['organizations', 'labels'])
@@ -215,7 +217,7 @@ def _filter():
 
 
 @pytest.mark.parametrize('name', ['Default', 'Eng Ops', 'Équipe – ops ✓', '.hidden', '-leading', 'x..y',
-                                  '...', 'back\\slash', 'a' * 230], ids=lambda n: n if len(n) < 20 else 'len%d' % len(n))
+                                  '...', 'back\\slash', 'a' * 210], ids=lambda n: n if len(n) < 20 else 'len%d' % len(n))
 def test_filter_keeps_names_that_are_already_safe(name):
     assert _filter()(name) == name
 
@@ -226,23 +228,24 @@ def test_filter_rewrites_separators_and_dot_names(name, expected):
     assert _filter()(name) == expected
 
 
-@pytest.mark.parametrize('name', [LONG, LONG_UTF8, 'a' * 231], ids=['ascii300', 'utf8', 'ascii231'])
+@pytest.mark.parametrize('name', [LONG, LONG_UTF8, 'a' * 211], ids=['ascii300', 'utf8', 'ascii211'])
 def test_filter_shortens_long_names(name):
     f = _filter()
     out = f(name)
-    assert len(out.encode('utf-8')) <= 230
+    assert len(out.encode('utf-8')) <= 210
     out.encode('utf-8').decode('utf-8')
     assert out == f(name) == f(out)
     assert out != f(name[:-1] + 'z')
 
 
-def test_filter_limit_is_230_bytes():
-    # 230 + the longest prefix and suffix the tasks add ("<19-digit id>_" and ".yaml") = 255.
+def test_filter_limit_is_210_bytes():
+    # 210 + the longest prefix and suffix the tasks add ("<19-digit id>_" and ".yaml") = 235, and
+    # 235 + Ansible's 20-byte ".ansible_tmpXXXXXXXX" temporary-file prefix = 255.
     f = _filter()
-    assert f('a' * 230) == 'a' * 230
-    assert f('é' * 115) == 'é' * 115
-    short = f('a' * 231)
-    assert len(short.encode('utf-8')) == 230 and short.startswith('a' * 221 + '-')
+    assert f('a' * 210) == 'a' * 210
+    assert f('é' * 105) == 'é' * 105
+    short = f('a' * 211)
+    assert len(short.encode('utf-8')) == 210 and short.startswith('a' * 201 + '-')
 
 
 def test_filter_output_is_always_one_component():
