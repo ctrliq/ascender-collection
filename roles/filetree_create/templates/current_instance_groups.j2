@@ -1,26 +1,30 @@
 ---
-controller_instance_groups: {{ [] if current_instance_groups_asset_value | length == 0 }}
+{% if current_instance_groups_asset_value | length == 0 %}
+controller_instance_groups: []
+{% else %}
+controller_instance_groups:
+{% endif %}
 {% for ig in current_instance_groups_asset_value %}
-  - name: "{{ ig.name }}"
-    policy_instance_minimum: {{ ig.policy_instance_minimum | int }}
-    policy_instance_percentage: {{ ig.policy_instance_percentage | int }}
-    is_container_group: {{ ig.is_container_group | bool | lower }}
-    max_concurrent_jobs: {{ ig.max_concurrent_jobs | int }}
-    max_forks: {{ ig.max_forks | int }}
+  - name: {{ (ig.name) | ctrliq.ascender.export_yaml }}
+    policy_instance_minimum: {{ (ig.policy_instance_minimum | int) | ctrliq.ascender.export_yaml }}
+    policy_instance_percentage: {{ (ig.policy_instance_percentage | int) | ctrliq.ascender.export_yaml }}
+    is_container_group: {{ (ig.is_container_group | bool) | ctrliq.ascender.export_yaml }}
+    max_concurrent_jobs: {{ (ig.max_concurrent_jobs | int) | ctrliq.ascender.export_yaml }}
+    max_forks: {{ (ig.max_forks | int) | ctrliq.ascender.export_yaml }}
 {% if ig.policy_instance_list | length > 0 %}
     policy_instance_list:
 {%   for _policy_instance in ig.policy_instance_list %}
-      - "{{ _policy_instance }}"
+      - {{ (_policy_instance) | ctrliq.ascender.export_yaml }}
 {%   endfor %}
 {% endif %}
 {% if ig.summary_fields.credential is defined and ig.summary_fields.credential.name is defined %}
-    credential: "{{ ig.summary_fields.credential.name }}"
+    credential: {{ (ig.summary_fields.credential.name) | ctrliq.ascender.export_yaml }}
 {% endif %}
 {% if ig.summary_fields.mesh_node is defined and ig.summary_fields.mesh_node.hostname is defined %}
-    mesh_node: "{{ ig.summary_fields.mesh_node.hostname }}"
+    mesh_node: {{ (ig.summary_fields.mesh_node.hostname) | ctrliq.ascender.export_yaml }}
 {% endif %}
 {% if ig.pod_spec_override %}
-    pod_spec_override: !unsafe {{ ig.pod_spec_override | to_json }}
+    pod_spec_override: {{ (ig.pod_spec_override) | ctrliq.ascender.export_yaml }}
 {% endif %}
 {% set __ig_instances = query(controller_api_plugin, ig.related.instances,
                           host=controller_hostname, oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs,
@@ -28,7 +32,7 @@ controller_instance_groups: {{ [] if current_instance_groups_asset_value | lengt
 {% if __ig_instances | length > 0 %}
     instances:
 {%   for instance in __ig_instances %}
-      - "{{ instance.hostname }}"
+      - {{ (instance.hostname) | ctrliq.ascender.export_yaml }}
 {%   endfor %}
 {% endif %}
 {% endfor %}

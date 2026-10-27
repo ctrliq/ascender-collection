@@ -2,76 +2,72 @@
 ---
 controller_inventories:
 {% endif %}
-  - name: "{{ current_inventories_asset_value.name }}"
-    description: "{{ template_overrides_resources.inventory[current_inventories_asset_value.name].description
+  - name: {{ (current_inventories_asset_value.name) | ctrliq.ascender.export_yaml }}
+    description: {{ (template_overrides_resources.inventory[current_inventories_asset_value.name].description
                      | default(template_overrides_global.inventory.description)
-                     | default(current_inventories_asset_value.description) }}"
-    organization: "{{ inventory_organization }}"
+                     | default(current_inventories_asset_value.description)) | ctrliq.ascender.export_yaml }}
+    organization: {{ (inventory_organization) | ctrliq.ascender.export_yaml }}
 {% if template_overrides_resources.inventory[current_inventories_asset_value.name].host_filter is defined
       or template_overrides_global.inventory.host_filter is defined
       or current_inventories_asset_value.host_filter is defined %}
-    host_filter: {{ template_overrides_resources.inventory[current_inventories_asset_value.name].host_filter
+    host_filter: {{ (template_overrides_resources.inventory[current_inventories_asset_value.name].host_filter
                      | default(template_overrides_global.inventory.host_filter)
-                     | default(current_inventories_asset_value.host_filter if (current_inventories_asset_value.host_filter|type_debug != 'NoneType') else '""') | replace("'",'"') }}
+                     | default(current_inventories_asset_value.host_filter if (current_inventories_asset_value.host_filter|type_debug != 'NoneType') else '')) | ctrliq.ascender.export_yaml }}
 {% endif %}
 {% if current_inventories_asset_value.kind %}
-    kind: "{{ current_inventories_asset_value.kind }}"
+    kind: {{ (current_inventories_asset_value.kind) | ctrliq.ascender.export_yaml }}
 {% endif %}
 {% if template_overrides_resources.inventory[current_inventories_asset_value.name].prevent_instance_group_fallback is defined
       or template_overrides_global.inventory.prevent_instance_group_fallback is defined
       or current_inventories_asset_value.prevent_instance_group_fallback is defined %}
-    prevent_instance_group_fallback: {{ template_overrides_resources.inventory[current_inventories_asset_value.name].prevent_instance_group_fallback
+    prevent_instance_group_fallback: {{ (template_overrides_resources.inventory[current_inventories_asset_value.name].prevent_instance_group_fallback
                                         | default(template_overrides_global.inventory.prevent_instance_group_fallback)
-                                        | default(current_inventories_asset_value.prevent_instance_group_fallback) }}
+                                        | default(current_inventories_asset_value.prevent_instance_group_fallback)) | ctrliq.ascender.export_yaml }}
 {% endif %}
 {% if template_overrides_resources.inventory[current_inventories_asset_value.name].allow_deletes_while_in_use is defined
       or template_overrides_global.inventory.allow_deletes_while_in_use is defined
       or current_inventories_asset_value.allow_deletes_while_in_use is defined %}
-    allow_deletes_while_in_use: {{ template_overrides_resources.inventory[current_inventories_asset_value.name].allow_deletes_while_in_use
+    allow_deletes_while_in_use: {{ (template_overrides_resources.inventory[current_inventories_asset_value.name].allow_deletes_while_in_use
                                    | default(template_overrides_global.inventory.allow_deletes_while_in_use)
-                                   | default(current_inventories_asset_value.allow_deletes_while_in_use) }}
+                                   | default(current_inventories_asset_value.allow_deletes_while_in_use)) | ctrliq.ascender.export_yaml }}
 {% endif %}
 {% if template_overrides_resources.inventory[current_inventories_asset_value.name].source_vars is defined
       or template_overrides_global.inventory.source_vars is defined
       or current_inventories_asset_value.source_vars is defined %}
-    source_vars:
 {% set __inventory_source_vars = template_overrides_resources.inventory[current_inventories_asset_value.name].source_vars
          | default(template_overrides_global.inventory.source_vars)
          | default(current_inventories_asset_value.source_vars) %}
-      {{ (__inventory_source_vars if __inventory_source_vars is mapping or (__inventory_source_vars | type_debug) == 'list' else (__inventory_source_vars | from_yaml))
-         | to_nice_yaml(indent=2, sort_keys=False) | indent(width=6, first=False) |  regex_replace('(^[^:]*): (.*){([{%])', '\\g<1>: !unsafe \\g<2>{\\g<3>', multiline=True)}}
+    source_vars: {{ ((__inventory_source_vars if __inventory_source_vars is mapping or (__inventory_source_vars | type_debug) == 'list' else (__inventory_source_vars | from_yaml))) | ctrliq.ascender.export_yaml }}
 {% endif %}
 {% if template_overrides_resources.inventory[current_inventories_asset_value.name].update_cache_timeout is defined
       or template_overrides_global.inventory.update_cache_timeout is defined
       or current_inventories_asset_value.update_cache_timeout is defined %}
-    update_cache_timeout: {{ template_overrides_resources.inventory[current_inventories_asset_value.name].update_cache_timeout
+    update_cache_timeout: {{ (template_overrides_resources.inventory[current_inventories_asset_value.name].update_cache_timeout
                              | default(template_overrides_global.inventory.update_cache_timeout)
-                             | default(current_inventories_asset_value.update_cache_timeout) }}
+                             | default(current_inventories_asset_value.update_cache_timeout)) | ctrliq.ascender.export_yaml }}
 {% endif %}
 {% if template_overrides_resources.inventory[current_inventories_asset_value.name].limit is defined
       or template_overrides_global.inventory.limit is defined
       or current_inventories_asset_value.limit is defined %}
-    limit: "{{ template_overrides_resources.inventory[current_inventories_asset_value.name].limit
+    limit: {{ (template_overrides_resources.inventory[current_inventories_asset_value.name].limit
                | default(template_overrides_global.inventory.limit)
-               | default(current_inventories_asset_value.limit) }}"
+               | default(current_inventories_asset_value.limit)) | ctrliq.ascender.export_yaml }}
 {% endif %}
 {% if template_overrides_resources.inventory[current_inventories_asset_value.name].verbosity is defined
       or template_overrides_global.inventory.verbosity is defined
       or current_inventories_asset_value.verbosity is defined %}
-    verbosity: {{ template_overrides_resources.inventory[current_inventories_asset_value.name].verbosity
+    verbosity: {{ (template_overrides_resources.inventory[current_inventories_asset_value.name].verbosity
                   | default(template_overrides_global.inventory.verbosity)
-                  | default(current_inventories_asset_value.verbosity) }}
+                  | default(current_inventories_asset_value.verbosity)) | ctrliq.ascender.export_yaml }}
 {% endif %}
 {% if template_overrides_resources.inventory[current_inventories_asset_value.name].variables is defined
       or template_overrides_global.inventory.variables is defined
       or (current_inventories_asset_value.variables is defined and current_inventories_asset_value.variables != '---' and current_inventories_asset_value.variables != '') %}
-    variables:
 {% set __inventory_variables = template_overrides_resources.inventory[current_inventories_asset_value.name].variables
          | default(template_overrides_global.inventory.variables)
          | default(current_inventories_asset_value.variables) %}
-      {{ (__inventory_variables if __inventory_variables is mapping or (__inventory_variables | type_debug) == 'list' else (__inventory_variables | from_yaml))
-         | to_nice_yaml(indent=2, sort_keys=False) | indent(width=6, first=False) | regex_replace('(^[^:]*): (.*){([{%])', '\\g<1>: !unsafe \\g<2>{\\g<3>', multiline=True)}}
-{%- endif %}
+    variables: {{ ((__inventory_variables if __inventory_variables is mapping or (__inventory_variables | type_debug) == 'list' else (__inventory_variables | from_yaml))) | ctrliq.ascender.export_yaml }}
+{% endif %}
 {% if template_overrides_resources.inventory[current_inventories_asset_value.name].input_inventories is defined
       or template_overrides_global.inventory.input_inventories is defined
       or (current_inventories_asset_value.related.input_inventories is defined and current_inventories_asset_value.related.input_inventories != '---' and current_inventories_asset_value.related.input_inventories != '') %}
@@ -83,7 +79,7 @@ controller_inventories:
 {%   if _input_inventories | length > 0 %}
     input_inventories:
 {%    for _input_inventory in _input_inventories %}
-      - {{ _input_inventory.name }}
+      - {{ (_input_inventory.name) | ctrliq.ascender.export_yaml }}
 {%    endfor %}
 {%   endif %}
 {% endif %}
@@ -98,7 +94,7 @@ controller_inventories:
 {%   if _instance_groups | length > 0 %}
     instance_groups:
 {%    for _instance_group in _instance_groups %}
-      - {{ _instance_group.name }}
+      - {{ (_instance_group.name) | ctrliq.ascender.export_yaml }}
 {%    endfor %}
 {%   endif %}
 {% endif %}

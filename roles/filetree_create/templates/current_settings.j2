@@ -1,28 +1,8 @@
 ---
-{# Render a scalar with its own YAML type. Quoting everything turned an integer
-   into "1800" and null into the string "null", and the blind replace() that went
-   with it rewrote any value that merely contained True, False or None as a
-   substring, so a URL such as https://None.example.com came out as
-   https://null.example.com. #}
-{% macro render_scalar(value) -%}
-{%- if value is none -%}
-null
-{%- elif value is boolean -%}
-{{ value | bool | lower }}
-{%- elif value is number -%}
-{{ value }}
-{%- else -%}
-"{{ value | string | replace('$encrypted$', '') | replace('\\', '\\\\') | replace('"', '\\"') }}"
-{%- endif -%}
-{%- endmacro %}
+{# Strip the $encrypted$ marker the API returns for secret settings, as before. #}
 controller_settings:
   - settings:
 {% for key,value in all_settings[0].items() %}
-{%   if value is mapping or value | type_debug == "list" %}
-{{ key | indent(width=6, first=True) }}:
-{{ value | to_nice_yaml(indent=2, sort_keys=false) | indent(width=8, first=True) }}
-{%-  else %}
-{{ key | indent(width=6, first=True) }}: {{ render_scalar(value) }}
-{%   endif %}
+      {{ key | ctrliq.ascender.export_yaml }}: {{ ((value | string | replace('$encrypted$', '')) if value is string else value) | ctrliq.ascender.export_yaml }}
 {% endfor %}
 ...

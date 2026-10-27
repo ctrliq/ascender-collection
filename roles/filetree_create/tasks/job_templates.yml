@@ -46,7 +46,7 @@
       vars:
         job_template_organization: "{{ current_job_templates_asset_value.summary_fields.organization.name | default(organization) }}"
         job_template_id: "{{ current_job_templates_asset_value.id }}"
-        job_template_name: "{{ current_job_templates_asset_value.name | regex_replace('/', '_') }}"
+        job_template_name: "{{ current_job_templates_asset_value.name | ctrliq.ascender.path_component }}"
         query_labels: "{{ query(controller_api_plugin, current_job_templates_asset_value.related.labels, host=controller_hostname, oauth_token=controller_oauthtoken,
           verify_ssl=controller_validate_certs, return_all=true, max_objects=query_controller_api_max_objects) }}"
         query_notification_error: "{{ query(controller_api_plugin, current_job_templates_asset_value.related.notification_templates_error, host=controller_hostname,
@@ -81,7 +81,7 @@
         state: directory
         mode: "0755"
       vars:
-        __path: "{{ output_path }}/{{ needed_path | regex_replace('/', '_') }}/job_templates"
+        __path: "{{ output_path }}/{{ needed_path | ctrliq.ascender.path_component }}/job_templates"
       loop: "{{ (job_templates_lookvar | map(attribute='summary_fields') | selectattr('organization', 'defined') | map(attribute='organization') | map(attribute='name')
         | list | flatten | unique) + ([organization] if ((job_templates_lookvar | map(attribute='summary_fields') | selectattr('organization', 'undefined') | list
         | flatten) | length > 0) else []) }}"
@@ -97,9 +97,9 @@
       vars:
         job_template_organization: "{{ current_job_templates_asset_value.summary_fields.organization.name | default(organization) }}"
         job_template_id: "{{ current_job_templates_asset_value.id }}"
-        job_template_name: "{{ current_job_templates_asset_value.name | regex_replace('/', '_') }}"
-        __dest: "{{ output_path }}/{{ job_template_organization | regex_replace('/', '_') }}/job_templates/{{ (job_template_id ~ '_') if omit_id is not defined else
-          '' }}{{ job_template_name | regex_replace('/', '_') }}.yaml"
+        job_template_name: "{{ current_job_templates_asset_value.name | ctrliq.ascender.path_component }}"
+        __dest: "{{ output_path }}/{{ job_template_organization | ctrliq.ascender.path_component }}/job_templates/{{ (job_template_id ~ '_') if omit_id is not defined else
+          '' }}{{ job_template_name | ctrliq.ascender.path_component }}.yaml"
         query_labels: "{{ query(controller_api_plugin, current_job_templates_asset_value.related.labels, host=controller_hostname, oauth_token=controller_oauthtoken,
           verify_ssl=controller_validate_certs, return_all=true, max_objects=query_controller_api_max_objects) }}"
         query_notification_error: "{{ query(controller_api_plugin, current_job_templates_asset_value.related.notification_templates_error, host=controller_hostname,
