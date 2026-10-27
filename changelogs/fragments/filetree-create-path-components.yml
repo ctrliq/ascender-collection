@@ -6,5 +6,5 @@ security_fixes:
 bugfixes:
   - filetree_create - credentials of an organization whose name contains ``/`` are exported again;
     the directory was created from the raw name, so writing the file failed.
-  - filetree_create - a name longer than 230 bytes is shortened and given a hash suffix, instead of
+  - filetree_create - a name longer than 210 bytes is shortened and given a hash suffix, instead of
     failing the export with a file name too long for the filesystem.

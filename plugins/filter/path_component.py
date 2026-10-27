@@ -15,10 +15,12 @@ description:
   - C(/) and NUL are replaced with C(_), as filetree_create has always done for C(/).
   - A name that is empty, C(.) or C(..) has each character replaced with C(_)
     (C(_), C(_) and C(__)), so it cannot name the current or parent directory.
-  - A name longer than 230 bytes in UTF-8 is cut to 221 bytes and given a C(-) and the first
+  - A name longer than 210 bytes in UTF-8 is cut to 201 bytes and given a C(-) and the first
     8 hex digits of the SHA-256 of the original name. With the longest prefix and suffix
-    filetree_create adds (a 19-digit id, C(_) and C(.yaml)), every file name stays within the
-    255-byte limit of common filesystems.
+    filetree_create adds (a 19-digit id, C(_) and C(.yaml)), every file name stays within 235
+    bytes. That leaves room for the 20-byte C(.ansible_tmp) prefix of the temporary file that
+    Ansible creates beside the destination when it cannot rename across filesystems, so that
+    file also fits the 255-byte limit of common filesystems.
   - Any other name is returned unchanged.
   - Distinct names can map to the same result, as C(a/b) and C(a_b) already do. This also holds
     for C(..) and C(__), for C(.), an empty name and C(_), and for a name equal to another name's
@@ -48,8 +50,10 @@ import hashlib
 
 from ansible.module_utils.common.text.converters import to_text
 
-# 255-byte name limit minus the longest prefix and suffix the tasks add: "<19-digit id>_" + ".yaml".
-MAX_BYTES = 230
+# 255-byte name limit, minus the temporary name Ansible's atomic_move builds beside the destination
+# when the source is on another filesystem (".ansible_tmp" + 8 random characters = 20 bytes), minus
+# the longest prefix and suffix the tasks add ("<19-digit id>_" + ".yaml" = 25 bytes).
+MAX_BYTES = 210
 _HASH_CHARS = 8
 
 
