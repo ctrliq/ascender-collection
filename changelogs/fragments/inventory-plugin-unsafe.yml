@@ -1,8 +1,0 @@
-security_fixes:
-  - controller inventory plugin - host and group names, their variables and the ``controller_metadata``
-    variable are now marked unsafe. With ansible-core 2.16 to 2.18, Jinja in these values was templated
-    on the node running Ansible, and anyone who could edit an inventory, host or group on the controller
-    (or feed one through an inventory source) controls that text. ansible-core 2.19 and later already
-    treat inventory plugin data as untrusted. A variable that holds Jinja on purpose, such as an
-    ``ansible_host`` built from other variables, is now kept as literal text; define it in the playbook
-    or in ``host_vars`` / ``group_vars`` instead.

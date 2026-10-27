@@ -4,6 +4,32 @@ Ascender Ansible Collection Release Notes
 
 .. contents:: Topics
 
+v25.6.3
+=======
+
+Minor Changes
+-------------
+
+- filetree_create - a schedule's ``dtend`` and ``job_type`` are exported as null instead of an empty string when unset; the schedules role omits both either way.
+- filetree_create - an instance ``capacity_adjustment`` is exported as the string the API returns (for example ``'1.00'``), which the instance module accepts for its float option.
+
+Security Fixes
+--------------
+
+- controller inventory plugin - host and group names, their variables and the ``controller_metadata`` variable are now marked unsafe. With ansible-core 2.16 to 2.18, Jinja in these values was templated on the node running Ansible, and anyone who could edit an inventory, host or group on the controller (or feed one through an inventory source) controls that text. ansible-core 2.19 and later already treat inventory plugin data as untrusted. A variable that holds Jinja on purpose, such as an ``ansible_host`` built from other variables, is now kept as literal text; define it in the playbook or in ``host_vars`` / ``group_vars`` instead.
+- filetree_create - directory and file names built from controller object names now go through the new ``ctrliq.ascender.path_component`` filter. An organization named ``..`` wrote its export into the parent of ``output_path``, and the credentials task used the organization name unchanged, so a name such as ``../../x`` created directories outside ``output_path``.
+- filetree_create - every value the templates export is now written through the new ``ctrliq.ascender.export_yaml`` filter, which double-quotes strings and tags them ``!unsafe``. Before, a resource name, description or variable containing ``{{ }}`` was templated when ``filetree_read`` loaded the export, and one containing a double quote and a newline could add keys to the exported entry.
+- flatten_filetree_create_output playbook - write the flattened files through ``export_yaml``, so the ``!unsafe`` tags loaded from the export are kept.
+
+Bugfixes
+--------
+
+- filetree_create - a name longer than 210 bytes is shortened and given a hash suffix, instead of failing the export with a file name too long for the filesystem.
+- filetree_create - a survey password default is exported as an empty string instead of the two characters ``''``, and an inventory ``host_filter`` is exported as the controller returns it.
+- filetree_create - booleans and integers are exported as native YAML values instead of quoted strings, and strings keep their type, so ``yes``, ``no`` or ``on`` are no longer turned into booleans and ``1.10`` or ``1.2`` in ``extra_vars`` no longer become floats.
+- filetree_create - credentials of an organization whose name contains ``/`` are exported again; the directory was created from the raw name, so writing the file failed.
+- filetree_create - multi-line ``extra_vars`` values keep their newlines instead of a literal ``\n``.
+
 v25.6.2
 =======
 

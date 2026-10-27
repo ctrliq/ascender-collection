@@ -156,7 +156,16 @@ plugins:
   callback: {}
   cliconf: {}
   connection: {}
-  filter: {}
+  filter:
+    export_yaml:
+      description: Render controller data as one line of YAML that is loaded back
+        literally
+      name: export_yaml
+      version_added: null
+    path_component:
+      description: Turn a controller object name into a single file or directory name
+      name: path_component
+      version_added: null
   httpapi: {}
   inventory:
     controller:
@@ -412,4 +421,4 @@ plugins:
   strategy: {}
   test: {}
   vars: {}
-version: 25.6.2
+version: 25.6.3
