@@ -38,7 +38,7 @@
         block: "{{ lookup('template', 'templates/current_inventories.j2') }}"
       vars:
         inventory_organization: "{{ current_inventories_asset_value.summary_fields.organization.name | default(organization) }}"
-        inventory_name: "{{ current_inventories_asset_value.name | regex_replace('/', '_') }}"
+        inventory_name: "{{ current_inventories_asset_value.name | ctrliq.ascender.path_component }}"
         first_inventory: "{{ not (__constructed_inventories_file.stat.exists | bool) }}"
         last_inventory: "{{ current_inventory_index == ((constructed_inventory_lookvar | length) - 1) }}"
       loop: "{{ constructed_inventory_lookvar }}"
@@ -63,8 +63,8 @@
         mode: "0755"
       vars:
         inventory_organization: "{{ needed_path.summary_fields.organization.name | default(organization) }}"
-        inventory_name: "{{ needed_path.name | regex_replace('/', '_') }}"
-        __path: "{{ output_path }}/{{ inventory_organization | regex_replace('/', '_') }}/inventories/{{ inventory_name | regex_replace('/', '_') }}"
+        inventory_name: "{{ needed_path.name | ctrliq.ascender.path_component }}"
+        __path: "{{ output_path }}/{{ inventory_organization | ctrliq.ascender.path_component }}/inventories/{{ inventory_name | ctrliq.ascender.path_component }}"
       loop: "{{ constructed_inventory_lookvar }}"
       loop_control:
         loop_var: needed_path
@@ -77,9 +77,9 @@
         mode: "0644"
       vars:
         inventory_organization: "{{ current_inventories_asset_value.summary_fields.organization.name | default(organization) }}"
-        inventory_name: "{{ current_inventories_asset_value.name | regex_replace('/', '_') }}"
-        __dest: "{{ output_path }}/{{ inventory_organization | regex_replace('/', '_') }}/inventories/{{ inventory_name | regex_replace('/', '_') }}/{{ (current_inventories_asset_value.id
-          ~ '_') if omit_id is not defined else '' }}{{ inventory_name | regex_replace('/', '_') }}.yaml"
+        inventory_name: "{{ current_inventories_asset_value.name | ctrliq.ascender.path_component }}"
+        __dest: "{{ output_path }}/{{ inventory_organization | ctrliq.ascender.path_component }}/inventories/{{ inventory_name | ctrliq.ascender.path_component }}/{{
+          (current_inventories_asset_value.id ~ '_') if omit_id is not defined else '' }}{{ inventory_name | ctrliq.ascender.path_component }}.yaml"
       loop: "{{ constructed_inventory_lookvar }}"
       loop_control:
         loop_var: current_inventories_asset_value
@@ -90,9 +90,9 @@
   when: not skip_inventory_sources
   vars:
     inventory_organization: "{{ current_inventory_sources.summary_fields.organization.name | default(organization) }}"
-    inventory_name: "{{ current_inventory_sources.name | regex_replace('/', '_') }}"
-    inventory_sources_output_path: "{{   (output_path + '/' + inventory_organization | regex_replace('/', '_') + '/controller_inventories/' + inventory_name | regex_replace('/',
-      '_')) if (flatten_output is not defined or (flatten_output | bool) == false) else output_path + '/inventory_sources.yaml' }}"
+    inventory_name: "{{ current_inventory_sources.name | ctrliq.ascender.path_component }}"
+    inventory_sources_output_path: "{{   (output_path + '/' + inventory_organization | ctrliq.ascender.path_component + '/controller_inventories/' + inventory_name
+      | ctrliq.ascender.path_component) if (flatten_output is not defined or (flatten_output | bool) == false) else output_path + '/inventory_sources.yaml' }}"
     current_inventory_sources_asset_value: "{{ query(controller_api_plugin, current_inventory_sources.related.inventory_sources, host=controller_hostname, oauth_token=controller_oauthtoken,
       verify_ssl=controller_validate_certs, return_all=true, max_objects=query_controller_api_max_objects) }}"
     last_inventory: "{{ current_inventory_index == ((inventory_lookvar | length) - 1) }}"

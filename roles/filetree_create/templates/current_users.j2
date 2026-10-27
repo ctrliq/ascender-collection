@@ -2,29 +2,29 @@
 ---
 controller_user_accounts:
 {% endif %}
-  - username: "{{ current_users_asset_value.username }}"
+  - username: {{ (current_users_asset_value.username) | ctrliq.ascender.export_yaml }}
     password: "INITIAL"
-    email: "{{ template_overrides_resources.user[current_users_asset_value.username].email
+    email: {{ (template_overrides_resources.user[current_users_asset_value.username].email
                | default(template_overrides_global.user.email)
-               | default(current_users_asset_value.email) }}"
-    first_name: "{{ template_overrides_resources.user[current_users_asset_value.username].first_name
+               | default(current_users_asset_value.email)) | ctrliq.ascender.export_yaml }}
+    first_name: {{ (template_overrides_resources.user[current_users_asset_value.username].first_name
                     | default(template_overrides_global.user.first_name)
-                    | default(current_users_asset_value.first_name) }}"
-    last_name: "{{ template_overrides_resources.user[current_users_asset_value.username].last_name
+                    | default(current_users_asset_value.first_name)) | ctrliq.ascender.export_yaml }}
+    last_name: {{ (template_overrides_resources.user[current_users_asset_value.username].last_name
                    | default(template_overrides_global.user.last_name)
-                   | default(current_users_asset_value.last_name) }}"
-    auditor: "{{ template_overrides_resources.user[current_users_asset_value.username].is_system_auditor
+                   | default(current_users_asset_value.last_name)) | ctrliq.ascender.export_yaml }}
+    auditor: {{ (template_overrides_resources.user[current_users_asset_value.username].is_system_auditor
                  | default(template_overrides_global.user.is_system_auditor)
-                 | default(current_users_asset_value.is_system_auditor) }}"
-    superuser: "{{ template_overrides_resources.user[current_users_asset_value.username].is_superuser
+                 | default(current_users_asset_value.is_system_auditor)) | ctrliq.ascender.export_yaml }}
+    superuser: {{ (template_overrides_resources.user[current_users_asset_value.username].is_superuser
                    | default(template_overrides_global.user.is_superuser)
-                   | default(current_users_asset_value.is_superuser) }}"
+                   | default(current_users_asset_value.is_superuser)) | ctrliq.ascender.export_yaml }}
 {% if template_overrides_resources.user[current_users_asset_value.username].preferred_language is defined
       or template_overrides_global.user.preferred_language is defined
       or current_users_asset_value.preferred_language %}
-    preferred_language: "{{ template_overrides_resources.user[current_users_asset_value.username].preferred_language
+    preferred_language: {{ (template_overrides_resources.user[current_users_asset_value.username].preferred_language
                             | default(template_overrides_global.user.preferred_language)
-                            | default(current_users_asset_value.preferred_language) }}"
+                            | default(current_users_asset_value.preferred_language)) | ctrliq.ascender.export_yaml }}
 {% endif %}
     update_secrets: false
 {% if last_user | default(true) | bool %}

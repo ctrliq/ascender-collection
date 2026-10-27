@@ -71,7 +71,7 @@
     - name: user_roles | Add current roles to the output yaml file
       ansible.builtin.template:
         src: templates/current_user_roles.j2
-        dest: "{{ output_path }}/user_roles/current_roles_{{ username | regex_replace('/', '_') }}.yaml"
+        dest: "{{ output_path }}/user_roles/current_roles_{{ username | ctrliq.ascender.path_component }}.yaml"
         mode: "0644"
       when: object_roles | length > 0
 ...

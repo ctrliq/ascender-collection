@@ -71,6 +71,7 @@ from ansible.module_utils.common.text.converters import to_text, to_native
 from ansible.errors import AnsibleParserError, AnsibleOptionsError
 from ansible.plugins.inventory import BaseInventoryPlugin, Cacheable
 from ansible.config.manager import ensure_type
+from ansible.utils.unsafe_proxy import wrap_var
 
 from ..module_utils.controller_api import ControllerAPIModule
 
@@ -171,7 +172,10 @@ class InventoryModule(BaseInventoryPlugin, Cacheable):
         if cache_needs_update:
             self._cache[cache_key] = inventory_data
 
-        inventory = inventory_data['inventory']
+        # Everything below comes from the controller API, where any user who can edit an inventory,
+        # host or group (or feed one through an inventory source) controls the text. Mark it unsafe so
+        # Jinja in a name or variable is kept as literal text instead of being templated on this node.
+        inventory = wrap_var(inventory_data['inventory'])
 
         # To start with, create all the groups.
         for group_name in inventory:
@@ -210,7 +214,7 @@ class InventoryModule(BaseInventoryPlugin, Cacheable):
             server_data['license_type'] = config_data.get('license_info', {}).get('license_type', 'unknown')
             for key in ('version', 'ansible_version'):
                 server_data[key] = config_data.get(key, 'unknown')
-            self.inventory.set_variable('all', 'controller_metadata', server_data)
+            self.inventory.set_variable('all', 'controller_metadata', wrap_var(server_data))
 
         # Clean up the inventory.
         self.inventory.reconcile_inventory()
