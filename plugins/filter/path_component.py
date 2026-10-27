@@ -13,6 +13,9 @@ description:
   - Used by the filetree_create tasks to build the output directory and file names from
     organization, inventory and other object names returned by the controller API.
   - C(/) and NUL are replaced with C(_), as filetree_create has always done for C(/).
+  - C($) is replaced with C(_). Ansible expands environment variables in C(path) options, so a
+    name such as C(..${HOME}) would otherwise become a path outside the output directory when
+    the file module writes it. Python's expansion has no escape syntax, so the character is replaced.
   - A name that is empty, C(.) or C(..) has each character replaced with C(_)
     (C(_), C(_) and C(__)), so it cannot name the current or parent directory.
   - A name longer than 210 bytes in UTF-8 is cut to 201 bytes and given a C(-) and the first
@@ -59,7 +62,8 @@ _HASH_CHARS = 8
 
 def path_component(value):
     name = to_text(value, errors='surrogate_or_strict')
-    safe = name.replace('/', '_').replace('\x00', '_')
+    # "$" because the file modules run path options through os.path.expandvars.
+    safe = name.replace('/', '_').replace('\x00', '_').replace('$', '_')
     if safe in ('', '.', '..'):
         return safe.replace('.', '_') or '_'
     encoded = safe.encode('utf-8', 'surrogatepass')
