@@ -160,6 +160,21 @@ def test_dotdot_organization_stays_inside_output_path(export):
     ]
 
 
+def test_environment_variables_in_names_are_not_expanded(export):
+    # The file modules expand environment variables in path options. FAKE_API_DATA is set by the
+    # harness to an absolute path, so "..${FAKE_API_DATA}" would leave output_path if "$" survived.
+    api = {
+        'api/v2/organizations/': [_org(1, '..${FAKE_API_DATA}'), _org(2, '$FAKE_API_DATA')],
+        'api/v2/credentials/': [_credential(5, 'key', '..${FAKE_API_DATA}')],
+        'api/v2/labels/': [_label(7, '..${FAKE_API_DATA}', '$FAKE_API_DATA')],
+    }
+    out, proc = export(api, ['organizations', 'credentials', 'labels'])
+    assert proc.returncode == 0, proc.stdout[-4000:]
+    assert _outside(out) == [], proc.stdout[-4000:]
+    assert _files(out) == ['.._{FAKE_API_DATA}/credentials/5_key.yaml', '.._{FAKE_API_DATA}/current_organization.yaml',
+                           '_FAKE_API_DATA/current_organization.yaml', '_FAKE_API_DATA/labels/7_.._{FAKE_API_DATA}.yaml']
+
+
 def test_credentials_directory_uses_the_sanitized_organization(export):
     # The directory task used the raw name: "Eng/Ops" made Eng/Ops/credentials and the file
     # task then failed on the missing Eng_Ops/credentials, and "../../escape" made a directory
@@ -223,7 +238,8 @@ def test_filter_keeps_names_that_are_already_safe(name):
 
 
 @pytest.mark.parametrize('name, expected', [('a/b', 'a_b'), ('/', '_'), ('../x', '.._x'), ('.', '_'), ('..', '__'),
-                                            ('', '_'), ('nul\x00byte', 'nul_byte')])
+                                            ('', '_'), ('nul\x00byte', 'nul_byte'), ('$HOME', '_HOME'),
+                                            ('..${HOME}', '.._{HOME}'), ('..$HOME', '.._HOME')])
 def test_filter_rewrites_separators_and_dot_names(name, expected):
     assert _filter()(name) == expected
 
