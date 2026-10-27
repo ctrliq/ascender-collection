@@ -190,7 +190,7 @@ jobs:
             libsasl2-dev \
             libxml2-dev \
             libxmlsec1-dev \
-            libxmlsec1-openssl \
+            libxmlsec1-openssl1 \
             pkg-config
 
       - name: Install dependencies
