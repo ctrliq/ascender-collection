@@ -22,6 +22,13 @@ from ansible.parsing.dataloader import DataLoader
 from ansible.plugins.loader import init_plugin_loader, inventory_loader
 from ansible.template import Templar
 
+try:
+    # ansible-core 2.19+ only renders strings marked as trusted templates.
+    from ansible.template import trust_as_template
+except ImportError:  # ansible-core < 2.19 renders any string.
+    def trust_as_template(value):
+        return value
+
 JINJA = '{{ 6 * 7 }}'
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 
@@ -69,7 +76,9 @@ def parsed(controller_module, monkeypatch):
 
 
 def _resolve(loader, value):
-    return Templar(loader=loader, variables={'v': value}).template('{{ v }}')
+    # Trust only the test's own expression. The plugin's value stays untrusted, so on 2.19+ it is
+    # never rendered, and on older cores only the unsafe marking keeps it literal.
+    return Templar(loader=loader, variables={'v': value}).template(trust_as_template('{{ v }}'))
 
 
 def test_host_var_is_not_templated(parsed):
