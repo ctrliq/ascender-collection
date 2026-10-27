@@ -2,19 +2,19 @@
 ---
 controller_organizations:
 {% endif %}
-  - name: "{{ current_organization.name }}"
-    description: "{{ template_overrides_resources.organization[current_organization.name].description
+  - name: {{ (current_organization.name) | ctrliq.ascender.export_yaml }}
+    description: {{ (template_overrides_resources.organization[current_organization.name].description
                      | default(template_overrides_global.organization.description)
-                     | default(current_organization.description) }}"
-    max_hosts: {{ template_overrides_resources.organization[current_organization.name].max_hosts
+                     | default(current_organization.description)) | ctrliq.ascender.export_yaml }}
+    max_hosts: {{ (template_overrides_resources.organization[current_organization.name].max_hosts
                   | default(template_overrides_global.organization.max_hosts)
-                  | default(current_organization.max_hosts) }}
+                  | default(current_organization.max_hosts)) | ctrliq.ascender.export_yaml }}
 {% if template_overrides_resources.organization[current_organization.name].default_environment is defined
       or template_overrides_global.organization.default_environment is defined
       or current_organization.summary_fields.default_environment is defined %}
-    default_environment: "{{ template_overrides_resources.organization[current_organization.name].default_environment
+    default_environment: {{ (template_overrides_resources.organization[current_organization.name].default_environment
                              | default(template_overrides_global.organization.default_environment)
-                             | default(current_organization.summary_fields.default_environment.name) }}"
+                             | default(current_organization.summary_fields.default_environment.name)) | ctrliq.ascender.export_yaml }}
 {% endif %}
 {% set _organization_instance_groups = query(controller_api_plugin, current_organization.related.instance_groups,
                      host=controller_hostname, oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs,
@@ -22,7 +22,7 @@ controller_organizations:
 {% if _organization_instance_groups | length > 0 %}
     instance_groups:
 {%   for _instance_group in _organization_instance_groups %}
-      - "{{ _instance_group.name }}"
+      - {{ (_instance_group.name) | ctrliq.ascender.export_yaml }}
 {%   endfor %}
 {% endif %}
 {% set _galaxy_credentials = query(controller_api_plugin, current_organization.related.galaxy_credentials,
@@ -31,37 +31,37 @@ controller_organizations:
 {% if _galaxy_credentials | length > 0 %}
     galaxy_credentials:
 {%   for _galaxy_credential in _galaxy_credentials %}
-      - "{{ _galaxy_credential.name }}"
+      - {{ (_galaxy_credential.name) | ctrliq.ascender.export_yaml }}
 {%   endfor %}
 {% endif %}
 {% if query_notification_error | length > 0 %}
     notification_templates_error:
 {% for notification_error in query_notification_error %}
-      - "{{ notification_error.name }}"
+      - {{ (notification_error.name) | ctrliq.ascender.export_yaml }}
 {% endfor %}
 {% endif %}
 {% if query_notification_started | length > 0 %}
     notification_templates_started:
 {% for notification_started in query_notification_started %}
-      - "{{ notification_started.name }}"
+      - {{ (notification_started.name) | ctrliq.ascender.export_yaml }}
 {% endfor %}
 {% endif %}
 {% if query_notification_success | length > 0 %}
     notification_templates_success:
 {% for notification_success in query_notification_success %}
-      - "{{ notification_success.name }}"
+      - {{ (notification_success.name) | ctrliq.ascender.export_yaml }}
 {% endfor %}
 {% endif %}
 {% if query_notification_approvals | length > 0 %}
     notification_templates_approvals:
 {% for notification_approval in query_notification_approvals %}
-      - "{{ notification_approval.name }}"
+      - {{ (notification_approval.name) | ctrliq.ascender.export_yaml }}
 {% endfor %}
 {% endif %}
 {% if query_notification_changed | length > 0 %}
     notification_templates_changed:
 {% for notification_changed in query_notification_changed %}
-      - "{{ notification_changed.name }}"
+      - {{ (notification_changed.name) | ctrliq.ascender.export_yaml }}
 {% endfor %}
 {% endif %}
 {% if last_organization | default(true) | bool %}

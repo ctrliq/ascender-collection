@@ -2,11 +2,11 @@
 ---
 controller_teams:
 {% endif %}
-  - name: "{{ current_teams_asset_value.name }}"
-    description: "{{ template_overrides_resources.team[current_teams_asset_value.name].description
+  - name: {{ (current_teams_asset_value.name) | ctrliq.ascender.export_yaml }}
+    description: {{ (template_overrides_resources.team[current_teams_asset_value.name].description
                      | default(template_overrides_global.team.description)
-                     | default(current_teams_asset_value.description) }}"
-    organization: "{{ current_teams_asset_value.summary_fields.organization.name }}"
+                     | default(current_teams_asset_value.description)) | ctrliq.ascender.export_yaml }}
+    organization: {{ (current_teams_asset_value.summary_fields.organization.name) | ctrliq.ascender.export_yaml }}
 {% if last_team | default(true) | bool %}
 ...
 {% endif %}

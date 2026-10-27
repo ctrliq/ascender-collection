@@ -3,30 +3,28 @@
 controller_hosts:
 {% endif %}
 {% for host in current_hosts_asset_value if not host.has_inventory_sources %}
-  - name: "{{ host.name }}"
-    description: "{{ template_overrides_resources.host[host.name].description
+  - name: {{ (host.name) | ctrliq.ascender.export_yaml }}
+    description: {{ (template_overrides_resources.host[host.name].description
                      | default(template_overrides_global.host.description)
-                     | default(host.description) }}"
-    inventory: "{{ host.summary_fields.inventory.name | default('ToDo: The host \'' + host.name + '\' must have an associated inventory') }}"
+                     | default(host.description)) | ctrliq.ascender.export_yaml }}
+    inventory: {{ (host.summary_fields.inventory.name | default('ToDo: The host \'' + host.name + '\' must have an associated inventory')) | ctrliq.ascender.export_yaml }}
 {% if template_overrides_resources.host[host.name].instance_id is defined
       or template_overrides_global.host.instance_id is defined
       or host.instance_id %}
-    instance_id: "{{ template_overrides_resources.host[host.name].instance_id
+    instance_id: {{ (template_overrides_resources.host[host.name].instance_id
                      | default(template_overrides_global.host.instance_id)
-                     | default(host.instance_id) }}"
+                     | default(host.instance_id)) | ctrliq.ascender.export_yaml }}
 {% endif %}
-    enabled: {{ template_overrides_resources.host[host.name].enabled
+    enabled: {{ (template_overrides_resources.host[host.name].enabled
                 | default(template_overrides_global.host.enabled)
-                | default(host.enabled | bool | lower) }}
+                | default(host.enabled | bool)) | ctrliq.ascender.export_yaml }}
 {% if template_overrides_resources.host[host.name].variables is defined
       or template_overrides_global.host.variables is defined
       or (host.variables and host.variables != '---' and host.variables != '') %}
-    variables:
 {% set __host_variables = template_overrides_resources.host[host.name].variables
          | default(template_overrides_global.host.variables)
          | default(host.variables) %}
-      {{ (__host_variables if __host_variables is mapping or (__host_variables | type_debug) == 'list' else (__host_variables | from_yaml))
-         | to_nice_yaml(indent=2, sort_keys=False) | indent(width=6, first=False) | regex_replace('(^[^:]*): (.*){([{%])', '\\g<1>: !unsafe \\g<2>{\\g<3>', multiline=True)}}
-{%- endif %}
+    variables: {{ ((__host_variables if __host_variables is mapping or (__host_variables | type_debug) == 'list' else (__host_variables | from_yaml))) | ctrliq.ascender.export_yaml }}
+{% endif %}
 {% endfor %}
 ...

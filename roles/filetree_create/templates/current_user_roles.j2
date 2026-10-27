@@ -4,7 +4,7 @@ controller_roles:
 {% endif %}
 {% for role in object_roles %}
 {% if (role|dict2items)[0].value.resource_type is defined %}
-  - user: "{{ username }}"
+  - user: {{ (username) | ctrliq.ascender.export_yaml }}
 {% if (role|dict2items)[0].value.resource_names | length > 0 %}
 {% if (role|dict2items)[0].value.resource_type is match('organization') %}
     organizations:
@@ -24,10 +24,10 @@ controller_roles:
     instance_groups:
 {% endif %}
 {% for object_name in (role|dict2items)[0].value.resource_names %}
-      - "{{ object_name }}"
+      - {{ (object_name) | ctrliq.ascender.export_yaml }}
 {% endfor %}
 {% endif %}
-    role: "{% if (role|dict2items)[0].key | lower == 'approve' %}approval{% else %}{{ (role|dict2items)[0].key | lower | regex_replace(' ', '_') }}{% endif %}"
+    role: {{ ('approval' if (role|dict2items)[0].key | lower == 'approve' else (role|dict2items)[0].key | lower | replace(' ', '_')) | ctrliq.ascender.export_yaml }}
 {% endif %}
 {% endfor %}
 {% if last_user_role | default(true) | bool %}

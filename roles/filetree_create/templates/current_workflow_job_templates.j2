@@ -2,12 +2,11 @@
 ---
 controller_workflows:
 {% endif %}
-  - name: "{{ current_workflow_job_templates_asset_value.name }}"
-    description: !unsafe '{{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].description
-                             | default(template_overrides_global.workflow_template.description)
-                             | default(current_workflow_job_templates_asset_value.description) | regex_replace("'", "''")
-    }}'
-    organization: "{{ current_workflow_job_templates_asset_value.summary_fields.organization.name | default(organization if organization != 'ORGANIZATIONLESS' else 'ToDo: The WF \'' + current_workflow_job_templates_asset_value.name + '\' must belong to an organization') }}"
+  - name: {{ (current_workflow_job_templates_asset_value.name) | ctrliq.ascender.export_yaml }}
+    description: {{ (template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].description
+                     | default(template_overrides_global.workflow_template.description)
+                     | default(current_workflow_job_templates_asset_value.description)) | ctrliq.ascender.export_yaml }}
+    organization: {{ (current_workflow_job_templates_asset_value.summary_fields.organization.name | default(organization if organization != 'ORGANIZATIONLESS' else 'ToDo: The WF \'' + current_workflow_job_templates_asset_value.name + '\' must belong to an organization')) | ctrliq.ascender.export_yaml }}
 {% set _workflow_nodes = query(controller_api_plugin, 'api/v2/workflow_job_template_nodes/',
                      query_params={'workflow_job_template': current_workflow_job_templates_asset_value.id},
                      host=controller_hostname, oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs,
@@ -15,19 +14,19 @@ controller_workflows:
 {% if _workflow_nodes | length > 0 %}
     simplified_workflow_nodes:
 {% for node in _workflow_nodes %}
-      - identifier: "{{ node.identifier }}"
+      - identifier: {{ (node.identifier) | ctrliq.ascender.export_yaml }}
 {% if node.summary_fields.inventory is defined %}
-        inventory: "{{ node.summary_fields.inventory.name }}"
+        inventory: {{ (node.summary_fields.inventory.name) | ctrliq.ascender.export_yaml }}
 {% endif %}
-        workflow_job_template: "{{ node.summary_fields.workflow_job_template.name }}"
+        workflow_job_template: {{ (node.summary_fields.workflow_job_template.name) | ctrliq.ascender.export_yaml }}
 {% if node.summary_fields.unified_job_template is not defined %}
         unified_job_template: "ToDo: The node is pointing to a deleted Job Template"
 {% endif %}
 {% if     node.summary_fields.unified_job_template is defined
       and node.summary_fields.unified_job_template.unified_job_type is not match('workflow_approval') %}
-        unified_job_template: "{{ node.summary_fields.unified_job_template.name }}"
+        unified_job_template: {{ (node.summary_fields.unified_job_template.name) | ctrliq.ascender.export_yaml }}
 {%   if node.verbosity != None %}
-        verbosity: "{{ node.verbosity }}"
+        verbosity: {{ (node.verbosity) | ctrliq.ascender.export_yaml }}
 {%   else %}
 {%     set jt_var = query(controller_api_plugin, 'api/v2/job_templates',
                           query_params={'name': node.summary_fields.unified_job_template.name},
@@ -35,37 +34,37 @@ controller_workflows:
                           return_all=true, max_objects=query_controller_api_max_objects) %}
 {%     if jt_var | length > 0 %}
 {%       if jt_var[0]['ask_verbosity_on_launch'] %}
-        verbosity = "{{ jt_var[0]['verbosity'] }}"
+        verbosity: {{ (jt_var[0]['verbosity']) | ctrliq.ascender.export_yaml }}
 {%       endif %}
 {%     endif %}
 {%   endif %}
 {% endif %}
 {% if node.limit is defined %}
-        limit: "{{ node.limit }}"
+        limit: {{ (node.limit) | ctrliq.ascender.export_yaml }}
 {% endif %}
 {% if node.job_type %}
-        job_type: "{{ node.job_type }}"
+        job_type: {{ (node.job_type) | ctrliq.ascender.export_yaml }}
 {% endif %}
 {% if     node.summary_fields.unified_job_template is defined
       and node.summary_fields.unified_job_template.unified_job_type is match('workflow_approval') %}
         approval_node:
-          description: "{{ node.summary_fields.unified_job_template.description }}"
-          name: "{{ node.summary_fields.unified_job_template.name }}"
-          timeout: {{ node.summary_fields.unified_job_template.timeout }}
+          description: {{ (node.summary_fields.unified_job_template.description) | ctrliq.ascender.export_yaml }}
+          name: {{ (node.summary_fields.unified_job_template.name) | ctrliq.ascender.export_yaml }}
+          timeout: {{ (node.summary_fields.unified_job_template.timeout) | ctrliq.ascender.export_yaml }}
 {%   if node.summary_fields.unified_job_template.context_template is defined and node.summary_fields.unified_job_template.context_template %}
-          context_template: !unsafe {{ node.summary_fields.unified_job_template.context_template | to_json }}
+          context_template: {{ (node.summary_fields.unified_job_template.context_template) | ctrliq.ascender.export_yaml }}
 {%   endif %}
 {%   if node.summary_fields.unified_job_template.required_approvals is defined %}
-          required_approvals: {{ node.summary_fields.unified_job_template.required_approvals }}
+          required_approvals: {{ (node.summary_fields.unified_job_template.required_approvals) | ctrliq.ascender.export_yaml }}
 {%   endif %}
 {%   if node.summary_fields.unified_job_template.on_timeout is defined and node.summary_fields.unified_job_template.on_timeout %}
-          on_timeout: "{{ node.summary_fields.unified_job_template.on_timeout }}"
+          on_timeout: {{ (node.summary_fields.unified_job_template.on_timeout) | ctrliq.ascender.export_yaml }}
 {%   endif %}
 {% endif %}
-        organization: "{{ current_workflow_job_templates_asset_value.summary_fields.organization.name | default(organization if organization != 'ORGANIZATIONLESS' else 'ToDo: The WF \'' + current_workflow_job_templates_asset_value.name + '\' must belong to an organization') }}"
-        all_parents_must_converge: "{{ node.all_parents_must_converge }}"
+        organization: {{ (current_workflow_job_templates_asset_value.summary_fields.organization.name | default(organization if organization != 'ORGANIZATIONLESS' else 'ToDo: The WF \'' + current_workflow_job_templates_asset_value.name + '\' must belong to an organization')) | ctrliq.ascender.export_yaml }}
+        all_parents_must_converge: {{ (node.all_parents_must_converge) | ctrliq.ascender.export_yaml }}
 {% if node.max_retries is defined and node.max_retries %}
-        max_retries: {{ node.max_retries }}
+        max_retries: {{ (node.max_retries) | ctrliq.ascender.export_yaml }}
 {% endif %}
 {% if node.extra_data is defined and node.extra_data | length > 0 %}
         extra_data:
@@ -74,106 +73,99 @@ controller_workflows:
                                | default(node.extra_data)
 -%}
 {%   for extra_data_item in (extra_data_contents | dict2items) if ((extra_data_item.value | string | length) > 0 and (extra_data_item.value | string) is not match('None')) %}
-{%     if extra_data_item.value | type_debug is match('list') %}
-          {{ extra_data_item.key }}:
-{%       for current_list_item in extra_data_item.value if ((extra_data_item.value | string | length) > 0 and (extra_data_item.value | string) is not match('None')) %}
-            - {{ (current_list_item | regex_replace("\n", "\\\\n") | regex_replace('"', '\\"')) | regex_replace('(^[^{]*){([{%])(.*)', '!unsafe "\\g<1>{\\g<2>\\g<3>"', multiline=True) }}
-{%       endfor %}
-{%     else %}
-          {{ extra_data_item.key }}: {{ (extra_data_item.value | regex_replace("\n", "\\\\n") | regex_replace('"', '\\"')) | regex_replace('(^[^{]*){([{%])(.*)', '!unsafe "\\g<1>{\\g<2>\\g<3>"', multiline=True) }}
-{%     endif %}
+          {{ (extra_data_item.key) | ctrliq.ascender.export_yaml }}: {{ (extra_data_item.value) | ctrliq.ascender.export_yaml }}
 {%   endfor %}
 {%- endif %}
 {% if node.success_nodes is defined and node.success_nodes | length > 0 %}
         success_nodes:
 {% for success in node.success_nodes %}
-          - "{{ query(controller_api_plugin, 'workflow_job_template_nodes/'+(success | string), host=controller_hostname, oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs)[0].identifier }}"
+          - {{ (query(controller_api_plugin, 'workflow_job_template_nodes/'+(success | string), host=controller_hostname, oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs)[0].identifier) | ctrliq.ascender.export_yaml }}
 {% endfor %}
 {% endif %}
 {% if node.always_nodes and node.always_nodes | length > 0 %}
         always_nodes:
 {% for always in node.always_nodes %}
-          - "{{ query(controller_api_plugin, 'workflow_job_template_nodes/'+(always | string), host=controller_hostname, oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs)[0].identifier }}"
+          - {{ (query(controller_api_plugin, 'workflow_job_template_nodes/'+(always | string), host=controller_hostname, oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs)[0].identifier) | ctrliq.ascender.export_yaml }}
 {% endfor %}
 {% endif %}
 {% if node.failure_nodes and node.failure_nodes | length > 0 %}
         failure_nodes:
 {% for failure in node.failure_nodes %}
-          - "{{ query(controller_api_plugin, 'workflow_job_template_nodes/'+(failure | string), host=controller_hostname, oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs)[0].identifier }}"
+          - {{ (query(controller_api_plugin, 'workflow_job_template_nodes/'+(failure | string), host=controller_hostname, oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs)[0].identifier) | ctrliq.ascender.export_yaml }}
 {% endfor %}
 {% endif %}
 {% if node.condition_edges is defined and node.condition_edges | length > 0 %}
         condition_nodes:
 {% for edge in node.condition_edges %}
-          - identifier: "{{ query(controller_api_plugin, 'workflow_job_template_nodes/'+(edge.id | string), host=controller_hostname, oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs)[0].identifier }}"
-            trigger: "{{ edge.trigger }}"
-            artifact_key: {{ edge.artifact_key | to_json }}
-            operator: "{{ edge.operator }}"
-            expected_value: {{ edge.expected_value | to_json }}
+          - identifier: {{ (query(controller_api_plugin, 'workflow_job_template_nodes/'+(edge.id | string), host=controller_hostname, oauth_token=controller_oauthtoken, verify_ssl=controller_validate_certs)[0].identifier) | ctrliq.ascender.export_yaml }}
+            trigger: {{ (edge.trigger) | ctrliq.ascender.export_yaml }}
+            artifact_key: {{ (edge.artifact_key) | ctrliq.ascender.export_yaml }}
+            operator: {{ (edge.operator) | ctrliq.ascender.export_yaml }}
+            expected_value: {{ (edge.expected_value) | ctrliq.ascender.export_yaml }}
 {% endfor %}
 {% endif %}
 {% endfor %}
 {% endif %}
-    ask_variables_on_launch: "{{  template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].ask_variables_on_launch
+    ask_variables_on_launch: {{ (template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].ask_variables_on_launch
                                  | default(template_overrides_global.workflow_template.ask_variables_on_launch)
-                                 | default(current_workflow_job_templates_asset_value.ask_variables_on_launch) }}"
-    allow_simultaneous: "{{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].allow_simultaneous
+                                 | default(current_workflow_job_templates_asset_value.ask_variables_on_launch)) | ctrliq.ascender.export_yaml }}
+    allow_simultaneous: {{ (template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].allow_simultaneous
                             | default(template_overrides_global.workflow_template.allow_simultaneous)
-                            | default(current_workflow_job_templates_asset_value.allow_simultaneous) }}"
+                            | default(current_workflow_job_templates_asset_value.allow_simultaneous)) | ctrliq.ascender.export_yaml }}
 {% if template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].allow_overwrite_flow_vars_on_relaunch is defined
       or template_overrides_global.workflow_template.allow_overwrite_flow_vars_on_relaunch is defined
       or current_workflow_job_templates_asset_value.allow_overwrite_flow_vars_on_relaunch is defined %}
-    allow_overwrite_flow_vars_on_relaunch: {{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].allow_overwrite_flow_vars_on_relaunch
+    allow_overwrite_flow_vars_on_relaunch: {{ (template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].allow_overwrite_flow_vars_on_relaunch
                                               | default(template_overrides_global.workflow_template.allow_overwrite_flow_vars_on_relaunch)
-                                              | default(current_workflow_job_templates_asset_value.allow_overwrite_flow_vars_on_relaunch | bool | lower) }}
+                                              | default(current_workflow_job_templates_asset_value.allow_overwrite_flow_vars_on_relaunch | bool)) | ctrliq.ascender.export_yaml }}
 {% endif %}
-    scm_branch: "{{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].scm_branch
+    scm_branch: {{ (template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].scm_branch
                     | default(template_overrides_global.workflow_template.scm_branch)
-                    | default(current_workflow_job_templates_asset_value.scm_branch) }}"
-    limit: "{{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].limit
+                    | default(current_workflow_job_templates_asset_value.scm_branch)) | ctrliq.ascender.export_yaml }}
+    limit: {{ (template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].limit
                   | default(template_overrides_global.workflow_job_template.limit)
-                  | default(current_workflow_job_templates_asset_value.limit) }}"
-    ask_limit_on_launch: {{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].ask_limit_on_launch
+                  | default(current_workflow_job_templates_asset_value.limit)) | ctrliq.ascender.export_yaml }}
+    ask_limit_on_launch: {{ (template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].ask_limit_on_launch
                             | default(template_overrides_global.workflow_job_template.ask_limit_on_launch)
-                            | default(current_workflow_job_templates_asset_value.ask_limit_on_launch | bool | lower) }}
-    ask_inventory_on_launch: {{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].ask_inventory_on_launch
+                            | default(current_workflow_job_templates_asset_value.ask_limit_on_launch | bool)) | ctrliq.ascender.export_yaml }}
+    ask_inventory_on_launch: {{ (template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].ask_inventory_on_launch
                                 | default(template_overrides_global.workflow_job_template.ask_inventory_on_launch)
-                                | default(current_workflow_job_templates_asset_value.ask_inventory_on_launch | bool | lower) }}
-    webhook_service: "{{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].description
+                                | default(current_workflow_job_templates_asset_value.ask_inventory_on_launch | bool)) | ctrliq.ascender.export_yaml }}
+    webhook_service: {{ (template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].description
                          | default(template_overrides_global.workflow_template.webhook_service)
-                         | default(current_workflow_job_templates_asset_value.webhook_service) }}"
+                         | default(current_workflow_job_templates_asset_value.webhook_service)) | ctrliq.ascender.export_yaml }}
 {% if template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].job_tags is defined
       or template_overrides_global.workflow_job_template.job_tags is defined
       or current_workflow_job_templates_asset_value.job_tags %}
-    job_tags: "{{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].job_tags
+    job_tags: {{ (template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].job_tags
         | default(template_overrides_global.workflow_job_template.job_tags)
-        | default(current_workflow_job_templates_asset_value.job_tags) }}"
+        | default(current_workflow_job_templates_asset_value.job_tags)) | ctrliq.ascender.export_yaml }}
 {% endif %}
 {% if template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].skip_tags is defined
       or template_overrides_global.workflow_job_template.skip_tags is defined
       or current_workflow_job_templates_asset_value.skip_tags %}
-    skip_tags: "{{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].skip_tags
+    skip_tags: {{ (template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].skip_tags
         | default(template_overrides_global.workflow_job_template.skip_tags)
-        | default(current_workflow_job_templates_asset_value.skip_tags) }}"
+        | default(current_workflow_job_templates_asset_value.skip_tags)) | ctrliq.ascender.export_yaml }}
 {% endif %}
-    ask_tags_on_launch: {{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].ask_tags_on_launch
+    ask_tags_on_launch: {{ (template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].ask_tags_on_launch
         | default(template_overrides_global.workflow_job_template.ask_tags_on_launch)
-        | default(current_workflow_job_templates_asset_value.ask_tags_on_launch | bool | lower) }}
-    ask_skip_tags_on_launch: {{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].ask_skip_tags_on_launch
+        | default(current_workflow_job_templates_asset_value.ask_tags_on_launch | bool)) | ctrliq.ascender.export_yaml }}
+    ask_skip_tags_on_launch: {{ (template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].ask_skip_tags_on_launch
         | default(template_overrides_global.workflow_job_template.ask_skip_tags_on_launch)
-        | default(current_workflow_job_templates_asset_value.ask_skip_tags_on_launch | bool | lower) }}
-    ask_labels_on_launch: {{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].ask_labels_on_launch
+        | default(current_workflow_job_templates_asset_value.ask_skip_tags_on_launch | bool)) | ctrliq.ascender.export_yaml }}
+    ask_labels_on_launch: {{ (template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].ask_labels_on_launch
         | default(template_overrides_global.workflow_job_template.ask_labels_on_launch)
-        | default(current_workflow_job_templates_asset_value.ask_labels_on_launch | bool | lower) }}
-    ask_scm_branch_on_launch: {{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].ask_scm_branch_on_launch
+        | default(current_workflow_job_templates_asset_value.ask_labels_on_launch | bool)) | ctrliq.ascender.export_yaml }}
+    ask_scm_branch_on_launch: {{ (template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].ask_scm_branch_on_launch
         | default(template_overrides_global.workflow_job_template.ask_scm_branch_on_launch)
-        | default(current_workflow_job_templates_asset_value.ask_scm_branch_on_launch | bool | lower) }}
+        | default(current_workflow_job_templates_asset_value.ask_scm_branch_on_launch | bool)) | ctrliq.ascender.export_yaml }}
 {% if template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].webhook_credential is defined
       or template_overrides_global.workflow_job_template.webhook_credential is defined
       or current_workflow_job_templates_asset_value.summary_fields.webhook_credential is defined %}
-    webhook_credential: "{{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].webhook_credential
+    webhook_credential: {{ (template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].webhook_credential
         | default(template_overrides_global.workflow_job_template.webhook_credential)
-        | default(current_workflow_job_templates_asset_value.summary_fields.webhook_credential.name) }}"
+        | default(current_workflow_job_templates_asset_value.summary_fields.webhook_credential.name)) | ctrliq.ascender.export_yaml }}
 {% endif %}
 {% set __wfjt_extra_vars = template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].extra_vars
                              | default(template_overrides_global.workflow_job_template.extra_vars)
@@ -185,14 +177,7 @@ controller_workflows:
     extra_vars:
 {% set extra_vars_contents = __wfjt_extra_vars -%}
 {%   for extra_vars_item in (extra_vars_contents | dict2items) if ((extra_vars_item.value | string | length) > 0 and (extra_vars_item.value | string) is not match('None')) %}
-{%     if extra_vars_item.value | type_debug is match('list') %}
-      {{ extra_vars_item.key }}:
-{%       for current_list_item in extra_vars_item.value if ((extra_vars_item.value | string | length) > 0 and (extra_vars_item.value | string) is not match('None')) %}
-        - {{ (current_list_item | regex_replace("\n", "\\\\n") | regex_replace('"', '\\"')) | regex_replace('(^[^{]*){([{%])(.*)', '!unsafe "\\g<1>{\\g<2>\\g<3>"', multiline=True) }}
-{%       endfor %}
-{%     else %}
-      {{ extra_vars_item.key }}: {{ (extra_vars_item.value | regex_replace("\n", "\\\\n") | regex_replace('"', '\\"')) | regex_replace('(^[^{]*){([{%])(.*)', '!unsafe "\\g<1>{\\g<2>\\g<3>"', multiline=True) }}
-{%     endif %}
+      {{ (extra_vars_item.key) | ctrliq.ascender.export_yaml }}: {{ (extra_vars_item.value) | ctrliq.ascender.export_yaml }}
 {%   endfor %}
 {% else %}
     extra_vars: ""
@@ -200,36 +185,36 @@ controller_workflows:
 {% if query_labels | length > 0 %}
     labels:
 {% for label in query_labels %}
-      - "{{ label.name }}"
+      - {{ (label.name) | ctrliq.ascender.export_yaml }}
 {% endfor %}
 {% endif %}
 {% if query_notification_error | length > 0 %}
     notification_templates_error:
 {% for notification_error in query_notification_error %}
-      - "{{ notification_error.name }}"
+      - {{ (notification_error.name) | ctrliq.ascender.export_yaml }}
 {% endfor %}
 {% endif %}
 {% if query_notification_started | length > 0 %}
     notification_templates_started:
 {% for notification_started in query_notification_started %}
-      - "{{ notification_started.name }}"
+      - {{ (notification_started.name) | ctrliq.ascender.export_yaml }}
 {% endfor %}
 {% endif %}
 {% if query_notification_success | length > 0 %}
     notification_templates_success:
 {% for notification_success in query_notification_success %}
-      - "{{ notification_success.name }}"
+      - {{ (notification_success.name) | ctrliq.ascender.export_yaml }}
 {% endfor %}
 {% endif %}
 {% if query_notification_approvals | length > 0 %}
     notification_templates_approvals:
 {% for notification_approval in query_notification_approvals %}
-      - "{{ notification_approval.name }}"
+      - {{ (notification_approval.name) | ctrliq.ascender.export_yaml }}
 {% endfor %}
 {% endif %}
-    survey_enabled: {{ template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].survey_enabled
+    survey_enabled: {{ (template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].survey_enabled
                        | default(template_overrides_global.workflow_job_template.survey_enabled)
-                       | default(current_workflow_job_templates_asset_value.survey_enabled | bool | lower) }}
+                       | default(current_workflow_job_templates_asset_value.survey_enabled | bool)) | ctrliq.ascender.export_yaml }}
 {% set survey_spec_contents = template_overrides_resources.workflow_job_template[current_workflow_job_templates_asset_value.name].survey_spec
                               | default(template_overrides_global.workflow_job_template.survey_spec)
                               | default(query(controller_api_plugin, current_workflow_job_templates_asset_value.related.survey_spec,
@@ -240,42 +225,25 @@ controller_workflows:
       or (current_workflow_job_templates_asset_value.related.survey_spec is defined and (survey_spec_contents | length > 0 and survey_spec_contents | first | length > 0)) %}
     survey_spec:
 {% for spec_item in survey_spec_contents %}
-      name: "{{ spec_item.name }}"
+      name: {{ (spec_item.name) | ctrliq.ascender.export_yaml }}
       spec:
 {%   for survey_item in spec_item.spec if ((survey_item | string | length) > 0 and (survey_item | string) is not match('None')) %}
 {%     set _var = namespace(first_survey_item = true) %}
 {%     for survey_item_content in (survey_item | dict2items) if ((survey_item_content.value | string | length) > 0 and (survey_item_content.value | string) is not match('None')) %}
-{%       if survey_item_content.key | regex_search('question_name|question_description|default') %}
-{%         if survey_item_content.value is number %}
-{%           set current_content = survey_item_content.key + ': ' + survey_item_content.value | string %}
-{%         else %}
-{%           set current_content = survey_item_content.key + ': !unsafe "' + (survey_item_content.value | regex_replace("\n", "\\\\n") | regex_replace('"', '\\"')) | regex_replace('\\\\(?!n|")', '\\\\\\\\') + '"' %}
-{%         endif %}
-{%       elif survey_item_content.key is not match('choices') %}
-{%         set current_content = survey_item_content.key + ': ' + survey_item_content.value | string %}
-{%       endif %}
-{%       if _var.first_survey_item %}
-{%         set _var.first_survey_item = false %}
+{%       if survey_item_content.key != 'choices' or survey_item_content.value[0] is defined %}
+{#         The API returns $encrypted$ for a password default; export it blank, as before. #}
+{%         set current_content = (survey_item_content.key | ctrliq.ascender.export_yaml) ~ ': '
+                                 ~ (('' if survey_item_content.value == '$encrypted$' else survey_item_content.value) | ctrliq.ascender.export_yaml) %}
+{%         if _var.first_survey_item %}
+{%           set _var.first_survey_item = false %}
         - {{ current_content }}
-{%       else %}
-{%         if current_content is defined %}
-          {{ current_content | replace("$encrypted$", "\'\'") }}
 {%         else %}
-{%           if survey_item_content.key is match('choices') and survey_item_content.value[0] is defined %}
-          {{ survey_item_content.key }}:
-{%             for choice in survey_item_content.value if ((survey_item_content.value | string | length) > 0 and (survey_item_content.value | string) is not match('None')) %}
-{%                 if choice is number %}
-            - {{ choice }}
-{%                 else %}
-            - !unsafe "{{ choice | regex_replace("\n", "\\\\n", multiline=true) | regex_replace('"', '\\"', multiline=true) }}"
-{%                 endif %}
-{%             endfor %}
-{%           endif %}
+          {{ current_content }}
 {%         endif %}
 {%       endif %}
 {%     endfor %}
 {%   endfor %}
-      description: "{{ spec_item.description }}"
+      description: {{ (spec_item.description) | ctrliq.ascender.export_yaml }}
 {% endfor %}
 {% endif %}
 {% if last_workflow_job_template | default(true) | bool %}

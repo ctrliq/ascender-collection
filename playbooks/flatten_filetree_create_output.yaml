@@ -38,9 +38,10 @@
       ansible.builtin.copy:
         dest: "{{ filetree_create_output_dir }}_flatten/{{ object_type.name }}.yaml"
         mode: "0644"
+        # export_yaml keeps the !unsafe tags filetree_read loaded; to_nice_yaml dropped them.
         content: |
           ---
-          {{ object_type.value | to_nice_yaml(indent=2) }}
+          {{ object_type.value | ctrliq.ascender.export_yaml }}
           ...
       loop_control:
         loop_var: object_type

@@ -1,0 +1,10 @@
+security_fixes:
+  - filetree_create - directory and file names built from controller object names now go through the
+    new ``ctrliq.ascender.path_component`` filter. An organization named ``..`` wrote its export into
+    the parent of ``output_path``, and the credentials task used the organization name unchanged, so a
+    name such as ``../../x`` created directories outside ``output_path``.
+bugfixes:
+  - filetree_create - credentials of an organization whose name contains ``/`` are exported again;
+    the directory was created from the raw name, so writing the file failed.
+  - filetree_create - a name longer than 230 bytes is shortened and given a hash suffix, instead of
+    failing the export with a file name too long for the filesystem.
