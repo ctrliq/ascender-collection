@@ -72,7 +72,6 @@ id:
 '''
 
 from ..module_utils.controller_api import ControllerAPIModule
-import json
 
 
 def main():
@@ -121,7 +120,7 @@ def main():
     if description is not None:
         host_fields['description'] = description
     if variables is not None:
-        host_fields['variables'] = json.dumps(variables)
+        host_fields['variables'] = variables
     if instance_id is not None:
         host_fields['instance_id'] = instance_id
 

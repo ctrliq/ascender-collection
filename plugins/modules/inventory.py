@@ -135,7 +135,6 @@ id:
 '''
 
 from ..module_utils.controller_api import ControllerAPIModule
-import json
 
 
 def main():
@@ -210,7 +209,7 @@ def main():
     if description is not None:
         inventory_fields['description'] = description
     if variables is not None:
-        inventory_fields['variables'] = json.dumps(variables)
+        inventory_fields['variables'] = variables
 
     association_fields = {}
 
